@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.druk.lmplayground.conversation.ConversationFragment"
+        android:label="Conversation" />
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.druk.lmplayground.profile.ProfileFragment"
+        android:label="Profile">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+    </fragment>
+
+</navigation>

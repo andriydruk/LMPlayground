@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <item name="conversation_fragment" type="id" />
+    <item name="profile_fragment" type="id" />
+</resources>

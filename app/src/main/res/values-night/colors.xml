@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- Logo -->
+    <color name="yellow_logo">@color/yellow400</color>
+    <color name="blue_logo">@color/blue300</color>
+</resources>
