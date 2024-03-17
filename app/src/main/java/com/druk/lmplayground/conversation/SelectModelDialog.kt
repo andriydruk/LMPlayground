@@ -72,19 +72,21 @@ fun Model(
                 text = model.name,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.Start,
                 maxLines = 1
             )
             Text(
                 text = model.description,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Start,
+                maxLines = 2
             )
         }
         if (model.file != null) {
             Icon(
                 imageVector = Icons.Outlined.AutoAwesome,
+                modifier = Modifier.padding(4.dp),
                 tint = MaterialTheme.colorScheme.onSurface,
                 contentDescription = null
             )
@@ -92,6 +94,7 @@ fun Model(
         else {
             Icon(
                 imageVector = Icons.Outlined.FileDownload,
+                modifier = Modifier.padding(4.dp),
                 tint = MaterialTheme.colorScheme.onSurface,
                 contentDescription = null
             )

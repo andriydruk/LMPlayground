@@ -8,7 +8,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DrawerValue.Closed
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -17,13 +21,12 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.druk.lmplayground.components.AppDrawer
 import com.druk.lmplayground.databinding.ContentMainBinding
 import kotlinx.coroutines.launch
+import kotlin.system.exitProcess
 
 /**
  * Main activity for the app.
@@ -73,24 +76,27 @@ class NavActivity : AppCompatActivity() {
                         }
                     }
 
-                    AppDrawer(
-                        drawerState = drawerState,
-                        onChatClicked = {
-                            findNavController().popBackStack(R.id.nav_home, false)
-                            scope.launch {
-                                drawerState.close()
-                            }
-                        },
-                        onProfileClicked = {
-                            val bundle = bundleOf("userId" to it)
-                            findNavController().navigate(R.id.nav_profile, bundle)
-                            scope.launch {
-                                drawerState.close()
-                            }
-                        }
-                    ) {
-                        AndroidViewBinding(ContentMainBinding::inflate)
-                    }
+                    AndroidViewBinding(ContentMainBinding::inflate)
+//                    findNavController().popBackStack(R.id.nav_home, false)
+//
+//                    AppDrawer(
+//                        drawerState = drawerState,
+//                        onChatClicked = {
+//                            findNavController().popBackStack(R.id.nav_home, false)
+//                            scope.launch {
+//                                drawerState.close()
+//                            }
+//                        },
+//                        onProfileClicked = {
+//                            val bundle = bundleOf("userId" to it)
+//                            findNavController().navigate(R.id.nav_profile, bundle)
+//                            scope.launch {
+//                                drawerState.close()
+//                            }
+//                        }
+//                    ) {
+//                        AndroidViewBinding(ContentMainBinding::inflate)
+//                    }
                 }
             }
         )

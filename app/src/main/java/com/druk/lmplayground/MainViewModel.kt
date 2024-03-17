@@ -26,7 +26,6 @@ class MainViewModel : ViewModel() {
                 val result = llamaCpp.loadOpenCL()
                 if (result != 0) {
                     Log.e("MainViewModel", "Failed to load OpenCL, error code: $result")
-                    return@withContext
                 }
                 llamaCpp.init()
             }

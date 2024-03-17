@@ -15,7 +15,7 @@ object ModelInfoProvider {
                 remoteUri = Uri.parse("https://huggingface.co/lmstudio-ai/gemma-2b-it-GGUF/resolve/main/gemma-2b-it-q4_k_m.gguf"),
                 inputPrefix = "<start_of_turn>user\n",
                 inputSuffix = "<end_of_turn>\n<start_of_turn>model\n",
-                description = "A model for generating text"
+                description = "2.5 billion parameters language model"
             ),
             ModelInfo(
                 name = "Phi 2B",
@@ -23,7 +23,7 @@ object ModelInfoProvider {
                 remoteUri = Uri.parse("https://huggingface.co/TheBloke/phi-2-GGUF/resolve/main/phi-2.Q4_K_M.gguf"),
                 inputPrefix = "Instruct: ",
                 inputSuffix = "\nOutput:",
-                description = "A model for generating text"
+                description = "2.7 billion parameter language model"
             ),
             ModelInfo(
                 name = "Gemma 7B",
@@ -31,7 +31,7 @@ object ModelInfoProvider {
                 remoteUri = Uri.parse("https://huggingface.co/mlabonne/gemma-7b-it-GGUF/resolve/main/gemma-7b-it.Q4_K_M.gguf"),
                 inputPrefix = "<start_of_turn>user\n",
                 inputSuffix = "<end_of_turn>\n<start_of_turn>model\n",
-                description = "A model for generating text"
+                description = "8.5 billion parameters language model"
             ),
             ModelInfo(
                 name = "Mistral 7B",
@@ -39,7 +39,7 @@ object ModelInfoProvider {
                 remoteUri = Uri.parse("https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q4_K_M.gguf"),
                 inputPrefix = "[INST]",
                 inputSuffix = "[/INST]",
-                description = "A model for generating text"
+                description = "7.3 billion parameter language model"
             ),
             ModelInfo(
                 name = "Llama 2 7B",
@@ -47,7 +47,7 @@ object ModelInfoProvider {
                 remoteUri = Uri.parse("https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/resolve/main/llama-2-7b-chat.Q4_K_M.gguf"),
                 inputPrefix = "[INST]",
                 inputSuffix = "[/INST]",
-                description = "A model for generating text"
+                description = "7 billion parameter language model"
             ),
         )
     }

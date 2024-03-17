@@ -11,15 +11,15 @@ android {
         applicationId = "com.druk.lmplayground"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 4
+        versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
         externalNativeBuild {
             cmake {
-//                arguments += "-DLLAMA_CLBLAST=ON"
-//                arguments += "-DCLBlast_DIR=/Users/admin/Projects/LLMPlayground/app/src/main/cpp/clblast/lib/cmake/CLBlast"
+                arguments += "-DLLAMA_CLBLAST=ON"
+                arguments += "-DCLBlast_DIR=${rootDir}/app/src/main/cpp/clblast/lib/cmake/CLBlast"
                 cFlags += "-march=armv8.4a+dotprod"
                 cppFlags += "-std=c++11"
             }

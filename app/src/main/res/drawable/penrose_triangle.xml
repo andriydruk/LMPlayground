@@ -7,18 +7,18 @@
       android:pathData="M220.9,0.71L406.45,330.97L200.19,331.08L160.63,401.79L525.84,401.85L303.04,0.5L220.9,0.71z"
       android:strokeLineJoin="round"
       android:strokeWidth="1"
-      android:fillColor="?colorPrimaryContainer"
+      android:fillColor="#ADD8E6"
       android:fillType="evenOdd"/>
   <path
       android:pathData="M220.89,0.68L0.5,401.79L40.91,474.52L223.74,143.19L325.77,331.07L406.58,331.07L220.89,0.68z"
       android:strokeLineJoin="round"
       android:strokeWidth="1"
-      android:fillColor="?colorPrimary"
+      android:fillColor="#007BFF"
       android:fillType="evenOdd"/>
   <path
       android:pathData="M223.79,143.25L264.08,217.47L160.45,401.85L525.86,402.04L487.39,476.54L40.92,474.49L223.79,143.25z"
       android:strokeLineJoin="round"
       android:strokeWidth="1"
-      android:fillColor="?colorPrimaryDark"
+      android:fillColor="#0022CC"
       android:fillType="evenOdd"/>
 </vector>

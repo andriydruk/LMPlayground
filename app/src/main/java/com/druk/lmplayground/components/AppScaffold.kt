@@ -17,7 +17,6 @@ fun AppDrawer(
 ) {
     PlaygroundTheme {
         ModalNavigationDrawer(
-            drawerState = drawerState,
             drawerContent = {
                 ModalDrawerSheet {
                     PlaygroundDrawerContent(

@@ -5,6 +5,7 @@
 #include "common.h"
 
 #include "console.h"
+#include "ggml.h"
 #include "llama.h"
 
 #include <cassert>
@@ -65,11 +66,9 @@ int generate(gpt_params params,
 extern "C" JNIEXPORT int
 JNICALL
 Java_com_druk_llamacpp_LlamaCpp_loadOpenCL(JNIEnv *env, jobject activity) {
-#ifdef LLAMA_CLBLAST
-    return clblast::LoadOpenCL();
-#else
-    return 0;
-#endif
+    int result = clblast::LoadOpenCL();
+    isOpenCLSupported = result == 0;
+    return result;
 }
 
 extern "C" JNIEXPORT int
