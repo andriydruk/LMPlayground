@@ -272,7 +272,6 @@ int LlamaGenerationSession::generate(LlamaGenerationSession::ResponseCallback ca
                 n_past, n_left, n_ctx, params.n_keep, n_discard);
 
             llama_kv_cache_seq_rm   (ctx, 0, params.n_keep + 1            , params.n_keep + n_discard + 1);
-            llama_kv_cache_seq_shift(ctx, 0, params.n_keep + 1 + n_discard, n_past, -n_discard);
 
             n_past -= n_discard;
 

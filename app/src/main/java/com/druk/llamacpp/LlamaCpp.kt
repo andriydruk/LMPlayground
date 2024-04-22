@@ -3,7 +3,6 @@ package com.druk.llamacpp
 class LlamaCpp {
 
     companion object {
-        // Used to load the 'llamacpp' library on application startup.
         init {
             System.loadLibrary("llamacpp")
         }

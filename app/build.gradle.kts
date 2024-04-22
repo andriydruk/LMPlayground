@@ -11,8 +11,8 @@ android {
         applicationId = "com.druk.lmplayground"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 4
-        versionName = "1.0.0"
+        versionCode = 8
+        versionName = "1.0.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
@@ -58,7 +58,7 @@ android {
         }
 
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             signingConfig = signingConfigs.getByName("debug")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
                     "proguard-rules.pro")

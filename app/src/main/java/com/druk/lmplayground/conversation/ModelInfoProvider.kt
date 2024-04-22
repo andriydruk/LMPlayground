@@ -10,9 +10,9 @@ object ModelInfoProvider {
         val files = path.listFiles()
         return listOf(
             ModelInfo(
-                name = "Gemma 2B",
-                file = files?.firstOrNull { it.name == "gemma-2b-it-q4_k_m.gguf" },
-                remoteUri = Uri.parse("https://huggingface.co/lmstudio-ai/gemma-2b-it-GGUF/resolve/main/gemma-2b-it-q4_k_m.gguf"),
+                name = "Gemma 1.1 2B",
+                file = files?.firstOrNull { it.name == "gemma-1.1-2b-it-Q4_K_M.gguf" },
+                remoteUri = Uri.parse("https://huggingface.co/lmstudio-community/gemma-1.1-2b-it-GGUF/resolve/main/gemma-1.1-2b-it-Q4_K_M.gguf"),
                 inputPrefix = "<start_of_turn>user\n",
                 inputSuffix = "<end_of_turn>\n<start_of_turn>model\n",
                 description = "2.5 billion parameters language model"
@@ -26,9 +26,17 @@ object ModelInfoProvider {
                 description = "2.7 billion parameter language model"
             ),
             ModelInfo(
-                name = "Gemma 7B",
-                file = files?.firstOrNull { it.name == "gemma-7b-it.Q4_K_M.gguf" },
-                remoteUri = Uri.parse("https://huggingface.co/mlabonne/gemma-7b-it-GGUF/resolve/main/gemma-7b-it.Q4_K_M.gguf"),
+                name = "Lamma 3 8B",
+                file = files?.firstOrNull { it.name == "Meta-Llama-3-8B-Instruct-Q4_K_M.gguf" },
+                remoteUri = Uri.parse("https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf"),
+                inputPrefix = "<|start_header_id|>user<|end_header_id|>\n\n",
+                inputSuffix = "<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
+                description = "8 billion parameters language model"
+            ),
+            ModelInfo(
+                name = "Gemma 1.1 7B",
+                file = files?.firstOrNull { it.name == "gemma-1.1-7b-it-Q4_K_M.gguf" },
+                remoteUri = Uri.parse("https://huggingface.co/bartowski/gemma-1.1-7b-it-GGUF/resolve/main/gemma-1.1-7b-it-Q4_K_M.gguf"),
                 inputPrefix = "<start_of_turn>user\n",
                 inputSuffix = "<end_of_turn>\n<start_of_turn>model\n",
                 description = "8.5 billion parameters language model"
