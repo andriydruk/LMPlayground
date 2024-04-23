@@ -26,7 +26,7 @@ object ModelInfoProvider {
                 description = "2.7 billion parameter language model"
             ),
             ModelInfo(
-                name = "Lamma 3 8B",
+                name = "Llama 3 8B",
                 file = files?.firstOrNull { it.name == "Meta-Llama-3-8B-Instruct-Q4_K_M.gguf" },
                 remoteUri = Uri.parse("https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf"),
                 inputPrefix = "<|start_header_id|>user<|end_header_id|>\n\n",
