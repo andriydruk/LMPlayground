@@ -68,7 +68,8 @@ public:
     ~LlamaModel() {}
 
     LlamaGenerationSession* createGenerationSession(const char* input_prefix,
-                                                    const char* input_suffix);
+                                                    const char* input_suffix,
+                                                    const char* antiprompt);
     void loadModel(gpt_params params,
                    const std::string &modelPath,
                    int32_t n_gpu_layers,

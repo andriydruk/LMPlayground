@@ -7,7 +7,8 @@ class LlamaModel {
 
     external fun createSession(
         inputPrefix: String?,
-        inputSuffix: String?
+        inputSuffix: String?,
+        antiPrompt: String?,
     ): LlamaGenerationSession
 
     external fun getModelSize(): Long

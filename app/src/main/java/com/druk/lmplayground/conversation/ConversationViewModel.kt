@@ -153,7 +153,8 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
                 val modelDescription = Formatter.formatFileSize(app, modelSize)
                 val llamaSession = llamaModel.createSession(
                     modelInfo.inputPrefix,
-                    modelInfo.inputSuffix
+                    modelInfo.inputSuffix,
+                    modelInfo.antiPrompt
                 )
                 // warmup the model
                 llamaSession.generate(object: LlamaGenerationCallback {
@@ -193,6 +194,7 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
             )
         )
 
+        val antiPrompt = _loadedModel.value?.antiPrompt
         _isGenerating.postValue(true)
         generatingJob = viewModelScope.launch {
             withContext(Dispatchers.Default) {
@@ -203,7 +205,11 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
                     var responseByteArray = ByteArray(0)
                     override fun newTokens(newTokens: ByteArray) {
                         responseByteArray += newTokens
-                        uiState.updateLastMessage(String(responseByteArray, Charsets.UTF_8))
+                        var string = String(responseByteArray, Charsets.UTF_8)
+                        if (antiPrompt != null) {
+                            string = string.removeSuffix(antiPrompt)
+                        }
+                        uiState.updateLastMessage(string)
                     }
                 }
                 while (this.isActive && llamaSession.generate(callback) == 0) {

@@ -10,5 +10,6 @@ data class ModelInfo(
     val downloadId: Long? = null,
     val inputPrefix: String? = null,
     val inputSuffix: String? = null,
+    val antiPrompt: String? = null,
     val description: String
 )

@@ -145,7 +145,8 @@ JNIEXPORT jobject JNICALL
 Java_com_druk_llamacpp_LlamaModel_createSession(JNIEnv *env,
                                                 jobject thiz,
                                                 jstring inputPrefix,
-                                                jstring inputSuffix) {
+                                                jstring inputSuffix,
+                                                jstring aniPrompt) {
 
     jclass clazz1 = env->GetObjectClass(thiz);
     jfieldID fid1 = env->GetFieldID(clazz1, "nativeHandle", "J");
@@ -157,8 +158,10 @@ Java_com_druk_llamacpp_LlamaModel_createSession(JNIEnv *env,
 
     const char *inputPrefixCStr = env->GetStringUTFChars(inputPrefix, nullptr);
     const char *inputSuffixCStr = env->GetStringUTFChars(inputSuffix, nullptr);
+    const char *antipromptCStr = env->GetStringUTFChars(aniPrompt, nullptr);
     LlamaGenerationSession* session = model->createGenerationSession(inputPrefixCStr,
-                                                                     inputSuffixCStr);
+                                                                     inputSuffixCStr,
+                                                                     antipromptCStr);
     jclass clazz3 = env->GetObjectClass(obj);
     jfieldID fid3 = env->GetFieldID(clazz3, "nativeHandle", "J");
     env->SetLongField(obj, fid3, (long)session);

@@ -92,13 +92,19 @@ uint64_t LlamaModel::getModelSize() {
 }
 
 LlamaGenerationSession* LlamaModel::createGenerationSession(const char* input_prefix,
-                                                            const char* input_suffix) {
+                                                            const char* input_suffix,
+                                                            const char* antiprompt) {
     LlamaGenerationSession *session = new LlamaGenerationSession(ctx_guidance_, model_);
     gpt_params localParams = g_params;
     localParams.interactive = true;
     localParams.interactive_first = true;
     localParams.input_prefix = std::string(input_prefix);
     localParams.input_suffix = std::string(input_suffix);
+    if (antiprompt != NULL) {
+        std::vector<std::string> antiprompt_vector = std::vector<std::string>();
+        antiprompt_vector.push_back(std::string(antiprompt));
+        localParams.antiprompt = antiprompt_vector;
+    }
     session->init(localParams);
     return session;
 }
