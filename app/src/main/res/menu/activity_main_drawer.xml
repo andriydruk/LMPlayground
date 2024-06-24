@@ -9,9 +9,5 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/penrose_triangle_monochrome"
             android:title="@string/conversations" />
-        <item
-            android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_baseline_person"
-            android:title="@string/profile" />
     </group>
 </menu>

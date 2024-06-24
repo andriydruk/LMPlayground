@@ -10,13 +10,4 @@
         android:name="com.druk.lmplayground.conversation.ConversationFragment"
         android:label="Conversation" />
 
-    <fragment
-        android:id="@+id/nav_profile"
-        android:name="com.druk.lmplayground.profile.ProfileFragment"
-        android:label="Profile">
-        <argument
-            android:name="userId"
-            app:argType="string" />
-    </fragment>
-
 </navigation>

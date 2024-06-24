@@ -1,4 +1,4 @@
-package com.druk.lmplayground.conversation
+package com.druk.lmplayground
 
 import android.net.Uri
 import android.os.Environment
@@ -15,6 +15,7 @@ object ModelInfoProvider {
                 remoteUri = Uri.parse("https://huggingface.co/lmstudio-community/gemma-1.1-2b-it-GGUF/resolve/main/gemma-1.1-2b-it-Q4_K_M.gguf"),
                 inputPrefix = "<start_of_turn>user\n",
                 inputSuffix = "<end_of_turn>\n<start_of_turn>model\n",
+                antiPrompt = "<eos>",
                 description = "2.5 billion parameters language model"
             ),
             ModelInfo(

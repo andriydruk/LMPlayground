@@ -5,8 +5,6 @@ import androidx.compose.runtime.toMutableStateList
 import com.druk.lmplayground.R
 
 class ConversationUiState(
-    val channelName: String,
-    val channelMembers: Int,
     initialMessages: List<Message>
 ) {
     private val _messages: MutableList<Message> = initialMessages.toMutableStateList()
@@ -30,7 +28,6 @@ class ConversationUiState(
 data class Message(
     val author: String,
     val content: String,
-    val timestamp: String,
     val image: Int? = null,
     val authorImage: Int = if (author == "User")
         R.drawable.ic_baseline_person

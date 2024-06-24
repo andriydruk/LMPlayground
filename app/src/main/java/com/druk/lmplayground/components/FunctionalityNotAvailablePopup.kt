@@ -1,4 +1,4 @@
-package com.druk.lmplayground
+package com.druk.lmplayground.components
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme

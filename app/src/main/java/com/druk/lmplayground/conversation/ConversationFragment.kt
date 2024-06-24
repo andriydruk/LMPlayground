@@ -8,13 +8,10 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.compose.ui.platform.ComposeView
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import com.druk.lmplayground.MainViewModel
-import com.druk.lmplayground.R
 import com.druk.lmplayground.theme.PlaygroundTheme
 
 class ConversationFragment : Fragment() {
@@ -37,17 +34,7 @@ class ConversationFragment : Fragment() {
         setContent {
             PlaygroundTheme {
                 ConversationContent(
-                    viewModel = viewModel,
-                    navigateToProfile = { user ->
-                        val bundle = bundleOf("userId" to user)
-                        findNavController().navigate(
-                            R.id.nav_profile,
-                            bundle
-                        )
-                    },
-                    onNavIconPressed = {
-                        // Do nothing for now
-                    }
+                    viewModel = viewModel
                 )
             }
         }

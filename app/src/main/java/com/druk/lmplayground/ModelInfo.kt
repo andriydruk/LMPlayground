@@ -1,4 +1,4 @@
-package com.druk.lmplayground.conversation
+package com.druk.lmplayground
 
 import android.net.Uri
 import java.io.File

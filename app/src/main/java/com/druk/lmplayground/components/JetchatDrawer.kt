@@ -1,6 +1,5 @@
 package com.druk.lmplayground.components
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,20 +27,15 @@ import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.druk.lmplayground.R
-import com.druk.lmplayground.data.colleagueProfile
-import com.druk.lmplayground.data.meProfile
 import com.druk.lmplayground.theme.PlaygroundTheme
 
 @Composable
 fun PlaygroundDrawerContent(
-    onProfileClicked: (String) -> Unit,
-    onChatClicked: (String) ->
-    Unit
+    onChatClicked: (String) -> Unit
 ) {
     // Use windowInsetsTopHeight() to add a spacer which pushes the drawer content
     // below the status bar (y-axis)
@@ -54,10 +48,6 @@ fun PlaygroundDrawerContent(
         ChatItem("droidcon-nyc", false) { onChatClicked("droidcon-nyc") }
         DividerItem(modifier = Modifier.padding(horizontal = 28.dp))
         DrawerItemHeader("Recent Profiles")
-        ProfileItem("Ali Conors (you)", meProfile.photo) { onProfileClicked(meProfile.userId) }
-        ProfileItem("Taylor Brooks", colleagueProfile.photo) {
-            onProfileClicked(colleagueProfile.userId)
-        }
     }
 }
 
@@ -133,39 +123,6 @@ private fun ChatItem(text: String, selected: Boolean, onChatClicked: () -> Unit)
 }
 
 @Composable
-private fun ProfileItem(text: String, @DrawableRes profilePic: Int?, onProfileClicked: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .height(56.dp)
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp)
-            .clip(CircleShape)
-            .clickable(onClick = onProfileClicked),
-        verticalAlignment = CenterVertically
-    ) {
-        val paddingSizeModifier = Modifier
-            .padding(start = 16.dp, top = 16.dp, bottom = 16.dp)
-            .size(24.dp)
-        if (profilePic != null) {
-            Image(
-                painter = painterResource(id = profilePic),
-                modifier = paddingSizeModifier.then(Modifier.clip(CircleShape)),
-                contentScale = ContentScale.Crop,
-                contentDescription = null
-            )
-        } else {
-            Spacer(modifier = paddingSizeModifier)
-        }
-        Text(
-            text,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(start = 12.dp)
-        )
-    }
-}
-
-@Composable
 fun DividerItem(modifier: Modifier = Modifier) {
     Divider(
         modifier = modifier,
@@ -179,7 +136,7 @@ fun DrawerPreview() {
     PlaygroundTheme {
         Surface {
             Column {
-                PlaygroundDrawerContent({}, {})
+                PlaygroundDrawerContent {}
             }
         }
     }
@@ -190,7 +147,7 @@ fun DrawerPreviewDark() {
     PlaygroundTheme(isDarkTheme = true) {
         Surface {
             Column {
-                PlaygroundDrawerContent({}, {})
+                PlaygroundDrawerContent {}
             }
         }
     }

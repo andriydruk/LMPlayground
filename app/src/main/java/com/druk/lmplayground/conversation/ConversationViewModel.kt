@@ -23,6 +23,8 @@ import com.druk.llamacpp.LlamaGenerationCallback
 import com.druk.llamacpp.LlamaGenerationSession
 import com.druk.llamacpp.LlamaModel
 import com.druk.llamacpp.LlamaProgressCallback
+import com.druk.lmplayground.ModelInfo
+import com.druk.lmplayground.ModelInfoProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
@@ -30,7 +32,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.TreeMap
 import kotlin.math.round
-
 
 class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
 
@@ -53,9 +54,7 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
     val models: LiveData<List<ModelInfo>> = _models
 
     val uiState = ConversationUiState(
-        initialMessages = emptyList(),
-        channelName = "#composers",
-        channelMembers = 42
+        initialMessages = emptyList()
     )
 
     private val downloadReceiver: BroadcastReceiver = object : BroadcastReceiver() {
@@ -189,8 +188,7 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
         uiState.addMessage(
             Message(
                 "Assistant",
-                "",
-                "8:07 PM"
+                ""
             )
         )
 

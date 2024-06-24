@@ -26,7 +26,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropDown
@@ -72,7 +71,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.druk.lmplayground.FunctionalityNotAvailablePopup
+import com.druk.lmplayground.components.FunctionalityNotAvailablePopup
+import com.druk.lmplayground.ModelInfo
 import com.druk.lmplayground.R
 import com.druk.lmplayground.components.PlaygroundAppBar
 import com.druk.lmplayground.theme.PlaygroundTheme
@@ -82,20 +82,14 @@ import kotlinx.coroutines.launch
  * Entry point for a conversation screen.
  *
  * @param uiState [ConversationUiState] that contains messages to display
- * @param navigateToProfile User action when navigation to a profile is requested
  * @param modifier [Modifier] to apply to this layout node
- * @param onNavIconPressed Sends an event up when the user clicks on the menu
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConversationContent(
     viewModel: ConversationViewModel,
-    navigateToProfile: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    onNavIconPressed: () -> Unit = { }
+    modifier: Modifier = Modifier
 ) {
-    val timeNow = stringResource(id = R.string.now)
-
     val scrollState = rememberLazyListState()
     val topBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topBarState)
@@ -188,6 +182,9 @@ fun ConversationContent(
                 scrollState = scrollState
             )
             UserInput(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .imePadding(),
                 status = if (modelInfo == null)
                     UserInputStatus.NOT_LOADED
                 else if (isGenerating == true)
@@ -196,22 +193,19 @@ fun ConversationContent(
                     UserInputStatus.IDLE,
                 onMessageSent = { content ->
                     viewModel.addMessage(
-                        Message("User", content, timeNow)
+                        Message("User", content)
                     )
-                },
-                resetScroll = {
-                    scope.launch {
-                        scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount- 1)
-                    }
                 },
                 onCancelClicked = {
                     viewModel.cancelGeneration()
                 },
                 // let this element handle the padding so that the elevation is shown behind the
                 // navigation bar
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .imePadding()
+                resetScroll = {
+                    scope.launch {
+                        scrollState.animateScrollToItem(scrollState.layoutInfo.totalItemsCount- 1)
+                    }
+                }
             )
         }
     }
@@ -532,8 +526,7 @@ fun ClickableMessage(
 fun ConversationPreview() {
     PlaygroundTheme {
         ConversationContent(
-            viewModel = ConversationViewModel(Application()),
-            navigateToProfile = { }
+            viewModel = ConversationViewModel(Application())
         )
     }
 }
