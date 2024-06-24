@@ -1,6 +1,5 @@
 package com.druk.lmplayground
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.druk.llamacpp.LlamaCpp
@@ -23,10 +22,6 @@ class MainViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
-                val result = llamaCpp.loadOpenCL()
-                if (result != 0) {
-                    Log.e("MainViewModel", "Failed to load OpenCL, error code: $result")
-                }
                 llamaCpp.init()
             }
         }

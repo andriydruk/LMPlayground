@@ -78,7 +78,7 @@ void LlamaModel::loadModel(gpt_params params,
     // print system information
     {
         LOG_TEE("\n");
-        LOG_TEE("%s\n", get_system_info(params).c_str());
+        LOG_TEE("%s\n", gpt_params_get_system_info(params).c_str());
     }
 
     this->model_ = model;
@@ -88,6 +88,9 @@ void LlamaModel::loadModel(gpt_params params,
 }
 
 uint64_t LlamaModel::getModelSize() {
+    if (this->model_ == NULL) {
+        return 0;
+    }
     return llama_model_size(this->model_);
 }
 

@@ -65,14 +65,6 @@ int generate(gpt_params params,
 
 extern "C" JNIEXPORT int
 JNICALL
-Java_com_druk_llamacpp_LlamaCpp_loadOpenCL(JNIEnv *env, jobject activity) {
-    int result = clblast::LoadOpenCL();
-    isOpenCLSupported = result == 0;
-    return result;
-}
-
-extern "C" JNIEXPORT int
-JNICALL
 Java_com_druk_llamacpp_LlamaCpp_init(JNIEnv *env, jobject activity) {
 
     // Redirect std::cerr to logcat
@@ -158,7 +150,10 @@ Java_com_druk_llamacpp_LlamaModel_createSession(JNIEnv *env,
 
     const char *inputPrefixCStr = env->GetStringUTFChars(inputPrefix, nullptr);
     const char *inputSuffixCStr = env->GetStringUTFChars(inputSuffix, nullptr);
-    const char *antipromptCStr = env->GetStringUTFChars(aniPrompt, nullptr);
+    const char *antipromptCStr = nullptr;
+    if (aniPrompt != nullptr) {
+        antipromptCStr = env->GetStringUTFChars(aniPrompt, nullptr);
+    }
     LlamaGenerationSession* session = model->createGenerationSession(inputPrefixCStr,
                                                                      inputSuffixCStr,
                                                                      antipromptCStr);
@@ -285,9 +280,6 @@ gpt_params initLlamaCpp() {
     LOG_TEE("%s: seed  = %u\n", __func__, params.seed);
 
     std::mt19937 rng(params.seed);
-    if (params.random_prompt) {
-        params.prompt = gpt_random_prompt(rng);
-    }
 
     LOG("%s: llama backend init\n", __func__);
     llama_backend_init();

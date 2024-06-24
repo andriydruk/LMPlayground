@@ -37,9 +37,9 @@ static void write_logfile(
         return;
     }
 
-    const std::string timestamp = get_sortable_timestamp();
+    const std::string timestamp = string_get_sortable_timestamp();
 
-    const bool success = create_directory_with_parents(params.logdir);
+    const bool success = fs_create_directory_with_parents(params.logdir);
     if (!success) {
         fprintf(stderr, "%s: warning: failed to create logdir %s, cannot write logfile\n",
                 __func__, params.logdir.c_str());
@@ -57,7 +57,7 @@ static void write_logfile(
     fprintf(logfile, "binary: main\n");
     char model_desc[128];
     llama_model_desc(model, model_desc, sizeof(model_desc));
-    dump_non_result_info_yaml(logfile, params, ctx, timestamp, input_tokens, model_desc);
+    yaml_dump_non_result_info(logfile, params, ctx, timestamp, input_tokens, model_desc);
 
     fprintf(logfile, "\n");
     fprintf(logfile, "######################\n");
@@ -65,8 +65,8 @@ static void write_logfile(
     fprintf(logfile, "######################\n");
     fprintf(logfile, "\n");
 
-    dump_string_yaml_multiline(logfile, "output", output.c_str());
-    dump_vector_int_yaml(logfile, "output_tokens", output_tokens);
+    yaml_dump_string_multiline(logfile, "output", output.c_str());
+    yaml_dump_vector_int(logfile, "output_tokens", output_tokens);
 
     llama_dump_timing_info_yaml(logfile, ctx);
     fclose(logfile);
@@ -118,18 +118,15 @@ void LlamaGenerationSession::init(gpt_params params_arg) {
     // print system information
     {
         LOG_TEE("\n");
-        LOG_TEE("%s\n", get_system_info(params).c_str());
+        LOG_TEE("%s\n", gpt_params_get_system_info(params).c_str());
     }
 
     const bool add_bos = llama_should_add_bos_token(model);
     LOG("add_bos: %d\n", add_bos);
 
-    if (params.interactive_first || params.instruct || params.chatml || !params.prompt.empty() || session_tokens.empty()) {
+    if (params.interactive_first || !params.prompt.empty() || session_tokens.empty()) {
         LOG("tokenize the prompt\n");
-        if (params.chatml) {
-            params.prompt = "<|im_start|>system\n" + params.prompt + "<|im_end|>";
-        }
-        embd_inp = ::llama_tokenize(ctx, params.prompt, add_bos, true);
+        embd_inp = ::llama_tokenize(ctx, params.prompt, true, true);
     } else {
         LOG("use session tokens\n");
         embd_inp = session_tokens;
@@ -166,8 +163,10 @@ void LlamaGenerationSession::init(gpt_params params_arg) {
     }
 
     // number of tokens to keep when resetting context
-    if (params.n_keep < 0 || params.n_keep > (int) embd_inp.size() || params.instruct || params.chatml) {
+    if (params.n_keep < 0 || params.n_keep > (int) embd_inp.size()) {
         params.n_keep = (int)embd_inp.size();
+    } else {
+        params.n_keep += add_bos; // always keep the BOS token
     }
 
     // prefix & suffix for instruct mode
@@ -183,18 +182,6 @@ void LlamaGenerationSession::init(gpt_params params_arg) {
 
     LOG("cml_pfx: %s\n", LOG_TOKENS_TOSTR_PRETTY(ctx, cml_pfx).c_str());
     LOG("cml_sfx: %s\n", LOG_TOKENS_TOSTR_PRETTY(ctx, cml_sfx).c_str());
-
-    // in instruct mode, we inject a prefix and a suffix to each input by the user
-    if (params.instruct) {
-        params.interactive_first = true;
-        params.antiprompt.push_back("### Instruction:\n\n");
-    }
-
-    // similar for chatml mode
-    else if (params.chatml) {
-        params.interactive_first = true;
-        params.antiprompt.push_back("<|im_start|>user\n");
-    }
 
     // enable interactive mode if interactive start is specified
     if (params.interactive_first) {
@@ -466,8 +453,6 @@ int LlamaGenerationSession::generate(LlamaGenerationSession::ResponseCallback ca
 
                 is_interacting = true;
                 printf("\n");
-            } else if (params.instruct || params.chatml) {
-                is_interacting = true;
             }
         }
 
@@ -485,7 +470,7 @@ int LlamaGenerationSession::generate(LlamaGenerationSession::ResponseCallback ca
     }
 
     // end of text token
-    if (!embd.empty() && embd.back() == llama_token_eos(model) && !(params.instruct || params.interactive || params.chatml)) {
+    if (!embd.empty() && embd.back() == llama_token_eos(model) && !(params.interactive)) {
         LOG_TEE(" [end of text]\n");
         return 5;
     }
@@ -503,10 +488,6 @@ int LlamaGenerationSession::generate(LlamaGenerationSession::ResponseCallback ca
 void LlamaGenerationSession::addMessage(const char *string) {
     if (n_past > 0 && is_interacting) {
         LOG("waiting for user input\n");
-
-        if (params.instruct || params.chatml) {
-            printf("\n> ");
-        }
 
         if (params.input_prefix_bos) {
             LOG("adding input prefix BOS token\n");
@@ -532,21 +513,8 @@ void LlamaGenerationSession::addMessage(const char *string) {
 
             const size_t original_size = embd_inp.size();
 
-            // instruct mode: insert instruction prefix
-            /*if (params.instruct && !is_antiprompt) {
-                LOG("inserting instruction prefix\n");
-                n_consumed = embd_inp.size();
-                embd_inp.insert(embd_inp.end(), inp_pfx.begin(), inp_pfx.end());
-            }
-            // chatml mode: insert user chat prefix
-            if (params.chatml && !is_antiprompt) {
-                LOG("inserting chatml prefix\n");
-                n_consumed = embd_inp.size();
-                embd_inp.insert(embd_inp.end(), cml_pfx.begin(), cml_pfx.end());
-            }*/
-
             if (params.escape) {
-                process_escapes(buffer);
+                string_process_escapes(buffer);
             }
 
             const auto line_pfx = ::llama_tokenize(ctx, params.input_prefix, false, true);
@@ -592,7 +560,7 @@ void LlamaGenerationSession::addMessage(const char *string) {
     }
 
     // end of text token
-    if (!embd.empty() && embd.back() == llama_token_eos(model) && !(params.instruct || params.interactive || params.chatml)) {
+    if (!embd.empty() && embd.back() == llama_token_eos(model) && !params.interactive) {
         LOG_TEE(" [end of text]\n");
         return;
     }
