@@ -9,7 +9,6 @@
 #include "common.h"
 
 #include "console.h"
-#include "llama.h"
 
 #include <cassert>
 #include <cinttypes>
@@ -27,6 +26,23 @@
 #include <signal.h>
 #include <unistd.h>
 #include <android/log.h>
+#include <fcntl.h>
+
+int32_t generate_random_int32() {
+    int32_t random_value;
+    int fd = open("/dev/urandom", O_RDONLY);
+    if (fd < 0) {
+        __android_log_write(ANDROID_LOG_ERROR, "Llama", "Can't open /dev/urandom");
+        return 0;
+    }
+    if (read(fd, &random_value, sizeof(random_value)) != sizeof(random_value)) {
+        __android_log_write(ANDROID_LOG_ERROR, "Llama", "Can't read from /dev/urandom");
+        return 0;
+    }
+    close(fd);
+    __android_log_print(ANDROID_LOG_ERROR, "Llama", "Generated random seed %d", random_value);
+    return random_value;
+}
 
 void LlamaModel::loadModel(gpt_params params,
                            const std::string &modelPath,
@@ -51,23 +67,6 @@ void LlamaModel::loadModel(gpt_params params,
     if (model == NULL) {
         fprintf(stderr, "%s: error: failed to load model '%s'\n", __func__, params.model.c_str());
         return;
-    }
-
-    for (unsigned int i = 0; i < params.lora_adapter.size(); ++i) {
-        const std::string& lora_adapter = std::get<0>(params.lora_adapter[i]);
-        float lora_scale = std::get<1>(params.lora_adapter[i]);
-        int err = llama_model_apply_lora_from_file(model,
-                                                   lora_adapter.c_str(),
-                                                   lora_scale,
-                                                   ((i > 0) || params.lora_base.empty())
-                                                   ? NULL
-                                                   : params.lora_base.c_str(),
-                                                   params.n_threads);
-        if (err != 0) {
-            fprintf(stderr, "%s: error: failed to apply lora adapter\n", __func__);
-            llama_free_model(model);
-            return;
-        }
     }
 
     if (sparams.cfg_scale > 1.f) {
@@ -103,6 +102,8 @@ LlamaGenerationSession* LlamaModel::createGenerationSession(const char* input_pr
     localParams.interactive_first = true;
     localParams.input_prefix = std::string(input_prefix);
     localParams.input_suffix = std::string(input_suffix);
+    localParams.sparams.seed = generate_random_int32();
+
     if (antiprompt != NULL) {
         std::vector<std::string> antiprompt_vector = std::vector<std::string>();
         antiprompt_vector.push_back(std::string(antiprompt));

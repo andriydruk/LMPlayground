@@ -274,34 +274,81 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
     private val runnable: Runnable = object : Runnable {
         override fun run() {
             downloadModels.lastKey()?.let {
-                checkDownloadProgress(it, downloadModels[it]!!)
+                checkDownloadStatus(it, downloadModels[it]!!)
                 handler.postDelayed(this, 100)
             }
         }
     }
 
-    private fun checkDownloadProgress(downloadId: Long, model: ModelInfo) {
+    private fun checkDownloadStatus(downloadId: Long, model: ModelInfo) {
         val query = DownloadManager.Query()
         query.setFilterById(downloadId)
         val cursor = downloadManager.query(query)
         if (cursor.moveToFirst()) {
-            val bytesDownloadedIndex = cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
-            val bytesTotalIndex = cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
-            if (bytesDownloadedIndex == -1 || bytesTotalIndex == -1) {
-                return
-            }
-            val bytesDownloaded = cursor.getLong(bytesDownloadedIndex)
-            val bytesTotal = cursor.getLong(bytesTotalIndex)
-            if (bytesTotal > 0) {
-                val progress = bytesDownloaded.toFloat() / bytesTotal
-                _loadedModel.postValue(
-                    model.copy(
-                        description = "Downloading ${(progress * 100L).toInt()}%"
+            val statusIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+            cursor.getColumnIndex(DownloadManager.COLUMN_REASON)
+            val status = cursor.getInt(statusIndex)
+            when (status) {
+                DownloadManager.STATUS_SUCCESSFUL -> {
+                    _loadedModel.postValue(model.copy(description = "Download completed"))
+                    _modelLoadingProgress.postValue(1f)
+                }
+                DownloadManager.STATUS_FAILED -> {
+                    val failureMessage = getFailureMessage(cursor)
+                    _loadedModel.postValue(model.copy(description = failureMessage))
+                    _modelLoadingProgress.postValue(0f)
+                }
+                DownloadManager.STATUS_PAUSED -> {
+                    _loadedModel.postValue(model.copy(description = "Download paused"))
+                }
+                DownloadManager.STATUS_PENDING -> {
+                    _loadedModel.postValue(model.copy(description = "Download pending..."))
+                    _modelLoadingProgress.postValue(0f)
+                }
+                DownloadManager.STATUS_RUNNING -> {
+                    val progress = getDownloadProgress(cursor)
+                    _loadedModel.postValue(
+                        model.copy(
+                            description = "Downloading ${(progress * 100L).toInt()}%"
+                        )
                     )
-                )
-                _modelLoadingProgress.postValue(progress)
+                    _modelLoadingProgress.postValue(progress)
+                }
             }
         }
         cursor.close()
     }
+
+    private fun getDownloadProgress(cursor: Cursor): Float {
+        val bytesDownloadedIndex = cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)
+        val bytesTotalIndex = cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES)
+        if (bytesDownloadedIndex == -1 || bytesTotalIndex == -1) {
+            return 0f
+        }
+        val bytesDownloaded = cursor.getLong(bytesDownloadedIndex)
+        val bytesTotal = cursor.getLong(bytesTotalIndex)
+        return if (bytesTotal > 0) {
+            bytesDownloaded.toFloat() / bytesTotal
+        } else {
+            0f
+        }
+    }
+
+    private fun getFailureMessage(cursor: Cursor): String {
+        val reasonColumn = cursor.getColumnIndex(DownloadManager.COLUMN_REASON)
+        val reason = cursor.getInt(reasonColumn)
+        return when (reason) {
+            DownloadManager.ERROR_UNKNOWN -> "Unknown error occurred"
+            DownloadManager.ERROR_FILE_ERROR -> "Storage issue"
+            DownloadManager.ERROR_UNHANDLED_HTTP_CODE -> "Unhandled HTTP code"
+            DownloadManager.ERROR_HTTP_DATA_ERROR -> "HTTP data error"
+            DownloadManager.ERROR_TOO_MANY_REDIRECTS -> "Too many redirects"
+            DownloadManager.ERROR_INSUFFICIENT_SPACE -> "Insufficient storage space"
+            DownloadManager.ERROR_DEVICE_NOT_FOUND -> "External device not found"
+            DownloadManager.ERROR_CANNOT_RESUME -> "Cannot resume download"
+            DownloadManager.ERROR_FILE_ALREADY_EXISTS -> "File already exists"
+            else -> "Unknown error occurred"
+        }
+    }
+
 }

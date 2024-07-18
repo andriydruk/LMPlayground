@@ -46,8 +46,6 @@ protected:
 };
 
 gpt_params g_params;
-//llama_context *g_ctx_guidance = NULL;
-//llama_model *g_model = NULL;
 
 static void llama_log_callback_logTee(ggml_log_level level, const char * text, void * user_data) {
     (void) level;
