@@ -13,9 +13,9 @@ object ModelInfoProvider {
                 name = "Qwen2 0.5B",
                 file = files?.firstOrNull { it.name == "qwen2-0_5b-instruct-q4_k_m.gguf" },
                 remoteUri = Uri.parse("https://huggingface.co/Qwen/Qwen2-0.5B-Instruct-GGUF/resolve/main/qwen2-0_5b-instruct-q4_k_m.gguf"),
-                inputPrefix = "<|user|>\n",
-                inputSuffix = "<|end|>\n<|assistant|>\n",
-                antiPrompt = "<|end|><|assistant|>",
+                inputPrefix = "<|im_start|>user\n",
+                inputSuffix = "<|im_end|>\n<|im_start|>assistant\n",
+                antiPrompt = "<|im_end|>",
                 description = "0.5 billion parameters language model"
             ),
             ModelInfo(
