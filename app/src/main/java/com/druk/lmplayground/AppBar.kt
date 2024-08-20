@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.druk.lmplayground.components
+package com.druk.lmplayground
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.RowScope
@@ -15,11 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.druk.lmplayground.R
 import com.druk.lmplayground.theme.PlaygroundTheme
 
 @Composable
-fun PlaygroundAppBar(
+fun AppBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     onNavIconPressed: () -> Unit = { },
@@ -46,16 +45,16 @@ fun PlaygroundAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun PlaygroundAppBarPreview() {
+fun AppBarPreview() {
     PlaygroundTheme {
-        PlaygroundAppBar(title = { Text("Preview!") })
+        AppBar(title = { Text("Preview!") })
     }
 }
 
 @Preview
 @Composable
-fun PlaygroundAppBarPreviewDark() {
+fun AppBarPreviewDark() {
     PlaygroundTheme(isDarkTheme = true) {
-        PlaygroundAppBar(title = { Text("Preview!") })
+        AppBar(title = { Text("Preview!") })
     }
 }

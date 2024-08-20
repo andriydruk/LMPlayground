@@ -64,13 +64,13 @@ private:
 
 class LlamaModel {
 public:
-    LlamaModel() {}
-    ~LlamaModel() {}
+    LlamaModel() = default;
+    ~LlamaModel() = default;
 
-    LlamaGenerationSession* createGenerationSession(const char* input_prefix,
-                                                    const char* input_suffix,
-                                                    const char* antiprompt);
-    void loadModel(gpt_params params,
+    LlamaGenerationSession* createGenerationSession(std::string input_prefix,
+                                                    std::string input_suffix,
+                                                    std::vector<std::string> antiprompt);
+    void loadModel(const gpt_params& params,
                    const std::string &modelPath,
                    int32_t n_gpu_layers,
                    llama_progress_callback progress_callback,
@@ -82,8 +82,8 @@ public:
 
 private:
     // Private members for the model, like the model data, etc.
-    llama_model *model_ = NULL;
-    llama_context *ctx_guidance_ = NULL;
+    llama_model *model_ = nullptr;
+    llama_context *ctx_guidance_ = nullptr;
 };
 
 #endif //LMPLAYGROUND_LLAMACPP_H

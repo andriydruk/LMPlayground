@@ -2,6 +2,3 @@
 	path = app/src/main/cpp/llama.cpp
 	url=https://github.com/andriydruk/llama.cpp-android.git
 	branch = android
-[submodule "app/src/main/cpp/OpenCL-Headers"]
-	path = app/src/main/cpp/OpenCL-Headers
-	url = https://github.com/KhronosGroup/OpenCL-Headers.git

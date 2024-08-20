@@ -121,7 +121,7 @@ void LlamaGenerationSession::init(gpt_params params_arg) {
         LOG_TEE("%s\n", gpt_params_get_system_info(params).c_str());
     }
 
-    const bool add_bos = llama_should_add_bos_token(model);
+    const bool add_bos = llama_add_bos_token(model);
     LOG("add_bos: %d\n", add_bos);
 
     if (params.interactive_first || !params.prompt.empty() || session_tokens.empty()) {

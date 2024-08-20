@@ -23,7 +23,7 @@
 #include <vector>
 #include <mutex>
 
-#include <signal.h>
+#include <csignal>
 #include <unistd.h>
 #include <android/log.h>
 #include <fcntl.h>
@@ -44,16 +44,14 @@ int32_t generate_random_int32() {
     return random_value;
 }
 
-void LlamaModel::loadModel(gpt_params params,
+void LlamaModel::loadModel(const gpt_params& params,
                            const std::string &modelPath,
                            int32_t n_gpu_layers,
                            llama_progress_callback progress_callback,
                            void * progress_callback_user_data) {
 
-    //params.n_gpu_layers = 33;
-    // params.n_threads = 32;
-    llama_sampling_params & sparams = params.sparams;
-    llama_context * ctx_guidance = NULL;
+    const llama_sampling_params & sparams = params.sparams;
+    llama_context * ctx_guidance = nullptr;
 
     // load the model and apply lora adapter, if any
     LOG("%s: load the model and apply lora adapter, if any\n", __func__);
@@ -64,7 +62,7 @@ void LlamaModel::loadModel(gpt_params params,
     model_params.progress_callback_user_data = progress_callback_user_data;
 
     llama_model * model = llama_load_model_from_file(modelPath.c_str(), model_params);
-    if (model == NULL) {
+    if (model == nullptr) {
         fprintf(stderr, "%s: error: failed to load model '%s'\n", __func__, params.model.c_str());
         return;
     }
@@ -87,39 +85,34 @@ void LlamaModel::loadModel(gpt_params params,
 }
 
 uint64_t LlamaModel::getModelSize() {
-    if (this->model_ == NULL) {
+    if (this->model_ == nullptr) {
         return 0;
     }
     return llama_model_size(this->model_);
 }
 
-LlamaGenerationSession* LlamaModel::createGenerationSession(const char* input_prefix,
-                                                            const char* input_suffix,
-                                                            const char* antiprompt) {
-    LlamaGenerationSession *session = new LlamaGenerationSession(ctx_guidance_, model_);
+LlamaGenerationSession* LlamaModel::createGenerationSession(std::string input_prefix,
+                                                            std::string input_suffix,
+                                                            std::vector<std::string> antiprompt) {
+    auto *session = new LlamaGenerationSession(ctx_guidance_, model_);
     gpt_params localParams = g_params;
     localParams.interactive = true;
     localParams.interactive_first = true;
-    localParams.input_prefix = std::string(input_prefix);
-    localParams.input_suffix = std::string(input_suffix);
+    localParams.input_prefix = input_prefix;
+    localParams.input_suffix = input_suffix;
     localParams.sparams.seed = generate_random_int32();
-
-    if (antiprompt != NULL) {
-        std::vector<std::string> antiprompt_vector = std::vector<std::string>();
-        antiprompt_vector.push_back(std::string(antiprompt));
-        localParams.antiprompt = antiprompt_vector;
-    }
+    localParams.antiprompt = antiprompt;
     session->init(localParams);
     return session;
 }
 
 void LlamaModel::unloadModel() {
-    if (ctx_guidance_ == NULL) {
+    if (ctx_guidance_ == nullptr) {
         llama_free(ctx_guidance_);
-        ctx_guidance_ = NULL;
+        ctx_guidance_ = nullptr;
     }
-    if (model_ == NULL) {
+    if (model_ == nullptr) {
         llama_free_model(model_);
-        model_ = NULL;
+        model_ = nullptr;
     }
 }

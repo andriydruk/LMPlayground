@@ -23,8 +23,9 @@ import com.druk.llamacpp.LlamaGenerationCallback
 import com.druk.llamacpp.LlamaGenerationSession
 import com.druk.llamacpp.LlamaModel
 import com.druk.llamacpp.LlamaProgressCallback
-import com.druk.lmplayground.ModelInfo
-import com.druk.lmplayground.ModelInfoProvider
+import com.druk.lmplayground.App
+import com.druk.lmplayground.models.ModelInfo
+import com.druk.lmplayground.models.ModelInfoProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
@@ -35,7 +36,7 @@ import kotlin.math.round
 
 class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
 
-    private lateinit var llamaCpp: LlamaCpp
+    private val llamaCpp: LlamaCpp? = (app as? App)?.llamaCpp
     private var llamaModel: LlamaModel? = null
     private var llamaSession: LlamaGenerationSession? = null
     private var generatingJob: Job? = null
@@ -100,10 +101,6 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
         )
     }
 
-    fun setLlama(llamaCpp: LlamaCpp) {
-        this.llamaCpp = llamaCpp
-    }
-
     override fun onCleared() {
         generatingJob?.cancel()
         viewModelScope.launch {
@@ -127,6 +124,7 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
     @MainThread
     fun loadModel(modelInfo: ModelInfo) {
         val file = modelInfo.file ?: return
+        val llamaCpp = llamaCpp ?: return
         _models.postValue(emptyList())
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
@@ -204,8 +202,9 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
                     override fun newTokens(newTokens: ByteArray) {
                         responseByteArray += newTokens
                         var string = String(responseByteArray, Charsets.UTF_8)
-                        if (antiPrompt != null) {
-                            string = string.removeSuffix(antiPrompt)
+                        for (suffix in antiPrompt ?: emptyArray()) {
+                            string = string.removeSuffix(suffix)
+                            string = string.removeSuffix(suffix + "\n")
                         }
                         uiState.updateLastMessage(string)
                     }
