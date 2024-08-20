@@ -11,15 +11,16 @@ android {
         applicationId = "com.druk.lmplayground"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 14
-        versionName = "1.0.7"
+        versionCode = 1_00_08
+        versionName = "1.0.8"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
         externalNativeBuild {
             cmake {
-                // arguments += "-DLLAMA_VULKAN=ON"
-                // cppFlags += "-I${rootDir}/app/src/main/cpp/Vulkan-Hpp/Vulkan-Headers/include"
+                // Disable Vulkan for macOS Emulator (It doesn't support Vulkan)
+//                arguments += "-DLLAMA_VULKAN=ON"
+//                cppFlags += "-I${rootDir}/app/src/main/cpp/Vulkan-Hpp/Vulkan-Headers/include"
                 cFlags += "-march=armv8.4a+dotprod"
                 cppFlags += "-std=c++11"
             }

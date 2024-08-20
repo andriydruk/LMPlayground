@@ -27,8 +27,6 @@
 #include <android/log.h>
 #include <iostream>
 
-#include "clblast/include/opencl_wrapper.h"
-
 class AndroidLogBuf : public std::streambuf {
 protected:
     std::streamsize xsputn(const char* s, std::streamsize n) override {
