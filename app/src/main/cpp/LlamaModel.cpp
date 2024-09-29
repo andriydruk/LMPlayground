@@ -35,11 +35,13 @@ void LlamaModel::loadModel(const gpt_params& params_arg,
                            std::string input_prefix,
                            std::string input_suffix,
                            std::vector<std::string> antiprompt,
+                           int32_t n_ctx,
                            int32_t n_gpu_layers,
                            llama_progress_callback progress_callback,
                            void * progress_callback_user_data) {
     params = params_arg;
     params.interactive = true;
+    params.n_ctx = 2048;
     params.interactive_first = true;
     params.input_prefix = std::move(input_prefix);
     params.input_suffix = std::move(input_suffix);

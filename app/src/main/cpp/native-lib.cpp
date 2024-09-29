@@ -104,6 +104,7 @@ Java_com_druk_llamacpp_LlamaCpp_loadModel(JNIEnv *env,
                      std::string(inputPrefixCStr),
                      std::string(inputSuffixCStr),
                      antiprompt_vector,
+                     2048,
                      -1,
                      [](float progress, void *ctx) -> bool {
                             auto* context = static_cast<CallbackContext*>(ctx);

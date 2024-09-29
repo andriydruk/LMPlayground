@@ -82,6 +82,7 @@ public:
                    std::string input_prefix,
                    std::string input_suffix,
                    std::vector<std::string> antiprompt,
+                   int32_t n_ctx,
                    int32_t n_gpu_layers,
                    llama_progress_callback progress_callback,
                    void* progress_callback_user_data);

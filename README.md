@@ -10,12 +10,15 @@ LM Playground is designed as a universal platform for experimenting with various
 ![preview](art/Preview.png)
 
 ## Currently supported models
-* Qwen2 0.5B
+* Qwen2.5 0.5B
+* Qwen2.5 1.5B
+* Llama3.2 1B
+* Llama3.2 3B
 * Google Gemma2 2B
-* Microsoft Phi 3.1B
-* Meta Llama 3 7B
+* Microsoft Phi3.5 mini
+* Llama3.1 7B
 * Mistral 7B
-* Google Gemma2 2B
+* Google Gemma2 9B
 
 ## Install
 If you're just looking to install LM Playground, you can find it on [Google Play](https://play.google.com/store/apps/details?id=com.druk.lmplayground). If you're a developer wanting to contribute, read on.
