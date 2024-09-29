@@ -134,6 +134,9 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
                 )
                 val llamaModel = llamaCpp.loadModel(
                     file.path,
+                    modelInfo.inputPrefix,
+                    modelInfo.inputSuffix,
+                    modelInfo.antiPrompt,
                     object: LlamaProgressCallback {
                         override fun onProgress(progress: Float) {
                             val progressDescription = "${round(100 * progress).toInt()}%"
@@ -148,26 +151,7 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
                 )
                 val modelSize = llamaModel.getModelSize()
                 val modelDescription = Formatter.formatFileSize(app, modelSize)
-                val llamaSession = llamaModel.createSession(
-                    modelInfo.inputPrefix,
-                    modelInfo.inputSuffix,
-                    modelInfo.antiPrompt
-                )
-                // warmup the model
-                llamaSession.generate(object: LlamaGenerationCallback {
-                    override fun newTokens(newTokens: ByteArray) {
-                        // ignore
-                    }
-                })
-
-                val callback = object: LlamaGenerationCallback {
-                    override fun newTokens(newTokens: ByteArray) {
-                        // ignore
-                    }
-                }
-                while (this.isActive && llamaSession.generate(callback) == 0) {
-                    // wait for the response
-                }
+                val llamaSession = llamaModel.createSession()
                 this@ConversationViewModel.llamaModel = llamaModel
                 this@ConversationViewModel.llamaSession = llamaSession
                 _modelLoadingProgress.postValue(0f)

@@ -17,16 +17,9 @@ class LlamaModel {
     /**
      * Creates a new generation session for the loaded model.
      *
-     * @param inputPrefix (Optional) A string to prefix to the generated text.
-     * @param inputSuffix (Optional) A string to suffix to the generated text.
-     * @param antiPrompt (Optional) A string to stops the generation.
      * @return A `LlamaGenerationSession` object for managing text generation.
      */
-    external fun createSession(
-        inputPrefix: String?,
-        inputSuffix: String?,
-        antiPrompt: Array<String>,
-    ): LlamaGenerationSession
+    external fun createSession(): LlamaGenerationSession
 
     /**
      * Gets the size of the model in bytes.

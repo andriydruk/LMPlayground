@@ -7,6 +7,7 @@
 #include "console.h"
 #include "ggml.h"
 #include "llama.h"
+#include "log.h"
 
 #include <cassert>
 #include <cinttypes>
@@ -19,13 +20,10 @@
 #include <sstream>
 #include <string>
 #include <vector>
-
+#include <iostream>
 #include <csignal>
 #include <unistd.h>
 #include <android/log.h>
-
-#include <android/log.h>
-#include <iostream>
 
 class AndroidLogBuf : public std::streambuf {
 protected:
@@ -78,6 +76,9 @@ JNICALL
 Java_com_druk_llamacpp_LlamaCpp_loadModel(JNIEnv *env,
                    jobject activity,
                    jstring modelPath,
+                   jstring inputPrefix,
+                   jstring inputSuffix,
+                   jobjectArray aniPrompt,
                    jobject progressCallback) {
 
     // Struct to hold multiple pointers
@@ -86,10 +87,23 @@ Java_com_druk_llamacpp_LlamaCpp_loadModel(JNIEnv *env,
         jobject progressCallback;
     };
 
+    const char *inputPrefixCStr = env->GetStringUTFChars(inputPrefix, nullptr);
+    const char *inputSuffixCStr = env->GetStringUTFChars(inputSuffix, nullptr);
+    std::vector<std::string> antiprompt_vector = std::vector<std::string>();
+    jsize len = env->GetArrayLength(aniPrompt);
+    for (int i = 0; i < len; i++) {
+        jstring element = (jstring) env->GetObjectArrayElement(aniPrompt, i);
+        const char *antiprompt = env->GetStringUTFChars(element, nullptr);
+        antiprompt_vector.push_back(std::string(antiprompt));
+    }
+
     auto* model = new LlamaModel();
     CallbackContext ctx = {env, progressCallback};
     model->loadModel(g_params,
                      env->GetStringUTFChars(modelPath, nullptr),
+                     std::string(inputPrefixCStr),
+                     std::string(inputSuffixCStr),
+                     antiprompt_vector,
                      -1,
                      [](float progress, void *ctx) -> bool {
                             auto* context = static_cast<CallbackContext*>(ctx);
@@ -129,11 +143,7 @@ Java_com_druk_llamacpp_LlamaModel_unloadModel(JNIEnv *env, jobject thiz) {
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_druk_llamacpp_LlamaModel_createSession(JNIEnv *env,
-                                                jobject thiz,
-                                                jstring inputPrefix,
-                                                jstring inputSuffix,
-                                                jobjectArray aniPrompt) {
+Java_com_druk_llamacpp_LlamaModel_createSession(JNIEnv *env, jobject thiz) {
 
     jclass clazz1 = env->GetObjectClass(thiz);
     jfieldID fid1 = env->GetFieldID(clazz1, "nativeHandle", "J");
@@ -143,19 +153,7 @@ Java_com_druk_llamacpp_LlamaModel_createSession(JNIEnv *env,
     jmethodID constructor = env->GetMethodID(clazz2, "<init>", "()V");
     jobject obj = env->NewObject(clazz2, constructor);
 
-    const char *inputPrefixCStr = env->GetStringUTFChars(inputPrefix, nullptr);
-    const char *inputSuffixCStr = env->GetStringUTFChars(inputSuffix, nullptr);
-    std::vector<std::string> antiprompt_vector = std::vector<std::string>();
-    jsize len = env->GetArrayLength(aniPrompt);
-    for (int i = 0; i < len; i++) {
-        jstring element = (jstring) env->GetObjectArrayElement(aniPrompt, i);
-        const char *antiprompt = env->GetStringUTFChars(element, nullptr);
-        antiprompt_vector.push_back(std::string(antiprompt));
-    }
-
-    LlamaGenerationSession* session = model->createGenerationSession(std::string(inputPrefixCStr),
-                                                                     std::string(inputSuffixCStr),
-                                                                     antiprompt_vector);
+    LlamaGenerationSession* session = model->createGenerationSession();
     jclass clazz3 = env->GetObjectClass(obj);
     jfieldID fid3 = env->GetFieldID(clazz3, "nativeHandle", "J");
     env->SetLongField(obj, fid3, (long)session);
@@ -233,15 +231,11 @@ gpt_params initLlamaCpp() {
     gpt_params params;
 
 #ifndef LOG_DISABLE_LOGS
-    log_set_target(log_filename_generator("main", "log"));
-    LOG_TEE("Log start\n");
+    LOG("Log start\n");
     llama_log_set(llama_log_callback_logTee, nullptr);
 #endif // LOG_DISABLE_LOGS
 
-    // save choice to use color for later
-    // (note for later: this is a slightly awkward choice)
-    console::init(params.simple_io, params.use_color);
-    atexit([]() { console::cleanup(); });
+    gpt_init();
 
     if (params.logits_all) {
         printf("\n************\n");
@@ -256,31 +250,27 @@ gpt_params initLlamaCpp() {
     }
 
     if (params.n_ctx != 0 && params.n_ctx < 8) {
-        LOG_TEE("%s: warning: minimum context size is 8, using minimum size.\n", __func__);
+        LOG("%s: warning: minimum context size is 8, using minimum size.\n", __func__);
         params.n_ctx = 8;
     }
 
     if (params.rope_freq_base != 0.0) {
-        LOG_TEE("%s: warning: changing RoPE frequency base to %g.\n", __func__, params.rope_freq_base);
+        LOG("%s: warning: changing RoPE frequency base to %g.\n", __func__, params.rope_freq_base);
     }
 
     if (params.rope_freq_scale != 0.0) {
-        LOG_TEE("%s: warning: scaling RoPE frequency by %g.\n", __func__, params.rope_freq_scale);
+        LOG("%s: warning: scaling RoPE frequency by %g.\n", __func__, params.rope_freq_scale);
     }
 
-    LOG_TEE("%s: build = %d (%s)\n",      __func__, LLAMA_BUILD_NUMBER, LLAMA_COMMIT);
-    LOG_TEE("%s: built with %s for %s\n", __func__, LLAMA_COMPILER, LLAMA_BUILD_TARGET);
-
-    if (params.seed == LLAMA_DEFAULT_SEED) {
-        params.seed = time(nullptr);
-    }
-
-    LOG_TEE("%s: seed  = %u\n", __func__, params.seed);
-
-    std::mt19937 rng(params.seed);
+    LOG("%s: build = %d (%s)\n",      __func__, LLAMA_BUILD_NUMBER, LLAMA_COMMIT);
+    LOG("%s: built with %s for %s\n", __func__, LLAMA_COMPILER, LLAMA_BUILD_TARGET);
 
     LOG("%s: llama backend init\n", __func__);
     llama_backend_init();
+    llama_numa_init(params.numa);
+
+    params.cpuparams.n_threads = (int) sysconf(_SC_NPROCESSORS_ONLN);
+    params.cpuparams_batch.n_threads = (int) sysconf(_SC_NPROCESSORS_ONLN);
 
     return params;
 }
