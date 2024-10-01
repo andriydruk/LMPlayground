@@ -1,0 +1,49 @@
+name: Pull Request Check
+
+on: pull_request
+
+jobs:
+
+  AndroidTest:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Enable KVM group perms
+      run: |
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+        ls /dev/kvm
+    - uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '21'
+        cache: 'gradle'
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+    - name: Install Android Emulator
+      run: $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "emulator"
+    - name: Install Android Emulator image
+      run: $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "system-images;android-33;google_apis;x86_64"
+    - name: Create Android Emulator
+      run: $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n ci-test -k "system-images;android-33;google_apis;x86_64" -d "pixel" --force
+    - name: Start ADB server
+      run: adb start-server
+    - name: Start Android Emulator
+      run: $ANDROID_HOME/emulator/emulator -no-window -avd ci-test -noaudio > /dev/null &
+    - name: Run connected android tests
+      run: |
+        adb wait-for-device;
+        ./gradlew app:cAT
+    - name: Publish Report
+      uses: mikepenz/action-junit-report@v3
+      if: success() || failure() # always run even if the previous step fails
+      with:
+        report_paths: app/build/outputs/androidTest-results/connected/**/*.xml
+        check_name: AndroidTestReport
+        detailed_summary: true
+        include_passed: true
