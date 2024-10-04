@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +35,8 @@ import com.druk.lmplayground.AppBar
 import com.druk.lmplayground.R
 import com.druk.lmplayground.models.ModelInfo
 import com.druk.lmplayground.theme.PlaygroundTheme
+
+const val ConversationBarTestTag = "ConversationBarTestTag"
 
 @Composable
 fun ConversationBar(
@@ -49,7 +52,7 @@ fun ConversationBar(
         FunctionalityNotAvailablePopup { functionalityNotAvailablePopupShown = false }
     }
     AppBar(
-        modifier = modifier,
+        modifier = modifier.testTag(ConversationBarTestTag),
         scrollBehavior = scrollBehavior,
         onNavIconPressed = onNavIconPressed,
         title = {

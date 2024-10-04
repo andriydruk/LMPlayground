@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.ManagedVirtualDevice
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -21,13 +23,12 @@ android {
                 // Disable Vulkan for macOS Emulator (It doesn't support Vulkan)
 //                arguments += "-DGGML_VULKAN=ON"
 //                cppFlags += "-I${rootDir}/app/src/main/cpp/Vulkan-Hpp/Vulkan-Headers/include"
-                cFlags += "-march=armv8.4a+dotprod"
                 cppFlags += "-std=c++11"
             }
         }
 
         ndk {
-            abiFilters += "arm64-v8a"
+            abiFilters += setOf("arm64-v8a", "x86_64")
         }
     }
 
@@ -74,6 +75,15 @@ android {
     buildFeatures {
         compose = true
         viewBinding = true
+    }
+
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a", "x86_64")
+            isUniversalApk = true
+        }
     }
 
     composeOptions {
