@@ -12,6 +12,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.halilibo.richtext.commonmark.Markdown
+import com.halilibo.richtext.ui.material3.RichText
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -35,16 +37,22 @@ fun ChatItemBubble(
 
     Column {
         Surface {
-            val styledMessage = messageFormatter(
-                text = message.content,
-                primary = isUserMe
-            )
-
             SelectionContainer {
-                Text(
-                    text = styledMessage,
-                    style = MaterialTheme.typography.bodyLarge.copy(color = LocalContentColor.current)
-                )
+                if (isUserMe) {
+                    val styledMessage = messageFormatter(
+                        text = message.content,
+                        primary = isUserMe
+                    )
+
+                    Text(
+                        text = styledMessage,
+                        style = MaterialTheme.typography.bodyLarge.copy(color = LocalContentColor.current)
+                    )
+                } else {
+                    RichText {
+                        Markdown(message.content)
+                    }
+                }
             }
         }
 
