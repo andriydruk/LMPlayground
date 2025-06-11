@@ -128,7 +128,11 @@ Java_com_druk_llamacpp_LlamaModel_unloadModel(JNIEnv *env, jobject thiz) {
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_druk_llamacpp_LlamaModel_createSession(JNIEnv *env, jobject thiz) {
+Java_com_druk_llamacpp_LlamaModel_createSession(JNIEnv *env, jobject thiz,
+                                                jint n_ctx,
+                                                jfloat temperature,
+                                                jfloat top_p,
+                                                jint top_k) {
 
     jclass clazz1 = env->GetObjectClass(thiz);
     jfieldID fid1 = env->GetFieldID(clazz1, "nativeHandle", "J");
@@ -138,7 +142,10 @@ Java_com_druk_llamacpp_LlamaModel_createSession(JNIEnv *env, jobject thiz) {
     jmethodID constructor = env->GetMethodID(clazz2, "<init>", "()V");
     jobject obj = env->NewObject(clazz2, constructor);
 
-    LlamaGenerationSession* session = model->createGenerationSession();
+    LlamaGenerationSession* session = model->createGenerationSession(n_ctx,
+                                                                     temperature,
+                                                                     top_p,
+                                                                     top_k);
     jclass clazz3 = env->GetObjectClass(obj);
     jfieldID fid3 = env->GetFieldID(clazz3, "nativeHandle", "J");
     env->SetLongField(obj, fid3, (long)session);

@@ -19,7 +19,12 @@ class LlamaModel {
      *
      * @return A `LlamaGenerationSession` object for managing text generation.
      */
-    external fun createSession(): LlamaGenerationSession
+    external fun createSession(
+        contextSize: Int,
+        temperature: Float,
+        topP: Float,
+        topK: Int
+    ): LlamaGenerationSession
 
     /**
      * Gets the size of the model in bytes.

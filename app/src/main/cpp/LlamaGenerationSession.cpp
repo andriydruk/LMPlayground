@@ -89,7 +89,11 @@ LlamaGenerationSession::~LlamaGenerationSession() {
     }
 }
 
-void LlamaGenerationSession::init(llama_model *model) {
+void LlamaGenerationSession::init(llama_model *model,
+                                  int32_t n_ctx,
+                                  float   temperature,
+                                  float   top_p,
+                                  int32_t top_k) {
 
     vocab = llama_model_get_vocab(model);
 
@@ -98,8 +102,8 @@ void LlamaGenerationSession::init(llama_model *model) {
 
     // initialize the context
     llama_context_params ctx_params = llama_context_default_params();
-    ctx_params.n_ctx = 2048;
-    ctx_params.n_batch = 2048;
+    ctx_params.n_ctx = n_ctx;
+    ctx_params.n_batch = n_ctx;
     ctx_params.n_threads       = n_threads;
     ctx_params.n_threads_batch = n_threads;
 
@@ -114,9 +118,9 @@ void LlamaGenerationSession::init(llama_model *model) {
 
     // initialize the sampler
     smpl = llama_sampler_chain_init(smplParams);
-    llama_sampler_chain_add(smpl, llama_sampler_init_greedy());
-    llama_sampler_chain_add(smpl, llama_sampler_init_min_p(0.05f, 1));
-    llama_sampler_chain_add(smpl, llama_sampler_init_temp(0.8f));
+    llama_sampler_chain_add(smpl, llama_sampler_init_top_k(top_k));
+    llama_sampler_chain_add(smpl, llama_sampler_init_top_p(top_p, 1));
+    llama_sampler_chain_add(smpl, llama_sampler_init_temp(temperature));
     llama_sampler_chain_add(smpl, llama_sampler_init_dist(LLAMA_DEFAULT_SEED));
 
     messages = new std::vector<llama_chat_message>();

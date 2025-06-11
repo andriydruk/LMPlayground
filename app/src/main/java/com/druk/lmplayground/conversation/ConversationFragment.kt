@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.druk.lmplayground.models.SelectModelDialog
+import com.druk.lmplayground.models.GenerationParams
 import com.druk.lmplayground.theme.PlaygroundTheme
 import kotlinx.coroutines.launch
 
@@ -72,7 +73,10 @@ class ConversationFragment : Fragment() {
 
                 val colorScheme = MaterialTheme.colorScheme
                 var modelReport by remember { mutableStateOf<String?>(null) }
+                var showParams by remember { mutableStateOf(false) }
+                val params by viewModel.generationParams.observeAsState(GenerationParams())
 
+                Box {
                 Scaffold(
                     topBar = {
                         ConversationBar(
@@ -86,7 +90,8 @@ class ConversationFragment : Fragment() {
                             },
                             onUnloadModelPressed = {
                                 viewModel.unloadModel()
-                            }
+                            },
+                            onSettingsPressed = { showParams = true }
                         )
                         if (models.isNotEmpty()) {
                             SelectModelDialog(
@@ -179,6 +184,13 @@ class ConversationFragment : Fragment() {
                         )
                     }
                 }
+                ParametersPanel(
+                    visible = showParams,
+                    params = params,
+                    onApply = { viewModel.applyGenerationParams(it) },
+                    onDismiss = { showParams = false },
+                    modifier = Modifier.align(Alignment.TopEnd)
+                )
             }
         }
     }

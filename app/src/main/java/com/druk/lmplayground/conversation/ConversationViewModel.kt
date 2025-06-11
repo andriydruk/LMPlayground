@@ -26,6 +26,7 @@ import com.druk.llamacpp.LlamaProgressCallback
 import com.druk.lmplayground.App
 import com.druk.lmplayground.models.ModelInfo
 import com.druk.lmplayground.models.ModelInfoProvider
+import com.druk.lmplayground.models.GenerationParams
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
@@ -44,6 +45,7 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
     private val _modelLoadingProgress = MutableLiveData(0f)
     private val _loadedModel = MutableLiveData<ModelInfo?>(null)
     private val _models = MutableLiveData<List<ModelInfo>>(emptyList())
+    private val _generationParams = MutableLiveData(GenerationParams())
     private var downloadModels = TreeMap<Long, ModelInfo>()
     private val downloadManager: DownloadManager by lazy {
         app.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
@@ -53,6 +55,7 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
     val modelLoadingProgress: LiveData<Float> = _modelLoadingProgress
     val loadedModel: LiveData<ModelInfo?> = _loadedModel
     val models: LiveData<List<ModelInfo>> = _models
+    val generationParams: LiveData<GenerationParams> = _generationParams
 
     val uiState = ConversationUiState(
         initialMessages = emptyList()
@@ -151,7 +154,13 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
                 )
                 val modelSize = llamaModel.getModelSize()
                 val modelDescription = Formatter.formatFileSize(app, modelSize)
-                val llamaSession = llamaModel.createSession()
+                val params = _generationParams.value ?: GenerationParams()
+                val llamaSession = llamaModel.createSession(
+                    params.contextSize,
+                    params.temperature,
+                    params.topP,
+                    params.topK
+                )
                 this@ConversationViewModel.llamaModel = llamaModel
                 this@ConversationViewModel.llamaSession = llamaSession
                 _modelLoadingProgress.postValue(0f)
@@ -236,6 +245,13 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
 
     fun resetModelList() {
         _models.postValue(emptyList())
+    }
+
+    fun applyGenerationParams(params: GenerationParams) {
+        _generationParams.postValue(params)
+        val model = _loadedModel.value ?: return
+        unloadModel()
+        loadModel(model)
     }
 
     fun downloadModel(model: ModelInfo) {

@@ -46,9 +46,12 @@ void LlamaModel::loadModel(const std::string &modelPath,
     }
 }
 
-LlamaGenerationSession* LlamaModel::createGenerationSession() {
+LlamaGenerationSession* LlamaModel::createGenerationSession(int32_t n_ctx,
+                                                           float   temperature,
+                                                           float   top_p,
+                                                           int32_t top_k) {
     auto *session = new LlamaGenerationSession();
-    session->init(model);
+    session->init(model, n_ctx, temperature, top_p, top_k);
     return session;
 }
 
