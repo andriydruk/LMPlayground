@@ -31,6 +31,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -53,6 +54,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Lightbulb
@@ -75,6 +78,7 @@ import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.SemanticsPropertyReceiver
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.platform.LocalDensity
@@ -91,6 +95,7 @@ import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
 import coil.compose.AsyncImage
 import com.druk.lmplayground.R
+import com.druk.lmplayground.dictation.DictationState
 
 enum class UserInputStatus {
     IDLE,
@@ -147,10 +152,27 @@ fun UserInput(
     onMessageSent: (String) -> Unit,
     onCancelClicked: () -> Unit = {},
     resetScroll: () -> Unit = {},
+    dictationState: DictationState = DictationState.Idle,
+    onMicClick: () -> Unit = {},
+    onStopRecording: () -> Unit = {},
+    onCancelRecording: () -> Unit = {},
+    /**
+     * A finished transcript waiting to be inserted at the cursor. The composer
+     * owns the text field, so the caller hands the text over and is told when
+     * it landed via [onTranscriptConsumed].
+     */
+    pendingTranscript: String? = null,
+    onTranscriptConsumed: () -> Unit = {},
 ) {
 
     var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue())
+    }
+
+    LaunchedEffect(pendingTranscript) {
+        val transcript = pendingTranscript ?: return@LaunchedEffect
+        textState = textState.insertAtCursor(transcript)
+        onTranscriptConsumed()
     }
 
     // Used to decide if the keyboard should be shown
@@ -239,45 +261,153 @@ fun UserInput(
                 }
             }
 
-            UserInputText(
-                status,
-                focusRequester = focusRequester,
-                supportsThinking = supportsThinking,
-                thinkingEnabled = thinkingEnabled,
-                onThinkingToggle = onThinkingToggle,
-                supportsVision = supportsVision,
-                cameraAvailable = cameraAvailable,
-                onAttachImage = onAttachImage,
-                onTakePhoto = onTakePhoto,
-                onAttachDocument = onAttachDocument,
-                textFieldValue = textState,
-                onTextChanged = { textState = it },
-                // Only show the keyboard if there's no input selector and text field has focus
-                keyboardShown = textFieldFocusState,
-                // Close extended selector if text field receives focus
-                onTextFieldFocused = { focused ->
-                    if (focused) {
+            if (dictationState !is DictationState.Idle) {
+                DictationBar(
+                    state = dictationState,
+                    onStopRecording = onStopRecording,
+                    onCancelRecording = onCancelRecording,
+                    compact = integrateWithSurface,
+                )
+            } else {
+                UserInputText(
+                    status,
+                    focusRequester = focusRequester,
+                    supportsThinking = supportsThinking,
+                    thinkingEnabled = thinkingEnabled,
+                    onThinkingToggle = onThinkingToggle,
+                    supportsVision = supportsVision,
+                    cameraAvailable = cameraAvailable,
+                    onAttachImage = onAttachImage,
+                    onTakePhoto = onTakePhoto,
+                    onAttachDocument = onAttachDocument,
+                    onMicClick = onMicClick,
+                    textFieldValue = textState,
+                    onTextChanged = { textState = it },
+                    // Only show the keyboard if there's no input selector and text field has focus
+                    keyboardShown = textFieldFocusState,
+                    // Close extended selector if text field receives focus
+                    onTextFieldFocused = { focused ->
+                        if (focused) {
+                            resetScroll()
+                        }
+                        textFieldFocusState = focused
+                    },
+                    sendMessageEnabled = textState.text.isNotBlank(),
+                    onMessageSent = {
+                        onMessageSent(textState.text)
+                        // Reset text field and close keyboard
+                        textState = TextFieldValue()
+                        // Move scroll to bottom
                         resetScroll()
-                    }
-                    textFieldFocusState = focused
-                },
-                sendMessageEnabled = textState.text.isNotBlank(),
-                onMessageSent = {
-                    onMessageSent(textState.text)
-                    // Reset text field and close keyboard
-                    textState = TextFieldValue()
-                    // Move scroll to bottom
-                    resetScroll()
-                },
-                onCancelClicked = onCancelClicked,
-                // On tablet landscape (integrateWithSurface) reduce the row's
-                // vertical padding from 8dp → 2dp so the input dock saves ~12dp
-                // of message area — vertical space is the constrained dimension
-                // when the IME is open.
-                compact = integrateWithSurface
-            )
+                    },
+                    onCancelClicked = onCancelClicked,
+                    // On tablet landscape (integrateWithSurface) reduce the row's
+                    // vertical padding from 8dp → 2dp so the input dock saves ~12dp
+                    // of message area — vertical space is the constrained dimension
+                    // when the IME is open.
+                    compact = integrateWithSurface
+                )
+            }
         }
     }
+}
+
+/**
+ * Replaces the text field while dictation is running: a live timer with a
+ * cancel/stop pair, then a spinner while the audio is transcribed.
+ */
+@Composable
+private fun DictationBar(
+    state: DictationState,
+    onStopRecording: () -> Unit,
+    onCancelRecording: () -> Unit,
+    compact: Boolean,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = if (compact) 2.dp else 8.dp, horizontal = 4.dp)
+            .heightIn(min = if (compact) 40.dp else 48.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        when (state) {
+            is DictationState.Recording -> {
+                IconButton(onClick = onCancelRecording) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = stringResource(R.string.dictation_cancel),
+                        tint = LocalContentColor.current,
+                    )
+                }
+                // The dot tracks input level, so the user can see the mic is
+                // actually hearing them before they commit to a long sentence.
+                val level = (0.35f + state.amplitude * 4f).coerceIn(0.35f, 1f)
+                Box(
+                    modifier = Modifier
+                        .size(10.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.error.copy(alpha = level))
+                )
+                Text(
+                    text = formatElapsed(state.elapsedMs),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(start = 12.dp),
+                )
+                Text(
+                    text = stringResource(R.string.dictation_recording),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 8.dp).weight(1f),
+                )
+                IconButton(onClick = onStopRecording, modifier = Modifier.padding(end = 4.dp)) {
+                    Icon(
+                        imageVector = Icons.Filled.Stop,
+                        contentDescription = stringResource(R.string.dictation_stop),
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                }
+            }
+
+            DictationState.Transcribing -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.padding(start = 12.dp).size(18.dp),
+                    strokeWidth = 2.dp,
+                )
+                Text(
+                    text = stringResource(R.string.dictation_transcribing),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 12.dp).weight(1f),
+                )
+            }
+
+            DictationState.Idle -> Unit
+        }
+    }
+}
+
+private fun formatElapsed(elapsedMs: Long): String {
+    val totalSeconds = elapsedMs / 1000
+    return "%d:%02d".format(totalSeconds / 60, totalSeconds % 60)
+}
+
+/**
+ * Splice [text] in at the caret, replacing any selection, and leave the caret
+ * after the inserted text. Spacing is normalized so dictating twice in a row
+ * doesn't run words together.
+ */
+private fun TextFieldValue.insertAtCursor(text: String): TextFieldValue {
+    val start = selection.min.coerceIn(0, this.text.length)
+    val end = selection.max.coerceIn(0, this.text.length)
+    val before = this.text.substring(0, start)
+    val after = this.text.substring(end)
+    val separator = if (before.isNotEmpty() && !before.last().isWhitespace()) " " else ""
+    val inserted = separator + text
+    return TextFieldValue(
+        text = before + inserted + after,
+        selection = TextRange(start + inserted.length),
+    )
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -321,6 +451,7 @@ private fun UserInputText(
     onAttachImage: () -> Unit = {},
     onTakePhoto: () -> Unit = {},
     onAttachDocument: () -> Unit = {},
+    onMicClick: () -> Unit = {},
     keyboardType: KeyboardType = KeyboardType.Text,
     onTextChanged: (TextFieldValue) -> Unit,
     textFieldValue: TextFieldValue,
@@ -490,6 +621,20 @@ private fun UserInputText(
             disabledContainerColor = Color.Transparent,
             disabledContentColor = disabledContentColor
         )
+
+        // Dictation works without a chat model loaded (it runs its own engine),
+        // so the mic stays available except while a response is streaming.
+        IconButton(
+            onClick = onMicClick,
+            enabled = status != UserInputStatus.GENERATING,
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Mic,
+                contentDescription = stringResource(R.string.dictation_start),
+                modifier = if (status == UserInputStatus.GENERATING) Modifier.alpha(0.8f) else Modifier,
+                tint = LocalContentColor.current
+            )
+        }
 
         // Send button
         Box {

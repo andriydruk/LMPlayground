@@ -1,6 +1,9 @@
 package com.druk.llamacpp
 
 import android.os.ParcelFileDescriptor
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
  * App-facing facade for the inference engine.
@@ -75,6 +78,58 @@ class LlamaCpp(private val client: InferenceClient) {
             // next successful call will overwrite it.
         }
     }
+
+    // ── Voice dictation ──────────────────────────────────────────────────
+
+    /**
+     * Load the Parakeet ASR model from a [ParcelFileDescriptor] (SAF storage).
+     * Returns false when the file isn't a usable Parakeet GGUF.
+     */
+    fun loadAsrModel(pfd: ParcelFileDescriptor): Boolean =
+        client.withService { it.loadAsrModel(null, pfd) }
+
+    /** Path overload, for `/data/local/tmp` models in instrumented tests. */
+    fun loadAsrModel(path: String): Boolean =
+        client.withService { it.loadAsrModel(path, null) }
+
+    fun isAsrModelLoaded(): Boolean = client.withService { it.isAsrModelLoaded() }
+
+    fun unloadAsrModel() {
+        try {
+            client.withService { it.unloadAsrModel() }
+        } catch (_: Throwable) {
+            // Best-effort: if the service is already gone, so is the model.
+        }
+    }
+
+    /**
+     * Transcribe 16 kHz mono little-endian f32 PCM read from [pcmFd], which is
+     * closed by the service. Suspends until the transcript arrives.
+     *
+     * @param targetLang a locale such as "en", or "auto" for detection.
+     * @throws IllegalStateException when transcription fails.
+     */
+    suspend fun transcribe(pcmFd: ParcelFileDescriptor, targetLang: String = "auto"): String =
+        suspendCancellableCoroutine { continuation ->
+            val callback = object : ITranscriptionCallback.Stub() {
+                override fun onTranscription(text: String) {
+                    if (continuation.isActive) continuation.resume(text)
+                }
+
+                override fun onTranscriptionError(message: String) {
+                    if (continuation.isActive) {
+                        continuation.resumeWithException(IllegalStateException(message))
+                    }
+                }
+            }
+            try {
+                client.withService { it.transcribe(pcmFd, targetLang, callback) }
+            } catch (t: Throwable) {
+                // The caller owns [pcmFd] and closes it either way; the service
+                // closes its own binder-dup'd copy.
+                if (continuation.isActive) continuation.resumeWithException(t)
+            }
+        }
 
     private fun wrapProgress(cb: LlamaProgressCallback) = object : ILlamaProgressCallback.Stub() {
         override fun onProgress(progress: Float) = cb.onProgress(progress)

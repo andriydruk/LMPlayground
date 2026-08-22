@@ -23,6 +23,8 @@ import com.druk.lmplayground.models.ModelInfoProvider
 import com.druk.lmplayground.models.ModelWithStatus
 import com.druk.lmplayground.models.resolveCapabilities
 import com.druk.lmplayground.data.RagDocumentEntity
+import com.druk.lmplayground.dictation.DictationController
+import com.druk.lmplayground.dictation.DictationManager
 import com.druk.lmplayground.download.DownloadRepository
 import com.druk.lmplayground.rag.DocumentTextExtractor
 import com.druk.lmplayground.rag.DocumentTextExtractors
@@ -214,6 +216,17 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
         storagePreferences,
         notifications,
         runtimeListener,
+    )
+
+    /**
+     * Voice dictation. Deliberately independent of [runtime]: the ASR model is
+     * its own engine, so the microphone works whatever chat model is loaded.
+     */
+    val dictation = DictationController(
+        app,
+        DictationManager(llamaCpp, storageRepository),
+        storageRepository,
+        viewModelScope,
     )
 
     /**

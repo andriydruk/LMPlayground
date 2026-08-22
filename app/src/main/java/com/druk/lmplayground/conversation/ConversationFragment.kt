@@ -1,5 +1,6 @@
 package com.druk.lmplayground.conversation
 
+import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -79,6 +80,9 @@ import dev.chrisbanes.haze.HazeTint
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import com.druk.lmplayground.dictation.DictationState
 import kotlinx.coroutines.launch
 
 class ConversationFragment : Fragment() {
@@ -96,6 +100,20 @@ class ConversationFragment : Fragment() {
 
     private val cameraAvailable by lazy {
         requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)
+    }
+
+    private val recordAudioPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            viewModel.dictation.startRecording()
+        } else {
+            Toast.makeText(
+                requireContext(),
+                R.string.dictation_permission_denied,
+                Toast.LENGTH_SHORT,
+            ).show()
+        }
     }
 
     private val pickMediaLauncher = registerForActivityResult(
@@ -168,6 +186,22 @@ class ConversationFragment : Fragment() {
      * path as the photo picker. No CAMERA permission is needed — the camera app
      * does the capture and we only receive the written image.
      */
+    /**
+     * Begin dictation, asking for the microphone first if we don't have it.
+     * The permission callback starts the recording on grant.
+     */
+    private fun startDictation() {
+        val granted = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.RECORD_AUDIO,
+        ) == PackageManager.PERMISSION_GRANTED
+        if (granted) {
+            viewModel.dictation.startRecording()
+        } else {
+            recordAudioPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+        }
+    }
+
     private fun launchCamera() {
         // Drop any temp from a prior capture that was never sent.
         clearPendingCapture()
@@ -266,6 +300,12 @@ class ConversationFragment : Fragment() {
             }
             var showParamsSheet by remember { mutableStateOf(false) }
 
+            val dictationState by viewModel.dictation.state.observeAsState(DictationState.Idle)
+            val dictationTranscript by viewModel.dictation.transcript.observeAsState()
+            val dictationError by viewModel.dictation.error.observeAsState()
+            val dictationModelReady by viewModel.dictation.isModelReady.observeAsState()
+            var showDictationDownloadPrompt by remember { mutableStateOf(false) }
+
             // Surface transient ViewModel errors (e.g. message-too-large)
             // as Toasts. The ViewModel can't show UI directly, so we
             // observe a one-shot LiveData and clear it after consumption.
@@ -275,6 +315,15 @@ class ConversationFragment : Fragment() {
                 Toast.makeText(toastContext, msg, Toast.LENGTH_LONG).show()
                 viewModel.consumeUserError()
             }
+
+            LaunchedEffect(dictationError) {
+                val msg = dictationError ?: return@LaunchedEffect
+                Toast.makeText(toastContext, msg, Toast.LENGTH_SHORT).show()
+                viewModel.dictation.consumeError()
+            }
+
+            // The model may have been downloaded (or deleted) since last time.
+            LaunchedEffect(Unit) { viewModel.dictation.refreshModelAvailability() }
 
             // Storage configuration state
             val isStorageConfigured by storageViewModel.isStorageConfigured.observeAsState(true)
@@ -510,6 +559,43 @@ class ConversationFragment : Fragment() {
                         },
                         dismissButton = {
                             TextButton(onClick = { viewModel.dismissEmbeddingModelPrompt() }) {
+                                Text(stringResource(R.string.cancel))
+                            }
+                        }
+                    )
+                }
+
+                // Dictation needs its speech model on disk — offer the one-time
+                // download the first time the microphone is tapped.
+                if (showDictationDownloadPrompt) {
+                    val dictationModel = viewModel.dictation.modelInfo
+                    AlertDialog(
+                        onDismissRequest = { showDictationDownloadPrompt = false },
+                        title = { Text(stringResource(R.string.dictation_model_dialog_title)) },
+                        text = {
+                            Text(
+                                stringResource(
+                                    R.string.dictation_model_dialog_message,
+                                    dictationModel.name,
+                                    dictationModel.description.substringAfterLast("· "),
+                                )
+                            )
+                        },
+                        confirmButton = {
+                            TextButton(onClick = {
+                                showDictationDownloadPrompt = false
+                                viewModel.dictation.downloadModel()
+                                Toast.makeText(
+                                    requireContext(),
+                                    R.string.dictation_model_downloading,
+                                    Toast.LENGTH_SHORT,
+                                ).show()
+                            }) {
+                                Text(stringResource(R.string.download_model))
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { showDictationDownloadPrompt = false }) {
                                 Text(stringResource(R.string.cancel))
                             }
                         }
@@ -823,6 +909,24 @@ class ConversationFragment : Fragment() {
                                 onSwipeUp = {
                                     if (isModelReady) showParamsSheet = true
                                 },
+                                dictationState = dictationState,
+                                onMicClick = {
+                                    // Check on every tap rather than trusting the
+                                    // cached flag: the model may have finished
+                                    // downloading (or been deleted) since the
+                                    // screen was composed.
+                                    viewLifecycleOwner.lifecycleScope.launch {
+                                        if (viewModel.dictation.isModelAvailable()) {
+                                            startDictation()
+                                        } else {
+                                            showDictationDownloadPrompt = true
+                                        }
+                                    }
+                                },
+                                onStopRecording = { viewModel.dictation.stopRecording() },
+                                onCancelRecording = { viewModel.dictation.cancelRecording() },
+                                pendingTranscript = dictationTranscript,
+                                onTranscriptConsumed = { viewModel.dictation.consumeTranscript() },
                                 onMessageSent = { content ->
                                     val imageUri = attachedImageUri.value
                                     attachedImageUri.value = null

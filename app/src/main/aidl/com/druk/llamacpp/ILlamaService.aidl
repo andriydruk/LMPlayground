@@ -2,6 +2,7 @@ package com.druk.llamacpp;
 
 import com.druk.llamacpp.ILlamaGenerationCallback;
 import com.druk.llamacpp.ILlamaProgressCallback;
+import com.druk.llamacpp.ITranscriptionCallback;
 import com.druk.llamacpp.SamplerParams;
 import android.os.ParcelFileDescriptor;
 
@@ -68,6 +69,35 @@ interface ILlamaService {
     boolean supportsVision(int modelId);
 
     void unloadModel(int modelId);
+
+    // ── Speech recognition (voice dictation) ─────────────────────────────
+    /**
+     * Load the Parakeet ASR model used for voice dictation. Independent of
+     * chat models: at most one ASR model is loaded at a time, and loading a
+     * second one replaces the first. Exactly one of (path, pfd) must be
+     * non-null, resolved the same way as loadModel. Returns true on success.
+     */
+    boolean loadAsrModel(in @nullable String path,
+                         in @nullable ParcelFileDescriptor pfd);
+
+    boolean isAsrModelLoaded();
+
+    /** Idempotent. Frees the ASR context and its PFD. */
+    void unloadAsrModel();
+
+    /**
+     * Transcribe little-endian f32 PCM (16 kHz mono) read from `pcmFd`, which
+     * the service closes when it finishes. Audio goes over an FD rather than a
+     * byte[] because a minute of PCM is several times the binder cap.
+     *
+     * Runs on a service-owned single-threaded executor (the native context is
+     * not re-entrant) and returns immediately; the result arrives on `cb`.
+     * `targetLang` is a locale such as "en", or "auto" to let multilingual
+     * checkpoints detect it themselves.
+     */
+    void transcribe(in ParcelFileDescriptor pcmFd,
+                    String targetLang,
+                    ITranscriptionCallback cb);
 
     // ── Embeddings ───────────────────────────────────────────────────────
     /**

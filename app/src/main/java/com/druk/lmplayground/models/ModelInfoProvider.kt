@@ -41,6 +41,13 @@ object ModelInfoProvider {
         "en", "de", "es", "fr", "ja", "pt", "ar", "cs", "it", "ko", "nl", "zh"
     )
     private val ENGLISH_ONLY = listOf("en")
+    // Parakeet TDT v3 transcribes 25 European languages and detects which one
+    // it is hearing on its own.
+    private val PARAKEET_LANGS = listOf(
+        "bg", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr",
+        "hr", "hu", "it", "lt", "lv", "mt", "nl", "pl", "pt", "ro",
+        "ru", "sk", "sl", "sv", "uk"
+    )
 
     /**
      * Static list of all available models
@@ -595,20 +602,44 @@ object ModelInfoProvider {
     )
 
     /**
-     * Get all known model filenames (including mmproj files for vision models
-     * and the embedding model, so the storage scan never surfaces those files
-     * as "custom models")
+     * Speech-recognition model powering voice dictation. Like
+     * [embeddingModel] it is deliberately NOT part of [rawModels]/[allModels]:
+     * it can't chat, so it must never appear in the model picker. Downloaded on
+     * demand through the regular download pipeline when the user first taps the
+     * microphone.
+     *
+     * Runs on the vendored parakeet.cpp engine rather than llama.cpp — no
+     * chat model is involved, so dictation works whatever is loaded. The q4_k
+     * quant is the publisher's own recommendation for on-device use.
+     */
+    val dictationModel: ModelInfo = ModelInfo(
+        name = "Parakeet TDT 0.6B v3",
+        filename = "tdt-0.6b-v3-q4_k.gguf",
+        remoteUri = Uri.parse("https://huggingface.co/mudler/parakeet-cpp-gguf/resolve/main/tdt-0.6b-v3-q4_k.gguf"),
+        releaseDate = LocalDate.parse("2025-08-14"),
+        description = "NVIDIA · Voice dictation · 675Mb",
+        logoRes = R.drawable.logo_nvidia,
+        supportedLanguages = PARAKEET_LANGS,
+    )
+
+    /**
+     * Get all known model filenames (including mmproj files for vision models,
+     * the embedding model and the dictation model, so the storage scan never
+     * surfaces those files as "custom models")
      */
     val knownFilenames: Set<String> = (allModels.flatMap { model ->
         listOfNotNull(model.filename, model.mmprojFilename)
-    } + embeddingModel.filename).toSet()
+    } + embeddingModel.filename + dictationModel.filename).toSet()
 
     /**
      * Get model by filename
      */
     fun getByFilename(filename: String): ModelInfo? =
-        if (filename == embeddingModel.filename) embeddingModel
-        else allModels.find { it.filename == filename }
+        when (filename) {
+            embeddingModel.filename -> embeddingModel
+            dictationModel.filename -> dictationModel
+            else -> allModels.find { it.filename == filename }
+        }
     
     /**
      * Get display name for a filename

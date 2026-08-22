@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <!-- Per-token typewriter haptic while streaming a response. -->
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Voice dictation: audio is recorded to app-private storage and
+         transcribed on device by the bundled speech model. Never uploaded. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <!-- Large-screen / Chromebook posture: app works without touch input and
          supports freeform window management. Keeping these as required="false"
@@ -20,6 +23,10 @@
          purpose — capture is delegated to the camera app, so none is needed.
          required="false" keeps the app available to camera-less devices. -->
     <uses-feature android:name="android.hardware.camera.any" android:required="false" />
+
+    <!-- Optional microphone: only voice dictation needs it, so devices without
+         one still get the app. -->
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
 
     <application
         android:name=".App"

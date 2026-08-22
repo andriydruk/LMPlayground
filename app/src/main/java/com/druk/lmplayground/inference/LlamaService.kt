@@ -5,20 +5,26 @@ import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.ParcelFileDescriptor
 import android.os.RemoteException
 import android.util.Log
 import com.druk.llamacpp.ILlamaGenerationCallback
 import com.druk.llamacpp.ILlamaProgressCallback
 import com.druk.llamacpp.ILlamaService
+import com.druk.llamacpp.ITranscriptionCallback
 import com.druk.llamacpp.LlamaProgressCallback
 import com.druk.llamacpp.SamplerParams
+import com.druk.llamacpp.jni.NativeAsr
 import com.druk.llamacpp.jni.NativeLlamaCpp
 import com.druk.llamacpp.jni.NativeLlamaEmbeddingSession
 import com.druk.llamacpp.jni.NativeLlamaModel
 import com.druk.llamacpp.jni.NativeLlamaSession
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 
@@ -142,6 +148,36 @@ class LlamaService : Service() {
     private val sessions = ConcurrentHashMap<Int, SessionEntry>()
     private val embeddingSessions = ConcurrentHashMap<Int, EmbeddingEntry>()
 
+    /**
+     * The loaded voice-dictation model, or null. Unlike chat models there is
+     * at most one, it has no sessions, and it is driven exclusively from
+     * [asrExecutor] — the native context is not re-entrant.
+     */
+    private class AsrEntry(
+        val handle: Long,
+        val pfd: ParcelFileDescriptor?,
+    )
+
+    private val nativeAsr by lazy { NativeAsr() }
+    private val asrModel = AtomicReference<AsrEntry?>(null)
+
+    /**
+     * Single thread: serializes transcription against itself and against
+     * load/unload, so a transcribe in flight can never have its context freed
+     * underneath it.
+     */
+    private val asrExecutor: ExecutorService by lazy {
+        Executors.newSingleThreadExecutor { r -> Thread(r, "asr-worker") }
+    }
+
+    private val asrIdleHandler by lazy { Handler(Looper.getMainLooper()) }
+    private val asrIdleUnload = Runnable {
+        if (asrModel.get() != null) {
+            Log.d(TAG, "unloading ASR model after ${ASR_IDLE_TIMEOUT_MS / 60_000} min idle")
+            unloadAsr()
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
         Log.d(TAG, "LlamaService.onCreate (pid=${android.os.Process.myPid()})")
@@ -159,6 +195,8 @@ class LlamaService : Service() {
         models.values.forEach { it.pendingDestroy = true }
         embeddingSessions.values.toList().forEach { tearDownEmbeddingSession(it) }
         sessions.values.toList().forEach { tearDownSession(it) }
+        unloadAsr()
+        asrExecutor.shutdown()
         super.onDestroy()
     }
 
@@ -266,8 +304,45 @@ class LlamaService : Service() {
                 entry.nativeModel.unloadModel()
                 entry.pfd?.close()
                 entry.mmprojPfd?.close()
-                if (models.isEmpty()) demoteFromForeground()
+                // A loaded ASR model keeps the process worth protecting even
+                // when no chat model is left.
+                if (models.isEmpty() && asrModel.get() == null) demoteFromForeground()
             }
+        }
+    }
+
+    /**
+     * Free the ASR context. Runs the native free on [asrExecutor] so it can
+     * never overlap a transcription, but claims the slot immediately so
+     * callers (and [isAsrModelLoaded]) see the model as gone right away.
+     */
+    private fun unloadAsr() {
+        val entry = asrModel.getAndSet(null) ?: return
+        asrIdleHandler.removeCallbacks(asrIdleUnload)
+        asrExecutor.execute {
+            try {
+                nativeAsr.freeModel(entry.handle)
+            } catch (t: Throwable) {
+                Log.w(TAG, "ASR unload failed", t)
+            }
+            entry.pfd?.close()
+            // The ASR model can be the only thing keeping :llama alive.
+            if (models.isEmpty()) demoteFromForeground()
+        }
+    }
+
+    private fun scheduleAsrIdleUnload() {
+        asrIdleHandler.removeCallbacks(asrIdleUnload)
+        asrIdleHandler.postDelayed(asrIdleUnload, ASR_IDLE_TIMEOUT_MS)
+    }
+
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        // Dictation is a transient convenience; a ~700 MB ASR model is the
+        // first thing worth giving back when the system is under pressure.
+        if (level >= TRIM_MEMORY_RUNNING_CRITICAL && asrModel.get() != null) {
+            Log.i(TAG, "onTrimMemory($level): unloading ASR model")
+            unloadAsr()
         }
     }
 
@@ -601,6 +676,84 @@ class LlamaService : Service() {
             sessions[sessionId]?.nativeSession?.setPreambleCachePath(path, fingerprint)
         }
 
+        override fun loadAsrModel(path: String?, pfd: ParcelFileDescriptor?): Boolean {
+            val resolved = resolvePath(path, pfd) ?: return false
+            // Replacing an existing model: drop the old one first so the two
+            // never coexist in RAM.
+            unloadAsr()
+            return try {
+                // Load on the ASR thread and wait: the caller is a background
+                // coroutine and the result decides whether dictation can run.
+                val handle = asrExecutor.submit<Long> {
+                    nativeAsr.loadModel(resolved)
+                }.get()
+                if (handle == 0L) {
+                    Log.e(TAG, "native ASR loadModel returned 0 for $resolved")
+                    pfd?.close()
+                    return false
+                }
+                asrModel.set(AsrEntry(handle, pfd))
+                // Loading is not itself a reason to stay resident forever.
+                scheduleAsrIdleUnload()
+                if (models.isEmpty()) promoteToForeground()
+                true
+            } catch (t: Throwable) {
+                Log.e(TAG, "loadAsrModel failed", t)
+                pfd?.close()
+                false
+            }
+        }
+
+        override fun isAsrModelLoaded(): Boolean = asrModel.get() != null
+
+        override fun unloadAsrModel() = unloadAsr()
+
+        override fun transcribe(
+            pcmFd: ParcelFileDescriptor,
+            targetLang: String,
+            cb: ITranscriptionCallback,
+        ) {
+            val entry = asrModel.get()
+            if (entry == null) {
+                pcmFd.close()
+                try { cb.onTranscriptionError("ASR model not loaded") } catch (_: RemoteException) {}
+                return
+            }
+            asrIdleHandler.removeCallbacks(asrIdleUnload)
+            asrExecutor.execute {
+                try {
+                    // Re-read the slot on the worker thread: an unload may have
+                    // claimed it between the binder call and this runnable.
+                    val live = asrModel.get()
+                    if (live == null) {
+                        try {
+                            cb.onTranscriptionError("ASR model not loaded")
+                        } catch (_: RemoteException) {}
+                        return@execute
+                    }
+                    val text = nativeAsr.transcribe(live.handle, pcmFd.fd, targetLang)
+                    if (text == null) {
+                        val error = nativeAsr.lastError(live.handle)
+                        try {
+                            cb.onTranscriptionError(
+                                error.ifEmpty { "Transcription failed" },
+                            )
+                        } catch (_: RemoteException) {}
+                    } else {
+                        try { cb.onTranscription(text) } catch (_: RemoteException) {}
+                    }
+                } catch (t: Throwable) {
+                    Log.e(TAG, "transcribe failed", t)
+                    try {
+                        cb.onTranscriptionError(t.message ?: "Transcription failed")
+                    } catch (_: RemoteException) {}
+                } finally {
+                    pcmFd.close()
+                    scheduleAsrIdleUnload()
+                }
+            }
+        }
+
         // Self-managed via loadModel/unloadModel — kept here for the AIDL
         // contract; callers don't need to invoke them.
         override fun requestForeground() = promoteToForeground()
@@ -703,5 +856,12 @@ class LlamaService : Service() {
 
     companion object {
         private const val TAG = "LlamaService"
+
+        /**
+         * How long a loaded ASR model survives without a transcription. Long
+         * enough to keep a dictation-heavy session snappy, short enough that
+         * ~700 MB doesn't sit idle behind a chat model for the whole session.
+         */
+        private const val ASR_IDLE_TIMEOUT_MS = 5 * 60 * 1000L
     }
 }

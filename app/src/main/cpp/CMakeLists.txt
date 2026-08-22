@@ -50,11 +50,18 @@ if(NOT DEFINED LLAMA_INSTALL_VERSION)
 endif()
 add_subdirectory(llama.cpp/tools/mtmd)
 
+# Include parakeet (NVIDIA Parakeet ASR) for voice dictation. It is vendored into
+# the fork rather than carried as a second submodule so it links the same in-tree
+# ggml: one backend registry, one set of GGML_BACKEND_DL CPU variants, and the
+# "fd:N" handling in ggml_fopen covers Parakeet GGUFs loaded from SAF storage.
+add_subdirectory(llama.cpp/tools/parakeet)
+
 add_library(${CMAKE_PROJECT_NAME} SHARED
         native-lib.cpp
         LlamaModel.cpp
         LlamaGenerationSession.cpp
-        LlamaEmbeddingSession.cpp)
+        LlamaEmbeddingSession.cpp
+        AsrEngine.cpp)
 
 # mtmd public headers (mtmd.h, mtmd-helper.h) for the vision integration.
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE llama.cpp/tools/mtmd)
@@ -63,5 +70,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         llama-common
         llama
         mtmd
+        parakeet
         android
         log)

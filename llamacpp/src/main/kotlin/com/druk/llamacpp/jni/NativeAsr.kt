@@ -1,0 +1,37 @@
+package com.druk.llamacpp.jni
+
+/**
+ * Direct JNI binding to the Parakeet ASR engine. Loaded only inside the
+ * `:llama` process; app code goes through `com.druk.llamacpp.LlamaCpp`.
+ *
+ * A loaded context is a raw native handle. It is not re-entrant: callers must
+ * serialize [transcribe] per handle.
+ */
+class NativeAsr {
+
+    companion object {
+        init {
+            System.loadLibrary("llamacpp")
+        }
+    }
+
+    /**
+     * @param modelPath a filesystem path or an `fd:N` pseudo-path for a file
+     *   descriptor owned by this process (SAF storage).
+     * @return a native handle, or 0 when the model could not be loaded.
+     */
+    external fun loadModel(modelPath: String): Long
+
+    /**
+     * Transcribes little-endian f32 PCM (16 kHz mono) read from [pcmFd].
+     *
+     * @param targetLang a locale such as "en" or "de"; "auto" (or null) lets the
+     *   multilingual checkpoints detect the language themselves.
+     * @return the transcript, or null on failure (see [lastError]).
+     */
+    external fun transcribe(handle: Long, pcmFd: Int, targetLang: String?): String?
+
+    external fun lastError(handle: Long): String
+
+    external fun freeModel(handle: Long)
+}

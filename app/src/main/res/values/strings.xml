@@ -402,6 +402,21 @@
     <string name="embedding_model_dialog_title">Enable document Q&amp;A</string>
     <string name="embedding_model_dialog_message">Answering questions about documents needs a small embedding model, %1$s (%2$s), downloaded once and kept on your device.</string>
 
+    <!-- Voice dictation -->
+    <string name="dictation_start">Dictate</string>
+    <string name="dictation_stop">Stop recording</string>
+    <string name="dictation_cancel">Cancel recording</string>
+    <string name="dictation_recording">Recording…</string>
+    <string name="dictation_transcribing">Transcribing…</string>
+    <string name="dictation_permission_denied">Allow microphone access to dictate.</string>
+    <string name="dictation_record_failed">Couldn\'t start recording.</string>
+    <string name="dictation_failed">Couldn\'t transcribe the recording.</string>
+    <string name="dictation_no_speech">Didn\'t catch that — try again.</string>
+    <string name="dictation_storage_not_configured">Set up a models folder first (Settings → Models).</string>
+    <string name="dictation_model_dialog_title">Enable voice dictation</string>
+    <string name="dictation_model_dialog_message">Speaking instead of typing needs a speech-recognition model, %1$s (%2$s), downloaded once and kept on your device. It works offline, in 25 languages.</string>
+    <string name="dictation_model_downloading">Downloading the dictation model…</string>
+
     <!-- Debug-only crash injection (only shown in debug builds — do not
          translate, English only). -->
     <string name="debug_crash_engine_title" translatable="false">Crash inference engine (debug)</string>
