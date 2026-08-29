@@ -170,6 +170,13 @@ class LlamaService : Service() {
         Executors.newSingleThreadExecutor { r -> Thread(r, "asr-worker") }
     }
 
+    /**
+     * Live dictation streams, keyed by an int handed to the client so native
+     * pointers never cross the process boundary.
+     */
+    private val dictationStreams = ConcurrentHashMap<Int, Long>()
+    private val nextStreamId = AtomicInteger(1)
+
     private val asrIdleHandler by lazy { Handler(Looper.getMainLooper()) }
     private val asrIdleUnload = Runnable {
         if (asrModel.get() != null) {
@@ -319,7 +326,10 @@ class LlamaService : Service() {
     private fun unloadAsr() {
         val entry = asrModel.getAndSet(null) ?: return
         asrIdleHandler.removeCallbacks(asrIdleUnload)
+        // Streams hold state inside the model's context, so they go first.
+        val streams = dictationStreams.keys.toList().mapNotNull { dictationStreams.remove(it) }
         asrExecutor.execute {
+            streams.forEach { runCatching { nativeAsr.streamFree(it) } }
             try {
                 nativeAsr.freeModel(entry.handle)
             } catch (t: Throwable) {
@@ -691,6 +701,60 @@ class LlamaService : Service() {
             } finally {
                 scheduleAsrIdleUnload()
             }
+        }
+
+        override fun startDictationStream(targetLang: String): Int {
+            val entry = asrModel.get() ?: return 0
+            asrIdleHandler.removeCallbacks(asrIdleUnload)
+            return try {
+                val stream = asrExecutor.submit<Long> {
+                    nativeAsr.streamBegin(entry.handle, targetLang)
+                }.get()
+                if (stream == 0L) {
+                    Log.e(TAG, "streamBegin failed: ${nativeAsr.lastError(entry.handle)}")
+                    return 0
+                }
+                val id = nextStreamId.getAndIncrement()
+                dictationStreams[id] = stream
+                id
+            } catch (t: Throwable) {
+                Log.e(TAG, "startDictationStream failed", t)
+                0
+            }
+        }
+
+        override fun feedDictationAudio(streamId: Int, pcm: FloatArray): String? {
+            val stream = dictationStreams[streamId] ?: return null
+            return try {
+                asrExecutor.submit<String?> {
+                    nativeAsr.streamFeed(stream, pcm, pcm.size)
+                }.get()
+            } catch (t: Throwable) {
+                Log.e(TAG, "feedDictationAudio failed", t)
+                null
+            }
+        }
+
+        override fun finishDictationStream(streamId: Int): String? {
+            val stream = dictationStreams.remove(streamId) ?: return null
+            return try {
+                asrExecutor.submit<String?> {
+                    val tail = nativeAsr.streamFinalize(stream)
+                    nativeAsr.streamFree(stream)
+                    tail
+                }.get()
+            } catch (t: Throwable) {
+                Log.e(TAG, "finishDictationStream failed", t)
+                null
+            } finally {
+                scheduleAsrIdleUnload()
+            }
+        }
+
+        override fun cancelDictationStream(streamId: Int) {
+            val stream = dictationStreams.remove(streamId) ?: return
+            asrExecutor.execute { nativeAsr.streamFree(stream) }
+            scheduleAsrIdleUnload()
         }
 
         override fun loadAsrModel(path: String?, pfd: ParcelFileDescriptor?): Boolean {

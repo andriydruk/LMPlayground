@@ -138,6 +138,31 @@ class LlamaCpp(private val client: InferenceClient) {
     fun transcribeSamples(pcm: FloatArray, targetLang: String = "auto"): String? =
         client.withService { it.transcribeSamples(pcm, targetLang) }
 
+    /**
+     * Begin live dictation. Returns a positive stream id, or 0 when the loaded
+     * model cannot stream.
+     */
+    fun startDictationStream(targetLang: String = "auto"): Int =
+        client.withService { it.startDictationStream(targetLang) }
+
+    /**
+     * Feed recorded samples; returns the text finalized since the last feed.
+     * Blocks for the decode, so call it off the main thread.
+     */
+    fun feedDictationAudio(streamId: Int, pcm: FloatArray): String? =
+        client.withService { it.feedDictationAudio(streamId, pcm) }
+
+    fun finishDictationStream(streamId: Int): String? =
+        client.withService { it.finishDictationStream(streamId) }
+
+    fun cancelDictationStream(streamId: Int) {
+        try {
+            client.withService { it.cancelDictationStream(streamId) }
+        } catch (_: Throwable) {
+            // Best-effort: a dead service has already dropped the stream.
+        }
+    }
+
     private fun wrapProgress(cb: LlamaProgressCallback) = object : ILlamaProgressCallback.Stub() {
         override fun onProgress(progress: Float) = cb.onProgress(progress)
     }

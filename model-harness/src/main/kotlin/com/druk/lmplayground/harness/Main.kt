@@ -93,10 +93,10 @@ fun main(args: Array<String>) {
     // Voice dictation runs on parakeet.cpp, not llama.cpp, and transcribes
     // audio rather than generating tokens — so like the embedding model it
     // sits outside the per-model chat loop.
-    if (opts.matchesModel("Parakeet TDT 0.6B v3", AsrProbe.MODEL_FILENAME) &&
+    if (opts.matchesModel("Nemotron 3.5 ASR Streaming 0.6B", AsrProbe.MODEL_FILENAME) &&
         (opts.probes.isEmpty() || "asr" in opts.probes)
     ) {
-        println("run       Parakeet TDT 0.6B v3 (voice dictation)")
+        println("run       Nemotron 3.5 ASR Streaming (voice dictation)")
         val asr = AsrProbe.run(modelsDir, reportDir)
         val bad = asr.results.count { it.status == Status.FAIL || it.status == Status.ERROR }
         println("          ${asr.results.size} results, $bad failing" +

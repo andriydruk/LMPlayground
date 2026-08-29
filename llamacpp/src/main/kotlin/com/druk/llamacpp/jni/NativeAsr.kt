@@ -48,6 +48,23 @@ class NativeAsr {
         targetLang: String?,
     ): String?
 
+    /**
+     * Begin a live transcription stream. Returns 0 when the model is not a
+     * cache-aware streaming checkpoint.
+     */
+    external fun streamBegin(handle: Long, targetLang: String?): Long
+
+    /**
+     * Feed newly recorded samples. Returns the text finalized *since the
+     * previous feed* ("" when nothing settled yet), null on error.
+     */
+    external fun streamFeed(streamHandle: Long, pcm: FloatArray, nSamples: Int): String?
+
+    /** Flush the tail after the last feed. */
+    external fun streamFinalize(streamHandle: Long): String?
+
+    external fun streamFree(streamHandle: Long)
+
     external fun lastError(handle: Long): String
 
     external fun freeModel(handle: Long)

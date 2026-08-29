@@ -41,14 +41,12 @@ class DictationModelTest {
     }
 
     @Test
-    fun `dictation model declares its European language coverage`() {
-        // Parakeet v3 covers 25 European languages; CJK is explicitly absent.
-        assertEquals(25, dictationModel.supportedLanguages.size)
-        listOf("en", "de", "uk", "ru", "pl").forEach {
+    fun `dictation model declares its language coverage`() {
+        // Nemotron 3.5 ASR streaming: 35 languages in one checkpoint, CJK
+        // included — the coverage the older European-only checkpoint lacked.
+        assertEquals(35, dictationModel.supportedLanguages.size)
+        listOf("en", "de", "uk", "ru", "pl", "zh", "ja", "ko").forEach {
             assertTrue("expected $it", dictationModel.supportsLanguage(it))
-        }
-        listOf("zh", "ja", "ko").forEach {
-            assertFalse("unexpected $it", dictationModel.supportsLanguage(it))
         }
     }
 }

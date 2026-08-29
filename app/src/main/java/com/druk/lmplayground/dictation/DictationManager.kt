@@ -89,6 +89,44 @@ class DictationManager(
         }
     }
 
+    /**
+     * Open a live dictation stream, loading the model first if needed. Returns
+     * 0 when the model is missing or cannot stream.
+     */
+    suspend fun beginStream(targetLang: String = "auto"): Int = mutex.withLock {
+        val llamaCpp = llamaCpp ?: return 0
+        if (!ensureModelLoadedLocked()) return 0
+        return try {
+            llamaCpp.startDictationStream(targetLang)
+        } catch (t: Throwable) {
+            Log.e(TAG, "beginStream failed", t)
+            0
+        }
+    }
+
+    /**
+     * Feed one slice. Deliberately outside [mutex]: feeds happen several times
+     * a second and the service already serializes them on its ASR thread;
+     * taking the lock here would let an idle-unload check stall dictation.
+     */
+    fun feed(streamId: Int, pcm: FloatArray): String? = try {
+        llamaCpp?.feedDictationAudio(streamId, pcm)
+    } catch (t: Throwable) {
+        Log.e(TAG, "feed failed", t)
+        null
+    }
+
+    fun endStream(streamId: Int): String? = try {
+        llamaCpp?.finishDictationStream(streamId)
+    } catch (t: Throwable) {
+        Log.e(TAG, "endStream failed", t)
+        null
+    }
+
+    fun cancelStream(streamId: Int) {
+        llamaCpp?.cancelDictationStream(streamId)
+    }
+
     suspend fun unload() = mutex.withLock { unloadLocked() }
 
     private fun ensureModelLoadedLocked(): Boolean {

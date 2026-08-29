@@ -43,10 +43,12 @@ object ModelInfoProvider {
     private val ENGLISH_ONLY = listOf("en")
     // Parakeet TDT v3 transcribes 25 European languages and detects which one
     // it is hearing on its own.
+    // Nemotron 3.5 ASR streaming: 35 languages in one checkpoint, CJK included.
     private val PARAKEET_LANGS = listOf(
-        "bg", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr",
-        "hr", "hu", "it", "lt", "lv", "mt", "nl", "pl", "pt", "ro",
-        "ru", "sk", "sl", "sv", "uk"
+        "ar", "bg", "cs", "da", "de", "el", "en", "es", "et", "fi",
+        "fr", "he", "hi", "hr", "hu", "it", "ja", "ko", "lt", "lv",
+        "mt", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sv",
+        "th", "tr", "uk", "vi", "zh"
     )
 
     /**
@@ -609,15 +611,19 @@ object ModelInfoProvider {
      * microphone.
      *
      * Runs on the vendored parakeet.cpp engine rather than llama.cpp — no
-     * chat model is involved, so dictation works whatever is loaded. The q4_k
+     * chat model is involved, so dictation works whatever is loaded.
+     *
+     * A cache-aware *streaming* checkpoint: it transcribes while the user is
+     * still speaking, which the offline tdt-* models cannot do. It also brings
+     * punctuation and 35 languages, CJK included. The q4_k
      * quant is the publisher's own recommendation for on-device use.
      */
     val dictationModel: ModelInfo = ModelInfo(
-        name = "Parakeet TDT 0.6B v3",
-        filename = "tdt-0.6b-v3-q4_k.gguf",
-        remoteUri = Uri.parse("https://huggingface.co/mudler/parakeet-cpp-gguf/resolve/main/tdt-0.6b-v3-q4_k.gguf"),
-        releaseDate = LocalDate.parse("2025-08-14"),
-        description = "NVIDIA · Voice dictation · 675Mb",
+        name = "Nemotron 3.5 ASR Streaming 0.6B",
+        filename = "nemotron-3.5-asr-streaming-0.6b-q4_k.gguf",
+        remoteUri = Uri.parse("https://huggingface.co/mudler/parakeet-cpp-gguf/resolve/main/nemotron-3.5-asr-streaming-0.6b-q4_k.gguf"),
+        releaseDate = LocalDate.parse("2026-06-05"),
+        description = "NVIDIA · Voice dictation · 718Mb",
         logoRes = R.drawable.logo_nvidia,
         supportedLanguages = PARAKEET_LANGS,
     )

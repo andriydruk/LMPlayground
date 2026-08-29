@@ -11,19 +11,29 @@
 #include <cerrno>
 #include <fcntl.h>
 #include <cstdlib>
+#include <cctype>
 #include <cstring>
 #include <string>
 #include <unistd.h>
 #include <vector>
+
+#if defined(__ANDROID__)
+#include <sys/system_properties.h>
+#endif
 
 #define LMP_LOG_TAG "AsrEngine"
 #include "lmp_log.h"
 
 #include "parakeet_capi.h"
 
-// Parakeet's own default is tuned for desktop core counts. Phones have ~4 big
-// cores worth using; more threads just contend with the little cores.
-static constexpr int kAsrThreads = 4;
+// Parakeet's own default is tuned for desktop core counts. On a big.LITTLE
+// phone every extra thread is a liability: ggml waits for the slowest worker at
+// each graph node, so pulling in efficiency cores stalls the whole encoder.
+// Measured on a Pixel 7 Pro (2x X1 + 2x A78 + 4x A55), streaming a fixed clip:
+//   2 threads 1.48x realtime · 3: 1.67x · 4: 1.54x · 6: 2.83x · 8: 30.5x
+// Two — the big cores alone — is both the fastest and the safest default.
+// Override with `setprop debug.lmp.asr_threads N`.
+static constexpr int kAsrThreads = 2;
 
 // Mobile GPU drivers have repeatedly mishandled encoder graphs in this app (the
 // CLIP vision denylist exists for exactly that reason), and parakeet's conformer
@@ -37,9 +47,20 @@ static void asrConfigureBackend() {
     static bool done = false;
     if (done) return;
     setenv("PARAKEET_DEVICE", "cpu", 0);
-    const char *threads = getenv("LMP_ASR_THREADS");
-    int n = threads != nullptr ? atoi(threads) : 0;
+
+    // Thread count: `setprop debug.lmp.asr_threads N` on Android (same
+    // convention as debug.lmp.mtmd_backend), $LMP_ASR_THREADS on the host.
+    int n = 0;
+#if defined(__ANDROID__)
+    char prop[PROP_VALUE_MAX] = {0};
+    if (__system_property_get("debug.lmp.asr_threads", prop) > 0) n = atoi(prop);
+#endif
+    if (n <= 0) {
+        const char *threads = getenv("LMP_ASR_THREADS");
+        n = threads != nullptr ? atoi(threads) : 0;
+    }
     parakeet_capi_set_num_threads(n > 0 ? n : kAsrThreads);
+    LOGi("ASR threads: %d", n > 0 ? n : kAsrThreads);
     done = true;
 }
 
@@ -166,6 +187,96 @@ Java_com_druk_llamacpp_jni_NativeAsr_transcribeSamples(JNIEnv *env, jobject thiz
     jstring result = env->NewStringUTF(text);
     parakeet_capi_free_string(text);
     return result;
+}
+
+// The streaming decoder emits the locale it settled on as a literal token at
+// utterance boundaries ("<en-US>"), which the offline path never does. Left in,
+// those tags would appear verbatim in the user's dictated text.
+static std::string stripLocaleTags(const char *text) {
+    std::string out(text);
+    size_t at = 0;
+    while ((at = out.find('<', at)) != std::string::npos) {
+        const size_t close = out.find('>', at);
+        if (close == std::string::npos) break;
+        const std::string tag = out.substr(at + 1, close - at - 1);
+        // Only "xx" / "xx-YY" locale tags — never angle brackets that were
+        // actually dictated.
+        bool locale = tag.size() >= 2 && tag.size() <= 7 &&
+                      islower(static_cast<unsigned char>(tag[0])) &&
+                      islower(static_cast<unsigned char>(tag[1]));
+        for (size_t i = 2; locale && i < tag.size(); ++i) {
+            const char c = tag[i];
+            locale = (i == 2) ? c == '-' : (isalnum(static_cast<unsigned char>(c)) != 0);
+        }
+        if (!locale) { at = close + 1; continue; }
+        out.erase(at, close - at + 1);
+    }
+    return out;
+}
+
+// ---------------------------------------------------------------------------
+// Streaming. A stream is begun from a loaded context and fed PCM as it is
+// recorded; each feed returns the text finalized *since the last feed*, so the
+// caller accumulates rather than replaces. Only cache-aware streaming
+// checkpoints support this — streamBegin returns 0 for an offline model.
+// ---------------------------------------------------------------------------
+
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_com_druk_llamacpp_jni_NativeAsr_streamBegin(JNIEnv *env, jobject thiz, jlong handle,
+                                                 jstring targetLang) {
+    auto *ctx = reinterpret_cast<parakeet_ctx *>(handle);
+    if (ctx == nullptr) return 0;
+
+    const char *lang = targetLang != nullptr ? env->GetStringUTFChars(targetLang, nullptr) : nullptr;
+    parakeet_stream *stream = parakeet_capi_stream_begin_lang(ctx, lang);
+    if (lang != nullptr) env->ReleaseStringUTFChars(targetLang, lang);
+
+    if (stream == nullptr) {
+        LOGe("stream begin failed (not a streaming model?): %s", parakeet_capi_last_error(ctx));
+        return 0;
+    }
+    return reinterpret_cast<jlong>(stream);
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_druk_llamacpp_jni_NativeAsr_streamFeed(JNIEnv *env, jobject thiz, jlong streamHandle,
+                                                jfloatArray pcm, jint nSamples) {
+    auto *stream = reinterpret_cast<parakeet_stream *>(streamHandle);
+    if (stream == nullptr || pcm == nullptr) return nullptr;
+
+    jfloat *samples = env->GetFloatArrayElements(pcm, nullptr);
+    if (samples == nullptr) return nullptr;
+    // Events are ignored: end-of-utterance is a voice-agent turn-taking signal,
+    // and dictation ends when the user lets go of the button.
+    char *text = parakeet_capi_stream_feed(stream, samples, nSamples, nullptr);
+    env->ReleaseFloatArrayElements(pcm, samples, JNI_ABORT);  // read-only
+
+    if (text == nullptr) return nullptr;
+    jstring result = env->NewStringUTF(stripLocaleTags(text).c_str());
+    parakeet_capi_free_string(text);
+    return result;
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_druk_llamacpp_jni_NativeAsr_streamFinalize(JNIEnv *env, jobject thiz, jlong streamHandle) {
+    auto *stream = reinterpret_cast<parakeet_stream *>(streamHandle);
+    if (stream == nullptr) return nullptr;
+
+    char *text = parakeet_capi_stream_finalize(stream);
+    if (text == nullptr) return nullptr;
+    jstring result = env->NewStringUTF(stripLocaleTags(text).c_str());
+    parakeet_capi_free_string(text);
+    return result;
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_druk_llamacpp_jni_NativeAsr_streamFree(JNIEnv *env, jobject thiz, jlong streamHandle) {
+    auto *stream = reinterpret_cast<parakeet_stream *>(streamHandle);
+    if (stream != nullptr) parakeet_capi_stream_free(stream);
 }
 
 extern "C"

@@ -28,8 +28,11 @@ import java.io.File
  */
 object AsrProbe {
 
-    const val MODEL_FILENAME = "tdt-0.6b-v3-q4_k.gguf"
-    private const val MODEL_NAME = "Parakeet TDT 0.6B v3"
+    const val MODEL_FILENAME = "nemotron-3.5-asr-streaming-0.6b-q4_k.gguf"
+    private const val MODEL_NAME = "Nemotron 3.5 ASR Streaming 0.6B"
+
+    /** Live dictation feeds the encoder in slices this long. */
+    private const val FEED_MS = 640
 
     /**
      * Real speech, q4_k, greedy TDT decoding. NVIDIA reports ~6% WER for this
@@ -37,6 +40,9 @@ object AsrProbe {
      * above 15% means something is wrong with the pipeline, not the model.
      */
     private const val WER_BUDGET = 0.15
+
+    /** Streaming decodes with limited right context, so it is graded looser. */
+    private const val STREAM_WER_BUDGET = 0.25
 
     fun run(modelsDir: File, reportDir: File): ModelReport {
         val file = File(modelsDir, MODEL_FILENAME)
@@ -78,6 +84,8 @@ object AsrProbe {
             } else {
                 results += accuracy(asr, handle, anchor, artifacts)
             }
+
+            results += streaming(asr, handle, artifacts)
 
             val synthetic = AudioFixtures.synthetic()
             results += if (synthetic.isEmpty()) {
@@ -176,6 +184,95 @@ object AsrProbe {
             ms, detail,
             rawArtifact = artifacts.write("asr-multilingual", transcript.toString()),
         )
+    }
+
+    /**
+     * Live dictation: the same clip fed in slices, as the microphone delivers
+     * it. Checks that text arrives *before* the audio ends and that what
+     * accumulates is still right.
+     *
+     * A checkpoint that cannot stream fails here rather than silently leaving
+     * the user holding the mic with nothing appearing.
+     */
+    private fun streaming(asr: NativeAsr, handle: Long, artifacts: ArtifactSink): ProbeResult {
+        val clip = AudioFixtures.anchor()
+            ?: return ProbeResult(
+                "asr-streaming", null, Status.SKIP, "NO_FIXTURE",
+                "jfk.wav is missing — live dictation unverified",
+            )
+
+        val t0 = System.currentTimeMillis()
+        val stream = asr.streamBegin(handle, clip.lang)
+        if (stream == 0L) {
+            return ProbeResult(
+                "asr-streaming", null, Status.FAIL, "NOT_STREAMING_MODEL",
+                "streamBegin failed — this checkpoint is not cache-aware streaming, so no " +
+                    "text can appear while the user speaks",
+                System.currentTimeMillis() - t0,
+                mapOf("lastError" to asr.lastError(handle)),
+            )
+        }
+
+        val samples = readPcm(clip.pcm)
+        val slice = AudioFixtures.SAMPLE_RATE * FEED_MS / 1000
+        val transcript = StringBuilder()
+        var firstTextMs = -1L
+        var feeds = 0
+
+        try {
+            var offset = 0
+            while (offset < samples.size) {
+                val n = minOf(slice, samples.size - offset)
+                val delta = asr.streamFeed(stream, samples.copyOfRange(offset, offset + n), n)
+                feeds++
+                if (!delta.isNullOrEmpty()) {
+                    if (firstTextMs < 0) firstTextMs = System.currentTimeMillis() - t0
+                    transcript.append(delta)
+                }
+                offset += n
+            }
+            asr.streamFinalize(stream)?.let { transcript.append(it) }
+        } finally {
+            asr.streamFree(stream)
+        }
+
+        val ms = System.currentTimeMillis() - t0
+        val text = transcript.toString().trim()
+        val wer = if (text.isEmpty()) 1.0 else wordErrorRate(clip.reference, text)
+        val realtime = ms / 1000.0 / clip.seconds
+        val ok = text.isNotEmpty() && firstTextMs >= 0 && wer <= STREAM_WER_BUDGET
+        return ProbeResult(
+            "asr-streaming", null,
+            if (ok) Status.PASS else Status.FAIL,
+            when {
+                text.isEmpty() -> "NO_STREAM_TEXT"
+                firstTextMs < 0 -> "NO_PARTIALS"
+                wer > STREAM_WER_BUDGET -> "HIGH_WER"
+                else -> "OK"
+            },
+            if (ok) "streamed ${"%.0f".format(clip.seconds)}s in $feeds feeds, WER ${pct(wer)}, " +
+                "first text after ${firstTextMs}ms"
+            else if (text.isEmpty()) "streaming produced no text at all"
+            else "streamed WER ${pct(wer)} exceeds the ${pct(STREAM_WER_BUDGET)} budget",
+            ms,
+            mapOf(
+                "wer" to pct(wer),
+                "firstText" to "${firstTextMs}ms",
+                // Above 1.0 the decoder is slower than speech, so the text lags
+                // further behind the longer the user talks.
+                "speed" to "${"%.2f".format(realtime)}x realtime",
+                "heard" to text,
+            ),
+            rawArtifact = artifacts.write(
+                "asr-streaming", "reference: ${clip.reference}\nheard:     $text",
+            ),
+        )
+    }
+
+    private fun readPcm(file: java.io.File): FloatArray {
+        val bytes = file.readBytes()
+        val bb = java.nio.ByteBuffer.wrap(bytes).order(java.nio.ByteOrder.LITTLE_ENDIAN)
+        return FloatArray(bytes.size / 4) { bb.getFloat(it * 4) }
     }
 
     private fun pct(v: Double) = WordErrorRate.percent(v)

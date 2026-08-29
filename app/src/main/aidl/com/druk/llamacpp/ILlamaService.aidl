@@ -110,6 +110,25 @@ interface ILlamaService {
      */
     @nullable String transcribeSamples(in float[] pcm, String targetLang);
 
+    /**
+     * Begin a live dictation stream over the loaded ASR model. Returns a
+     * positive streamId, or 0 when the model cannot stream.
+     */
+    int startDictationStream(String targetLang);
+
+    /**
+     * Feed newly recorded 16 kHz mono f32 samples; returns the text finalized
+     * since the previous feed ("" if none, null on error). Callers append.
+     * A slice is tens of KB, far under the binder cap.
+     */
+    @nullable String feedDictationAudio(int streamId, in float[] pcm);
+
+    /** Flush the tail and close the stream, returning any last text. */
+    @nullable String finishDictationStream(int streamId);
+
+    /** Close the stream and discard its state. Idempotent. */
+    void cancelDictationStream(int streamId);
+
     // ── Embeddings ───────────────────────────────────────────────────────
     /**
      * Create an embeddings-enabled context (mean pooling, L2-normalized

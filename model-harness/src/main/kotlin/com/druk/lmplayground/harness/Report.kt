@@ -30,6 +30,7 @@ object Report {
         "Embed" to null,
         "ASR" to null,
         "ASR-lang" to null,
+        "ASR-live" to null,
     )
 
     private fun cell(r: ModelReport, column: String, cap: Cap?): String {
@@ -54,6 +55,7 @@ object Report {
             "Embed" -> r.results.filter { it.probe == "embeddings" }
             "ASR" -> r.results.filter { it.probe == "asr" }
             "ASR-lang" -> r.results.filter { it.probe == "asr-multilingual" }
+            "ASR-live" -> r.results.filter { it.probe == "asr-streaming" }
             else -> r.results.filter { it.cap == cap }
         }
         if (relevant.isEmpty()) return "·"

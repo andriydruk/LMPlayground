@@ -50,7 +50,7 @@ class AsrTranscriptionTest {
     companion object {
         private const val TAG = "AsrTranscriptionTest"
         private const val MODELS_PATH = "/data/local/tmp"
-        private const val ASR_MODEL = "tdt-0.6b-v3-q4_k.gguf"
+        private const val ASR_MODEL = "nemotron-3.5-asr-streaming-0.6b-q4_k.gguf"
         private const val CLIP = "audio/jfk.wav"
         private const val SAMPLE_RATE = 16_000
 
@@ -139,6 +139,40 @@ class AsrTranscriptionTest {
             "WER ${WordErrorRate.percent(wer)} exceeds the " +
                 "${WordErrorRate.percent(WER_BUDGET)} budget — heard: $transcript",
             wer <= WER_BUDGET,
+        )
+    }
+
+    /** Streaming throughput at the current thread setting. */
+    @Test(timeout = 900_000)
+    fun streaming_throughput() {
+        val service = service!!
+        assertTrue(service.loadAsrModel(File(MODELS_PATH, ASR_MODEL).absolutePath, null))
+        val samples = decodeWavAsset(CLIP)
+        val seconds = samples.size / SAMPLE_RATE.toDouble()
+        val streamId = service.startDictationStream("en")
+        assertTrue("not a streaming checkpoint", streamId > 0)
+
+        val slice = SAMPLE_RATE * 640 / 1000
+        val heard = StringBuilder()
+        var firstMs = -1L
+        val t0 = System.currentTimeMillis()
+        var off = 0
+        while (off < samples.size) {
+            val n = minOf(slice, samples.size - off)
+            val d = service.feedDictationAudio(streamId, samples.copyOfRange(off, off + n))
+            if (!d.isNullOrEmpty()) {
+                if (firstMs < 0) firstMs = System.currentTimeMillis() - t0
+                heard.append(d)
+            }
+            off += n
+        }
+        service.finishDictationStream(streamId)?.let { heard.append(it) }
+        val total = System.currentTimeMillis() - t0
+        Log.i(
+            TAG,
+            "THROUGHPUT total=${total}ms rt=${"%.2f".format(total / 1000.0 / seconds)}x " +
+                "firstText=${firstMs}ms wer=" +
+                WordErrorRate.percent(WordErrorRate.of(REFERENCE, heard.toString().trim())),
         )
     }
 

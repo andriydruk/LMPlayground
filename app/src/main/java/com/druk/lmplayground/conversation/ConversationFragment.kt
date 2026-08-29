@@ -106,7 +106,13 @@ class ConversationFragment : Fragment() {
         ActivityResultContracts.RequestPermission()
     ) { granted ->
         if (granted) {
-            viewModel.dictation.startListening()
+            // The finger left the button while the system dialog was up, so
+            // there is nothing to record for — the next press dictates.
+            Toast.makeText(
+                requireContext(),
+                R.string.dictation_permission_granted,
+                Toast.LENGTH_SHORT,
+            ).show()
         } else {
             Toast.makeText(
                 requireContext(),
@@ -186,6 +192,14 @@ class ConversationFragment : Fragment() {
      * path as the photo picker. No CAMERA permission is needed — the camera app
      * does the capture and we only receive the written image.
      */
+    override fun onPause() {
+        super.onPause()
+        // Backgrounding mid-hold means no release will arrive, and Android mutes
+        // the microphone for a background app anyway — end dictation rather than
+        // leave it recording silence until the duration cap.
+        viewModel.dictation.onMicReleased()
+    }
+
     /**
      * Begin dictation, asking for the microphone first if we don't have it.
      * The permission callback starts the recording on grant.
@@ -239,7 +253,6 @@ class ConversationFragment : Fragment() {
         // After returning from the Tools screen (which marks the flag), hide the
         // "Set up tools" button — re-checking here instead of on tap avoids the
         // button visibly disappearing under the user's finger.
-        viewModel.refreshToolsSetupVisibility()
     }
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
@@ -274,7 +287,6 @@ class ConversationFragment : Fragment() {
             // uses supportsThinking, because the thinking budget applies to them.
             val thinkingToggleable by viewModel.thinkingToggleable.observeAsState(false)
             val supportsToolCalling by viewModel.supportsToolCalling.observeAsState(false)
-            val showToolsSetup by viewModel.showToolsSetup.observeAsState(false)
             val toolEnabledStates by viewModel.toolEnabledStates.observeAsState(emptyMap())
             val thinkingEnabled by viewModel.thinkingEnabled.observeAsState(false)
             val supportsVision by viewModel.supportsVision.observeAsState(false)
@@ -304,6 +316,7 @@ class ConversationFragment : Fragment() {
             val dictationTranscript by viewModel.dictation.transcript.observeAsState()
             val dictationError by viewModel.dictation.error.observeAsState()
             val dictationModelReady by viewModel.dictation.isModelReady.observeAsState()
+            val dictationDownload by viewModel.dictation.downloadProgress.observeAsState()
             var showDictationDownloadPrompt by remember { mutableStateOf(false) }
 
             // Surface transient ViewModel errors (e.g. message-too-large)
@@ -720,27 +733,7 @@ class ConversationFragment : Fragment() {
                                     .padding(top = topBarHeight, bottom = bottomBarHeight),
                                 contentAlignment = Alignment.Center
                             ) {
-                                WhatsNewText(
-                                    // Show the "Set up tools" button only until
-                                    // the user taps it once (then persisted off).
-                                    onSetUpTools = if (showToolsSetup) {
-                                        {
-                                            // Don't hide on tap (avoids the button
-                                            // vanishing under the finger). The flag is
-                                            // set when the Tools screen opens; we
-                                            // re-check it in onResume.
-                                            if (findNavController().currentDestination?.id == R.id.nav_home) {
-                                                findNavController().navigate(
-                                                    R.id.action_home_to_settings,
-                                                    bundleOf(
-                                                        SettingsFragment.ARG_OPEN_DETAIL
-                                                            to SettingsFragment.DETAIL_TOOLS
-                                                    )
-                                                )
-                                            }
-                                        }
-                                    } else null
-                                )
+                                WhatsNewText()
                             }
                         } else {
                             Messages(
@@ -910,11 +903,16 @@ class ConversationFragment : Fragment() {
                                     if (isModelReady) showParamsSheet = true
                                 },
                                 dictationState = dictationState,
-                                onMicClick = {
-                                    // Check on every tap rather than trusting the
-                                    // cached flag: the model may have finished
-                                    // downloading (or been deleted) since the
-                                    // screen was composed.
+                                dictationDownloadProgress = dictationDownload,
+                                onMicPressed = {
+                                    // Already fetching: the ring around the mic
+                                    // is the answer, not the dialog again.
+                                    if (dictationDownload != null) return@UserInput
+                                    viewModel.dictation.onMicPressed()
+                                    // Check on every press rather than trusting
+                                    // the cached flag: the model may have
+                                    // finished downloading (or been deleted)
+                                    // since the screen was composed.
                                     viewLifecycleOwner.lifecycleScope.launch {
                                         if (viewModel.dictation.isModelAvailable()) {
                                             startDictation()
@@ -923,7 +921,10 @@ class ConversationFragment : Fragment() {
                                         }
                                     }
                                 },
-                                onStopRecording = { viewModel.dictation.stopListening() },
+                                // Releasing is the stop. Harmless when the press
+                                // never started dictation (model missing, or
+                                // permission just requested).
+                                onMicReleased = { viewModel.dictation.onMicReleased() },
                                 onCancelRecording = { viewModel.dictation.cancelListening() },
                                 pendingTranscript = dictationTranscript,
                                 onTranscriptConsumed = { viewModel.dictation.consumeTranscript() },
