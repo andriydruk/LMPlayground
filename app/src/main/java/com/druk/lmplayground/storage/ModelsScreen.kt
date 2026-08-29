@@ -100,6 +100,7 @@ fun ModelsScreen(
     onSkipMigration: () -> Unit,
     onCancelMigration: () -> Unit,
     embeddingModel: ModelWithStatus? = null,
+    dictationModel: ModelWithStatus? = null,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -138,6 +139,7 @@ fun ModelsScreen(
             onSkipMigration = onSkipMigration,
             onCancelMigration = onCancelMigration,
             embeddingModel = embeddingModel,
+            dictationModel = dictationModel,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
@@ -180,6 +182,7 @@ fun ModelsContent(
     // under Downloaded when on disk (delete) or while its download is in
     // flight (progress + cancel); never offered under Available.
     embeddingModel: ModelWithStatus? = null,
+    dictationModel: ModelWithStatus? = null,
 ) {
     var modelToDelete by remember { mutableStateOf<ModelInfo?>(null) }
     // Vision model awaiting the "with images / text only" download choice.
@@ -207,6 +210,13 @@ fun ModelsContent(
     val embeddingDownloadProgress = embeddingModel?.let { downloadingModels[it.model.name] }
     val showEmbeddingRow = embeddingModel != null &&
         (embeddingModel.isDownloaded || embeddingDownloadProgress != null)
+
+    // Same treatment for voice dictation: it can't be chatted with, the mic
+    // button owns its download, and it only appears once it is on disk (or is
+    // arriving) so it never sits in Available as a chat model.
+    val dictationDownloadProgress = dictationModel?.let { downloadingModels[it.model.name] }
+    val showDictationRow = dictationModel != null &&
+        (dictationModel.isDownloaded || dictationDownloadProgress != null)
 
     // When the device language is non-English, separate models that support the user's
     // language from those that don't so users see relevant models first.
@@ -296,7 +306,7 @@ fun ModelsContent(
                     )
                 }
 
-                if (downloadedModels.isEmpty() && !showEmbeddingRow) {
+                if (downloadedModels.isEmpty() && !showEmbeddingRow && !showDictationRow) {
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         Text(
                             text = stringResource(R.string.no_downloaded_models),
@@ -337,6 +347,28 @@ fun ModelsContent(
                                 downloadProgress = embeddingDownloadProgress,
                                 onDownloadClick = {},
                                 onCancelClick = { onCancelDownload(embeddingModel.model) }
+                            )
+                        }
+                    }
+                }
+
+                if (showDictationRow && dictationModel != null) {
+                    item(key = "dictation_" + dictationModel.model.filename) {
+                        if (dictationModel.isDownloaded) {
+                            DownloadedModelItem(
+                                model = dictationModel.model,
+                                vision = false,
+                                onDeleteClick = { modelToDelete = dictationModel.model }
+                            )
+                        } else {
+                            // Download in flight (started from the chat's mic
+                            // button): progress + cancel, same as the embedding row.
+                            AvailableModelItem(
+                                modelWithStatus = dictationModel,
+                                moduleOnly = false,
+                                downloadProgress = dictationDownloadProgress,
+                                onDownloadClick = {},
+                                onCancelClick = { onCancelDownload(dictationModel.model) }
                             )
                         }
                     }

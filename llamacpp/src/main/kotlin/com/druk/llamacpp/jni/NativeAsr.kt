@@ -37,6 +37,17 @@ class NativeAsr {
      */
     external fun transcribePath(handle: Long, pcmPath: String, targetLang: String?): String?
 
+    /**
+     * Transcribe samples already in memory. Live dictation uses this for each
+     * few-second slice of speech, so nothing has to reach disk.
+     */
+    external fun transcribeSamples(
+        handle: Long,
+        pcm: FloatArray,
+        nSamples: Int,
+        targetLang: String?,
+    ): String?
+
     external fun lastError(handle: Long): String
 
     external fun freeModel(handle: Long)

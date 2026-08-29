@@ -69,9 +69,9 @@ class DictationControllerTest {
     }
 
     @Test
-    fun `stop and cancel are no-ops when not recording`() {
-        controller.stopRecording()
-        controller.cancelRecording()
+    fun `stop and cancel are no-ops when not listening`() {
+        controller.stopListening()
+        controller.cancelListening()
         assertEquals(DictationState.Idle, controller.state.value)
     }
 

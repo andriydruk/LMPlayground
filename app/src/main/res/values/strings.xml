@@ -406,8 +406,8 @@
     <string name="dictation_start">Dictate</string>
     <string name="dictation_stop">Stop recording</string>
     <string name="dictation_cancel">Cancel recording</string>
-    <string name="dictation_recording">Recording…</string>
-    <string name="dictation_transcribing">Transcribing…</string>
+    <string name="dictation_listening">Listening…</string>
+    <string name="dictation_transcribing">Finishing…</string>
     <string name="dictation_permission_denied">Allow microphone access to dictate.</string>
     <string name="dictation_record_failed">Couldn\'t start recording.</string>
     <string name="dictation_failed">Couldn\'t transcribe the recording.</string>

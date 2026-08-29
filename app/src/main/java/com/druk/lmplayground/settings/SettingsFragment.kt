@@ -283,6 +283,7 @@ class SettingsFragment : Fragment() {
         val storageInfo by storageViewModel.storageInfo.observeAsState()
         val allModels by storageViewModel.allModels.observeAsState(emptyList())
         val embeddingModel by storageViewModel.embeddingModel.observeAsState()
+            val dictationModel by storageViewModel.dictationModel.observeAsState()
         val downloadingProgress by storageViewModel.downloadingModels.observeAsState(emptyMap())
         val snackbarMessage by storageViewModel.snackbarMessage.observeAsState()
         val pendingMigration by storageViewModel.pendingMigration.observeAsState()
@@ -350,6 +351,7 @@ class SettingsFragment : Fragment() {
             onSkipMigration = { storageViewModel.skipMigration() },
             onCancelMigration = { storageViewModel.cancelMigration() },
             embeddingModel = embeddingModel,
+            dictationModel = dictationModel,
         )
     }
 

@@ -99,6 +99,17 @@ interface ILlamaService {
                     String targetLang,
                     ITranscriptionCallback cb);
 
+    /**
+     * Transcribe one slice of 16 kHz mono f32 audio and return its text, or
+     * null on failure. Live dictation calls this every few seconds while the
+     * user speaks, so the text can appear before they finish; a slice is a
+     * couple of hundred KB and crosses as an array rather than a descriptor.
+     *
+     * Runs on the same single ASR thread as [transcribe], so slices are
+     * transcribed in order and never overlap a load or unload.
+     */
+    @nullable String transcribeSamples(in float[] pcm, String targetLang);
+
     // ── Embeddings ───────────────────────────────────────────────────────
     /**
      * Create an embeddings-enabled context (mean pooling, L2-normalized

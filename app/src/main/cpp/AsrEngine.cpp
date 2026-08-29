@@ -142,6 +142,34 @@ Java_com_druk_llamacpp_jni_NativeAsr_transcribePath(JNIEnv *env, jobject thiz, j
 
 extern "C"
 JNIEXPORT jstring JNICALL
+Java_com_druk_llamacpp_jni_NativeAsr_transcribeSamples(JNIEnv *env, jobject thiz, jlong handle,
+                                                       jfloatArray pcm, jint nSamples,
+                                                       jstring targetLang) {
+    auto *ctx = reinterpret_cast<parakeet_ctx *>(handle);
+    if (ctx == nullptr || pcm == nullptr || nSamples <= 0) return nullptr;
+
+    // Live dictation transcribes a few seconds at a time, so the audio comes
+    // straight across as an array rather than through a file — a slice is a
+    // couple of hundred KB, well under the binder cap.
+    jfloat *samples = env->GetFloatArrayElements(pcm, nullptr);
+    if (samples == nullptr) return nullptr;
+
+    const char *lang = targetLang != nullptr ? env->GetStringUTFChars(targetLang, nullptr) : nullptr;
+    char *text = parakeet_capi_transcribe_pcm_lang(ctx, samples, nSamples, 16000, 0, lang);
+    if (lang != nullptr) env->ReleaseStringUTFChars(targetLang, lang);
+    env->ReleaseFloatArrayElements(pcm, samples, JNI_ABORT);  // read-only
+
+    if (text == nullptr) {
+        LOGe("chunk transcription failed: %s", parakeet_capi_last_error(ctx));
+        return nullptr;
+    }
+    jstring result = env->NewStringUTF(text);
+    parakeet_capi_free_string(text);
+    return result;
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
 Java_com_druk_llamacpp_jni_NativeAsr_lastError(JNIEnv *env, jobject thiz, jlong handle) {
     auto *ctx = reinterpret_cast<parakeet_ctx *>(handle);
     return env->NewStringUTF(ctx != nullptr ? parakeet_capi_last_error(ctx) : "");

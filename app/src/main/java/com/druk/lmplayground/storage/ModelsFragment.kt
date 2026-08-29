@@ -100,6 +100,7 @@ class ModelsFragment : Fragment() {
             val storageInfo by viewModel.storageInfo.observeAsState()
             val allModels by viewModel.allModels.observeAsState(emptyList())
             val embeddingModel by viewModel.embeddingModel.observeAsState()
+            val dictationModel by viewModel.dictationModel.observeAsState()
             val downloadingProgress by viewModel.downloadingModels.observeAsState(emptyMap())
             val snackbarMessage by viewModel.snackbarMessage.observeAsState()
             val pendingMigration by viewModel.pendingMigration.observeAsState()
@@ -170,7 +171,8 @@ class ModelsFragment : Fragment() {
                     onCancelMigration = {
                         viewModel.cancelMigration()
                     },
-                    embeddingModel = embeddingModel
+                    embeddingModel = embeddingModel,
+                    dictationModel = dictationModel
                 )
             }
         }

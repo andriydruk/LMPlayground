@@ -131,6 +131,13 @@ class LlamaCpp(private val client: InferenceClient) {
             }
         }
 
+    /**
+     * Transcribe one slice of recorded audio. Blocks for the decode, so call it
+     * from a background thread. Returns null on failure.
+     */
+    fun transcribeSamples(pcm: FloatArray, targetLang: String = "auto"): String? =
+        client.withService { it.transcribeSamples(pcm, targetLang) }
+
     private fun wrapProgress(cb: LlamaProgressCallback) = object : ILlamaProgressCallback.Stub() {
         override fun onProgress(progress: Float) = cb.onProgress(progress)
     }

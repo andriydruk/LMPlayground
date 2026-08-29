@@ -10,29 +10,37 @@ import com.druk.lmplayground.storage.StorageRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /** What the microphone button is doing right now. */
 sealed interface DictationState {
-    /** Ready to record (or the model still has to be downloaded — see [DictationController.isModelReady]). */
     data object Idle : DictationState
-    data class Recording(val elapsedMs: Long, val amplitude: Float) : DictationState
-    data object Transcribing : DictationState
+
+    /**
+     * Live dictation in progress. [text] is everything recognized so far and
+     * grows while the user speaks; the composer shows it as it arrives.
+     */
+    data class Listening(
+        val elapsedMs: Long,
+        val amplitude: Float,
+        val text: String,
+    ) : DictationState
+
+    /** Stopped; flushing the decoder's tail. Brief — a fraction of a second. */
+    data object Finishing : DictationState
 }
 
 /**
- * Drives voice dictation for the chat input: record → transcribe → hand the
- * text back to the composer.
+ * Drives voice dictation for the chat input.
  *
- * Recording and transcription both run off the main thread; the LiveData here
- * is what the input bar renders. The caller (the fragment) owns the
- * RECORD_AUDIO permission prompt and must only call [startRecording] once the
- * permission is granted.
+ * Audio is fed to the recognizer as it is recorded and partial text comes back
+ * within a few hundred milliseconds, so the user sees words appear while
+ * speaking rather than waiting for a transcription pass at the end. Stopping
+ * flushes the decoder tail and hands over the final text.
+ *
+ * The caller (the fragment) owns the RECORD_AUDIO prompt and must only call
+ * [startListening] once the permission is granted.
  */
 class DictationController(
     private val app: Application,
@@ -49,7 +57,7 @@ class DictationController(
     private val _isModelReady = MutableLiveData<Boolean?>(null)
     val isModelReady: LiveData<Boolean?> = _isModelReady
 
-    /** Transcript awaiting insertion into the composer; cleared by [consumeTranscript]. */
+    /** Final transcript awaiting insertion into the composer. */
     private val _transcript = MutableLiveData<String?>(null)
     val transcript: LiveData<String?> = _transcript
 
@@ -86,62 +94,100 @@ class DictationController(
     }
 
     /**
-     * Start recording. The caller must hold RECORD_AUDIO. Recording stops on
-     * [stopRecording], [cancelRecording], or the recorder's own duration cap.
+     * Start listening. The caller must hold RECORD_AUDIO. Recording ends on
+     * [stopListening], [cancelListening], or the recorder's duration cap.
+     *
+     * Audio is transcribed in slices while the user is still speaking, so text
+     * appears every few seconds rather than only at the end. Slices are cut at
+     * a pause where possible — splitting mid-word costs a word at each seam,
+     * and a speaker's natural gaps are the cheapest place to break.
      */
-    fun startRecording() {
+    fun startListening() {
         if (_state.value !is DictationState.Idle) return
-        val output = AudioRecorder.outputFile(app)
-        _state.value = DictationState.Recording(0L, 0f)
+        _state.value = DictationState.Listening(0L, 0f, "")
 
-        recordingJob = recorder.record(output)
-            .onEach { level ->
-                // A cancel may have already moved us out of Recording; don't
-                // resurrect the state from a buffered emission.
-                if (_state.value is DictationState.Recording) {
-                    _state.postValue(DictationState.Recording(level.elapsedMs, level.amplitude))
+        recordingJob = scope.launch {
+            val heard = StringBuilder()
+            val pending = ArrayList<FloatArray>()
+            var pendingSamples = 0
+            var cancelled = false
+
+            /** Transcribe everything buffered so far and append what came back. */
+            suspend fun flush() {
+                if (pendingSamples == 0) return
+                val slice = FloatArray(pendingSamples)
+                var at = 0
+                for (part in pending) {
+                    part.copyInto(slice, at)
+                    at += part.size
+                }
+                pending.clear()
+                pendingSamples = 0
+                val text = withContext(Dispatchers.IO) { manager.transcribeChunk(slice) }
+                if (!text.isNullOrBlank()) {
+                    if (heard.isNotEmpty()) heard.append(' ')
+                    heard.append(text.trim())
                 }
             }
-            .catch { t ->
-                Log.e(TAG, "recording failed", t)
-                _state.postValue(DictationState.Idle)
+
+            try {
+                recorder.record().collect { chunk ->
+                    pending += chunk.samples
+                    pendingSamples += chunk.samples.size
+
+                    // Cut at a pause once there is enough audio to be worth a
+                    // pass, and force a cut if the speaker never pauses.
+                    val quiet = chunk.amplitude < SILENCE_LEVEL
+                    if (pendingSamples >= MIN_SLICE_SAMPLES && quiet ||
+                        pendingSamples >= MAX_SLICE_SAMPLES
+                    ) {
+                        flush()
+                    }
+
+                    _state.postValue(
+                        DictationState.Listening(
+                            elapsedMs = chunk.elapsedMs,
+                            amplitude = chunk.amplitude,
+                            text = heard.toString(),
+                        ),
+                    )
+                }
+            } catch (t: Throwable) {
+                cancelled = true
+                Log.e(TAG, "dictation failed", t)
                 _error.postValue(app.getString(R.string.dictation_record_failed))
             }
-            .onCompletion { cause ->
-                // Cancelled by cancelRecording(): the file is discarded.
-                if (cause != null || _state.value !is DictationState.Recording) return@onCompletion
-                transcribe(output)
+
+            if (!cancelled) {
+                // The tail after the last cut still holds words.
+                if (pendingSamples > 0) _state.postValue(DictationState.Finishing)
+                flush()
+                emitTranscript(heard.toString().trim())
             }
-            .launchIn(scope)
+            _state.postValue(DictationState.Idle)
+        }
     }
 
-    /** Finish recording and transcribe what was captured. */
-    fun stopRecording() {
-        if (_state.value !is DictationState.Recording) return
+    /** Finish dictation and keep what was recognized. */
+    fun stopListening() {
+        if (_state.value !is DictationState.Listening) return
         recorder.stop()
     }
 
-    /** Abandon the recording without transcribing. */
-    fun cancelRecording() {
-        if (_state.value !is DictationState.Recording) return
+    /** Abandon dictation and discard the text. */
+    fun cancelListening() {
+        if (_state.value !is DictationState.Listening) return
         _state.value = DictationState.Idle
         recorder.stop()
         recordingJob?.cancel()
         recordingJob = null
-        AudioRecorder.outputFile(app).delete()
     }
 
-    private fun transcribe(pcmFile: java.io.File) {
-        _state.postValue(DictationState.Transcribing)
-        scope.launch {
-            val text = withContext(Dispatchers.IO) { manager.transcribe(pcmFile) }
-            pcmFile.delete()
-            _state.postValue(DictationState.Idle)
-            when {
-                text == null -> _error.postValue(app.getString(R.string.dictation_failed))
-                text.isBlank() -> _error.postValue(app.getString(R.string.dictation_no_speech))
-                else -> _transcript.postValue(text.trim())
-            }
+    private fun emitTranscript(text: String) {
+        if (text.isEmpty()) {
+            _error.postValue(app.getString(R.string.dictation_no_speech))
+        } else {
+            _transcript.postValue(text)
         }
     }
 
@@ -155,5 +201,17 @@ class DictationController(
 
     companion object {
         private const val TAG = "DictationController"
+
+        /**
+         * Slice bounds. The engine transcribes roughly 3x faster than real time
+         * on a mid-range phone, so a ~4 s slice is decoded well before the next
+         * one is spoken and the text never falls behind. Below the minimum a
+         * slice costs more in per-pass overhead than it returns in words.
+         */
+        private const val MIN_SLICE_SAMPLES = AudioRecorder.SAMPLE_RATE * 4
+        private const val MAX_SLICE_SAMPLES = AudioRecorder.SAMPLE_RATE * 8
+
+        /** RMS below this counts as a pause worth cutting on. */
+        private const val SILENCE_LEVEL = 0.02f
     }
 }

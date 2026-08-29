@@ -6,10 +6,6 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.util.Log
-import java.io.File
-import java.io.FileOutputStream
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import kotlin.math.sqrt
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -26,21 +22,31 @@ import kotlinx.coroutines.flow.callbackFlow
  */
 class AudioRecorder(private val context: Context) {
 
-    /** Emitted while recording so the UI can show a timer and a level meter. */
-    data class Level(val elapsedMs: Long, val amplitude: Float)
+    /**
+     * A slice of freshly recorded audio, handed straight to the recognizer.
+     * [samples] is 16 kHz mono f32 and is only valid until the next emission.
+     */
+    data class Chunk(
+        val samples: FloatArray,
+        val elapsedMs: Long,
+        val amplitude: Float,
+    )
 
     @Volatile private var stopRequested = false
 
     /**
      * Records until [stop] is called, the flow is cancelled, or
-     * [MAX_DURATION_MS] elapses. Emits progress; the recording lands in
-     * [outputFile].
+     * [MAX_DURATION_MS] elapses, emitting each buffer as it arrives so the
+     * recognizer can transcribe while the user is still speaking.
+     *
+     * Nothing is written to disk: live dictation consumes the audio as it is
+     * produced, so there is no recording to keep.
      *
      * The caller must hold RECORD_AUDIO — [android.media.AudioRecord] silently
      * yields empty buffers otherwise.
      */
     @SuppressLint("MissingPermission")
-    fun record(outputFile: File): Flow<Level> = callbackFlow {
+    fun record(): Flow<Chunk> = callbackFlow {
         stopRequested = false
 
         val minBuffer = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT)
@@ -69,35 +75,26 @@ class AudioRecorder(private val context: Context) {
 
         val thread = Thread({
             val samples = FloatArray(bufferSize / Float.SIZE_BYTES)
-            // The engine wants little-endian f32; DataOutputStream.writeFloat
-            // would emit big-endian and produce silence-like garbage.
-            val bytes = ByteBuffer.allocate(samples.size * Float.SIZE_BYTES)
-                .order(ByteOrder.LITTLE_ENDIAN)
             var totalSamples = 0L
             try {
-                outputFile.parentFile?.mkdirs()
-                FileOutputStream(outputFile).use { out ->
-                    recorder.startRecording()
-                    while (!stopRequested && totalSamples < MAX_SAMPLES) {
-                        val read = recorder.read(samples, 0, samples.size, AudioRecord.READ_BLOCKING)
-                        if (read <= 0) {
-                            if (read < 0) Log.w(TAG, "AudioRecord.read returned $read")
-                            continue
-                        }
-                        bytes.clear()
-                        bytes.asFloatBuffer().put(samples, 0, read)
-                        out.write(bytes.array(), 0, read * Float.SIZE_BYTES)
-
-                        totalSamples += read
-                        var sumSquares = 0.0
-                        for (i in 0 until read) sumSquares += samples[i] * samples[i].toDouble()
-                        trySend(
-                            Level(
-                                elapsedMs = totalSamples * 1000 / SAMPLE_RATE,
-                                amplitude = sqrt(sumSquares / read).toFloat(),
-                            ),
-                        )
+                recorder.startRecording()
+                while (!stopRequested && totalSamples < MAX_SAMPLES) {
+                    val read = recorder.read(samples, 0, samples.size, AudioRecord.READ_BLOCKING)
+                    if (read <= 0) {
+                        if (read < 0) Log.w(TAG, "AudioRecord.read returned $read")
+                        continue
                     }
+                    totalSamples += read
+                    var sumSquares = 0.0
+                    for (i in 0 until read) sumSquares += samples[i] * samples[i].toDouble()
+                    trySend(
+                        Chunk(
+                            // Copied: the buffer is reused by the next read.
+                            samples = samples.copyOf(read),
+                            elapsedMs = totalSamples * 1000 / SAMPLE_RATE,
+                            amplitude = sqrt(sumSquares / read).toFloat(),
+                        ),
+                    )
                 }
                 close()
             } catch (t: Throwable) {
@@ -140,9 +137,5 @@ class AudioRecorder(private val context: Context) {
         private const val MAX_SAMPLES = SAMPLE_RATE * MAX_DURATION_MS / 1000
 
         private const val STOP_TIMEOUT_MS = 2_000L
-
-        /** Raw PCM scratch file; overwritten by each recording. */
-        fun outputFile(context: Context): File =
-            File(File(context.cacheDir, "dictation").apply { mkdirs() }, "recording.pcm")
     }
 }

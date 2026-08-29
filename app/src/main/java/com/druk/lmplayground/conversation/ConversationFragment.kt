@@ -106,7 +106,7 @@ class ConversationFragment : Fragment() {
         ActivityResultContracts.RequestPermission()
     ) { granted ->
         if (granted) {
-            viewModel.dictation.startRecording()
+            viewModel.dictation.startListening()
         } else {
             Toast.makeText(
                 requireContext(),
@@ -196,7 +196,7 @@ class ConversationFragment : Fragment() {
             Manifest.permission.RECORD_AUDIO,
         ) == PackageManager.PERMISSION_GRANTED
         if (granted) {
-            viewModel.dictation.startRecording()
+            viewModel.dictation.startListening()
         } else {
             recordAudioPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
         }
@@ -923,8 +923,8 @@ class ConversationFragment : Fragment() {
                                         }
                                     }
                                 },
-                                onStopRecording = { viewModel.dictation.stopRecording() },
-                                onCancelRecording = { viewModel.dictation.cancelRecording() },
+                                onStopRecording = { viewModel.dictation.stopListening() },
+                                onCancelRecording = { viewModel.dictation.cancelListening() },
                                 pendingTranscript = dictationTranscript,
                                 onTranscriptConsumed = { viewModel.dictation.consumeTranscript() },
                                 onMessageSent = { content ->

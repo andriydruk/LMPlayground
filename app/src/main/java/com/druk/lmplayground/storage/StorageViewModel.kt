@@ -85,6 +85,14 @@ class StorageViewModel(application: Application) : AndroidViewModel(application)
     private val _embeddingModel = MutableLiveData<ModelWithStatus?>(null)
     val embeddingModel: LiveData<ModelWithStatus?> = _embeddingModel
 
+    /**
+     * The voice-dictation model. Like [embeddingModel] it is not a chat model,
+     * so it needs its own row — without one, a 675 MB download would be
+     * invisible here and impossible to delete.
+     */
+    private val _dictationModel = MutableLiveData<ModelWithStatus?>(null)
+    val dictationModel: LiveData<ModelWithStatus?> = _dictationModel
+
     private val _isStorageConfigured = MutableLiveData<Boolean>()
     val isStorageConfigured: LiveData<Boolean> = _isStorageConfigured
 
@@ -130,6 +138,12 @@ class StorageViewModel(application: Application) : AndroidViewModel(application)
                     ModelWithStatus(
                         model = ModelInfoProvider.embeddingModel,
                         isDownloaded = ModelInfoProvider.embeddingModel.filename in downloadedFilenames,
+                    )
+                )
+                _dictationModel.postValue(
+                    ModelWithStatus(
+                        model = ModelInfoProvider.dictationModel,
+                        isDownloaded = ModelInfoProvider.dictationModel.filename in downloadedFilenames,
                     )
                 )
             }

@@ -676,6 +676,23 @@ class LlamaService : Service() {
             sessions[sessionId]?.nativeSession?.setPreambleCachePath(path, fingerprint)
         }
 
+        override fun transcribeSamples(pcm: FloatArray, targetLang: String): String? {
+            val entry = asrModel.get() ?: return null
+            asrIdleHandler.removeCallbacks(asrIdleUnload)
+            return try {
+                asrExecutor.submit<String?> {
+                    // Re-read the slot on the worker: an unload may have claimed
+                    // it between the binder call and this task.
+                    asrModel.get()?.let { nativeAsr.transcribeSamples(it.handle, pcm, pcm.size, targetLang) }
+                }.get()
+            } catch (t: Throwable) {
+                Log.e(TAG, "transcribeSamples failed", t)
+                null
+            } finally {
+                scheduleAsrIdleUnload()
+            }
+        }
+
         override fun loadAsrModel(path: String?, pfd: ParcelFileDescriptor?): Boolean {
             val resolved = resolvePath(path, pfd) ?: return false
             // Replacing an existing model: drop the old one first so the two

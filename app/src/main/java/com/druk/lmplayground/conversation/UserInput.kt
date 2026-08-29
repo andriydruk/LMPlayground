@@ -78,7 +78,10 @@ import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.SemanticsPropertyReceiver
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.platform.LocalDensity
@@ -313,8 +316,11 @@ fun UserInput(
 }
 
 /**
- * Replaces the text field while dictation is running: a live timer with a
- * cancel/stop pair, then a spinner while the audio is transcribed.
+ * Replaces the text field while dictation is running: the words appear here as
+ * they are recognized, with a cancel/stop pair either side.
+ *
+ * The live text lands in the composer only when the user stops — showing it
+ * here keeps a half-recognized sentence out of a field they might send.
  */
 @Composable
 private fun DictationBar(
@@ -327,11 +333,11 @@ private fun DictationBar(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = if (compact) 2.dp else 8.dp, horizontal = 4.dp)
-            .heightIn(min = if (compact) 40.dp else 48.dp),
+            .heightIn(min = if (compact) 40.dp else 48.dp, max = 160.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         when (state) {
-            is DictationState.Recording -> {
+            is DictationState.Listening -> {
                 IconButton(onClick = onCancelRecording) {
                     Icon(
                         imageVector = Icons.Filled.Close,
@@ -350,15 +356,24 @@ private fun DictationBar(
                 )
                 Text(
                     text = formatElapsed(state.elapsedMs),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(start = 12.dp),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 8.dp),
                 )
                 Text(
-                    text = stringResource(R.string.dictation_recording),
+                    text = state.text.ifEmpty { stringResource(R.string.dictation_listening) },
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(start = 8.dp).weight(1f),
+                    color = if (state.text.isEmpty()) {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    },
+                    maxLines = 4,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
                 )
                 IconButton(onClick = onStopRecording, modifier = Modifier.padding(end = 4.dp)) {
                     Icon(
@@ -369,7 +384,7 @@ private fun DictationBar(
                 }
             }
 
-            DictationState.Transcribing -> {
+            DictationState.Finishing -> {
                 CircularProgressIndicator(
                     modifier = Modifier.padding(start = 12.dp).size(18.dp),
                     strokeWidth = 2.dp,
