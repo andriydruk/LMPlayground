@@ -1,9 +1,9 @@
 package com.druk.lmplayground.harness.probes
 
+import com.druk.llamacpp.asr.WordErrorRate
 import com.druk.llamacpp.jni.NativeAsr
 import com.druk.lmplayground.harness.*
 import java.io.File
-import java.util.Locale
 
 /**
  * Voice dictation: the Parakeet speech-recognition engine.
@@ -178,35 +178,8 @@ object AsrProbe {
         )
     }
 
-    private fun pct(v: Double) = "${"%.1f".format(v * 100)}%"
+    private fun pct(v: Double) = WordErrorRate.percent(v)
 
-    /**
-     * Word error rate: Levenshtein distance over words, normalized by the
-     * reference length. Case and punctuation are stripped first — dictation
-     * inserts text a human then edits, so "France?" vs "france" is not an
-     * error worth failing a build over.
-     */
-    internal fun wordErrorRate(reference: String, hypothesis: String): Double {
-        val ref = normalize(reference)
-        val hyp = normalize(hypothesis)
-        if (ref.isEmpty()) return if (hyp.isEmpty()) 0.0 else 1.0
-
-        var prev = IntArray(hyp.size + 1) { it }
-        val cur = IntArray(hyp.size + 1)
-        for (i in 1..ref.size) {
-            cur[0] = i
-            for (j in 1..hyp.size) {
-                val sub = prev[j - 1] + if (ref[i - 1] == hyp[j - 1]) 0 else 1
-                cur[j] = minOf(sub, prev[j] + 1, cur[j - 1] + 1)
-            }
-            prev = cur.copyOf()
-        }
-        return prev[hyp.size].toDouble() / ref.size
-    }
-
-    private fun normalize(s: String): List<String> = s
-        .lowercase(Locale.ROOT)
-        .replace(Regex("[^\\p{L}\\p{Nd}\\s']"), " ")
-        .split(Regex("\\s+"))
-        .filter { it.isNotEmpty() }
+    private fun wordErrorRate(reference: String, hypothesis: String) =
+        WordErrorRate.of(reference, hypothesis)
 }

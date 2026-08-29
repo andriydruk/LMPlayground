@@ -9,8 +9,10 @@ import android.os.ParcelFileDescriptor
 import android.util.Log
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.druk.llamacpp.ILlamaService
 import com.druk.llamacpp.ITranscriptionCallback
+import com.druk.llamacpp.asr.WordErrorRate
 import com.druk.lmplayground.inference.LlamaService
 import java.io.File
 import java.nio.ByteBuffer
@@ -18,8 +20,6 @@ import java.nio.ByteOrder
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.math.PI
-import kotlin.math.sin
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -31,17 +31,18 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * End-to-end instrumented test for the voice-dictation path: loads the Parakeet
- * GGUF through the AIDL surface and transcribes raw PCM handed over as a file
- * descriptor.
+ * Voice dictation end to end on real hardware: the Parakeet model loads through
+ * the AIDL surface and transcribes audio handed over as a file descriptor.
+ *
+ * The clip and the reference transcript are the same ones the macOS harness
+ * uses (`app/src/androidTest/assets/audio/`), and both grade with
+ * [WordErrorRate], so "passes on the Mac" and "passes on the phone" mean the
+ * same thing. What only this test can show is what the phone's CPU does with
+ * it — accuracy is hardware-independent, speed very much is not.
  *
  * Setup: copy the dictation model into /data/local/tmp/, e.g.
  *   adb push tdt-0.6b-v3-q4_k.gguf /data/local/tmp/
  *   adb shell chmod 666 /data/local/tmp/tdt-0.6b-v3-q4_k.gguf
- *
- * To assert on real words, also push a 16 kHz mono f32 recording of a known
- * phrase as speech.pcm (see [SPEECH_PCM]); without it the test still exercises
- * load → transcribe → unload using synthesized audio.
  */
 @RunWith(AndroidJUnit4::class)
 class AsrTranscriptionTest {
@@ -50,14 +51,19 @@ class AsrTranscriptionTest {
         private const val TAG = "AsrTranscriptionTest"
         private const val MODELS_PATH = "/data/local/tmp"
         private const val ASR_MODEL = "tdt-0.6b-v3-q4_k.gguf"
-
-        /** Optional: raw 16 kHz mono little-endian f32 PCM of a spoken phrase. */
-        private const val SPEECH_PCM = "speech.pcm"
-
-        /** Words the recording in [SPEECH_PCM] is expected to contain. */
-        private val EXPECTED_WORDS = listOf("capital", "france")
-
+        private const val CLIP = "audio/jfk.wav"
         private const val SAMPLE_RATE = 16_000
+
+        /**
+         * Real recorded speech, greedy TDT decoding. NVIDIA reports ~6% WER for
+         * this checkpoint across the Open ASR corpus; above 15% on one clean
+         * clip means the pipeline is broken, not that the model is imperfect.
+         */
+        private const val WER_BUDGET = 0.15
+
+        private const val REFERENCE =
+            "And so my fellow Americans, ask not what your country can do for you, " +
+                "ask what you can do for your country."
     }
 
     private lateinit var context: Context
@@ -87,7 +93,7 @@ class AsrTranscriptionTest {
         service = null
     }
 
-    @Test(timeout = 180_000)
+    @Test(timeout = 300_000)
     fun loadAsrModel_reportsLoaded() {
         val service = service!!
         assertFalse("no model should be loaded yet", service.isAsrModelLoaded)
@@ -103,38 +109,45 @@ class AsrTranscriptionTest {
         assertFalse(service.isAsrModelLoaded)
     }
 
-    @Test(timeout = 300_000)
-    fun transcribe_returnsTextForSpokenAudio() {
+    @Test(timeout = 600_000)
+    fun transcribe_realSpeech_isWithinWerBudget() {
         val service = service!!
+        val loadStart = System.currentTimeMillis()
         assertTrue(service.loadAsrModel(File(MODELS_PATH, ASR_MODEL).absolutePath, null))
+        val loadMs = System.currentTimeMillis() - loadStart
 
-        val speech = File(MODELS_PATH, SPEECH_PCM)
-        val hasSpeech = speech.exists() && speech.canRead()
-        val pcmFile = if (hasSpeech) speech else synthesizeTone()
+        val samples = decodeWavAsset(CLIP)
+        val seconds = samples.size / SAMPLE_RATE.toDouble()
+        val pcm = writePcm(samples)
 
-        val transcript = transcribeBlocking(pcmFile)
+        val started = System.currentTimeMillis()
+        val transcript = transcribeBlocking(pcm)
+        val ms = System.currentTimeMillis() - started
+        pcm.delete()
+
         assertNotNull("transcription produced no result", transcript)
-        Log.i(TAG, "transcript: '$transcript'")
-
-        if (hasSpeech) {
-            val lower = transcript!!.lowercase()
-            EXPECTED_WORDS.forEach {
-                assertTrue("expected '$it' in transcript '$transcript'", lower.contains(it))
-            }
-        }
-        // Synthesized audio has no words in it: reaching a result at all proves
-        // the PCM crossed the fd, the encoder ran and the decoder returned.
+        val wer = WordErrorRate.of(REFERENCE, transcript!!)
+        // Speed is reported, never asserted: it is the whole point of running
+        // on real hardware, but it is not a correctness property.
+        Log.i(
+            TAG,
+            "WER ${WordErrorRate.percent(wer)} | ${ms}ms for ${"%.1f".format(seconds)}s " +
+                "(${"%.2f".format(ms / 1000.0 / seconds)}x realtime) | load ${loadMs}ms",
+        )
+        Log.i(TAG, "heard: $transcript")
+        assertTrue(
+            "WER ${WordErrorRate.percent(wer)} exceeds the " +
+                "${WordErrorRate.percent(WER_BUDGET)} budget — heard: $transcript",
+            wer <= WER_BUDGET,
+        )
     }
 
     @Test(timeout = 180_000)
     fun transcribe_withoutModel_reportsError() {
         val error = AtomicReference<String?>(null)
         val latch = CountDownLatch(1)
-        val pcmFd = ParcelFileDescriptor.open(
-            synthesizeTone(),
-            ParcelFileDescriptor.MODE_READ_ONLY,
-        )
-        pcmFd.use {
+        val pcm = writePcm(FloatArray(SAMPLE_RATE) { 0f })
+        ParcelFileDescriptor.open(pcm, ParcelFileDescriptor.MODE_READ_ONLY).use {
             service!!.transcribe(it, "auto", object : ITranscriptionCallback.Stub() {
                 override fun onTranscription(text: String) = latch.countDown()
                 override fun onTranscriptionError(message: String) {
@@ -144,14 +157,14 @@ class AsrTranscriptionTest {
             })
             assertTrue("callback never fired", latch.await(30, TimeUnit.SECONDS))
         }
+        pcm.delete()
         assertEquals("ASR model not loaded", error.get())
     }
 
-    private fun transcribeBlocking(pcmFile: File, timeoutSec: Long = 240): String? {
+    private fun transcribeBlocking(pcmFile: File, timeoutSec: Long = 480): String? {
         val result = AtomicReference<String?>(null)
         val latch = CountDownLatch(1)
-        val pcmFd = ParcelFileDescriptor.open(pcmFile, ParcelFileDescriptor.MODE_READ_ONLY)
-        pcmFd.use {
+        ParcelFileDescriptor.open(pcmFile, ParcelFileDescriptor.MODE_READ_ONLY).use {
             service!!.transcribe(it, "auto", object : ITranscriptionCallback.Stub() {
                 override fun onTranscription(text: String) {
                     result.set(text)
@@ -168,17 +181,32 @@ class AsrTranscriptionTest {
         return result.get()
     }
 
-    /** Two seconds of a quiet 440 Hz tone in the engine's input format. */
-    private fun synthesizeTone(): File {
-        val file = File(context.cacheDir, "asr-test-tone.pcm")
-        val samples = SAMPLE_RATE * 2
-        val buffer = ByteBuffer.allocate(samples * Float.SIZE_BYTES)
-            .order(ByteOrder.LITTLE_ENDIAN)
-        for (i in 0 until samples) {
-            buffer.putFloat((0.05 * sin(2.0 * PI * 440.0 * i / SAMPLE_RATE)).toFloat())
-        }
-        file.writeBytes(buffer.array())
+    /** Writes the engine's input format: little-endian f32, 16 kHz mono. */
+    private fun writePcm(samples: FloatArray): File {
+        val file = File(context.cacheDir, "asr-test.pcm")
+        val bb = ByteBuffer.allocate(samples.size * Float.SIZE_BYTES).order(ByteOrder.LITTLE_ENDIAN)
+        samples.forEach { bb.putFloat(it) }
+        file.writeBytes(bb.array())
         return file
+    }
+
+    /** Minimal 16-bit PCM WAV reader for our own committed fixtures. */
+    private fun decodeWavAsset(name: String): FloatArray {
+        val bytes = InstrumentationRegistry.getInstrumentation().context.assets
+            .open(name).use { it.readBytes() }
+        val bb = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
+        var pos = 12
+        var dataOff = -1
+        var dataLen = 0
+        while (pos + 8 <= bytes.size) {
+            val id = String(bytes, pos, 4)
+            val size = bb.getInt(pos + 4)
+            if (id == "data") { dataOff = pos + 8; dataLen = size; break }
+            pos += 8 + size + (size and 1)
+        }
+        assertTrue("$name has no data chunk", dataOff >= 0)
+        val n = minOf(dataLen, bytes.size - dataOff) / 2
+        return FloatArray(n) { bb.getShort(dataOff + it * 2) / 32768f }
     }
 
     private fun bindServiceBlocking(timeoutMs: Long = 5_000): ILlamaService? {
