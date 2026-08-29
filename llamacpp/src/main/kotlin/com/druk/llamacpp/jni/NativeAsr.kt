@@ -31,6 +31,12 @@ class NativeAsr {
      */
     external fun transcribe(handle: Long, pcmFd: Int, targetLang: String?): String?
 
+    /**
+     * Same as [transcribe] but opens [pcmPath] itself. Used off Android, where
+     * the audio is a plain file rather than a descriptor handed over binder.
+     */
+    external fun transcribePath(handle: Long, pcmPath: String, targetLang: String?): String?
+
     external fun lastError(handle: Long): String
 
     external fun freeModel(handle: Long)

@@ -1,0 +1,7 @@
+{
+  "jfk.wav": {
+    "lang": "en",
+    "text": "And so my fellow Americans, ask not what your country can do for you, ask what you can do for your country.",
+    "source": "whisper.cpp samples; JFK 1961 inaugural address (US Government work, public domain)"
+  }
+}

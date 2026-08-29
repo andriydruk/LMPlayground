@@ -8,17 +8,18 @@
 
 #include <jni.h>
 
-#include <android/log.h>
 #include <cerrno>
+#include <fcntl.h>
 #include <cstdlib>
 #include <cstring>
 #include <string>
 #include <unistd.h>
 #include <vector>
 
-#include "parakeet_capi.h"
+#define LMP_LOG_TAG "AsrEngine"
+#include "lmp_log.h"
 
-#define ASR_TAG "AsrEngine"
+#include "parakeet_capi.h"
 
 // Parakeet's own default is tuned for desktop core counts. Phones have ~4 big
 // cores worth using; more threads just contend with the little cores.
@@ -28,11 +29,17 @@ static constexpr int kAsrThreads = 4;
 // CLIP vision denylist exists for exactly that reason), and parakeet's conformer
 // uses op patterns those drivers have never seen. parakeet auto-selects a
 // GPU/IGPU device when one is registered, so pin it to CPU before the first load.
-static void asrForceCpuBackend() {
+//
+// Both settings honour an existing environment value rather than overwriting it,
+// so the macOS harness can measure the Metal backend or a different thread count
+// without a rebuild. Nothing sets them on Android, where the defaults stand.
+static void asrConfigureBackend() {
     static bool done = false;
     if (done) return;
-    setenv("PARAKEET_DEVICE", "cpu", 1);
-    parakeet_capi_set_num_threads(kAsrThreads);
+    setenv("PARAKEET_DEVICE", "cpu", 0);
+    const char *threads = getenv("LMP_ASR_THREADS");
+    int n = threads != nullptr ? atoi(threads) : 0;
+    parakeet_capi_set_num_threads(n > 0 ? n : kAsrThreads);
     done = true;
 }
 
@@ -45,7 +52,7 @@ static bool readPcmF32(int fd, std::vector<float> &out) {
         ssize_t n = read(fd, chunk.data(), chunk.size() * sizeof(float));
         if (n < 0) {
             if (errno == EINTR) continue;
-            __android_log_print(ANDROID_LOG_ERROR, ASR_TAG, "read failed: %s", strerror(errno));
+            LOGe("read failed: %s", strerror(errno));
             return false;
         }
         if (n == 0) break;
@@ -60,31 +67,27 @@ static bool readPcmF32(int fd, std::vector<float> &out) {
 extern "C"
 JNIEXPORT jlong JNICALL
 Java_com_druk_llamacpp_jni_NativeAsr_loadModel(JNIEnv *env, jobject thiz, jstring modelPath) {
-    asrForceCpuBackend();
+    asrConfigureBackend();
 
     const char *path = env->GetStringUTFChars(modelPath, nullptr);
-    __android_log_print(ANDROID_LOG_INFO, ASR_TAG, "loading ASR model: %s", path);
+    LOGi("loading ASR model: %s", path);
     parakeet_ctx *ctx = parakeet_capi_load(path);
     env->ReleaseStringUTFChars(modelPath, path);
 
     if (ctx == nullptr) {
-        __android_log_print(ANDROID_LOG_ERROR, ASR_TAG, "ASR model load failed");
+        LOGe("ASR model load failed");
         return 0;
     }
-    __android_log_print(ANDROID_LOG_INFO, ASR_TAG, "ASR model loaded");
+    LOGi("ASR model loaded");
     return reinterpret_cast<jlong>(ctx);
 }
 
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_druk_llamacpp_jni_NativeAsr_transcribe(JNIEnv *env, jobject thiz, jlong handle,
-                                                jint pcmFd, jstring targetLang) {
-    auto *ctx = reinterpret_cast<parakeet_ctx *>(handle);
-    if (ctx == nullptr) return nullptr;
-
-    std::vector<float> samples;
-    if (!readPcmF32(static_cast<int>(pcmFd), samples) || samples.empty()) {
-        __android_log_print(ANDROID_LOG_WARN, ASR_TAG, "no PCM samples to transcribe");
+// Shared tail of both transcribe entry points: run the decoder over samples
+// already in memory and hand the transcript back as a Java string.
+static jstring transcribeSamples(JNIEnv *env, parakeet_ctx *ctx,
+                                 const std::vector<float> &samples, jstring targetLang) {
+    if (samples.empty()) {
+        LOGw("no PCM samples to transcribe");
         return nullptr;
     }
 
@@ -96,14 +99,45 @@ Java_com_druk_llamacpp_jni_NativeAsr_transcribe(JNIEnv *env, jobject thiz, jlong
     if (lang != nullptr) env->ReleaseStringUTFChars(targetLang, lang);
 
     if (text == nullptr) {
-        __android_log_print(ANDROID_LOG_ERROR, ASR_TAG, "transcription failed: %s",
-                            parakeet_capi_last_error(ctx));
+        LOGe("transcription failed: %s", parakeet_capi_last_error(ctx));
         return nullptr;
     }
 
     jstring result = env->NewStringUTF(text);
     parakeet_capi_free_string(text);
     return result;
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_druk_llamacpp_jni_NativeAsr_transcribe(JNIEnv *env, jobject thiz, jlong handle,
+                                                jint pcmFd, jstring targetLang) {
+    auto *ctx = reinterpret_cast<parakeet_ctx *>(handle);
+    if (ctx == nullptr) return nullptr;
+
+    std::vector<float> samples;
+    if (!readPcmF32(static_cast<int>(pcmFd), samples)) return nullptr;
+    return transcribeSamples(env, ctx, samples, targetLang);
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_druk_llamacpp_jni_NativeAsr_transcribePath(JNIEnv *env, jobject thiz, jlong handle,
+                                                    jstring pcmPath, jstring targetLang) {
+    auto *ctx = reinterpret_cast<parakeet_ctx *>(handle);
+    if (ctx == nullptr) return nullptr;
+
+    const char *path = env->GetStringUTFChars(pcmPath, nullptr);
+    int fd = open(path, O_RDONLY);
+    if (fd < 0) LOGe("cannot open %s: %s", path, strerror(errno));
+    env->ReleaseStringUTFChars(pcmPath, path);
+    if (fd < 0) return nullptr;
+
+    std::vector<float> samples;
+    const bool ok = readPcmF32(fd, samples);
+    close(fd);
+    if (!ok) return nullptr;
+    return transcribeSamples(env, ctx, samples, targetLang);
 }
 
 extern "C"
@@ -119,5 +153,5 @@ Java_com_druk_llamacpp_jni_NativeAsr_freeModel(JNIEnv *env, jobject thiz, jlong 
     auto *ctx = reinterpret_cast<parakeet_ctx *>(handle);
     if (ctx == nullptr) return;
     parakeet_capi_free(ctx);
-    __android_log_print(ANDROID_LOG_INFO, ASR_TAG, "ASR model unloaded");
+    LOGi("ASR model unloaded");
 }

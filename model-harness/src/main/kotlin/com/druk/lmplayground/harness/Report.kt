@@ -28,6 +28,8 @@ object Report {
         "Tool+Think" to Cap.TOOLS_WITH_THINKING,
         "Tool+Vis" to Cap.TOOLS_WITH_VISION,
         "Embed" to null,
+        "ASR" to null,
+        "ASR-lang" to null,
     )
 
     private fun cell(r: ModelReport, column: String, cap: Cap?): String {
@@ -50,6 +52,8 @@ object Report {
             "Tool+Think" -> r.results.filter { it.probe == "tools+think" }
             "Tool+Vis" -> r.results.filter { it.probe == "tools+vision" }
             "Embed" -> r.results.filter { it.probe == "embeddings" }
+            "ASR" -> r.results.filter { it.probe == "asr" }
+            "ASR-lang" -> r.results.filter { it.probe == "asr-multilingual" }
             else -> r.results.filter { it.cap == cap }
         }
         if (relevant.isEmpty()) return "·"

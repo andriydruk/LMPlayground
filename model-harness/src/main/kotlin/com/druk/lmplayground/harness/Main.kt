@@ -1,5 +1,6 @@
 package com.druk.lmplayground.harness
 
+import com.druk.lmplayground.harness.probes.AsrProbe
 import com.druk.lmplayground.harness.probes.EmbeddingProbe
 import java.io.File
 
@@ -38,10 +39,12 @@ fun main(args: Array<String>) {
     val undeclared = catalog.filter { c ->
         !c.deprecated &&
             c.filename !in expectations &&
-            // The embedding model is parsed out of the catalog like any other
-            // ModelInfo, but it cannot chat — it has its own probe below and
-            // must not also be reported as an unverified chat model.
+            // The embedding and dictation models are parsed out of the catalog
+            // like any other ModelInfo, but neither can chat — they have their
+            // own probes below and must not also be reported as unverified
+            // chat models.
             c.filename != EmbeddingProbe.MODEL_FILENAME &&
+            c.filename != AsrProbe.MODEL_FILENAME &&
             File(modelsDir, c.filename).isFile
     }
 
@@ -85,6 +88,20 @@ fun main(args: Array<String>) {
         val bad = embedding.results.count { it.status == Status.FAIL || it.status == Status.ERROR }
         println("          ${embedding.results.size} results, $bad failing")
         reports += embedding
+    }
+
+    // Voice dictation runs on parakeet.cpp, not llama.cpp, and transcribes
+    // audio rather than generating tokens — so like the embedding model it
+    // sits outside the per-model chat loop.
+    if (opts.matchesModel("Parakeet TDT 0.6B v3", AsrProbe.MODEL_FILENAME) &&
+        (opts.probes.isEmpty() || "asr" in opts.probes)
+    ) {
+        println("run       Parakeet TDT 0.6B v3 (voice dictation)")
+        val asr = AsrProbe.run(modelsDir, reportDir)
+        val bad = asr.results.count { it.status == Status.FAIL || it.status == Status.ERROR }
+        println("          ${asr.results.size} results, $bad failing" +
+            (asr.loadError?.let { " - LOAD FAILED: $it" } ?: ""))
+        reports += asr
     }
 
     val meta = linkedMapOf(

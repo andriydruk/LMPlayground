@@ -50,6 +50,11 @@ add_subdirectory(${LMP_LLAMA_DIR} ${CMAKE_BINARY_DIR}/llama.cpp)
 # when LLAMA_BUILD_MTMD=ON; the Android CMakeLists adds it manually only
 # because it leaves LLAMA_BUILD_MTMD at its OFF default.
 
+# parakeet (speech recognition behind voice dictation) is vendored in the fork
+# and is NOT added by llama.cpp itself, so add it here exactly as the Android
+# build does. This is what lets the harness transcribe audio on a Mac.
+add_subdirectory(${LMP_LLAMA_DIR}/tools/parakeet ${CMAKE_BINARY_DIR}/parakeet)
+
 # llama.cpp puts its own shared libs (libggml-*.so backends, libllama.dylib,
 # libmtmd.dylib) in <build>/bin. Put libllamacpp.dylib there too so that one
 # directory works as BOTH java.library.path and the nativeLibDir that
@@ -64,7 +69,8 @@ add_library(llamacpp SHARED
         ${LMP_CPP_DIR}/native-lib.cpp
         ${LMP_CPP_DIR}/LlamaModel.cpp
         ${LMP_CPP_DIR}/LlamaGenerationSession.cpp
-        ${LMP_CPP_DIR}/LlamaEmbeddingSession.cpp)
+        ${LMP_CPP_DIR}/LlamaEmbeddingSession.cpp
+        ${LMP_CPP_DIR}/AsrEngine.cpp)
 
 target_include_directories(llamacpp PRIVATE
         ${LMP_CPP_DIR}
@@ -72,7 +78,7 @@ target_include_directories(llamacpp PRIVATE
         ${JNI_INCLUDE_DIRS})
 
 # No `android`, no `log` — those are NDK-only.
-target_link_libraries(llamacpp llama-common llama mtmd)
+target_link_libraries(llamacpp llama-common llama mtmd parakeet)
 
 # All backend dylibs land next to libllamacpp.dylib, so the harness can pass
 # that one directory as both java.library.path and nativeLibDir (which
