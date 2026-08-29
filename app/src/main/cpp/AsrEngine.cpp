@@ -236,6 +236,7 @@ Java_com_druk_llamacpp_jni_NativeAsr_streamBegin(JNIEnv *env, jobject thiz, jlon
         LOGe("stream begin failed (not a streaming model?): %s", parakeet_capi_last_error(ctx));
         return 0;
     }
+    LOGi("dictation stream opened");
     return reinterpret_cast<jlong>(stream);
 }
 
@@ -276,7 +277,9 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_druk_llamacpp_jni_NativeAsr_streamFree(JNIEnv *env, jobject thiz, jlong streamHandle) {
     auto *stream = reinterpret_cast<parakeet_stream *>(streamHandle);
-    if (stream != nullptr) parakeet_capi_stream_free(stream);
+    if (stream == nullptr) return;
+    parakeet_capi_stream_free(stream);
+    LOGi("dictation stream closed");
 }
 
 extern "C"

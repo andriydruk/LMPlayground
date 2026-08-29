@@ -10,8 +10,13 @@ import com.druk.lmplayground.download.DownloadRepository
 import com.druk.lmplayground.storage.StorageRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 /** What the microphone button is doing right now. */
@@ -19,16 +24,12 @@ sealed interface DictationState {
     data object Idle : DictationState
 
     /**
-     * Live dictation in progress. [text] is everything recognized so far and
-     * grows while the user speaks; the composer shows it as it arrives.
+     * Dictation is under way: recording, recognizing, or both. [text] is
+     * everything recognized so far in this session and grows as words land.
      */
-    data class Listening(
-        val elapsedMs: Long,
-        val amplitude: Float,
-        val text: String,
-    ) : DictationState
+    data class Listening(val text: String) : DictationState
 
-    /** Stopped; flushing the decoder's tail. Brief — a fraction of a second. */
+    /** Recording has ended; the recognizer is still draining its backlog. */
     data object Finishing : DictationState
 }
 
@@ -36,9 +37,15 @@ sealed interface DictationState {
  * Drives voice dictation for the chat input.
  *
  * Audio is fed to the recognizer as it is recorded and partial text comes back
- * within a few hundred milliseconds, so the user sees words appear while
- * speaking rather than waiting for a transcription pass at the end. Stopping
- * flushes the decoder tail and hands over the final text.
+ * within a few hundred milliseconds, so words appear while the user is still
+ * speaking.
+ *
+ * Recording and recognition are deliberately separate. The recognizer runs
+ * behind the microphone — on a phone it decodes slower than speech — so it is
+ * still draining its backlog for a moment after the user lets go. Pressing
+ * again during that moment must not be swallowed: the new recording starts
+ * immediately and its audio waits in a queue for the recognizer, and the two
+ * utterances land in the input field in the order they were spoken.
  *
  * The caller (the fragment) owns the RECORD_AUDIO prompt and must only call
  * [startListening] once the permission is granted.
@@ -84,7 +91,23 @@ class DictationController(
 
     val modelInfo = manager.modelInfo
 
-    private var recordingJob: Job? = null
+    /**
+     * Serializes access to the recognizer. One utterance holds it from
+     * beginStream to endStream; the next waits here while still recording, so
+     * its audio is captured rather than dropped.
+     */
+    private val recognizer = Mutex()
+
+    /** Text recognized since the composer's base was captured, across utterances. */
+    private val sessionText = StringBuilder()
+
+    /** Recordings plus recognitions still in flight; at zero the session is done. */
+    private val outstanding = AtomicInteger(0)
+
+    /** True while the microphone is capturing — one recording at a time. */
+    @Volatile private var recording = false
+
+    private val jobs = mutableListOf<Job>()
 
     /**
      * Whether the microphone button is currently held.
@@ -120,14 +143,6 @@ class DictationController(
         downloads.startDownload(manager.modelInfo, storageUri)
     }
 
-    /**
-     * Start listening. The caller must hold RECORD_AUDIO. Ends on
-     * [stopListening], [cancelListening], or the recorder's duration cap.
-     *
-     * Audio is fed to the recognizer as it is recorded and partial text comes
-     * back within a few hundred milliseconds, so words appear while the user is
-     * still speaking.
-     */
     /** Called the moment the button goes down, before any async work. */
     fun onMicPressed() {
         held = true
@@ -139,96 +154,121 @@ class DictationController(
         stopListening()
     }
 
+    /**
+     * Start listening. The caller must hold RECORD_AUDIO. Ends on
+     * [stopListening], [cancelListening], or the recorder's duration cap.
+     */
     fun startListening() {
         // Released again before the start caught up.
         if (!held) return
-        // Synchronous guard: _state is updated with postValue, so a second
-        // press can arrive before the first has been reflected there. Two
-        // sessions would share one AudioRecorder and fight over its stop flag,
-        // leaving the microphone running.
-        if (recordingJob?.isActive == true) return
-        if (_state.value !is DictationState.Idle) return
-        _state.value = DictationState.Listening(0L, 0f, "")
+        // Only the microphone is exclusive. Recognition of a previous utterance
+        // may still be running, and that must not block a new one.
+        if (recording) return
+        recording = true
+        outstanding.incrementAndGet()
+        _state.postValue(DictationState.Listening(sessionText.toString()))
 
-        recordingJob = scope.launch {
-            val streamId = manager.beginStream()
-            if (streamId == 0) {
-                _state.postValue(DictationState.Idle)
-                _error.postValue(app.getString(R.string.dictation_failed))
-                return@launch
-            }
-            // Loading the model can take a moment on first use; the finger may
-            // be gone by now.
-            if (!held) {
-                withContext(Dispatchers.IO) { manager.cancelStream(streamId) }
-                _state.postValue(DictationState.Idle)
-                return@launch
+        val job = scope.launch {
+            // Audio is buffered so recording never waits for the recognizer.
+            val audio = Channel<FloatArray>(Channel.UNLIMITED)
+
+            val capture = launch(Dispatchers.IO) {
+                try {
+                    recorder.record().collect { audio.send(it.samples) }
+                } catch (t: Throwable) {
+                    Log.e(TAG, "recording failed", t)
+                    _error.postValue(app.getString(R.string.dictation_record_failed))
+                } finally {
+                    audio.close()
+                    // The microphone is free now, even though this utterance is
+                    // still being recognized below.
+                    recording = false
+                }
             }
 
-            val heard = StringBuilder()
-            var cancelled = false
             try {
-                // Feeds block for the decode; running them on the recorder's
-                // own thread would drop audio.
-                withContext(Dispatchers.IO) {
-                    recorder.record().collect { chunk ->
-                        val delta = manager.feed(streamId, chunk.samples)
-                        if (!delta.isNullOrEmpty()) heard.append(delta)
-                        _state.postValue(
-                            DictationState.Listening(
-                                elapsedMs = chunk.elapsedMs,
-                                amplitude = chunk.amplitude,
-                                text = heard.toString().trim(),
-                            ),
-                        )
+                recognizer.withLock {
+                    val streamId = manager.beginStream()
+                    if (streamId == 0) {
+                        _error.postValue(app.getString(R.string.dictation_failed))
+                        audio.cancel()
+                        return@withLock
+                    }
+                    var closed = false
+                    try {
+                        for (pcm in audio) {
+                            val delta = withContext(Dispatchers.IO) { manager.feed(streamId, pcm) }
+                            if (!delta.isNullOrEmpty()) appendRecognized(delta)
+                        }
+                        val tail = withContext(Dispatchers.IO) { manager.endStream(streamId) }
+                        closed = true
+                        if (!tail.isNullOrEmpty()) appendRecognized(tail)
+                    } finally {
+                        // Cancelled part-way (the user discarded): the native
+                        // stream still has to be released.
+                        if (!closed) withContext(NonCancellable) { manager.cancelStream(streamId) }
                     }
                 }
             } catch (t: Throwable) {
-                cancelled = true
-                Log.e(TAG, "dictation failed", t)
-                _error.postValue(app.getString(R.string.dictation_record_failed))
+                Log.e(TAG, "recognition failed", t)
+                _error.postValue(app.getString(R.string.dictation_failed))
+            } finally {
+                capture.join()
+                if (outstanding.decrementAndGet() == 0) finishSession()
             }
-
-            if (cancelled) {
-                withContext(Dispatchers.IO) { manager.cancelStream(streamId) }
-            } else {
-                // The decoder is behind the speaker by however long its backlog
-                // is; finalizing drains it, so show that we are catching up.
-                _state.postValue(DictationState.Finishing)
-                val tail = withContext(Dispatchers.IO) { manager.endStream(streamId) }
-                if (!tail.isNullOrEmpty()) heard.append(tail)
-                emitTranscript(heard.toString().trim())
-            }
-            _state.postValue(DictationState.Idle)
         }
+        jobs += job
+        job.invokeOnCompletion { jobs.remove(job) }
     }
 
     /**
-     * Finish dictation and keep what was recognized. Safe to call when nothing
-     * is running — a press whose start was still pending is stopped by [held].
+     * Finish the current recording and keep what was recognized. Safe to call
+     * when nothing is running — a press whose start was still pending is
+     * stopped by [held].
      */
     fun stopListening() {
         held = false
         recorder.stop()
+        // Recording has ended but the recognizer is still catching up; the
+        // composer keeps the text it already has.
+        if (outstanding.get() > 0) _state.postValue(DictationState.Finishing)
     }
 
-    /** Abandon dictation and discard the text. */
+    /** Abandon dictation and discard everything recognized in this session. */
     fun cancelListening() {
         held = false
-        if (_state.value !is DictationState.Listening) return
-        _state.value = DictationState.Idle
         recorder.stop()
-        recordingJob?.cancel()
-        recordingJob = null
+        jobs.toList().forEach { it.cancel() }
+        jobs.clear()
+        recording = false
+        outstanding.set(0)
+        synchronized(sessionText) { sessionText.setLength(0) }
+        _state.postValue(DictationState.Idle)
         // Terminal event so the composer restores what the user had typed.
-        _transcript.value = ""
+        _transcript.postValue("")
     }
 
-    /**
-     * Always posts a terminal value, even an empty one: the composer writes
-     * recognized text live and needs a definitive final answer to settle on —
-     * "" meaning "put back what was there".
-     */
+    /** Appends newly recognized text and shows the session so far. */
+    private fun appendRecognized(delta: String) {
+        val snapshot = synchronized(sessionText) {
+            if (sessionText.isNotEmpty() && !sessionText.last().isWhitespace()) {
+                sessionText.append(' ')
+            }
+            sessionText.append(delta.trim())
+            sessionText.toString()
+        }
+        _state.postValue(DictationState.Listening(snapshot))
+    }
+
+    /** Everything spoken has been recognized: hand the text to the composer. */
+    private fun finishSession() {
+        val text = synchronized(sessionText) {
+            sessionText.toString().trim().also { sessionText.setLength(0) }
+        }
+        emitTranscript(text)
+        _state.postValue(DictationState.Idle)
+    }
+
     private fun emitTranscript(text: String) {
         if (text.isEmpty()) _error.postValue(app.getString(R.string.dictation_no_speech))
         _transcript.postValue(text)
