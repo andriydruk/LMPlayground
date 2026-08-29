@@ -369,18 +369,6 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
     )
 
 
-    // Whether to show the What's New "Set up tools" button. Shown until the
-    // user has opened the Tools settings once (the flag is set there, not on
-    // tap, so the button doesn't visibly vanish under the user's finger).
-    // Re-read on resume so it disappears after returning from Tools settings.
-    private val _showToolsSetup = MutableLiveData(!storagePreferences.toolsSetupSeen)
-    val showToolsSetup: LiveData<Boolean> = _showToolsSetup
-
-    @MainThread
-    fun refreshToolsSetupVisibility() {
-        _showToolsSetup.value = !storagePreferences.toolsSetupSeen
-    }
-
     val isGenerating: LiveData<Boolean> = _isGenerating
     val isModelReady: LiveData<Boolean> = _isModelReady
     val modelLoadingProgress: LiveData<Float> = _modelLoadingProgress

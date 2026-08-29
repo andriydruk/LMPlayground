@@ -17,11 +17,6 @@ class StoragePreferences(context: Context) {
         get() = prefs.getString(KEY_URI, null)?.toUri()
         set(value) = prefs.edit { putString(KEY_URI, value?.toString()) }
 
-    /** True once the user has tapped the What's New "Set up tools" button. */
-    var toolsSetupSeen: Boolean
-        get() = prefs.getBoolean("tools_setup_seen", false)
-        set(value) = prefs.edit { putBoolean("tools_setup_seen", value) }
-
     /** Play a chime when generation finishes while the app is backgrounded. */
     var soundOnCompletion: Boolean
         get() = prefs.getBoolean("sound_on_completion", true)

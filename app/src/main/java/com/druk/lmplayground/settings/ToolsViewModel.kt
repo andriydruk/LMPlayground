@@ -19,13 +19,6 @@ class ToolsViewModel(app: Application) : AndroidViewModel(app) {
 
     private val prefs = StoragePreferences(app)
 
-    init {
-        // Opening the Tools screen counts as having "set up tools" — the
-        // What's New prompt button is suppressed from now on (re-checked by
-        // ConversationViewModel.refreshToolsSetupVisibility on resume).
-        prefs.toolsSetupSeen = true
-    }
-
     /** The catalog of available tools (same set the conversation engine uses). */
     val tools: List<Tool> = ToolRegistry.createDefault(app).getAllTools()
 
