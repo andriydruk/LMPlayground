@@ -1,6 +1,8 @@
 package com.druk.lmplayground.dictation
 
 import android.app.Application
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -100,16 +103,38 @@ class DictationController(
      */
     private val recognizer = Mutex()
 
-    /** Text recognized since the composer's base was captured, across utterances. */
-    private val sessionText = DictationTranscript()
+    /**
+     * One dictation session: from the first press until everything spoken has
+     * been recognized and handed to the composer. Pressing again while the
+     * recognizer is still catching up joins the running session, so the
+     * utterances land together.
+     */
+    private inner class Session {
+        /** Text recognized so far, across utterances. Guarded by itself. */
+        val transcript = DictationTranscript()
 
-    /** Recordings plus recognitions still in flight; at zero the session is done. */
-    private val outstanding = AtomicInteger(0)
+        /** Recordings plus recognitions still in flight; at zero it is done. */
+        val outstanding = AtomicInteger(0)
+
+        /** Parent of the session's coroutines, so [abandon] can stop them all. */
+        val job = SupervisorJob(scope.coroutineContext[Job])
+
+        /**
+         * Set on the main thread by [abandon]. Once set, nothing from this
+         * session reaches the composer — including updates already posted.
+         */
+        @Volatile var abandoned = false
+
+        fun text(): String = synchronized(transcript) { transcript.text }
+    }
+
+    private val sessionLock = Any()
+    private var current = Session()  // guarded by sessionLock
 
     /** True while the microphone is capturing — one recording at a time. */
     @Volatile private var recording = false
 
-    private val jobs = mutableListOf<Job>()
+    private val main = Handler(Looper.getMainLooper())
 
     /**
      * Whether the microphone button is currently held.
@@ -158,7 +183,7 @@ class DictationController(
 
     /**
      * Start listening. The caller must hold RECORD_AUDIO. Ends on
-     * [stopListening] or the recorder's duration cap.
+     * [stopListening], [abandon], or the recorder's duration cap.
      */
     fun startListening() {
         // Released again before the start caught up.
@@ -167,10 +192,12 @@ class DictationController(
         // may still be running, and that must not block a new one.
         if (recording) return
         recording = true
-        outstanding.incrementAndGet()
-        _state.postValue(DictationState.Listening(synchronized(sessionText) { sessionText.text }))
+        val session = synchronized(sessionLock) {
+            current.also { it.outstanding.incrementAndGet() }
+        }
+        publish(session) { _state.value = DictationState.Listening(session.text()) }
 
-        val job = scope.launch {
+        scope.launch(session.job) {
             // Audio is buffered so recording never waits for the recognizer.
             val audio = Channel<FloatArray>(Channel.UNLIMITED)
 
@@ -202,17 +229,17 @@ class DictationController(
                     try {
                         for (pcm in audio) {
                             val delta = withContext(Dispatchers.IO) { manager.feed(streamId, pcm) }
-                            if (!delta.isNullOrEmpty()) appendRecognized(delta)
+                            if (!delta.isNullOrEmpty()) appendRecognized(session, delta)
                         }
                         val tail = withContext(Dispatchers.IO) { manager.endStream(streamId) }
                         closed = true
-                        if (!tail.isNullOrEmpty()) appendRecognized(tail)
+                        if (!tail.isNullOrEmpty()) appendRecognized(session, tail)
                     } finally {
                         // The next stream starts a fresh detokenization, so
                         // its first word must not run into this one's last.
-                        synchronized(sessionText) { sessionText.endUtterance() }
-                        // Cancelled part-way (the user discarded): the native
-                        // stream still has to be released.
+                        synchronized(session.transcript) { session.transcript.endUtterance() }
+                        // Abandoned part-way: the native stream still has to
+                        // be released.
                         if (!closed) withContext(NonCancellable) { manager.cancelStream(streamId) }
                     }
                 }
@@ -223,11 +250,9 @@ class DictationController(
                 _error.postValue(app.getString(R.string.dictation_failed))
             } finally {
                 capture.join()
-                if (outstanding.decrementAndGet() == 0) finishSession()
+                if (session.outstanding.decrementAndGet() == 0) finishSession(session)
             }
         }
-        jobs += job
-        job.invokeOnCompletion { jobs.remove(job) }
     }
 
     /**
@@ -240,33 +265,66 @@ class DictationController(
         recorder.stop()
         // Recording has ended but the recognizer is still catching up; the
         // composer keeps the text it already has.
-        if (outstanding.get() > 0) _state.postValue(DictationState.Finishing)
+        val session = synchronized(sessionLock) { current }
+        if (session.outstanding.get() > 0) {
+            publish(session) { _state.value = DictationState.Finishing }
+        }
+    }
+
+    /**
+     * The user took the text over — edited it by hand, or sent it — while
+     * dictation was still writing into it. Stop at once: end the recording,
+     * drop whatever the recognizer has not delivered yet, and hand nothing
+     * more to the composer. Otherwise the tail of a phrase keeps landing in a
+     * field the user is busy changing. Main thread only.
+     */
+    fun abandon() {
+        held = false
+        val session = synchronized(sessionLock) { current.also { current = Session() } }
+        session.abandoned = true
+        recorder.stop()
+        session.job.cancel()
+        _state.value = DictationState.Idle
     }
 
     /**
      * Appends newly recognized text and shows the session so far. The delta
      * goes in verbatim: it carries its own spacing, and often ends mid-word.
      */
-    private fun appendRecognized(delta: String) {
-        val snapshot = synchronized(sessionText) {
-            sessionText.append(delta)
-            sessionText.text
+    private fun appendRecognized(session: Session, delta: String) {
+        if (session.abandoned) return
+        val snapshot = synchronized(session.transcript) {
+            session.transcript.append(delta)
+            session.transcript.text
         }
-        _state.postValue(DictationState.Listening(snapshot))
+        publish(session) { _state.value = DictationState.Listening(snapshot) }
     }
 
     /** Everything spoken has been recognized: hand the text to the composer. */
-    private fun finishSession() {
-        val text = synchronized(sessionText) {
-            sessionText.text.also { sessionText.clear() }
+    private fun finishSession(session: Session) {
+        synchronized(sessionLock) {
+            // Another press joined after the count reached zero (its own
+            // completion finishes the session), or it was abandoned.
+            if (session.outstanding.get() != 0 || current !== session) return
+            current = Session()
         }
-        emitTranscript(text)
-        _state.postValue(DictationState.Idle)
+        session.job.complete()
+        val text = session.text()
+        publish(session) {
+            if (text.isEmpty()) _error.value = app.getString(R.string.dictation_no_speech)
+            _transcript.value = text
+            _state.value = DictationState.Idle
+        }
     }
 
-    private fun emitTranscript(text: String) {
-        if (text.isEmpty()) _error.postValue(app.getString(R.string.dictation_no_speech))
-        _transcript.postValue(text)
+    /**
+     * Delivers a session's update on the main thread, unless the session was
+     * abandoned in the meantime. [abandon] runs on the main thread too, so an
+     * update already on its way when the user starts typing is dropped here —
+     * LiveData.postValue offers no way to take one back.
+     */
+    private fun publish(session: Session, update: () -> Unit) {
+        main.post { if (!session.abandoned) update() }
     }
 
     fun consumeTranscript() {

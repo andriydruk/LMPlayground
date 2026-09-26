@@ -172,6 +172,11 @@ fun UserInput(
     onMicPressed: () -> Unit = {},
     onMicReleased: () -> Unit = {},
     /**
+     * The user edited or sent the text while dictation was still writing into
+     * it. The caller must stop dictation and deliver nothing more.
+     */
+    onDictationAbandoned: () -> Unit = {},
+    /**
      * A finished transcript waiting to be inserted at the cursor. The composer
      * owns the text field, so the caller hands the text over and is told when
      * it landed via [onTranscriptConsumed].
@@ -185,8 +190,8 @@ fun UserInput(
     }
 
     // Text the composer held before dictation began. Recognized words are
-    // written on top of it as they arrive, so re-writing never compounds and
-    // a cancel restores exactly what was there.
+    // written on top of it as they arrive, so re-writing never compounds.
+    // Null whenever dictation is not writing into the field.
     var dictationBase by remember { mutableStateOf<TextFieldValue?>(null) }
 
     LaunchedEffect(dictationState) {
@@ -198,10 +203,18 @@ fun UserInput(
     LaunchedEffect(pendingTranscript) {
         val transcript = pendingTranscript ?: return@LaunchedEffect
         // Terminal event: the final text replaces whatever was written live,
-        // and an empty one (cancelled, or nothing heard) restores the base.
+        // and an empty one (nothing heard) restores the base.
         textState = (dictationBase ?: textState).insertAtCursor(transcript)
         dictationBase = null
         onTranscriptConsumed()
+    }
+
+    // The field is the user's again the moment they change it: dictation
+    // stops rather than rewriting their edit with a late tail of the phrase.
+    fun releaseFromDictation() {
+        if (dictationBase == null) return
+        dictationBase = null
+        onDictationAbandoned()
     }
 
     // Used to decide if the keyboard should be shown
@@ -305,7 +318,12 @@ fun UserInput(
                     onMicReleased = onMicReleased,
                     dictationDownloadProgress = dictationDownloadProgress,
                     textFieldValue = textState,
-                    onTextChanged = { textState = it },
+                    onTextChanged = {
+                        // Selection-only changes (moving the caret) keep
+                        // dictation going; any change to the text ends it.
+                        if (it.text != textState.text) releaseFromDictation()
+                        textState = it
+                    },
                     // Only show the keyboard if there's no input selector and text field has focus
                     keyboardShown = textFieldFocusState,
                     // Close extended selector if text field receives focus
@@ -317,6 +335,7 @@ fun UserInput(
                     },
                     sendMessageEnabled = textState.text.isNotBlank(),
                     onMessageSent = {
+                        releaseFromDictation()
                         onMessageSent(textState.text)
                         // Reset text field and close keyboard
                         textState = TextFieldValue()

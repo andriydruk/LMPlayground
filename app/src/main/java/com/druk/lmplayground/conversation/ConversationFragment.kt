@@ -925,6 +925,7 @@ class ConversationFragment : Fragment() {
                                 // never started dictation (model missing, or
                                 // permission just requested).
                                 onMicReleased = { viewModel.dictation.onMicReleased() },
+                                onDictationAbandoned = { viewModel.dictation.abandon() },
                                 pendingTranscript = dictationTranscript,
                                 onTranscriptConsumed = { viewModel.dictation.consumeTranscript() },
                                 onMessageSent = { content ->

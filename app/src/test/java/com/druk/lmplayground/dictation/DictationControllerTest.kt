@@ -1,6 +1,7 @@
 package com.druk.lmplayground.dictation
 
 import android.app.Application
+import android.os.Looper
 import androidx.test.core.app.ApplicationProvider
 import com.druk.lmplayground.storage.StoragePreferences
 import com.druk.lmplayground.storage.StorageRepository
@@ -19,12 +20,13 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows.shadowOf
 
 /**
  * State-machine behaviour of the microphone button. Recording and transcription
  * need real hardware and a real model (covered on device by
  * `AsrTranscriptionTest`); what this pins down is that the controller starts
- * inert, reports availability honestly, and ignores stray stop/cancel taps.
+ * inert, reports availability honestly, and ignores stray stop/abandon calls.
  *
  * Assertions read return values rather than LiveData where possible: this
  * project's Robolectric setup serves no Android resources, and postValue
@@ -79,6 +81,24 @@ class DictationControllerTest {
         // The permission dialog can steal the gesture, so a release can arrive
         // with no press behind it.
         controller.onMicReleased()
+        assertEquals(DictationState.Idle, controller.state.value)
+    }
+
+    @Test
+    fun `abandoning when not listening is a no-op`() {
+        controller.abandon()
+        shadowOf(Looper.getMainLooper()).idle()
+        assertEquals(DictationState.Idle, controller.state.value)
+        assertNull(controller.transcript.value)
+    }
+
+    @Test
+    fun `a press abandoned before its start catches up never listens`() {
+        // Starting waits on a model check; the user can type in the meantime.
+        controller.onMicPressed()
+        controller.abandon()
+        controller.startListening()
+        shadowOf(Looper.getMainLooper()).idle()
         assertEquals(DictationState.Idle, controller.state.value)
     }
 
