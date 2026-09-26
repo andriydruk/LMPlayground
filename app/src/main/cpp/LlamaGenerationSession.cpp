@@ -139,7 +139,18 @@ void LlamaGenerationSession::recreateToolSampler(const common_chat_params &rende
         sp.reasoning_budget_forced = common_tokenize(vocab, render.thinking_end_tags.front(), false, true);
     }
 
-    gsmpl = common_sampler_init(llama_get_model(ctx), sp);
+    // common_sampler_init throws when the grammar llama.cpp derived from the
+    // chat template does not parse (LFM2.5-VL's template yields empty rules).
+    // Uncaught, that crosses JNI and aborts the process. Without the grammar
+    // the regular sampler runs, and tool calls are still parsed from the
+    // output — they are just no longer constrained while generated.
+    try {
+        gsmpl = common_sampler_init(llama_get_model(ctx), sp);
+    } catch (const std::exception &e) {
+        LOGe("Tool sampler: %s; continuing without the tool-call grammar", e.what());
+        gsmpl = nullptr;
+        return;
+    }
     LOGi("Tool sampler created: grammar_len=%zu lazy=%d triggers=%zu",
          render.grammar.size(), (int)render.grammar_lazy, render.grammar_triggers.size());
 }
