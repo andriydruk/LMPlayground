@@ -8,6 +8,7 @@ import androidx.lifecycle.map
 import com.druk.lmplayground.R
 import com.druk.lmplayground.download.DownloadRepository
 import com.druk.lmplayground.storage.StorageRepository
+import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.atomic.AtomicInteger
@@ -156,7 +157,7 @@ class DictationController(
 
     /**
      * Start listening. The caller must hold RECORD_AUDIO. Ends on
-     * [stopListening], [cancelListening], or the recorder's duration cap.
+     * [stopListening] or the recorder's duration cap.
      */
     fun startListening() {
         // Released again before the start caught up.
@@ -175,6 +176,8 @@ class DictationController(
             val capture = launch(Dispatchers.IO) {
                 try {
                     recorder.record().collect { audio.send(it.samples) }
+                } catch (t: CancellationException) {
+                    throw t
                 } catch (t: Throwable) {
                     Log.e(TAG, "recording failed", t)
                     _error.postValue(app.getString(R.string.dictation_record_failed))
@@ -209,6 +212,8 @@ class DictationController(
                         if (!closed) withContext(NonCancellable) { manager.cancelStream(streamId) }
                     }
                 }
+            } catch (t: CancellationException) {
+                throw t
             } catch (t: Throwable) {
                 Log.e(TAG, "recognition failed", t)
                 _error.postValue(app.getString(R.string.dictation_failed))
@@ -232,20 +237,6 @@ class DictationController(
         // Recording has ended but the recognizer is still catching up; the
         // composer keeps the text it already has.
         if (outstanding.get() > 0) _state.postValue(DictationState.Finishing)
-    }
-
-    /** Abandon dictation and discard everything recognized in this session. */
-    fun cancelListening() {
-        held = false
-        recorder.stop()
-        jobs.toList().forEach { it.cancel() }
-        jobs.clear()
-        recording = false
-        outstanding.set(0)
-        synchronized(sessionText) { sessionText.setLength(0) }
-        _state.postValue(DictationState.Idle)
-        // Terminal event so the composer restores what the user had typed.
-        _transcript.postValue("")
     }
 
     /** Appends newly recognized text and shows the session so far. */

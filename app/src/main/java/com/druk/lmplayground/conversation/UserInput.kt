@@ -171,7 +171,6 @@ fun UserInput(
     dictationDownloadProgress: Float? = null,
     onMicPressed: () -> Unit = {},
     onMicReleased: () -> Unit = {},
-    onCancelRecording: () -> Unit = {},
     /**
      * A finished transcript waiting to be inserted at the cursor. The composer
      * owns the text field, so the caller hands the text over and is told when
@@ -304,7 +303,6 @@ fun UserInput(
                     onAttachDocument = onAttachDocument,
                     onMicPressed = onMicPressed,
                     onMicReleased = onMicReleased,
-                    onCancelRecording = onCancelRecording,
                     dictationDownloadProgress = dictationDownloadProgress,
                     textFieldValue = textState,
                     onTextChanged = { textState = it },
@@ -398,7 +396,6 @@ private fun UserInputText(
     onAttachDocument: () -> Unit = {},
     onMicPressed: () -> Unit = {},
     onMicReleased: () -> Unit = {},
-    onCancelRecording: () -> Unit = {},
     dictationDownloadProgress: Float? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
     onTextChanged: (TextFieldValue) -> Unit,
@@ -609,13 +606,16 @@ private fun UserInputText(
                                 onPress = {
                                     micPressed = true
                                     onMicPressed()
-                                    // True when the finger lifts on the button,
-                                    // false when the gesture is cancelled by
-                                    // dragging away — the familiar
-                                    // slide-to-cancel, so it discards.
-                                    val released = tryAwaitRelease()
+                                    // The result is ignored on purpose. A
+                                    // cancelled gesture — the finger drifting,
+                                    // or the input dock's swipe-up winning —
+                                    // used to discard, which threw away words
+                                    // the user had already said. Finishing is
+                                    // always the safer answer: unwanted text can
+                                    // be deleted, lost speech cannot.
+                                    tryAwaitRelease()
                                     micPressed = false
-                                    if (released) onMicReleased() else onCancelRecording()
+                                    onMicReleased()
                                 }
                             )
                         }

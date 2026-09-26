@@ -69,9 +69,16 @@ class DictationControllerTest {
     }
 
     @Test
-    fun `stop and cancel are no-ops when not listening`() {
+    fun `stopping when not listening is a no-op`() {
         controller.stopListening()
-        controller.cancelListening()
+        assertEquals(DictationState.Idle, controller.state.value)
+    }
+
+    @Test
+    fun `releasing without a press is a no-op`() {
+        // The permission dialog can steal the gesture, so a release can arrive
+        // with no press behind it.
+        controller.onMicReleased()
         assertEquals(DictationState.Idle, controller.state.value)
     }
 
