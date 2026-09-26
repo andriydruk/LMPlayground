@@ -1,4 +1,4 @@
 [submodule "app/src/main/cpp/llama.cpp"]
 	path = app/src/main/cpp/llama.cpp
 	url=https://github.com/andriydruk/llama.cpp-android
-	branch = android-b10327-parakeet
+	branch = android-b11200

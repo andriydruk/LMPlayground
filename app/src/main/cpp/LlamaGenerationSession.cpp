@@ -600,12 +600,13 @@ int LlamaGenerationSession::processImageTurn(std::vector<unsigned char> &image_d
     prev_len = 0;
 
     // Create bitmap from image data.
-    // b9621: the helper now returns a mtmd_helper_bitmap_wrapper and takes a
+    // The helper returns a mtmd_helper_bitmap_wrapper and takes a
     // `placeholder` flag; pass false for real image data (not a token-counting
     // placeholder), and unwrap .bitmap (video_ctx is unused for still images).
+    // The options only configure video decoding, so the defaults are fine.
     mtmd_bitmap *bitmap = mtmd_helper_bitmap_init_from_buf(
         mtmd_ctx, image_data.data(), image_data.size(),
-        /*placeholder=*/false).bitmap;
+        /*placeholder=*/false, mtmd_helper_init_opt_default()).bitmap;
     if (bitmap == nullptr) {
         LOGe("Failed to create bitmap from image data");
         return 1;
@@ -1208,8 +1209,7 @@ void LlamaGenerationSession::setTools(const char *toolsJson) {
         return;
     }
     try {
-        auto j = nlohmann::ordered_json::parse(toolsJson);
-        tools = common_chat_tools_parse_oaicompat(j);
+        tools = common_chat_tools_parse_oaicompat(common_json::parse(toolsJson));
         tools_enabled = !tools.empty();
         LOGi("Tools set: %zu tools, enabled: %d", tools.size(), (int)tools_enabled);
     } catch (const std::exception &e) {
