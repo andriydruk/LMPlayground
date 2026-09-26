@@ -129,6 +129,13 @@ object Expectations {
             caps(tools = R, thinking = R, noThinking = R, vision = N, toolsWithThinking = R),
             maxTokens = 2048),
 
+        // ── Liquid AI: vision ────────────────────────────────────────────
+        ModelExpectation("LFM2.5-VL-450M-Q4_K_M.gguf",
+            caps(tools = O, thinking = O, noThinking = R, vision = R, toolsWithVision = O),
+            notes = "runs on the LFM2.5 350M text template: its own template renders tool " +
+                "calls in a form llama.cpp derives an unparseable grammar from. Thinking is " +
+                "advertised by that template but, like the 350M, never used"),
+
         // ── XHToken ──────────────────────────────────────────────────────
         ModelExpectation("Spark-X2.5-4B-Q4_K_M.gguf",
             caps(tools = R, thinking = R, noThinking = R, vision = N, toolsWithThinking = R),

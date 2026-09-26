@@ -33,9 +33,18 @@ object ChatTemplateOverrides {
      * emitted was therefore unparseable and leaked into the chat as raw XML.
      * The override adds the missing assistant branch, which flips the derived
      * format to JSON_NATIVE with `<tool_call>` delimiters.
+     *
+     * LFM2.5-VL 450M: the opposite problem. Its template does render
+     * `message.tool_calls`, in a pythonic `[name(arg="v")]` form that
+     * llama.cpp's differential analysis mis-derives into a grammar with empty
+     * rules. The grammar fails to parse, so tool calls run unconstrained and
+     * the model answers in prose instead. The override is the LFM2.5 350M text
+     * template — the VL model's own backbone — which renders no tool calls and
+     * so reaches llama.cpp's dedicated LFM2 parser, like the text models.
      */
     private val OVERRIDES = mapOf(
         "HuggingFaceTB_SmolLM3-3B-Q4_K_M.gguf" to "HuggingFaceTB_SmolLM3-3B-Q4_K_M.jinja",
+        "LFM2.5-VL-450M-Q4_K_M.gguf" to "LFM2.5-VL-450M-Q4_K_M.jinja",
     )
 
     /** Cached per filename; templates are a few KB and read once per load. */

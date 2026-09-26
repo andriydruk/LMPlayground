@@ -25,6 +25,8 @@ object ModelInfoProvider {
     )
     private val DEEPSEEK_LANGS = listOf("en", "zh")
     private val LFM_LANGS = listOf("en", "ar", "zh", "fr", "de", "ja", "ko", "es")
+    // LFM2.5-VL adds Portuguese to the LFM2 set.
+    private val LFM_VL_LANGS = listOf("en", "ar", "zh", "fr", "de", "ja", "ko", "pt", "es")
     // LFM2.5 2.6B declares a wider set than the earlier LFM2.5 sizes.
     private val LFM25_LANGS = listOf(
         "ar", "zh", "en", "fr", "de", "hi", "id", "it",
@@ -344,6 +346,17 @@ object ModelInfoProvider {
             supportedLanguages = MINICPM_LANGS
         ),
         ModelInfo(
+            name = "LFM2.5 VL 450M",
+            filename = "LFM2.5-VL-450M-Q4_K_M.gguf",
+            remoteUri = Uri.parse("https://huggingface.co/LiquidAI/LFM2.5-VL-450M-GGUF/resolve/main/LFM2.5-VL-450M-Q4_K_M.gguf"),
+            releaseDate = LocalDate.parse("2026-04-08"),
+            description = "Liquid AI \u00B7 Tiny vision model \u00B7 229Mb + 103Mb mmproj",
+            logoRes = R.drawable.logo_liquid,
+            supportedLanguages = LFM_VL_LANGS,
+            mmprojFilename = "mmproj-LFM2.5-VL-450m-Q8_0.gguf",
+            mmprojUri = Uri.parse("https://huggingface.co/LiquidAI/LFM2.5-VL-450M-GGUF/resolve/main/mmproj-LFM2.5-VL-450m-Q8_0.gguf")
+        ),
+        ModelInfo(
             name = "MiniCPM5 2B",
             filename = "MiniCPM5-2B-Q4_K_M.gguf",
             remoteUri = Uri.parse("https://huggingface.co/openbmb/MiniCPM5-2B-GGUF/resolve/main/MiniCPM5-2B-Q4_K_M.gguf"),
@@ -537,6 +550,7 @@ object ModelInfoProvider {
         "LFM2.5-1.2B-Instruct-Q4_K_M.gguf",
         "LFM2.5-1.2B-Thinking-Q4_K_M.gguf",
         "LFM2.5-2.6B-Q4_K_M.gguf",
+        "LFM2.5-VL-450M-Q4_K_M.gguf",
         "HuggingFaceTB_SmolLM3-3B-Q4_K_M.gguf",
         "MiniCPM5-1B-Q4_K_M.gguf",
         "MiniCPM5-2B-Q4_K_M.gguf",
@@ -575,6 +589,7 @@ object ModelInfoProvider {
         "LFM2.5-1.2B-Instruct-Q4_K_M.gguf",
         "LFM2.5-1.2B-Thinking-Q4_K_M.gguf",
         "LFM2.5-2.6B-Q4_K_M.gguf",
+        "LFM2.5-VL-450M-Q4_K_M.gguf",
         "HuggingFaceTB_SmolLM3-3B-Q4_K_M.gguf",
         "MiniCPM5-1B-Q4_K_M.gguf",
         "MiniCPM5-2B-Q4_K_M.gguf",
@@ -601,6 +616,7 @@ object ModelInfoProvider {
         "Ministral-3-3B-Instruct-2512-Q4_K_M.gguf" to ThinkingMode.NONE,
         "LFM2.5-1.2B-Instruct-Q4_K_M.gguf" to ThinkingMode.NONE,
         "LFM2.5-350M-Q4_K_M.gguf" to ThinkingMode.NONE,
+        "LFM2.5-VL-450M-Q4_K_M.gguf" to ThinkingMode.NONE,
 
         // Reasoning-tuned: they keep thinking with the flag off, so offering
         // "off" is a promise the model will not keep.

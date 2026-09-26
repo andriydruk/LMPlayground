@@ -1,5 +1,6 @@
 package com.druk.lmplayground.models
 
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -79,6 +80,15 @@ class ModelInfoProviderCapabilityTest {
         listOf("Llama 3.2 1B", "Phi-4 mini", "Mistral 7B").forEach { name ->
             assertFalse("$name should not be badged as tool-capable", byName(name).supportsTools)
         }
+    }
+
+    @Test
+    fun lfm25VlIsAVisionModelWithToolsButNoThinkingToggle() {
+        val model = byName("LFM2.5 VL 450M")
+        assertTrue(model.isVision)
+        assertTrue(model.supportsTools)
+        // Its template advertises thinking; the model never uses it.
+        assertEquals(ThinkingMode.NONE, model.thinkingMode)
     }
 
     @Test
