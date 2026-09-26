@@ -26,15 +26,19 @@ constexpr int kMaxVisionThreads = 8;
 constexpr size_t kUserMarkerSearchWindow = 80;
 
 // Vulkan CLIP crash sentinel (implemented in native-lib.cpp). A marker file is
-// written right before the crash-prone Vulkan vision-encoder init and removed
-// right after it returns; if it survives to the next process start, the attempt
-// took the :llama process down, so Vulkan vision is disabled for this install
-// and CLIP runs on CPU. clipSentinelInit() promotes a surviving marker to a
-// permanent block; begin/end bracket the risky init in LlamaModel.
+// written right before each crash-prone Vulkan vision step and removed right
+// after it returns; if it survives to the next process start, the attempt took
+// the :llama process down, so Vulkan vision is disabled for this install and
+// CLIP runs on CPU. clipSentinelInit() promotes a surviving marker to a
+// permanent block; begin/end bracket the encoder init in LlamaModel and the
+// encode in processImageTurn. clipSentinelBlockVulkan() blocks it outright,
+// for a failure that was caught rather than crashed.
 void clipSentinelInit(const std::string &stateDir);
 bool clipSentinelVulkanBlocked();
+bool clipSentinelVulkanActive();
 void clipSentinelBeginVulkanAttempt();
 void clipSentinelEndVulkanAttempt();
+void clipSentinelBlockVulkan();
 
 struct SamplerParams {
     int n_ctx;

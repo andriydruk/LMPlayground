@@ -655,8 +655,28 @@ int LlamaGenerationSession::processImageTurn(std::vector<unsigned char> &image_d
     // Eval all chunks (text + image)
     int n_batch = llama_n_batch(ctx);
     llama_pos new_n_past = 0;
-    int32_t eval_result = mtmd_helper_eval_chunks(
-        mtmd_ctx, ctx, chunks, 0, 0, n_batch, true, &new_n_past);
+    // The encode is the other crash-prone Vulkan step. On Adreno 7xx/8xx the
+    // GPU can be lost mid-encode, and ggml's fault report then segfaults in
+    // the driver's vkGetDeviceFaultInfoEXT. Bracket it with the sentinel like
+    // the encoder init, so that costs one crash rather than one per image.
+    bool clip_on_vulkan = clipSentinelVulkanActive();
+    if (clip_on_vulkan) clipSentinelBeginVulkanAttempt();
+    int32_t eval_result;
+    try {
+        eval_result = mtmd_helper_eval_chunks(
+            mtmd_ctx, ctx, chunks, 0, 0, n_batch, true, &new_n_past);
+    } catch (const std::exception &e) {
+        // A lost GPU surfaces as vk::DeviceLostError; uncaught, it crosses
+        // JNI and aborts the process.
+        LOGe("Vision eval threw: %s", e.what());
+        eval_result = -1;
+        if (clip_on_vulkan) clipSentinelBlockVulkan();
+    } catch (...) {
+        LOGe("Vision eval threw: unknown exception");
+        eval_result = -1;
+        if (clip_on_vulkan) clipSentinelBlockVulkan();
+    }
+    if (clip_on_vulkan) clipSentinelEndVulkanAttempt();
 
     mtmd_input_chunks_free(chunks);
 

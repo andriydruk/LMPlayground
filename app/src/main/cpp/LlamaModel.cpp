@@ -140,8 +140,7 @@ void LlamaModel::loadMmprojModel(const std::string &mmprojPath) {
     // an uncatchable crash, not a C++ exception. Bracket it with the sentinel so
     // a crash here is detected on the next launch and Vulkan vision is disabled.
     // CPU encodes never hit this, so only mark the Vulkan path.
-    const char *clip_backend = std::getenv("MTMD_BACKEND_DEVICE");
-    bool clip_on_vulkan = (clip_backend != nullptr && strcmp(clip_backend, "CPU") != 0);
+    bool clip_on_vulkan = clipSentinelVulkanActive();
     if (clip_on_vulkan) clipSentinelBeginVulkanAttempt();
 
     // mtmd_init_from_file catches exceptions internally and returns null,

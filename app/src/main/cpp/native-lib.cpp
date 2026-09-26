@@ -133,9 +133,9 @@ static bool clipVulkanIsKnownGood(const char *gpuDescription) {
 #endif // __ANDROID__
 
 // --- Vulkan CLIP crash sentinel ---------------------------------------------
-// Catches GPUs not on the static denylist after a single crash. The inflight
-// marker brackets the Vulkan vision-encoder init (the SIGSEGV happens inside
-// the GPU driver and can't be caught); if it's still present at the next
+// Catches an allowlisted GPU that misbehaves after a single crash. The inflight
+// marker brackets the Vulkan vision-encoder init and each encode (the SIGSEGV
+// happens inside the GPU driver and can't be caught); if it's still present at the next
 // process start, that attempt crashed -> promote to a permanent block so CLIP
 // runs on CPU from then on. An empty stateDir disables the sentinel (tests).
 static std::string g_clipStateDir;
@@ -167,11 +167,22 @@ void clipSentinelInit(const std::string &stateDir) {
 bool clipSentinelVulkanBlocked() {
     return !g_clipStateDir.empty() && fileExists(clipBlockedPath());
 }
+bool clipSentinelVulkanActive() {
+    const char *backend = std::getenv("MTMD_BACKEND_DEVICE");
+    return backend != nullptr && strcmp(backend, "CPU") != 0;
+}
 void clipSentinelBeginVulkanAttempt() {
     if (!g_clipStateDir.empty()) touchFile(clipInflightPath());
 }
 void clipSentinelEndVulkanAttempt() {
     if (!g_clipStateDir.empty()) remove(clipInflightPath().c_str());
+}
+void clipSentinelBlockVulkan() {
+    if (!g_clipStateDir.empty()) touchFile(clipBlockedPath());
+    // The next projector load in this process goes to CPU too, not only the
+    // next launch: the Vulkan device is gone.
+    setenv("MTMD_BACKEND_DEVICE", "CPU", 1);
+    LOGw("Vulkan CLIP failed; disabling Vulkan vision");
 }
 
 extern "C" JNIEXPORT int
