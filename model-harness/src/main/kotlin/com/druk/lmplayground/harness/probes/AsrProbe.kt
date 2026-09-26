@@ -1,5 +1,6 @@
 package com.druk.lmplayground.harness.probes
 
+import com.druk.llamacpp.asr.DictationTranscript
 import com.druk.llamacpp.asr.WordErrorRate
 import com.druk.llamacpp.jni.NativeAsr
 import com.druk.lmplayground.harness.*
@@ -215,7 +216,8 @@ object AsrProbe {
 
         val samples = readPcm(clip.pcm)
         val slice = AudioFixtures.SAMPLE_RATE * FEED_MS / 1000
-        val transcript = StringBuilder()
+        // The app's own assembly, so this grades the text the user would see.
+        val transcript = DictationTranscript()
         var firstTextMs = -1L
         var feeds = 0
 
@@ -237,10 +239,14 @@ object AsrProbe {
         }
 
         val ms = System.currentTimeMillis() - t0
-        val text = transcript.toString().trim()
+        val text = transcript.text
         val wer = if (text.isEmpty()) 1.0 else wordErrorRate(clip.reference, text)
         val realtime = ms / 1000.0 / clip.seconds
-        val ok = text.isNotEmpty() && firstTextMs >= 0 && wer <= STREAM_WER_BUDGET
+        // WER strips punctuation and splits on any whitespace, so it cannot see
+        // "word ," or a doubled space. Checked separately, exactly.
+        val badSpacing = SPACING_DEFECT.find(text)?.let { text.around(it.range) }
+        val ok = text.isNotEmpty() && firstTextMs >= 0 && wer <= STREAM_WER_BUDGET &&
+            badSpacing == null
         return ProbeResult(
             "asr-streaming", null,
             if (ok) Status.PASS else Status.FAIL,
@@ -248,12 +254,14 @@ object AsrProbe {
                 text.isEmpty() -> "NO_STREAM_TEXT"
                 firstTextMs < 0 -> "NO_PARTIALS"
                 wer > STREAM_WER_BUDGET -> "HIGH_WER"
+                badSpacing != null -> "BAD_SPACING"
                 else -> "OK"
             },
             if (ok) "streamed ${"%.0f".format(clip.seconds)}s in $feeds feeds, WER ${pct(wer)}, " +
                 "first text after ${firstTextMs}ms"
             else if (text.isEmpty()) "streaming produced no text at all"
-            else "streamed WER ${pct(wer)} exceeds the ${pct(STREAM_WER_BUDGET)} budget",
+            else if (wer > STREAM_WER_BUDGET) "streamed WER ${pct(wer)} exceeds the ${pct(STREAM_WER_BUDGET)} budget"
+            else "assembled text is mis-spaced near \"$badSpacing\" — deltas were not joined verbatim",
             ms,
             mapOf(
                 "wer" to pct(wer),
@@ -268,6 +276,12 @@ object AsrProbe {
             ),
         )
     }
+
+    /** A doubled space, or a space before punctuation. */
+    private val SPACING_DEFECT = Regex("\\s{2}|\\s[,.!?;:]")
+
+    private fun String.around(range: IntRange) =
+        substring(maxOf(0, range.first - 12), minOf(length, range.last + 12))
 
     private fun readPcm(file: java.io.File): FloatArray {
         val bytes = file.readBytes()

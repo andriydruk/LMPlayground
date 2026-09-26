@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
+import com.druk.llamacpp.asr.DictationTranscript
 import com.druk.lmplayground.R
 import com.druk.lmplayground.download.DownloadRepository
 import com.druk.lmplayground.storage.StorageRepository
@@ -100,7 +101,7 @@ class DictationController(
     private val recognizer = Mutex()
 
     /** Text recognized since the composer's base was captured, across utterances. */
-    private val sessionText = StringBuilder()
+    private val sessionText = DictationTranscript()
 
     /** Recordings plus recognitions still in flight; at zero the session is done. */
     private val outstanding = AtomicInteger(0)
@@ -167,7 +168,7 @@ class DictationController(
         if (recording) return
         recording = true
         outstanding.incrementAndGet()
-        _state.postValue(DictationState.Listening(sessionText.toString()))
+        _state.postValue(DictationState.Listening(synchronized(sessionText) { sessionText.text }))
 
         val job = scope.launch {
             // Audio is buffered so recording never waits for the recognizer.
@@ -207,6 +208,9 @@ class DictationController(
                         closed = true
                         if (!tail.isNullOrEmpty()) appendRecognized(tail)
                     } finally {
+                        // The next stream starts a fresh detokenization, so
+                        // its first word must not run into this one's last.
+                        synchronized(sessionText) { sessionText.endUtterance() }
                         // Cancelled part-way (the user discarded): the native
                         // stream still has to be released.
                         if (!closed) withContext(NonCancellable) { manager.cancelStream(streamId) }
@@ -239,14 +243,14 @@ class DictationController(
         if (outstanding.get() > 0) _state.postValue(DictationState.Finishing)
     }
 
-    /** Appends newly recognized text and shows the session so far. */
+    /**
+     * Appends newly recognized text and shows the session so far. The delta
+     * goes in verbatim: it carries its own spacing, and often ends mid-word.
+     */
     private fun appendRecognized(delta: String) {
         val snapshot = synchronized(sessionText) {
-            if (sessionText.isNotEmpty() && !sessionText.last().isWhitespace()) {
-                sessionText.append(' ')
-            }
-            sessionText.append(delta.trim())
-            sessionText.toString()
+            sessionText.append(delta)
+            sessionText.text
         }
         _state.postValue(DictationState.Listening(snapshot))
     }
@@ -254,7 +258,7 @@ class DictationController(
     /** Everything spoken has been recognized: hand the text to the composer. */
     private fun finishSession() {
         val text = synchronized(sessionText) {
-            sessionText.toString().trim().also { sessionText.setLength(0) }
+            sessionText.text.also { sessionText.clear() }
         }
         emitTranscript(text)
         _state.postValue(DictationState.Idle)
