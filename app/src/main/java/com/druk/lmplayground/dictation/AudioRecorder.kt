@@ -76,6 +76,7 @@ class AudioRecorder(private val context: Context) {
         val thread = Thread({
             val samples = FloatArray(bufferSize / Float.SIZE_BYTES)
             var totalSamples = 0L
+            var failure: Throwable? = null
             try {
                 recorder.startRecording()
                 while (!stopRequested && totalSamples < MAX_SAMPLES) {
@@ -96,10 +97,10 @@ class AudioRecorder(private val context: Context) {
                         ),
                     )
                 }
-                close()
+                failure = null
             } catch (t: Throwable) {
                 Log.e(TAG, "recording failed", t)
-                close(t)
+                failure = t
             } finally {
                 try {
                     recorder.stop()
@@ -107,6 +108,11 @@ class AudioRecorder(private val context: Context) {
                     // Never started (e.g. immediate cancel) — nothing to stop.
                 }
                 recorder.release()
+                // Completed only after the microphone is actually released:
+                // the collector treats completion as "the mic is free", and a
+                // queued second utterance starts recording the moment it sees
+                // that. Signalling early hands it a busy AudioRecord.
+                close(failure)
             }
         }, "audio-recorder")
         thread.start()
