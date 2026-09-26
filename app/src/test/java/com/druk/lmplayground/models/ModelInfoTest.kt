@@ -78,4 +78,20 @@ class ModelInfoTest {
             modelStatus!!.isDownloaded
         )
     }
+
+    @Test
+    fun testGranite41IsOnlyListedWhenAlreadyDownloaded() {
+        // Superseded by Granite 4.2 3B: not offered, but still recognized.
+        val file = "granite-4.1-3b-Q4_K_M.gguf"
+        assertFalse(
+            ModelInfoProvider.getModelsWithStatus(emptySet()).any { it.model.filename == file }
+        )
+        assertTrue(
+            ModelInfoProvider.getModelsWithStatus(setOf(file)).any { it.model.filename == file }
+        )
+        assertTrue(
+            ModelInfoProvider.getModelsWithStatus(emptySet())
+                .any { it.model.filename == "granite-4.2-3b-Q4_K_M.gguf" }
+        )
+    }
 }

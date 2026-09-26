@@ -34,6 +34,9 @@ object ModelInfoProvider {
     // explicit that only these six are natively supported.
     private val SMOLLM3_LANGS = listOf("en", "fr", "es", "de", "it", "pt")
     private val MINICPM_LANGS = listOf("en", "zh")
+    // The card claims 200+ languages without listing them; the broad set is
+    // the closest honest filter.
+    private val SPARK_LANGS = MULTILINGUAL_BROAD
     private val MISTRAL_LANGS = listOf(
         "en", "fr", "de", "es", "it", "pt", "nl", "zh", "ja", "ko", "ar"
     )
@@ -283,13 +286,26 @@ object ModelInfoProvider {
             supportedLanguages = GRANITE_LANGS
         ),
         ModelInfo(
+            name = "Granite 4.2 3B",
+            filename = "granite-4.2-3b-Q4_K_M.gguf",
+            remoteUri = Uri.parse("https://huggingface.co/ibm-granite/granite-4.2-3b-GGUF/resolve/main/granite-4.2-3b-Q4_K_M.gguf"),
+            releaseDate = LocalDate.parse("2026-08-25"),
+            description = "IBM \u00B7 Hybrid reasoning model \u00B7 2.24Gb",
+            logoRes = R.drawable.logo_ibm,
+            supportedLanguages = GRANITE_LANGS
+        ),
+        // Superseded by Granite 4.2 3B, the same base model with a thinking
+        // mode added. Kept so a downloaded file keeps its identity; hidden
+        // unless present on disk.
+        ModelInfo(
             name = "Granite 4.1 3B",
             filename = "granite-4.1-3b-Q4_K_M.gguf",
             remoteUri = Uri.parse("https://huggingface.co/lmstudio-community/granite-4.1-3b-GGUF/resolve/main/granite-4.1-3b-Q4_K_M.gguf"),
             releaseDate = LocalDate.parse("2026-05-01"),
             description = "IBM \u00B7 Enterprise chat model \u00B7 2.10Gb",
             logoRes = R.drawable.logo_ibm,
-            supportedLanguages = GRANITE_LANGS
+            supportedLanguages = GRANITE_LANGS,
+            deprecated = true
         ),
         ModelInfo(
             name = "Granite 4.1 8B",
@@ -326,6 +342,24 @@ object ModelInfoProvider {
             description = "OpenBMB · Hybrid reasoning model · 688Mb",
             logoRes = R.drawable.logo_openbmb,
             supportedLanguages = MINICPM_LANGS
+        ),
+        ModelInfo(
+            name = "MiniCPM5 2B",
+            filename = "MiniCPM5-2B-Q4_K_M.gguf",
+            remoteUri = Uri.parse("https://huggingface.co/openbmb/MiniCPM5-2B-GGUF/resolve/main/MiniCPM5-2B-Q4_K_M.gguf"),
+            releaseDate = LocalDate.parse("2026-09-06"),
+            description = "OpenBMB · Hybrid reasoning model · 1.56Gb",
+            logoRes = R.drawable.logo_openbmb,
+            supportedLanguages = MINICPM_LANGS
+        ),
+        ModelInfo(
+            name = "Spark-X2.5 4B",
+            filename = "Spark-X2.5-4B-Q4_K_M.gguf",
+            remoteUri = Uri.parse("https://huggingface.co/XHToken/Spark-X2.5-4B-GGUF/resolve/main/Spark-X2.5-4B-Q4_K_M.gguf"),
+            releaseDate = LocalDate.parse("2026-08-24"),
+            description = "XHToken · Hybrid reasoning model · 2.60Gb",
+            logoRes = R.drawable.logo_xhtoken,
+            supportedLanguages = SPARK_LANGS
         ),
         ModelInfo(
             name = "Gemma 3n E2B",
@@ -505,6 +539,8 @@ object ModelInfoProvider {
         "LFM2.5-2.6B-Q4_K_M.gguf",
         "HuggingFaceTB_SmolLM3-3B-Q4_K_M.gguf",
         "MiniCPM5-1B-Q4_K_M.gguf",
+        "MiniCPM5-2B-Q4_K_M.gguf",
+        "Spark-X2.5-4B-Q4_K_M.gguf",
         "Ministral-3-3B-Instruct-2512-Q4_K_M.gguf",
         "Ministral-3-3B-Reasoning-2512-Q4_K_M.gguf",
         "Ministral-3-8B-Instruct-2512-Q4_K_M.gguf",
@@ -513,6 +549,7 @@ object ModelInfoProvider {
         "granite-4.0-h-tiny-Q4_K_M.gguf",
         "granite-4.1-3b-Q4_K_M.gguf",
         "granite-4.1-8b-Q4_K_M.gguf",
+        "granite-4.2-3b-Q4_K_M.gguf",
         "NVIDIA-Nemotron3-Nano-4B-Q4_K_M.gguf",
         "gemma-4-E2B_q4_0-it.gguf",
         "gemma-4-E4B_q4_0-it.gguf",
@@ -540,6 +577,9 @@ object ModelInfoProvider {
         "LFM2.5-2.6B-Q4_K_M.gguf",
         "HuggingFaceTB_SmolLM3-3B-Q4_K_M.gguf",
         "MiniCPM5-1B-Q4_K_M.gguf",
+        "MiniCPM5-2B-Q4_K_M.gguf",
+        "Spark-X2.5-4B-Q4_K_M.gguf",
+        "granite-4.2-3b-Q4_K_M.gguf",
         "Ministral-3-3B-Reasoning-2512-Q4_K_M.gguf",
         "Ministral-3-8B-Reasoning-2512-Q4_K_M.gguf",
         "NVIDIA-Nemotron3-Nano-4B-Q4_K_M.gguf",
@@ -577,6 +617,9 @@ object ModelInfoProvider {
         "gemma-4-E4B_q4_0-it.gguf" to ThinkingMode.OPTIONAL,
         "HuggingFaceTB_SmolLM3-3B-Q4_K_M.gguf" to ThinkingMode.OPTIONAL,
         "MiniCPM5-1B-Q4_K_M.gguf" to ThinkingMode.OPTIONAL,
+        "MiniCPM5-2B-Q4_K_M.gguf" to ThinkingMode.OPTIONAL,
+        "granite-4.2-3b-Q4_K_M.gguf" to ThinkingMode.OPTIONAL,
+        "Spark-X2.5-4B-Q4_K_M.gguf" to ThinkingMode.OPTIONAL,
         "NVIDIA-Nemotron3-Nano-4B-Q4_K_M.gguf" to ThinkingMode.OPTIONAL,
     )
 

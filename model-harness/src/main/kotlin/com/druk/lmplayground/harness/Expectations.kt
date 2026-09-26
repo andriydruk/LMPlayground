@@ -125,6 +125,15 @@ object Expectations {
             caps(tools = R, thinking = N, noThinking = R, vision = N),
             notes = "no thinking mode: the template reports supports_thinking=false and the " +
                 "model emits no <think> block. The catalog badge already agrees"),
+        ModelExpectation("granite-4.2-3b-Q4_K_M.gguf",
+            caps(tools = R, thinking = R, noThinking = R, vision = N, toolsWithThinking = R),
+            maxTokens = 2048),
+
+        // ── XHToken ──────────────────────────────────────────────────────
+        ModelExpectation("Spark-X2.5-4B-Q4_K_M.gguf",
+            caps(tools = R, thinking = R, noThinking = R, vision = N, toolsWithThinking = R),
+            maxTokens = 2048,
+            notes = "spark2_5 architecture: needs llama.cpp b10828 or later"),
 
         // ── NVIDIA ───────────────────────────────────────────────────────
         ModelExpectation("NVIDIA-Nemotron3-Nano-4B-Q4_K_M.gguf",
@@ -142,6 +151,12 @@ object Expectations {
         // ── OpenBMB ──────────────────────────────────────────────────────
         ModelExpectation("MiniCPM5-1B-Q4_K_M.gguf",
             caps(tools = R, thinking = R, noThinking = R, vision = N, toolsWithThinking = O)),
+        ModelExpectation("MiniCPM5-2B-Q4_K_M.gguf",
+            caps(tools = R, thinking = O, noThinking = R, vision = N, toolsWithThinking = R),
+            maxTokens = 2048,
+            notes = "greedy decoding loops (\"Thus answer: 9.\" x400) and never closes " +
+                "</think>; the app's sampler closes it in 900-1650 tokens on every seed " +
+                "tried, so thinking is optional here rather than broken"),
     )
 
     fun byFilename(): Map<String, ModelExpectation> = ALL.associateBy { it.filename }

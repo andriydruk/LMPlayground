@@ -67,6 +67,7 @@ class ModelInfoProviderLanguageTest {
     @Test
     fun miniCpm5IsEnZh() {
         assertEquals(setOf("en", "zh"), byName("MiniCPM5 1B").supportedLanguages.toSet())
+        assertEquals(setOf("en", "zh"), byName("MiniCPM5 2B").supportedLanguages.toSet())
     }
 
     @Test

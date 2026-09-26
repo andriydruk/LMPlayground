@@ -58,7 +58,10 @@ class ModelInfoProviderCapabilityTest {
 
     @Test
     fun newReasoningFamiliesSupportToolsAndThinking() {
-        listOf("LFM2.5 2.6B", "SmolLM3 3B", "MiniCPM5 1B").forEach { name ->
+        listOf(
+            "LFM2.5 2.6B", "SmolLM3 3B", "MiniCPM5 1B",
+            "MiniCPM5 2B", "Granite 4.2 3B", "Spark-X2.5 4B",
+        ).forEach { name ->
             val model = byName(name)
             assertTrue("$name should support tools", model.supportsTools)
             assertTrue("$name should support thinking", model.supportsThinking)
