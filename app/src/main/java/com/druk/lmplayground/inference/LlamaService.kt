@@ -27,6 +27,8 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 /**
  * Bound service that owns the llama.cpp native state.
@@ -139,9 +141,16 @@ class LlamaService : Service() {
          * embedTexts and the destroy path both take this lock, so a native
          * embed in flight on one binder thread can't have its context freed
          * out from under it by unloadModel/destroyEmbeddingSession on another.
+         * A ReentrantLock so [onDestroy] can try it without waiting.
          */
-        val lock = Any()
+        val lock = ReentrantLock()
         @Volatile var destroyed = false
+
+        /**
+         * A teardown was asked for but deferred because an embed held
+         * [lock]; that embed finishes the teardown when it returns.
+         */
+        @Volatile var destroyRequested = false
     }
 
     private val models = ConcurrentHashMap<Int, ModelEntry>()
@@ -200,7 +209,9 @@ class LlamaService : Service() {
         // → tryFinalizeModelTeardown will finish the cleanup. The
         // process is going away anyway, so the leak is bounded.
         models.values.forEach { it.pendingDestroy = true }
-        embeddingSessions.values.toList().forEach { tearDownEmbeddingSession(it) }
+        // Never wait on an embed here: this is the main thread, and on a slow
+        // CPU one embed call outlasts the service-stop ANR timeout.
+        embeddingSessions.values.toList().forEach { tearDownEmbeddingSession(it, wait = false) }
         sessions.values.toList().forEach { tearDownSession(it) }
         unloadAsr()
         asrExecutor.shutdown()
@@ -209,16 +220,27 @@ class LlamaService : Service() {
 
     /**
      * Destroy [entry]'s native context and remove it from
-     * [embeddingSessions]. Blocks until any in-flight embedTexts on
-     * another binder thread finishes (embed calls are short — one small
-     * batch per call). Idempotent.
+     * [embeddingSessions]. By default blocks until any in-flight embedTexts
+     * on another binder thread finishes. With [wait] false it returns at
+     * once instead, and that embedTexts call finishes the teardown when it
+     * returns. Idempotent.
      */
-    private fun tearDownEmbeddingSession(entry: EmbeddingEntry) {
-        synchronized(entry.lock) {
+    private fun tearDownEmbeddingSession(entry: EmbeddingEntry, wait: Boolean = true) {
+        // Set before trying the lock: an embed that holds it checks this
+        // after releasing it, so a deferred teardown is never lost.
+        entry.destroyRequested = true
+        if (wait) {
+            entry.lock.lock()
+        } else if (!entry.lock.tryLock()) {
+            return
+        }
+        try {
             if (!entry.destroyed) {
                 entry.destroyed = true
                 entry.nativeSession.destroy()
             }
+        } finally {
+            entry.lock.unlock()
         }
         embeddingSessions.remove(entry.embeddingSessionId, entry)
         tryFinalizeModelTeardown(entry.modelId)
@@ -492,7 +514,7 @@ class LlamaService : Service() {
 
         override fun getEmbeddingDim(embeddingSessionId: Int): Int {
             val entry = embeddingSessions[embeddingSessionId] ?: return 0
-            synchronized(entry.lock) {
+            entry.lock.withLock {
                 if (entry.destroyed) return 0
                 return entry.nativeSession.getEmbeddingDim()
             }
@@ -500,10 +522,13 @@ class LlamaService : Service() {
 
         override fun embedTexts(embeddingSessionId: Int, texts: Array<String>): FloatArray? {
             val entry = embeddingSessions[embeddingSessionId] ?: return null
-            synchronized(entry.lock) {
+            val embeddings = entry.lock.withLock {
                 if (entry.destroyed) return null
-                return entry.nativeSession.embedTexts(texts)
+                entry.nativeSession.embedTexts(texts)
             }
+            // A teardown that could not wait for this embed was left to it.
+            if (entry.destroyRequested) tearDownEmbeddingSession(entry)
+            return embeddings
         }
 
         override fun destroyEmbeddingSession(embeddingSessionId: Int) {
