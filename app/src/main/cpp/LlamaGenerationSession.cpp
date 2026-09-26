@@ -1151,6 +1151,11 @@ bool LlamaGenerationSession::tryPreambleCache(bool enableThinking) {
         // Stale or unreadable: clean up so we don't keep retrying.
         unlink(bin_path.c_str());
         unlink(json_path.c_str());
+        // A load that failed part-way can leave the KV cache half-written, and
+        // the prefill below would decode on top of it — a ggml_abort inside
+        // llama_decode in 1.9.0/1.9.1 Vitals. The cache is meant to be empty
+        // here (prev_len == 0), so start the prefill from a clean one.
+        llama_memory_clear(llama_get_memory(ctx), true);
     }
 
     // 3. Cache miss: prefill the preamble alone, then save.
