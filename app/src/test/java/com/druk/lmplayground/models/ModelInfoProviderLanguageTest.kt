@@ -71,6 +71,14 @@ class ModelInfoProviderLanguageTest {
     }
 
     @Test
+    fun lfm25Vl3bSharesTheLargeTextModelsLanguages() {
+        assertEquals(
+            byName("LFM2.5 2.6B").supportedLanguages.toSet(),
+            byName("LFM2.5 VL 3B").supportedLanguages.toSet()
+        )
+    }
+
+    @Test
     fun lfm25LargeIsBroaderThanEarlierSizes() {
         val large = byName("LFM2.5 2.6B").supportedLanguages
         val small = byName("LFM2.5 350M").supportedLanguages

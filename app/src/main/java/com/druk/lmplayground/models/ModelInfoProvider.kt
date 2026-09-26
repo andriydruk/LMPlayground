@@ -357,6 +357,28 @@ object ModelInfoProvider {
             mmprojUri = Uri.parse("https://huggingface.co/LiquidAI/LFM2.5-VL-450M-GGUF/resolve/main/mmproj-LFM2.5-VL-450m-Q8_0.gguf")
         ),
         ModelInfo(
+            name = "LFM2.5 VL 1.6B",
+            filename = "LFM2.5-VL-1.6B-Q4_K_M.gguf",
+            remoteUri = Uri.parse("https://huggingface.co/LiquidAI/LFM2.5-VL-1.6B-GGUF/resolve/main/LFM2.5-VL-1.6B-Q4_K_M.gguf"),
+            releaseDate = LocalDate.parse("2026-01-05"),
+            description = "Liquid AI \u00B7 Compact vision model \u00B7 731Mb + 583Mb mmproj",
+            logoRes = R.drawable.logo_liquid,
+            supportedLanguages = LFM_LANGS,
+            mmprojFilename = "mmproj-LFM2.5-VL-1.6b-Q8_0.gguf",
+            mmprojUri = Uri.parse("https://huggingface.co/LiquidAI/LFM2.5-VL-1.6B-GGUF/resolve/main/mmproj-LFM2.5-VL-1.6b-Q8_0.gguf")
+        ),
+        ModelInfo(
+            name = "LFM2.5 VL 3B",
+            filename = "LFM2.5-VL-3B-Q4_K_M.gguf",
+            remoteUri = Uri.parse("https://huggingface.co/LiquidAI/LFM2.5-VL-3B-GGUF/resolve/main/LFM2.5-VL-3B-Q4_K_M.gguf"),
+            releaseDate = LocalDate.parse("2026-08-12"),
+            description = "Liquid AI \u00B7 Vision and OCR model \u00B7 1.67Gb + 583Mb mmproj",
+            logoRes = R.drawable.logo_liquid,
+            supportedLanguages = LFM25_LANGS,
+            mmprojFilename = "mmproj-LFM2.5-VL-3B-Q8_0.gguf",
+            mmprojUri = Uri.parse("https://huggingface.co/LiquidAI/LFM2.5-VL-3B-GGUF/resolve/main/mmproj-LFM2.5-VL-3B-Q8_0.gguf")
+        ),
+        ModelInfo(
             name = "MiniCPM5 2B",
             filename = "MiniCPM5-2B-Q4_K_M.gguf",
             remoteUri = Uri.parse("https://huggingface.co/openbmb/MiniCPM5-2B-GGUF/resolve/main/MiniCPM5-2B-Q4_K_M.gguf"),
@@ -551,6 +573,8 @@ object ModelInfoProvider {
         "LFM2.5-1.2B-Thinking-Q4_K_M.gguf",
         "LFM2.5-2.6B-Q4_K_M.gguf",
         "LFM2.5-VL-450M-Q4_K_M.gguf",
+        "LFM2.5-VL-3B-Q4_K_M.gguf",
+        "LFM2.5-VL-1.6B-Q4_K_M.gguf",
         "HuggingFaceTB_SmolLM3-3B-Q4_K_M.gguf",
         "MiniCPM5-1B-Q4_K_M.gguf",
         "MiniCPM5-2B-Q4_K_M.gguf",
@@ -590,6 +614,8 @@ object ModelInfoProvider {
         "LFM2.5-1.2B-Thinking-Q4_K_M.gguf",
         "LFM2.5-2.6B-Q4_K_M.gguf",
         "LFM2.5-VL-450M-Q4_K_M.gguf",
+        "LFM2.5-VL-3B-Q4_K_M.gguf",
+        "LFM2.5-VL-1.6B-Q4_K_M.gguf",
         "HuggingFaceTB_SmolLM3-3B-Q4_K_M.gguf",
         "MiniCPM5-1B-Q4_K_M.gguf",
         "MiniCPM5-2B-Q4_K_M.gguf",
@@ -617,6 +643,8 @@ object ModelInfoProvider {
         "LFM2.5-1.2B-Instruct-Q4_K_M.gguf" to ThinkingMode.NONE,
         "LFM2.5-350M-Q4_K_M.gguf" to ThinkingMode.NONE,
         "LFM2.5-VL-450M-Q4_K_M.gguf" to ThinkingMode.NONE,
+        "LFM2.5-VL-3B-Q4_K_M.gguf" to ThinkingMode.NONE,
+        "LFM2.5-VL-1.6B-Q4_K_M.gguf" to ThinkingMode.NONE,
 
         // Reasoning-tuned: they keep thinking with the flag off, so offering
         // "off" is a promise the model will not keep.

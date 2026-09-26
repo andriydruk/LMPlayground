@@ -136,6 +136,15 @@ object Expectations {
                 "calls in a form llama.cpp derives an unparseable grammar from. Thinking is " +
                 "advertised by that template but, like the 350M, never used"),
 
+        ModelExpectation("LFM2.5-VL-1.6B-Q4_K_M.gguf",
+            caps(tools = R, thinking = O, noThinking = R, vision = R, toolsWithVision = O),
+            notes = "own template derives a working tool grammar, like the 3B. Thinking is " +
+                "advertised by the template but never used"),
+        ModelExpectation("LFM2.5-VL-3B-Q4_K_M.gguf",
+            caps(tools = R, thinking = O, noThinking = R, vision = R, toolsWithVision = O),
+            notes = "unlike the 450M its own template derives a working tool grammar, so no " +
+                "override. Thinking is advertised by the template but never used"),
+
         // ── XHToken ──────────────────────────────────────────────────────
         ModelExpectation("Spark-X2.5-4B-Q4_K_M.gguf",
             caps(tools = R, thinking = R, noThinking = R, vision = N, toolsWithThinking = R),

@@ -84,11 +84,13 @@ class ModelInfoProviderCapabilityTest {
 
     @Test
     fun lfm25VlIsAVisionModelWithToolsButNoThinkingToggle() {
-        val model = byName("LFM2.5 VL 450M")
-        assertTrue(model.isVision)
-        assertTrue(model.supportsTools)
-        // Its template advertises thinking; the model never uses it.
-        assertEquals(ThinkingMode.NONE, model.thinkingMode)
+        listOf("LFM2.5 VL 450M", "LFM2.5 VL 1.6B", "LFM2.5 VL 3B").forEach { name ->
+            val model = byName(name)
+            assertTrue("$name should be a vision model", model.isVision)
+            assertTrue("$name should support tools", model.supportsTools)
+            // The templates advertise thinking; the models never use it.
+            assertEquals(name, ThinkingMode.NONE, model.thinkingMode)
+        }
     }
 
     @Test
