@@ -25,6 +25,10 @@ jobs:
         cache: 'gradle'
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
+      with:
+        # The default also installs the legacy "tools" package, which the SDK
+        # repository no longer serves; sdkmanager then fails the job.
+        packages: 'platform-tools'
     - name: Run unit tests
       run: ./gradlew app:testDebugUnitTest -PskipScreenshots
     - name: Run lint

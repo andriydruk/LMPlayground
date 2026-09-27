@@ -25,6 +25,10 @@ jobs:
 
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
+      with:
+        # The default also installs the legacy "tools" package, which the SDK
+        # repository no longer serves; sdkmanager then fails the job.
+        packages: 'platform-tools'
 
     # The Vulkan backend (GGML_VULKAN=ON) needs three host build-time deps that
     # build.gradle probes for at configure time but the runner lacks by default:
