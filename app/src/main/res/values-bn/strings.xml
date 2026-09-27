@@ -119,7 +119,7 @@
     <string name="faq_q14">প্রতিক্রিয়া প্রস্তুত হলে অ্যাপ কি আমাকে জানাবে?</string>
     <string name="faq_a14">হ্যাঁ। অ্যাপ ব্যাকগ্রাউন্ডে থাকা অবস্থায়, একটি বিজ্ঞপ্তি মডেলের স্ট্যাটাস ট্র্যাক করে — লোড হয়েছে, তৈরি হচ্ছে, তারপর প্রতিক্রিয়া প্রস্তুত — এবং আপনাকে প্রতিক্রিয়া কপি বা শেয়ার করতে দেয়। আপনি সেটিংস → শব্দ এবং হ্যাপটিক-এ একটি ছোট সমাপ্তি ধ্বনিও সক্ষম করতে পারেন। মডেল ডাউনলোড গতি ও ETA সহ নিজস্ব অগ্রগতি বিজ্ঞপ্তি দেখায়।</string>
     <string name="faq_q15">ভয়েস ডিক্টেশন কি আমার কণ্ঠ কোথাও পাঠায়?</string>
-    <string name="faq_a15">না। চ্যাট ইনপুটে মাইক্রোফোন চেপে ধরে কথা বলুন — একটি স্পিচ-রিকগনিশন মডেল আপনি বলার সাথে সাথে আপনার ফোনেই আপনার কথাগুলো লেখায় রূপান্তর করে, ৩৫টি ভাষায়। অডিও কখনো সংরক্ষণ করা হয় না বা কোথাও পাঠানো হয় না, তাই ডিক্টেশন পুরোপুরি অফলাইনে কাজ করে। মডেলটি (718 MB) একবারই ডাউনলোড হয়, প্রথমবার মাইক্রোফোন ব্যবহারের সময়।</string>
+    <string name="faq_a15">না। চ্যাট ইনপুটে মাইক্রোফোনে ট্যাপ করে কথা বলুন — একটি স্পিচ-রিকগনিশন মডেল আপনি বলার সাথে সাথে আপনার ফোনেই আপনার কথাগুলো লেখায় রূপান্তর করে, ৩৫টি ভাষায়। অডিও কখনো সংরক্ষণ করা হয় না বা কোথাও পাঠানো হয় না, তাই ডিক্টেশন পুরোপুরি অফলাইনে কাজ করে। মডেলটি (718 MB) একবারই ডাউনলোড হয়, প্রথমবার মাইক্রোফোন ব্যবহারের সময়।</string>
 
     <!-- Models Screen -->
     <string name="models">মডেল</string>
@@ -395,15 +395,14 @@
     <string name="whats_new_documents">নথি — আপনার ফাইল সম্পর্কে প্রশ্ন করুন</string>
     <string name="whats_new_documents_detail">PDF, Word ফাইল, ই-বুক এবং আরও অনেক কিছু সংযুক্ত করুন</string>
     <string name="whats_new_documents_search">ডিভাইসে অনুসন্ধান সঠিক অংশ খুঁজে দেয়</string>
-    <string name="whats_new_voice">ভয়েস — মাইক্রোফোন চেপে ধরে কথা বলুন</string>
+    <string name="whats_new_voice">ভয়েস — মাইক্রোফোনে ট্যাপ করে কথা বলুন</string>
     <string name="whats_new_voice_detail">আপনি বলার সাথে সাথেই শব্দগুলো দেখা যায়</string>
     <string name="whats_new_voice_languages">৩৫টি ভাষায় অফলাইনে কাজ করে</string>
-    <string name="dictation_start">ডিক্টেট করতে চেপে ধরুন</string>
-    <string name="dictation_permission_granted">ডিক্টেট করতে মাইক্রোফোন চেপে ধরুন।</string>
+    <string name="dictation_start">ডিক্টেশন শুরু করুন</string>
+    <string name="dictation_stop">ডিক্টেশন বন্ধ করুন</string>
     <string name="dictation_permission_denied">ডিক্টেট করতে মাইক্রোফোনের অনুমতি দিন।</string>
     <string name="dictation_record_failed">রেকর্ডিং শুরু করা যায়নি।</string>
     <string name="dictation_failed">রেকর্ডিংটি লেখায় রূপান্তর করা যায়নি।</string>
-    <string name="dictation_no_speech">শোনা যায়নি — আবার চেষ্টা করুন।</string>
     <string name="dictation_storage_not_configured">প্রথমে একটি মডেল ফোল্ডার সেট আপ করুন (সেটিংস → মডেল)।</string>
     <string name="dictation_model_dialog_title">ভয়েস ডিক্টেশন চালু করুন</string>
     <string name="dictation_model_dialog_message">টাইপের বদলে কথা বলতে একটি স্পিচ-রিকগনিশন মডেল লাগবে, %1$s (%2$s), যা একবার ডাউনলোড হয়ে আপনার ডিভাইসেই থাকবে। এটি অফলাইনে, ৩৫টি ভাষায় কাজ করে।</string>

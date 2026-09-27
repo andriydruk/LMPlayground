@@ -120,7 +120,7 @@
     <string name="faq_q14">האם האפליקציה תודיע לי כשתגובה מוכנה?</string>
     <string name="faq_a14">כן. בזמן שהאפליקציה ברקע, התראה עוקבת אחר מצב המודל — נטען, יוצר, ואז התגובה מוכנה — ומאפשרת לך להעתיק או לשתף את התגובה. תוכל גם להפעיל צליל סיום קצר בהגדרות → צליל ורטט. הורדות מודלים מציגות התראת התקדמות משלהן עם מהירות וזמן משוער שנותר.</string>
     <string name="faq_q15">האם ההכתבה הקולית שולחת את הקול שלי למקום כלשהו?</string>
-    <string name="faq_a15">לא. לחצו לחיצה ארוכה על המיקרופון בשדה ההודעה ודברו — מודל לזיהוי דיבור הופך את המילים שלכם לטקסט בטלפון תוך כדי דיבור, ב-35 שפות. ההקלטה אף פעם לא נשמרת ולא נשלחת לשום מקום, כך שההכתבה עובדת אופליין לגמרי. המודל (718MB) מורד פעם אחת, בפעם הראשונה שמשתמשים במיקרופון.</string>
+    <string name="faq_a15">לא. הקישו על המיקרופון בשדה ההודעה ודברו — מודל לזיהוי דיבור הופך את המילים שלכם לטקסט בטלפון תוך כדי דיבור, ב-35 שפות. ההקלטה אף פעם לא נשמרת ולא נשלחת לשום מקום, כך שההכתבה עובדת אופליין לגמרי. המודל (718MB) מורד פעם אחת, בפעם הראשונה שמשתמשים במיקרופון.</string>
 
     <!-- Models Screen -->
     <string name="models">מודלים</string>
@@ -398,15 +398,14 @@
     <string name="whats_new_documents">מסמכים — שאל שאלות על הקבצים שלך</string>
     <string name="whats_new_documents_detail">צרף קובצי PDF, קובצי Word, ספרים אלקטרוניים ועוד</string>
     <string name="whats_new_documents_search">חיפוש במכשיר מוצא את הקטעים הנכונים</string>
-    <string name="whats_new_voice">קול — לחצו לחיצה ארוכה על המיקרופון ודברו</string>
+    <string name="whats_new_voice">קול — הקישו על המיקרופון ודברו</string>
     <string name="whats_new_voice_detail">המילים מופיעות תוך כדי דיבור</string>
     <string name="whats_new_voice_languages">עובד אופליין ב-35 שפות</string>
-    <string name="dictation_start">לחיצה ארוכה להכתבה</string>
-    <string name="dictation_permission_granted">לחצו לחיצה ארוכה על המיקרופון כדי להכתיב.</string>
+    <string name="dictation_start">התחלת הכתבה</string>
+    <string name="dictation_stop">עצירת הכתבה</string>
     <string name="dictation_permission_denied">אפשרו גישה למיקרופון כדי להכתיב.</string>
     <string name="dictation_record_failed">לא ניתן להתחיל את ההקלטה.</string>
     <string name="dictation_failed">לא ניתן לתמלל את ההקלטה.</string>
-    <string name="dictation_no_speech">לא הצלחתי לשמוע — נסו שוב.</string>
     <string name="dictation_storage_not_configured">הגדירו קודם תיקיית מודלים (הגדרות ← מודלים).</string>
     <string name="dictation_model_dialog_title">הפעלת הכתבה קולית</string>
     <string name="dictation_model_dialog_message">כדי לדבר במקום להקליד צריך מודל לזיהוי דיבור, %1$s (%2$s), שמורד פעם אחת ונשמר במכשיר. הוא עובד אופליין, ב-35 שפות.</string>

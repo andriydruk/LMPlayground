@@ -105,7 +105,7 @@
     <string name="faq_q14">回复就绪时应用会通知我吗？</string>
     <string name="faq_a14">会的。当应用在后台运行时，通知会跟踪模型的状态——已加载、生成中、然后回复就绪——并让您复制或分享回复。您还可以在 设置 \u2192 声音与触感 中开启简短的完成提示音。模型下载会显示带有速度和预计剩余时间的专属进度通知。</string>
     <string name="faq_q15">语音输入会把我的声音发送到别处吗？</string>
-    <string name="faq_a15">不会。在聊天输入框中按住麦克风说话——语音识别模型会在你说话的同时，直接在手机上把你的话转成文字，支持 35 种语言。音频从不保存，也不会发送到任何地方，因此语音输入完全离线可用。模型（718 MB）只需下载一次，在你首次使用麦克风时下载。</string>
+    <string name="faq_a15">不会。在聊天输入框中点按麦克风说话——语音识别模型会在你说话的同时，直接在手机上把你的话转成文字，支持 35 种语言。音频从不保存，也不会发送到任何地方，因此语音输入完全离线可用。模型（718 MB）只需下载一次，在你首次使用麦克风时下载。</string>
     <string name="models">模型</string>
     <string name="change_folder">更改文件夹</string>
     <string name="delete_model">删除</string>
@@ -351,15 +351,14 @@
     <string name="whats_new_documents">文档——针对你的文件提问</string>
     <string name="whats_new_documents_detail">附加 PDF、Word 文件、电子书等</string>
     <string name="whats_new_documents_search">设备端搜索找到正确的段落</string>
-    <string name="whats_new_voice">语音——按住麦克风说话</string>
+    <string name="whats_new_voice">语音——点按麦克风说话</string>
     <string name="whats_new_voice_detail">边说边出字</string>
     <string name="whats_new_voice_languages">支持 35 种语言，离线可用</string>
-    <string name="dictation_start">按住说话</string>
-    <string name="dictation_permission_granted">按住麦克风即可语音输入。</string>
+    <string name="dictation_start">开始语音输入</string>
+    <string name="dictation_stop">停止语音输入</string>
     <string name="dictation_permission_denied">请允许访问麦克风以使用语音输入。</string>
     <string name="dictation_record_failed">无法开始录音。</string>
     <string name="dictation_failed">无法转写录音。</string>
-    <string name="dictation_no_speech">没听清——请再试一次。</string>
     <string name="dictation_storage_not_configured">请先设置模型文件夹（设置 → 模型）。</string>
     <string name="dictation_model_dialog_title">启用语音输入</string>
     <string name="dictation_model_dialog_message">用说话代替打字需要一个语音识别模型 %1$s（%2$s），只需下载一次并保存在你的设备上。它可离线使用，支持 35 种语言。</string>

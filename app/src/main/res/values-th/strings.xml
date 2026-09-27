@@ -120,7 +120,7 @@
     <string name="faq_q14">แอปจะแจ้งเตือนฉันเมื่อคำตอบพร้อมหรือไม่?</string>
     <string name="faq_a14">ใช่ ขณะที่แอปทำงานอยู่เบื้องหลัง การแจ้งเตือนจะติดตามสถานะของโมเดล — โหลดแล้ว กำลังสร้าง แล้วคำตอบพร้อม — และให้คุณคัดลอกหรือแชร์คำตอบได้ คุณยังสามารถเปิดเสียงสั้นๆ เมื่อเสร็จได้ใน การตั้งค่า → เสียงและการสั่น การดาวน์โหลดโมเดลจะแสดงการแจ้งเตือนความคืบหน้าของตัวเองพร้อมความเร็วและเวลาที่เหลือโดยประมาณ</string>
     <string name="faq_q15">การพิมพ์ด้วยเสียงส่งเสียงของฉันไปที่ไหนหรือไม่</string>
-    <string name="faq_a15">ไม่ กดไมโครโฟนในช่องข้อความค้างไว้แล้วพูด — โมเดลรู้จำเสียงพูดจะแปลงคำพูดของคุณเป็นข้อความบนโทรศัพท์ขณะที่คุณพูด รองรับ 35 ภาษา เสียงจะไม่ถูกบันทึกหรือส่งไปที่ใดเลย การพิมพ์ด้วยเสียงจึงทำงานแบบออฟไลน์ได้ทั้งหมด โมเดล (718 MB) จะดาวน์โหลดเพียงครั้งเดียวเมื่อคุณใช้ไมโครโฟนครั้งแรก</string>
+    <string name="faq_a15">ไม่ แตะไมโครโฟนในช่องข้อความแล้วพูด — โมเดลรู้จำเสียงพูดจะแปลงคำพูดของคุณเป็นข้อความบนโทรศัพท์ขณะที่คุณพูด รองรับ 35 ภาษา เสียงจะไม่ถูกบันทึกหรือส่งไปที่ใดเลย การพิมพ์ด้วยเสียงจึงทำงานแบบออฟไลน์ได้ทั้งหมด โมเดล (718 MB) จะดาวน์โหลดเพียงครั้งเดียวเมื่อคุณใช้ไมโครโฟนครั้งแรก</string>
 
     <!-- Models Screen -->
     <string name="models">โมเดล</string>
@@ -385,15 +385,14 @@
     <string name="whats_new_documents">เอกสาร — ถามคำถามเกี่ยวกับไฟล์ของคุณ</string>
     <string name="whats_new_documents_detail">แนบ PDF, ไฟล์ Word, อีบุ๊กและอื่นๆ</string>
     <string name="whats_new_documents_search">การค้นหาบนอุปกรณ์จะหาย่อหน้าที่ถูกต้อง</string>
-    <string name="whats_new_voice">เสียง — กดไมค์ค้างไว้แล้วพูด</string>
+    <string name="whats_new_voice">เสียง — แตะไมค์แล้วพูด</string>
     <string name="whats_new_voice_detail">คำพูดของคุณจะปรากฏขณะที่คุณพูด</string>
     <string name="whats_new_voice_languages">ใช้งานแบบออฟไลน์ได้ 35 ภาษา</string>
-    <string name="dictation_start">กดค้างเพื่อพิมพ์ด้วยเสียง</string>
-    <string name="dictation_permission_granted">กดไมโครโฟนค้างไว้เพื่อพิมพ์ด้วยเสียง</string>
+    <string name="dictation_start">เริ่มพิมพ์ด้วยเสียง</string>
+    <string name="dictation_stop">หยุดพิมพ์ด้วยเสียง</string>
     <string name="dictation_permission_denied">อนุญาตให้เข้าถึงไมโครโฟนเพื่อพิมพ์ด้วยเสียง</string>
     <string name="dictation_record_failed">ไม่สามารถเริ่มบันทึกเสียงได้</string>
     <string name="dictation_failed">ไม่สามารถถอดความการบันทึกได้</string>
-    <string name="dictation_no_speech">ฟังไม่ทัน — ลองอีกครั้ง</string>
     <string name="dictation_storage_not_configured">ตั้งค่าโฟลเดอร์โมเดลก่อน (การตั้งค่า → โมเดล)</string>
     <string name="dictation_model_dialog_title">เปิดใช้การพิมพ์ด้วยเสียง</string>
     <string name="dictation_model_dialog_message">การพูดแทนการพิมพ์ต้องใช้โมเดลรู้จำเสียงพูด %1$s (%2$s) ซึ่งดาวน์โหลดเพียงครั้งเดียวและเก็บไว้ในอุปกรณ์ของคุณ ใช้งานแบบออฟไลน์ได้ 35 ภาษา</string>

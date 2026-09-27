@@ -31,7 +31,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,10 +42,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -54,8 +53,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Lightbulb
-import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Lightbulb
@@ -67,32 +64,18 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.hazeEffect
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.SemanticsPropertyReceiver
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.platform.LocalDensity
@@ -110,6 +93,8 @@ import androidx.compose.ui.window.PopupProperties
 import coil.compose.AsyncImage
 import com.druk.lmplayground.R
 import com.druk.lmplayground.dictation.DictationState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 enum class UserInputStatus {
     IDLE,
@@ -169,8 +154,13 @@ fun UserInput(
     dictationState: DictationState = DictationState.Idle,
     /** 0..1 while the dictation model downloads, negative if queued, null if not. */
     dictationDownloadProgress: Float? = null,
-    onMicPressed: () -> Unit = {},
-    onMicReleased: () -> Unit = {},
+    /** Whether the dictation toggle is on. */
+    micOn: Boolean = false,
+    /** True once the microphone is actually delivering audio. */
+    micRecording: StateFlow<Boolean> = IdleMicRecording,
+    /** Loudness 0..1 while recording, for the mic button's ring. */
+    micLevel: StateFlow<Float> = IdleMicLevel,
+    onMicClick: () -> Unit = {},
     /**
      * The user edited or sent the text while dictation was still writing into
      * it. The caller must stop dictation and deliver nothing more.
@@ -314,8 +304,10 @@ fun UserInput(
                     onAttachImage = onAttachImage,
                     onTakePhoto = onTakePhoto,
                     onAttachDocument = onAttachDocument,
-                    onMicPressed = onMicPressed,
-                    onMicReleased = onMicReleased,
+                    micOn = micOn,
+                    micRecording = micRecording,
+                    micLevel = micLevel,
+                    onMicClick = onMicClick,
                     dictationDownloadProgress = dictationDownloadProgress,
                     textFieldValue = textState,
                     onTextChanged = {
@@ -400,6 +392,10 @@ fun Modifier.clearFocusOnKeyboardDismiss(): Modifier = composed {
 val KeyboardShownKey = SemanticsPropertyKey<Boolean>("KeyboardShownKey")
 var SemanticsPropertyReceiver.keyboardShownProperty by KeyboardShownKey
 
+/** The level of a mic that is not recording, for callers that have none. */
+private val IdleMicLevel: StateFlow<Float> = MutableStateFlow(0f)
+private val IdleMicRecording: StateFlow<Boolean> = MutableStateFlow(false)
+
 @ExperimentalFoundationApi
 @Composable
 private fun UserInputText(
@@ -413,8 +409,10 @@ private fun UserInputText(
     onAttachImage: () -> Unit = {},
     onTakePhoto: () -> Unit = {},
     onAttachDocument: () -> Unit = {},
-    onMicPressed: () -> Unit = {},
-    onMicReleased: () -> Unit = {},
+    micOn: Boolean = false,
+    micRecording: StateFlow<Boolean> = IdleMicRecording,
+    micLevel: StateFlow<Float> = IdleMicLevel,
+    onMicClick: () -> Unit = {},
     dictationDownloadProgress: Float? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
     onTextChanged: (TextFieldValue) -> Unit,
@@ -586,105 +584,18 @@ private fun UserInputText(
             disabledContentColor = disabledContentColor
         )
 
-        // Push to talk: dictation runs for exactly as long as the button is
-        // held, so there is no separate stop to hunt for and no recording left
-        // running by accident. Dictation works without a chat model loaded (it
-        // runs its own engine), so the mic is live except while generating.
-        val micEnabled = status != UserInputStatus.GENERATING
-        // Driven by the finger, not by dictation state: the circle must appear
-        // the instant the button goes down (loading the model takes a moment)
-        // and clear the instant it comes up — even though the recognizer keeps
-        // working through the audio already captured.
-        var micPressed by remember { mutableStateOf(false) }
-        val pulse = rememberInfiniteTransition(label = "mic")
-        val pulseScale by pulse.animateFloat(
-            initialValue = 1f,
-            targetValue = 1.25f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(durationMillis = 650, easing = FastOutSlowInEasing),
-                repeatMode = RepeatMode.Reverse,
-            ),
-            label = "pulseScale",
+        // A toggle: tap to start, tap to stop. Dictation works without a chat
+        // model loaded (it runs its own engine), so the mic is live except
+        // while generating.
+        MicButton(
+            micOn = micOn,
+            enabled = status != UserInputStatus.GENERATING,
+            downloadProgress = dictationDownloadProgress,
+            recording = micRecording,
+            level = micLevel,
+            onClick = onMicClick,
+            modifier = Modifier.padding(horizontal = 4.dp),
         )
-        // Applied directly: routing it through animateFloatAsState would set a
-        // spring chasing a moving target, which damps the oscillation flat.
-        val restScale = if (micPressed) pulseScale else 1f
-        val circleAlpha by animateFloatAsState(
-            targetValue = if (micPressed) 1f else 0f,
-            label = "micCircle",
-        )
-
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 4.dp)
-                .size(48.dp)
-                .then(
-                    if (micEnabled) {
-                        Modifier.pointerInput(Unit) {
-                            detectTapGestures(
-                                onPress = {
-                                    micPressed = true
-                                    onMicPressed()
-                                    // The result is ignored on purpose. A
-                                    // cancelled gesture — the finger drifting,
-                                    // or the input dock's swipe-up winning —
-                                    // used to discard, which threw away words
-                                    // the user had already said. Finishing is
-                                    // always the safer answer: unwanted text can
-                                    // be deleted, lost speech cannot.
-                                    tryAwaitRelease()
-                                    micPressed = false
-                                    onMicReleased()
-                                }
-                            )
-                        }
-                    } else {
-                        Modifier
-                    }
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            // The filled circle scales; the 48dp touch target never does, so
-            // the finger keeps hitting the same place.
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .graphicsLayer {
-                        scaleX = restScale
-                        scaleY = restScale
-                        alpha = circleAlpha
-                    }
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary)
-            )
-            // The model is ~700 MB, so the wait needs to be visible where the
-            // user asked for it rather than only on the models screen.
-            if (dictationDownloadProgress != null) {
-                if (dictationDownloadProgress >= 0f) {
-                    CircularProgressIndicator(
-                        progress = { dictationDownloadProgress },
-                        modifier = Modifier.size(44.dp),
-                        strokeWidth = 2.dp
-                    )
-                } else {
-                    // Queued with no byte count yet (waiting for network).
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(44.dp),
-                        strokeWidth = 2.dp
-                    )
-                }
-            }
-            Icon(
-                imageVector = Icons.Filled.Mic,
-                contentDescription = stringResource(R.string.dictation_start),
-                modifier = if (!micEnabled) Modifier.alpha(0.8f) else Modifier,
-                tint = lerp(
-                    LocalContentColor.current,
-                    MaterialTheme.colorScheme.onPrimary,
-                    circleAlpha,
-                )
-            )
-        }
 
         // Send button
         Box {

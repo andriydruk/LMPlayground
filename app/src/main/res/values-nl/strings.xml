@@ -121,7 +121,7 @@
     <string name="faq_q14">Geeft de app een melding wanneer een antwoord klaar is?</string>
     <string name="faq_a14">Ja. Terwijl de app op de achtergrond draait, houdt een melding de status van het model bij — geladen, genereren, daarna antwoord gereed — en kun je het antwoord kopiëren of delen. Je kunt ook een korte voltooiingstoon inschakelen via Instellingen → Geluid en haptiek. Modeldownloads tonen hun eigen voortgangsmelding met snelheid en resterende tijd.</string>
     <string name="faq_q15">Stuurt spraakdictatie mijn stem ergens naartoe?</string>
-    <string name="faq_a15">Nee. Houd de microfoon in het berichtveld ingedrukt en spreek — een spraakherkenningsmodel zet je woorden op je telefoon om in tekst terwijl je praat, in 35 talen. De audio wordt nooit opgeslagen of ergens naartoe gestuurd, dus dictatie werkt volledig offline. Het model (718 MB) wordt één keer gedownload, de eerste keer dat je de microfoon gebruikt.</string>
+    <string name="faq_a15">Nee. Tik op de microfoon in het berichtveld en spreek — een spraakherkenningsmodel zet je woorden op je telefoon om in tekst terwijl je praat, in 35 talen. De audio wordt nooit opgeslagen of ergens naartoe gestuurd, dus dictatie werkt volledig offline. Het model (718 MB) wordt één keer gedownload, de eerste keer dat je de microfoon gebruikt.</string>
 
     <!-- Models Screen -->
     <string name="models">Modellen</string>
@@ -396,15 +396,14 @@
     <string name="whats_new_documents">Documenten — stel vragen over je bestanden</string>
     <string name="whats_new_documents_detail">Voeg pdf\'s, Word-bestanden, e-books en meer toe</string>
     <string name="whats_new_documents_search">Zoeken op het apparaat vindt de juiste passages</string>
-    <string name="whats_new_voice">Spraak — houd de microfoon ingedrukt en spreek</string>
+    <string name="whats_new_voice">Spraak — tik op de microfoon en spreek</string>
     <string name="whats_new_voice_detail">Je woorden verschijnen terwijl je praat</string>
     <string name="whats_new_voice_languages">Werkt offline in 35 talen</string>
-    <string name="dictation_start">Ingedrukt houden om te dicteren</string>
-    <string name="dictation_permission_granted">Houd de microfoon ingedrukt om te dicteren.</string>
+    <string name="dictation_start">Dictatie starten</string>
+    <string name="dictation_stop">Dictatie stoppen</string>
     <string name="dictation_permission_denied">Geef toegang tot de microfoon om te dicteren.</string>
     <string name="dictation_record_failed">Kan de opname niet starten.</string>
     <string name="dictation_failed">Kan de opname niet transcriberen.</string>
-    <string name="dictation_no_speech">Dat verstond ik niet — probeer het opnieuw.</string>
     <string name="dictation_storage_not_configured">Stel eerst een modellenmap in (Instellingen → Modellen).</string>
     <string name="dictation_model_dialog_title">Spraakdictatie inschakelen</string>
     <string name="dictation_model_dialog_message">Om te spreken in plaats van te typen is een spraakherkenningsmodel nodig, %1$s (%2$s), dat één keer wordt gedownload en op je apparaat blijft. Het werkt offline, in 35 talen.</string>

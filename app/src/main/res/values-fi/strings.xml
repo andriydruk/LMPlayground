@@ -120,7 +120,7 @@
     <string name="faq_q14">Ilmoittaako sovellus minulle, kun vastaus on valmis?</string>
     <string name="faq_a14">Kyllä. Kun sovellus on taustalla, ilmoitus seuraa mallin tilaa – ladattu, generoi, sitten vastaus valmis – ja antaa sinun kopioida tai jakaa vastauksen. Voit myös ottaa käyttöön lyhyen valmistumisäänen kohdassa Asetukset → Ääni ja värinä. Mallien lataukset näyttävät oman edistymisilmoituksensa nopeuden ja arvioidun jäljellä olevan ajan kanssa.</string>
     <string name="faq_q15">Lähettääkö puhesanelu ääneni jonnekin?</string>
-    <string name="faq_a15">Ei. Pidä viestikentän mikrofonia painettuna ja puhu – puheentunnistusmalli muuttaa sanasi tekstiksi puhelimessasi puhuessasi, 35 kielellä. Ääntä ei koskaan tallenneta eikä lähetetä minnekään, joten sanelu toimii täysin offline-tilassa. Malli (718 Mt) ladataan kerran, kun käytät mikrofonia ensimmäisen kerran.</string>
+    <string name="faq_a15">Ei. Napauta viestikentän mikrofonia ja puhu – puheentunnistusmalli muuttaa sanasi tekstiksi puhelimessasi puhuessasi, 35 kielellä. Ääntä ei koskaan tallenneta eikä lähetetä minnekään, joten sanelu toimii täysin offline-tilassa. Malli (718 Mt) ladataan kerran, kun käytät mikrofonia ensimmäisen kerran.</string>
 
     <!-- Models Screen -->
     <string name="models">Mallit</string>
@@ -384,15 +384,14 @@
     <string name="whats_new_documents">Asiakirjat – kysy kysymyksiä tiedostoistasi</string>
     <string name="whats_new_documents_detail">Liitä PDF-tiedostoja, Word-tiedostoja, e-kirjoja ja muuta</string>
     <string name="whats_new_documents_search">Laitteella tehtävä haku löytää oikeat kohdat</string>
-    <string name="whats_new_voice">Puhe – pidä mikrofonia painettuna ja puhu</string>
+    <string name="whats_new_voice">Puhe – napauta mikrofonia ja puhu</string>
     <string name="whats_new_voice_detail">Sanasi ilmestyvät puhuessasi</string>
     <string name="whats_new_voice_languages">Toimii offline-tilassa 35 kielellä</string>
-    <string name="dictation_start">Sanele pitämällä painettuna</string>
-    <string name="dictation_permission_granted">Sanele pitämällä mikrofonia painettuna.</string>
+    <string name="dictation_start">Aloita sanelu</string>
+    <string name="dictation_stop">Lopeta sanelu</string>
     <string name="dictation_permission_denied">Salli mikrofonin käyttö sanelua varten.</string>
     <string name="dictation_record_failed">Tallennusta ei voitu aloittaa.</string>
     <string name="dictation_failed">Tallennetta ei voitu litteroida.</string>
-    <string name="dictation_no_speech">En saanut selvää – yritä uudelleen.</string>
     <string name="dictation_storage_not_configured">Määritä ensin mallikansio (Asetukset → Mallit).</string>
     <string name="dictation_model_dialog_title">Ota puhesanelu käyttöön</string>
     <string name="dictation_model_dialog_message">Puhuminen kirjoittamisen sijaan vaatii puheentunnistusmallin, %1$s (%2$s), joka ladataan kerran ja säilytetään laitteellasi. Se toimii offline-tilassa 35 kielellä.</string>

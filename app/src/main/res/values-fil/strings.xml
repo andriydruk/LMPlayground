@@ -119,7 +119,7 @@
     <string name="faq_q14">Aabisuhan ba ako ng app kapag handa na ang isang tugon?</string>
     <string name="faq_a14">Oo. Habang nasa background ang app, may notification na sumusubaybay sa status ng model \u2014 naka-load, gumagawa, pagkatapos ay handa na ang tugon \u2014 at hinahayaan kang kopyahin o ibahagi ang sagot. Maaari mo ring i-enable ang isang maikling chime kapag tapos sa Mga setting \u2192 Tunog at Haptic. Ang mga pag-download ng model ay nagpapakita ng sarili nilang progress notification na may bilis at ETA.</string>
     <string name="faq_q15">Ipinapadala ba ng voice dictation ang boses ko kahit saan?</string>
-    <string name="faq_a15">Hindi. Pindutin nang matagal ang mikropono sa message field at magsalita — isang speech-recognition model ang gagawing text ang mga salita mo sa phone mo habang nagsasalita ka, sa 35 wika. Hindi kailanman sine-save o ipinapadala kahit saan ang audio, kaya gumagana ang dictation nang ganap na offline. Isang beses lang ida-download ang model (718 MB), sa unang beses na gamitin mo ang mikropono.</string>
+    <string name="faq_a15">Hindi. I-tap ang mikropono sa message field at magsalita — isang speech-recognition model ang gagawing text ang mga salita mo sa phone mo habang nagsasalita ka, sa 35 wika. Hindi kailanman sine-save o ipinapadala kahit saan ang audio, kaya gumagana ang dictation nang ganap na offline. Isang beses lang ida-download ang model (718 MB), sa unang beses na gamitin mo ang mikropono.</string>
 
     <!-- Models Screen -->
     <string name="models">Mga Modelo</string>
@@ -387,15 +387,14 @@
     <string name="whats_new_documents">Mga Dokumento — magtanong tungkol sa iyong mga file</string>
     <string name="whats_new_documents_detail">Maglakip ng mga PDF, Word file, ebook at higit pa</string>
     <string name="whats_new_documents_search">Nahahanap ng paghahanap sa device ang tamang mga bahagi</string>
-    <string name="whats_new_voice">Boses — pindutin nang matagal ang mikropono at magsalita</string>
+    <string name="whats_new_voice">Boses — i-tap ang mikropono at magsalita</string>
     <string name="whats_new_voice_detail">Lumalabas ang mga salita mo habang nagsasalita ka</string>
     <string name="whats_new_voice_languages">Gumagana offline sa 35 wika</string>
-    <string name="dictation_start">Pindutin nang matagal para mag-dictate</string>
-    <string name="dictation_permission_granted">Pindutin nang matagal ang mikropono para mag-dictate.</string>
+    <string name="dictation_start">Simulan ang dictation</string>
+    <string name="dictation_stop">Ihinto ang dictation</string>
     <string name="dictation_permission_denied">Payagan ang access sa mikropono para mag-dictate.</string>
     <string name="dictation_record_failed">Hindi masimulan ang pag-record.</string>
     <string name="dictation_failed">Hindi ma-transcribe ang recording.</string>
-    <string name="dictation_no_speech">Hindi ko iyon narinig — subukan ulit.</string>
     <string name="dictation_storage_not_configured">Mag-set up muna ng folder ng mga modelo (Mga setting → Mga Modelo).</string>
     <string name="dictation_model_dialog_title">I-enable ang voice dictation</string>
     <string name="dictation_model_dialog_message">Para magsalita sa halip na mag-type, kailangan ng speech-recognition model, %1$s (%2$s), na ida-download nang isang beses at itatabi sa device mo. Gumagana ito offline, sa 35 wika.</string>

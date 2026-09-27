@@ -105,7 +105,7 @@
     <string name="faq_q14">Aplica\u021Bia m\u0103 va notifica atunci c\u00E2nd un r\u0103spuns este gata?</string>
     <string name="faq_a14">Da. C\u00E2t timp aplica\u021Bia este \u00EEn fundal, o notificare urm\u0103re\u015Fte starea modelului \u2014 \u00EEnc\u0103rcat, \u00EEn generare, apoi r\u0103spuns gata \u2014 \u015Fi \u00EE\u021Bi permite s\u0103 copiezi sau s\u0103 distribui r\u0103spunsul. Po\u021Bi activa \u015Fi un scurt semnal sonor de finalizare \u00EEn Set\u0103ri \u2192 Sunet \u015Fi vibra\u021Bii. Desc\u0103rc\u0103rile de modele afi\u015Feaz\u0103 propria notificare de progres, cu vitez\u0103 \u015Fi timp estimat.</string>
     <string name="faq_q15">Dictarea vocală îmi trimite vocea undeva?</string>
-    <string name="faq_a15">Nu. Ține apăsat microfonul din câmpul de mesaj și vorbește — un model de recunoaștere a vorbirii transformă cuvintele tale în text pe telefon, pe măsură ce vorbești, în 35 de limbi. Sunetul nu este niciodată salvat sau trimis nicăieri, așa că dictarea funcționează complet offline. Modelul (718 MB) se descarcă o singură dată, prima dată când folosești microfonul.</string>
+    <string name="faq_a15">Nu. Atinge microfonul din câmpul de mesaj și vorbește — un model de recunoaștere a vorbirii transformă cuvintele tale în text pe telefon, pe măsură ce vorbești, în 35 de limbi. Sunetul nu este niciodată salvat sau trimis nicăieri, așa că dictarea funcționează complet offline. Modelul (718 MB) se descarcă o singură dată, prima dată când folosești microfonul.</string>
     <string name="models">Modele</string>
     <string name="change_folder">Schimb\u0103 folderul</string>
     <string name="delete_model">\u015Eterge</string>
@@ -354,15 +354,14 @@
     <string name="whats_new_documents">Documente — pune întrebări despre fișierele tale</string>
     <string name="whats_new_documents_detail">Atașează PDF-uri, fișiere Word, cărți electronice și altele</string>
     <string name="whats_new_documents_search">Căutarea pe dispozitiv găsește pasajele potrivite</string>
-    <string name="whats_new_voice">Voce — ține apăsat microfonul și vorbește</string>
+    <string name="whats_new_voice">Voce — atinge microfonul și vorbește</string>
     <string name="whats_new_voice_detail">Cuvintele apar pe măsură ce vorbești</string>
     <string name="whats_new_voice_languages">Funcționează offline în 35 de limbi</string>
-    <string name="dictation_start">Ține apăsat pentru a dicta</string>
-    <string name="dictation_permission_granted">Ține apăsat microfonul pentru a dicta.</string>
+    <string name="dictation_start">Pornește dictarea</string>
+    <string name="dictation_stop">Oprește dictarea</string>
     <string name="dictation_permission_denied">Permite accesul la microfon pentru a dicta.</string>
     <string name="dictation_record_failed">Nu s-a putut porni înregistrarea.</string>
     <string name="dictation_failed">Nu s-a putut transcrie înregistrarea.</string>
-    <string name="dictation_no_speech">Nu s-a înțeles — încearcă din nou.</string>
     <string name="dictation_storage_not_configured">Configurează mai întâi un dosar pentru modele (Setări → Modele).</string>
     <string name="dictation_model_dialog_title">Activează dictarea vocală</string>
     <string name="dictation_model_dialog_message">Ca să vorbești în loc să tastezi, ai nevoie de un model de recunoaștere a vorbirii, %1$s (%2$s), descărcat o singură dată și păstrat pe dispozitivul tău. Funcționează offline, în 35 de limbi.</string>

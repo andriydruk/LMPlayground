@@ -105,7 +105,7 @@
     <string name="faq_q14">O aplicativo vai me avisar quando uma resposta estiver pronta?</string>
     <string name="faq_a14">Sim. Enquanto o aplicativo est\u00E1 em segundo plano, uma notifica\u00E7\u00E3o acompanha o status do modelo \u2014 carregado, gerando e, ent\u00E3o, resposta pronta \u2014 e permite copiar ou compartilhar a resposta. Voc\u00EA tamb\u00E9m pode ativar um breve sinal sonoro de conclus\u00E3o em Configura\u00E7\u00F5es \u2192 Som e vibra\u00E7\u00E3o. Os downloads de modelos exibem sua pr\u00F3pria notifica\u00E7\u00E3o de progresso com velocidade e tempo estimado.</string>
     <string name="faq_q15">O ditado por voz envia minha voz para algum lugar?</string>
-    <string name="faq_a15">Não. Mantenha o microfone pressionado no campo de mensagem e fale — um modelo de reconhecimento de fala transforma suas palavras em texto no seu celular enquanto você fala, em 35 idiomas. O áudio nunca é salvo nem enviado para lugar nenhum, então o ditado funciona totalmente offline. O modelo (718 MB) é baixado uma vez, na primeira vez que você usa o microfone.</string>
+    <string name="faq_a15">Não. Toque no microfone no campo de mensagem e fale — um modelo de reconhecimento de fala transforma suas palavras em texto no seu celular enquanto você fala, em 35 idiomas. O áudio nunca é salvo nem enviado para lugar nenhum, então o ditado funciona totalmente offline. O modelo (718 MB) é baixado uma vez, na primeira vez que você usa o microfone.</string>
     <string name="models">Modelos</string>
     <string name="change_folder">Alterar pasta</string>
     <string name="delete_model">Excluir</string>
@@ -353,15 +353,14 @@
     <string name="whats_new_documents">Documentos — faça perguntas sobre seus arquivos</string>
     <string name="whats_new_documents_detail">Anexe PDFs, arquivos do Word, e-books e mais</string>
     <string name="whats_new_documents_search">A busca no dispositivo encontra os trechos certos</string>
-    <string name="whats_new_voice">Voz — mantenha o microfone pressionado e fale</string>
+    <string name="whats_new_voice">Voz — toque no microfone e fale</string>
     <string name="whats_new_voice_detail">Suas palavras aparecem enquanto você fala</string>
     <string name="whats_new_voice_languages">Funciona offline em 35 idiomas</string>
-    <string name="dictation_start">Mantenha pressionado para ditar</string>
-    <string name="dictation_permission_granted">Mantenha o microfone pressionado para ditar.</string>
+    <string name="dictation_start">Iniciar ditado</string>
+    <string name="dictation_stop">Parar ditado</string>
     <string name="dictation_permission_denied">Permita o acesso ao microfone para ditar.</string>
     <string name="dictation_record_failed">Não foi possível iniciar a gravação.</string>
     <string name="dictation_failed">Não foi possível transcrever a gravação.</string>
-    <string name="dictation_no_speech">Não entendi — tente de novo.</string>
     <string name="dictation_storage_not_configured">Primeiro configure uma pasta de modelos (Configurações → Modelos).</string>
     <string name="dictation_model_dialog_title">Ativar ditado por voz</string>
     <string name="dictation_model_dialog_message">Para falar em vez de digitar, é preciso um modelo de reconhecimento de fala, %1$s (%2$s), baixado uma única vez e guardado no seu dispositivo. Ele funciona offline, em 35 idiomas.</string>

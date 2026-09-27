@@ -12,6 +12,7 @@ import com.druk.lmplayground.R
 import com.druk.lmplayground.download.DownloadRepository
 import com.druk.lmplayground.storage.StorageRepository
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.math.log10
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import java.util.concurrent.atomic.AtomicInteger
@@ -19,6 +20,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -51,6 +55,10 @@ sealed interface DictationState {
  * again during that moment must not be swallowed: the new recording starts
  * immediately and its audio waits in a queue for the recognizer, and the two
  * utterances land in the input field in the order they were spoken.
+ *
+ * The microphone button is a toggle: one tap starts dictation, the next
+ * stops it. [micOn] is what the button shows, and [level] drives its live
+ * waveform.
  *
  * The caller (the fragment) owns the RECORD_AUDIO prompt and must only call
  * [startListening] once the permission is granted.
@@ -89,6 +97,29 @@ class DictationController(
     /** Final transcript awaiting insertion into the composer. */
     private val _transcript = MutableLiveData<String?>(null)
     val transcript: LiveData<String?> = _transcript
+
+    /**
+     * Whether the microphone button is on. Set the moment the user taps — the
+     * model check and load come after — and cleared when they tap again or the
+     * recording ends on its own (duration cap, error, [abandon]).
+     */
+    private val _micOn = MutableLiveData(false)
+    val micOn: LiveData<Boolean> = _micOn
+
+    /**
+     * Loudness of the audio being recorded, 0 (silence) to 1 (loud speech),
+     * about 16 times a second; 0 whenever nothing is recording.
+     */
+    private val _level = MutableStateFlow(0f)
+    val level: StateFlow<Float> = _level.asStateFlow()
+
+    /**
+     * True from the first chunk of audio the microphone actually delivers
+     * until the recording ends. Unlike [micOn] it waits out the model load,
+     * so the button can signal "you're being recorded now", not "you tapped".
+     */
+    private val _recording = MutableStateFlow(false)
+    val isRecording: StateFlow<Boolean> = _recording.asStateFlow()
 
     /** One-shot user-facing error; cleared by [consumeError]. */
     private val _error = MutableLiveData<String?>(null)
@@ -137,14 +168,27 @@ class DictationController(
     private val main = Handler(Looper.getMainLooper())
 
     /**
-     * Whether the microphone button is currently held.
+     * Whether the user wants the microphone on.
      *
-     * Starting is asynchronous (an on-disk check, then loading the model), so a
-     * quick tap can release before recording has begun. Every step on the way
-     * up re-checks this, and releasing clears it — without that, a fast tap
-     * would leave dictation running with no finger on the button.
+     * Starting is asynchronous (an on-disk check, then loading the model), so
+     * the user can tap off again before recording has begun. Every step on the
+     * way up re-checks this, and turning off clears it.
      */
     @Volatile private var held = false
+
+    /**
+     * Bumped on every tap-on (main thread). A recording remembers the one it
+     * served, so when it ends it can tell "the user tapped off, or the
+     * recording hit its cap" (turn the button off) from "the user already
+     * tapped on again" (leave the new request alone).
+     */
+    private var micRequest = 0
+
+    /**
+     * A tap-on arrived while the previous recording was still releasing the
+     * microphone. That recording starts this one when it lets go.
+     */
+    private var startPending = false
 
     fun refreshModelAvailability() {
         scope.launch { isModelAvailable() }
@@ -170,14 +214,23 @@ class DictationController(
         downloads.startDownload(manager.modelInfo, storageUri)
     }
 
-    /** Called the moment the button goes down, before any async work. */
+    /** Whether the button is on, for deciding what a tap means. Main thread. */
+    val isMicOn: Boolean get() = _micOn.value == true
+
+    /** The user turned the microphone on, before any async work. Main thread. */
     fun onMicPressed() {
         held = true
+        micRequest++
+        _micOn.value = true
     }
 
-    /** Called on release or gesture cancel; ends dictation if it got going. */
+    /**
+     * The user turned the microphone off (or never got it started: model
+     * missing, permission denied). Ends dictation if it got going. Main thread.
+     */
     fun onMicReleased() {
         held = false
+        _micOn.value = false
         stopListening()
     }
 
@@ -186,12 +239,17 @@ class DictationController(
      * [stopListening], [abandon], or the recorder's duration cap.
      */
     fun startListening() {
-        // Released again before the start caught up.
+        // Turned off again before the start caught up.
         if (!held) return
         // Only the microphone is exclusive. Recognition of a previous utterance
-        // may still be running, and that must not block a new one.
-        if (recording) return
+        // may still be running, and that must not block a new one. A recording
+        // still letting go of the mic starts this one when it has.
+        if (recording) {
+            startPending = true
+            return
+        }
         recording = true
+        val request = micRequest
         val session = synchronized(sessionLock) {
             current.also { it.outstanding.incrementAndGet() }
         }
@@ -203,7 +261,11 @@ class DictationController(
 
             val capture = launch(Dispatchers.IO) {
                 try {
-                    recorder.record().collect { audio.send(it.samples) }
+                    recorder.record().collect {
+                        _recording.value = true
+                        _level.value = levelOf(it.amplitude)
+                        audio.send(it.samples)
+                    }
                 } catch (t: CancellationException) {
                     throw t
                 } catch (t: Throwable) {
@@ -211,9 +273,12 @@ class DictationController(
                     _error.postValue(app.getString(R.string.dictation_record_failed))
                 } finally {
                     audio.close()
+                    _recording.value = false
+                    _level.value = 0f
                     // The microphone is free now, even though this utterance is
                     // still being recognized below.
                     recording = false
+                    main.post { onRecordingEnded(request) }
                 }
             }
 
@@ -256,6 +321,22 @@ class DictationController(
     }
 
     /**
+     * A recording let go of the microphone. If it was still serving the
+     * latest tap, the button turns off (that covers the duration cap and a
+     * recorder error, where nobody tapped). If the user already tapped on
+     * again and that start was waiting for the mic, it runs now. Main thread.
+     */
+    private fun onRecordingEnded(request: Int) {
+        if (request == micRequest) {
+            held = false
+            _micOn.value = false
+        } else if (startPending) {
+            startPending = false
+            startListening()
+        }
+    }
+
+    /**
      * Finish the current recording and keep what was recognized. Safe to call
      * when nothing is running — a press whose start was still pending is
      * stopped by [held].
@@ -280,6 +361,8 @@ class DictationController(
      */
     fun abandon() {
         held = false
+        startPending = false
+        _micOn.value = false
         val session = synchronized(sessionLock) { current.also { current = Session() } }
         session.abandoned = true
         recorder.stop()
@@ -310,8 +393,9 @@ class DictationController(
         }
         session.job.complete()
         val text = session.text()
+        // Nothing recognized needs no message: the stop tone and the ring
+        // going away already say it ended, and an empty field says the rest.
         publish(session) {
-            if (text.isEmpty()) _error.value = app.getString(R.string.dictation_no_speech)
             _transcript.value = text
             _state.value = DictationState.Idle
         }
@@ -338,5 +422,21 @@ class DictationController(
     companion object {
         private const val TAG = "DictationController"
 
+        /** Quiet-room noise; anything below reads as silence. */
+        private const val LEVEL_FLOOR_DB = -55f
+
+        /** Loud, close speech; anything above reads as full scale. */
+        private const val LEVEL_CEIL_DB = -15f
+
+        /**
+         * Maps a chunk's RMS amplitude (float PCM, full scale 1.0) to 0..1 on a
+         * decibel scale, which is how loudness is heard: linear RMS would sit
+         * near zero for normal speech and only move for shouting.
+         */
+        internal fun levelOf(rms: Float): Float {
+            if (rms <= 0f) return 0f
+            val db = 20f * log10(rms)
+            return ((db - LEVEL_FLOOR_DB) / (LEVEL_CEIL_DB - LEVEL_FLOOR_DB)).coerceIn(0f, 1f)
+        }
     }
 }

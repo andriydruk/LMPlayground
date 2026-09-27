@@ -105,7 +105,7 @@
     <string name="faq_q14">응답이 준비되면 앱이 알려주나요?</string>
     <string name="faq_a14">네. 앱이 백그라운드에 있는 동안 알림이 모델의 상태——로드됨, 생성 중, 그리고 응답 준비됨——를 추적하며, 응답을 복사하거나 공유할 수 있게 해줍니다. 설정 \u2192 소리 및 햅틱에서 짧은 완료 알림음을 켤 수도 있습니다. 모델 다운로드는 속도와 예상 남은 시간이 표시되는 자체 진행 알림을 보여줍니다.</string>
     <string name="faq_q15">음성 받아쓰기가 제 목소리를 어딘가로 보내나요?</string>
-    <string name="faq_a15">아니요. 채팅 입력란의 마이크를 길게 누르고 말하면 음성 인식 모델이 말하는 동안 휴대폰에서 바로 글자로 변환합니다(35개 언어 지원). 오디오는 저장되거나 어디로도 전송되지 않으므로 받아쓰기는 완전히 오프라인으로 작동합니다. 모델(718MB)은 마이크를 처음 사용할 때 한 번만 다운로드됩니다.</string>
+    <string name="faq_a15">아니요. 채팅 입력란의 마이크를 탭하고 말하면 음성 인식 모델이 말하는 동안 휴대폰에서 바로 글자로 변환합니다(35개 언어 지원). 오디오는 저장되거나 어디로도 전송되지 않으므로 받아쓰기는 완전히 오프라인으로 작동합니다. 모델(718MB)은 마이크를 처음 사용할 때 한 번만 다운로드됩니다.</string>
     <string name="models">모델</string>
     <string name="change_folder">폴더 변경</string>
     <string name="delete_model">삭제</string>
@@ -351,15 +351,14 @@
     <string name="whats_new_documents">문서 — 내 파일에 대해 질문하기</string>
     <string name="whats_new_documents_detail">PDF, Word 파일, 전자책 등을 첨부하세요</string>
     <string name="whats_new_documents_search">기기 내 검색이 알맞은 구절을 찾아줍니다</string>
-    <string name="whats_new_voice">음성 — 마이크를 길게 누르고 말하세요</string>
+    <string name="whats_new_voice">음성 — 마이크를 탭하고 말하세요</string>
     <string name="whats_new_voice_detail">말하는 동안 바로 글자가 표시됩니다</string>
     <string name="whats_new_voice_languages">35개 언어를 오프라인으로 지원</string>
-    <string name="dictation_start">길게 눌러 받아쓰기</string>
-    <string name="dictation_permission_granted">마이크를 길게 눌러 받아쓰세요.</string>
+    <string name="dictation_start">받아쓰기 시작</string>
+    <string name="dictation_stop">받아쓰기 중지</string>
     <string name="dictation_permission_denied">받아쓰려면 마이크 접근을 허용하세요.</string>
     <string name="dictation_record_failed">녹음을 시작할 수 없습니다.</string>
     <string name="dictation_failed">녹음을 텍스트로 변환할 수 없습니다.</string>
-    <string name="dictation_no_speech">잘 듣지 못했어요 — 다시 시도하세요.</string>
     <string name="dictation_storage_not_configured">먼저 모델 폴더를 설정하세요(설정 → 모델).</string>
     <string name="dictation_model_dialog_title">음성 받아쓰기 사용</string>
     <string name="dictation_model_dialog_message">타이핑 대신 말하려면 음성 인식 모델 %1$s(%2$s)이(가) 필요합니다. 한 번 다운로드하면 기기에 보관되며, 오프라인으로 35개 언어를 지원합니다.</string>

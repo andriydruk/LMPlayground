@@ -105,7 +105,7 @@
     <string name="faq_q14">\u0915\u094D\u092F\u093E \u092A\u094D\u0930\u0924\u093F\u0915\u094D\u0930\u093F\u092F\u093E \u0924\u0948\u092F\u093E\u0930 \u0939\u094B\u0928\u0947 \u092A\u0930 \u0910\u092A \u092E\u0941\u091D\u0947 \u0938\u0942\u091A\u093F\u0924 \u0915\u0930\u0947\u0917\u093E?</string>
     <string name="faq_a14">\u0939\u093E\u0901\u0964 \u091C\u092C \u0910\u092A \u092C\u0948\u0915\u0917\u094D\u0930\u093E\u0909\u0902\u0921 \u092E\u0947\u0902 \u0939\u094B\u0924\u093E \u0939\u0948, \u0924\u094B \u090F\u0915 \u0938\u0942\u091A\u0928\u093E \u092E\u0949\u0921\u0932 \u0915\u0940 \u0938\u094D\u0925\u093F\u0924\u093F \u0915\u094B \u091F\u094D\u0930\u0948\u0915 \u0915\u0930\u0924\u0940 \u0939\u0948 \u2014 \u0932\u094B\u0921 \u0939\u0941\u0906, \u091C\u0928\u0930\u0947\u091F \u0939\u094B \u0930\u0939\u093E \u0939\u0948, \u092B\u093F\u0930 \u092A\u094D\u0930\u0924\u093F\u0915\u094D\u0930\u093F\u092F\u093E \u0924\u0948\u092F\u093E\u0930 \u2014 \u0914\u0930 \u0906\u092A\u0915\u094B \u091C\u0935\u093E\u092C \u0915\u0949\u092A\u0940 \u092F\u093E \u0938\u093E\u091D\u093E \u0915\u0930\u0928\u0947 \u0926\u0947\u0924\u0940 \u0939\u0948\u0964 \u0906\u092A \u0938\u0947\u091F\u093F\u0902\u0917\u094D\u0938 \u2192 \u0927\u094D\u0935\u0928\u093F \u0914\u0930 \u0939\u0948\u092A\u094D\u091F\u093F\u0915 \u092E\u0947\u0902 \u090F\u0915 \u091B\u094B\u091F\u0940 \u0938\u092E\u093E\u092A\u094D\u0924\u093F \u0927\u094D\u0935\u0928\u093F \u092D\u0940 \u0938\u0915\u094D\u0937\u092E \u0915\u0930 \u0938\u0915\u0924\u0947 \u0939\u0948\u0902\u0964 \u092E\u0949\u0921\u0932 \u0921\u093E\u0909\u0928\u0932\u094B\u0921 \u0905\u092A\u0928\u0940 \u092A\u094D\u0930\u0917\u0924\u093F \u0938\u0942\u091A\u0928\u093E \u0917\u0924\u093F \u0914\u0930 ETA \u0915\u0947 \u0938\u093E\u0925 \u0926\u093F\u0916\u093E\u0924\u0947 \u0939\u0948\u0902\u0964</string>
     <string name="faq_q15">क्या वॉइस डिक्टेशन मेरी आवाज़ कहीं भेजता है?</string>
-    <string name="faq_a15">नहीं। चैट इनपुट में माइक्रोफ़ोन दबाकर रखें और बोलें — एक स्पीच-रिकग्निशन मॉडल आपके बोलते ही आपके शब्दों को आपके फ़ोन पर टेक्स्ट में बदल देता है, 35 भाषाओं में। ऑडियो न कभी सेव होता है, न कहीं भेजा जाता है, इसलिए डिक्टेशन पूरी तरह ऑफ़लाइन काम करता है। मॉडल (718 MB) एक बार डाउनलोड होता है, जब आप पहली बार माइक्रोफ़ोन इस्तेमाल करते हैं।</string>
+    <string name="faq_a15">नहीं। चैट इनपुट में माइक्रोफ़ोन पर टैप करें और बोलें — एक स्पीच-रिकग्निशन मॉडल आपके बोलते ही आपके शब्दों को आपके फ़ोन पर टेक्स्ट में बदल देता है, 35 भाषाओं में। ऑडियो न कभी सेव होता है, न कहीं भेजा जाता है, इसलिए डिक्टेशन पूरी तरह ऑफ़लाइन काम करता है। मॉडल (718 MB) एक बार डाउनलोड होता है, जब आप पहली बार माइक्रोफ़ोन इस्तेमाल करते हैं।</string>
     <string name="models">\u092E\u0949\u0921\u0932</string>
     <string name="change_folder">\u092B\u093C\u094B\u0932\u094D\u0921\u0930 \u092C\u0926\u0932\u0947\u0902</string>
     <string name="delete_model">\u0921\u093F\u0932\u0940\u091F \u0915\u0930\u0947\u0902</string>
@@ -356,15 +356,14 @@
     <string name="whats_new_documents">दस्तावेज़ — अपनी फ़ाइलों के बारे में सवाल पूछें</string>
     <string name="whats_new_documents_detail">PDF, Word फ़ाइलें, ई-बुक्स और बहुत कुछ अटैच करें</string>
     <string name="whats_new_documents_search">डिवाइस पर खोज सही अंश ढूँढ़ती है</string>
-    <string name="whats_new_voice">आवाज़ — माइक दबाकर रखें और बोलें</string>
+    <string name="whats_new_voice">आवाज़ — माइक पर टैप करें और बोलें</string>
     <string name="whats_new_voice_detail">आपके बोलते ही शब्द दिखने लगते हैं</string>
     <string name="whats_new_voice_languages">35 भाषाओं में ऑफ़लाइन काम करता है</string>
-    <string name="dictation_start">डिक्टेट करने के लिए दबाकर रखें</string>
-    <string name="dictation_permission_granted">डिक्टेट करने के लिए माइक्रोफ़ोन दबाकर रखें।</string>
+    <string name="dictation_start">डिक्टेशन शुरू करें</string>
+    <string name="dictation_stop">डिक्टेशन रोकें</string>
     <string name="dictation_permission_denied">डिक्टेट करने के लिए माइक्रोफ़ोन की अनुमति दें।</string>
     <string name="dictation_record_failed">रिकॉर्डिंग शुरू नहीं हो सकी।</string>
     <string name="dictation_failed">रिकॉर्डिंग को टेक्स्ट में नहीं बदला जा सका।</string>
-    <string name="dictation_no_speech">सुनाई नहीं दिया — फिर से कोशिश करें।</string>
     <string name="dictation_storage_not_configured">पहले एक मॉडल फ़ोल्डर सेट करें (सेटिंग्स → मॉडल)।</string>
     <string name="dictation_model_dialog_title">वॉइस डिक्टेशन चालू करें</string>
     <string name="dictation_model_dialog_message">टाइप करने के बजाय बोलने के लिए एक स्पीच-रिकग्निशन मॉडल, %1$s (%2$s), चाहिए, जो एक बार डाउनलोड होकर आपके डिवाइस पर रहता है। यह ऑफ़लाइन, 35 भाषाओं में काम करता है।</string>

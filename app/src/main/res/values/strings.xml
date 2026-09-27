@@ -123,7 +123,7 @@
     <string name="faq_q14">Will the app notify me when a response is ready?</string>
     <string name="faq_a14">Yes. While the app is in the background, a notification tracks the model\'s status \u2014 loaded, generating, then response ready \u2014 and lets you copy or share the reply. You can also enable a short completion chime in Settings \u2192 Sound and Haptic. Model downloads show their own progress notification with speed and ETA.</string>
     <string name="faq_q15">Does voice dictation send my voice anywhere?</string>
-    <string name="faq_a15">No. Hold the microphone in the chat input and speak \u2014 a speech-recognition model turns your words into text on your phone as you talk, in 35 languages. The audio is never saved or sent anywhere, so dictation works fully offline. The model (718 MB) downloads once, the first time you use the microphone.</string>
+    <string name="faq_a15">No. Tap the microphone in the chat input and speak \u2014 a speech-recognition model turns your words into text on your phone as you talk, in 35 languages. The audio is never saved or sent anywhere, so dictation works fully offline. The model (718 MB) downloads once, the first time you use the microphone.</string>
 
     <!-- Models Screen -->
     <string name="models">Models</string>
@@ -290,7 +290,7 @@
 
     <!-- What\'s New -->
     <string name="whats_new">What\'s New</string>
-    <string name="whats_new_voice">Voice — hold the mic and speak</string>
+    <string name="whats_new_voice">Voice — tap the mic and speak</string>
     <string name="whats_new_voice_detail">Your words appear as you talk</string>
     <string name="whats_new_voice_languages">Works offline in 35 languages</string>
     <string name="whats_new_documents">Documents — ask questions about your files</string>
@@ -408,12 +408,11 @@
     <string name="embedding_model_dialog_message">Answering questions about documents needs a small embedding model, %1$s (%2$s), downloaded once and kept on your device.</string>
 
     <!-- Voice dictation -->
-    <string name="dictation_start">Hold to dictate</string>
-    <string name="dictation_permission_granted">Hold the microphone to dictate.</string>
+    <string name="dictation_start">Start dictation</string>
+    <string name="dictation_stop">Stop dictation</string>
     <string name="dictation_permission_denied">Allow microphone access to dictate.</string>
     <string name="dictation_record_failed">Couldn\'t start recording.</string>
     <string name="dictation_failed">Couldn\'t transcribe the recording.</string>
-    <string name="dictation_no_speech">Didn\'t catch that — try again.</string>
     <string name="dictation_storage_not_configured">Set up a models folder first (Settings → Models).</string>
     <string name="dictation_model_dialog_title">Enable voice dictation</string>
     <string name="dictation_model_dialog_message">Speaking instead of typing needs a speech-recognition model, %1$s (%2$s), downloaded once and kept on your device. It works offline, in 35 languages.</string>

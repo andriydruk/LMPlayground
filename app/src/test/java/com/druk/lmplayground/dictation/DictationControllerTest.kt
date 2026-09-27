@@ -16,6 +16,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -100,6 +101,41 @@ class DictationControllerTest {
         controller.startListening()
         shadowOf(Looper.getMainLooper()).idle()
         assertEquals(DictationState.Idle, controller.state.value)
+    }
+
+    @Test
+    fun `a tap turns the mic on and the next one turns it off`() {
+        assertFalse(controller.isMicOn)
+        controller.onMicPressed()
+        assertTrue("on the moment the user taps, before the model loads", controller.isMicOn)
+        controller.onMicReleased()
+        assertFalse(controller.isMicOn)
+    }
+
+    @Test
+    fun `abandoning turns the mic off`() {
+        // Editing or sending the text while dictating stops it.
+        controller.onMicPressed()
+        controller.abandon()
+        assertFalse(controller.isMicOn)
+    }
+
+    @Test
+    fun `the level is silent while nothing records`() {
+        assertEquals(0f, controller.level.value)
+    }
+
+    @Test
+    fun `levels map loudness onto a decibel scale`() {
+        assertEquals(0f, DictationController.levelOf(0f))
+        // Room noise stays at the bottom, loud speech saturates.
+        assertEquals(0f, DictationController.levelOf(0.001f))
+        assertEquals(1f, DictationController.levelOf(0.5f))
+        // Normal speech (about -30 dBFS) lands mid-scale, not near zero as a
+        // linear RMS would.
+        val speech = DictationController.levelOf(0.03f)
+        assertTrue("speech reads $speech", speech in 0.4f..0.8f)
+        assertTrue(DictationController.levelOf(0.1f) > speech)
     }
 
     @Test

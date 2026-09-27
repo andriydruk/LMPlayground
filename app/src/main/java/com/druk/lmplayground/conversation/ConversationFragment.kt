@@ -106,14 +106,11 @@ class ConversationFragment : Fragment() {
         ActivityResultContracts.RequestPermission()
     ) { granted ->
         if (granted) {
-            // The finger left the button while the system dialog was up, so
-            // there is nothing to record for — the next press dictates.
-            Toast.makeText(
-                requireContext(),
-                R.string.dictation_permission_granted,
-                Toast.LENGTH_SHORT,
-            ).show()
+            // The tap that asked is still "on" — no finger has to be held
+            // through the system dialog — so start the recording it wanted.
+            viewModel.dictation.startListening()
         } else {
+            viewModel.dictation.onMicReleased()
             Toast.makeText(
                 requireContext(),
                 R.string.dictation_permission_denied,
@@ -194,9 +191,8 @@ class ConversationFragment : Fragment() {
      */
     override fun onPause() {
         super.onPause()
-        // Backgrounding mid-hold means no release will arrive, and Android mutes
-        // the microphone for a background app anyway — end dictation rather than
-        // leave it recording silence until the duration cap.
+        // Android mutes the microphone for a background app, so end dictation
+        // rather than leave it recording silence until the duration cap.
         viewModel.dictation.onMicReleased()
     }
 
@@ -313,6 +309,7 @@ class ConversationFragment : Fragment() {
             var showParamsSheet by remember { mutableStateOf(false) }
 
             val dictationState by viewModel.dictation.state.observeAsState(DictationState.Idle)
+            val micOn by viewModel.dictation.micOn.observeAsState(false)
             val dictationTranscript by viewModel.dictation.transcript.observeAsState()
             val dictationError by viewModel.dictation.error.observeAsState()
             val dictationModelReady by viewModel.dictation.isModelReady.observeAsState()
@@ -904,12 +901,19 @@ class ConversationFragment : Fragment() {
                                 },
                                 dictationState = dictationState,
                                 dictationDownloadProgress = dictationDownload,
-                                onMicPressed = {
+                                micOn = micOn,
+                                micRecording = viewModel.dictation.isRecording,
+                                micLevel = viewModel.dictation.level,
+                                onMicClick = {
+                                    if (viewModel.dictation.isMicOn) {
+                                        viewModel.dictation.onMicReleased()
+                                        return@UserInput
+                                    }
                                     // Already fetching: the ring around the mic
                                     // is the answer, not the dialog again.
                                     if (dictationDownload != null) return@UserInput
                                     viewModel.dictation.onMicPressed()
-                                    // Check on every press rather than trusting
+                                    // Check on every tap rather than trusting
                                     // the cached flag: the model may have
                                     // finished downloading (or been deleted)
                                     // since the screen was composed.
@@ -917,14 +921,11 @@ class ConversationFragment : Fragment() {
                                         if (viewModel.dictation.isModelAvailable()) {
                                             startDictation()
                                         } else {
+                                            viewModel.dictation.onMicReleased()
                                             showDictationDownloadPrompt = true
                                         }
                                     }
                                 },
-                                // Releasing is the stop. Harmless when the press
-                                // never started dictation (model missing, or
-                                // permission just requested).
-                                onMicReleased = { viewModel.dictation.onMicReleased() },
                                 onDictationAbandoned = { viewModel.dictation.abandon() },
                                 pendingTranscript = dictationTranscript,
                                 onTranscriptConsumed = { viewModel.dictation.consumeTranscript() },
