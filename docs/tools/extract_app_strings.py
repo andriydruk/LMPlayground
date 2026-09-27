@@ -37,10 +37,10 @@ def folder_to_lang(folder):
 WANT = [
     'faq_q1','faq_q2','faq_q3','faq_q4','faq_q5',
     'faq_q6','faq_q7','faq_q8','faq_q9','faq_q10',
-    'faq_q11','faq_q12','faq_q13','faq_q14',
+    'faq_q11','faq_q12','faq_q13','faq_q14','faq_q15',
     'faq_a1','faq_a2','faq_a3','faq_a4','faq_a5',
     'faq_a6','faq_a7','faq_a8','faq_a9','faq_a10',
-    'faq_a11','faq_a12','faq_a13','faq_a14',
+    'faq_a11','faq_a12','faq_a13','faq_a14','faq_a15',
     # Privacy policy — the website hosts it too, mirroring the app copy so it
     # localizes as the Android resources get translated.
     'privacy_policy',

@@ -125,7 +125,11 @@
       transition: transform 0.1s, background 0.15s;
     }
     .nav-cta:hover { background: white; transform: translateY(-1px); }
-    @media (max-width: 820px) { .nav-links { display: none; } }
+    /* Nine links: tighten, never wrap a label, and drop the row once it no
+       longer fits (it wrapped into two-line labels below ~1000px). */
+    .nav-links a { white-space: nowrap; }
+    @media (max-width: 1240px) { .nav-links { gap: 16px; font-size: 13px; } }
+    @media (max-width: 1024px) { .nav-links { display: none; } }
 
     /* ============== HERO ============== */
     .hero {
@@ -916,6 +920,14 @@
           "@type": "Answer",
           "text": "Yes. While the app is in the background, a notification tracks the model's status — loaded, generating, then response ready — and lets you copy or share the reply. You can also enable a short completion chime in Settings → Sound and Haptic. Model downloads show their own progress notification with speed and ETA."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "Does voice dictation send my voice anywhere?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Hold the microphone in the chat input and speak — a speech-recognition model turns your words into text on your phone as you talk, in 35 languages. The audio is never saved or sent anywhere, so dictation works fully offline. The model (718 MB) downloads once, the first time you use the microphone."
+        }
       }
     ]
   }
@@ -936,6 +948,7 @@
         <a href="#tools" data-i18n="nav.tools">Tools</a>
         <a href="#vision" data-i18n="nav.vision">Vision</a>
         <a href="#documents" data-i18n="nav.documents">Documents</a>
+        <a href="#voice" data-i18n="nav.voice">Voice</a>
         <a href="#languages" data-i18n="nav.languages">Languages</a>
         <a href="#faq" data-i18n="nav.faq">FAQ</a>
         <a href="https://github.com/andriydruk/LMPlayground" aria-label="GitHub" style="display:flex;align-items:center;gap:6px;">
@@ -958,7 +971,7 @@
     <div class="hero-grid"></div>
     <div class="container hero-inner">
       <div>
-        <span class="pill"><span class="dot"></span><span data-i18n="hero.pill">v1.9.0 · Chat with your documents</span></span>
+        <span class="pill"><span class="dot"></span><span data-i18n="hero.pill">v1.9.2 · Voice dictation</span></span>
         <h1 class="hero-title" data-i18n-html="hero.title">Run large language models<br/>on <em>your</em> phone.</h1>
         <p class="hero-sub hero-sub-lg" data-i18n="hero.sub">
           No cloud, no internet, no tracking.
@@ -975,7 +988,7 @@
         </div>
         <div class="hero-meta">
           <span data-i18n-html="hero.meta.mit"><span class="mono">MIT</span> — free &amp; open source</span>
-          <span data-i18n-html="hero.meta.models"><b>25+</b> supported models</span>
+          <span data-i18n-html="hero.meta.models"><b>40+</b> supported models</span>
           <span data-i18n-html="hero.meta.network"><b>0</b> network calls at inference</span>
         </div>
       </div>
@@ -1120,7 +1133,7 @@
   <!-- MODELS -->
   <section id="models" style="padding-top:0;">
     <div class="container">
-      <span class="eyebrow" data-i18n="models.eyebrow">Model library · 25+</span>
+      <span class="eyebrow" data-i18n="models.eyebrow">Model library · 40+</span>
       <div class="models-header">
         <div>
           <h2 class="section-title" data-i18n="models.title">Pick a brain. Tap download. Chat.</h2>
@@ -1329,6 +1342,49 @@
     </div>
   </section>
 
+  <!-- VOICE -->
+  <section id="voice" style="padding-top:0;">
+    <div class="container">
+      <div class="eyebrow-row">
+        <span class="eyebrow" data-i18n="voice.eyebrow">Voice</span>
+      </div>
+      <h2 class="section-title" data-i18n-html="voice.title">Speak instead of typing.<br/>It stays on your phone.</h2>
+      <p class="section-sub" data-i18n="voice.sub">Hold the microphone and talk — your words appear in the message box while you're still speaking. Recognition runs right on your phone, with no internet needed.</p>
+
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-head">
+            <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/><line x1="12" y1="18" x2="12" y2="22"/></svg>
+            <h3 data-i18n="voice.t1.title">Hold and speak</h3>
+          </div>
+          <p data-i18n="voice.t1.body">Press and hold the mic in the chat input. Words stream in as you talk; let go, then edit or send.</p>
+          <div class="tool-ex">hold <span class="arr">→</span> text</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-head">
+            <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <h3 data-i18n="voice.t2.title">35 languages</h3>
+          </div>
+          <p data-i18n="voice.t2.body">One speech model understands 35 languages — Chinese, Japanese and Korean included — and adds punctuation for you.</p>
+          <div class="tool-ex">35 <span class="arr">→</span> languages</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-head">
+            <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <h3 data-i18n="voice.t3.title">Stays on device</h3>
+          </div>
+          <p data-i18n="voice.t3.body">Recognition runs locally and offline. Your audio is never saved or uploaded.</p>
+          <div class="tool-ex">0 <span class="arr">→</span> uploads</div>
+        </div>
+      </div>
+
+      <div class="tools-note">
+        <svg class="hammer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/></svg>
+        <span data-i18n="voice.note">Dictation downloads a speech-recognition model once (Nemotron ASR, 718 MB) — after that it works offline with every chat model.</span>
+      </div>
+    </div>
+  </section>
+
   <!-- SYSTEM PROMPTS -->
   <section id="prompts" style="padding-top:0;">
     <div class="container">
@@ -1428,7 +1484,7 @@
           <h2 class="section-title" style="font-size:44px;" data-i18n-html="faq.title">What you actually<br/>wanted to know.</h2>
           <p class="section-sub" data-i18n="faq.sub">Still stuck? Open an issue on GitHub or reach out directly.</p>
         </div>
-        <!-- FAQ list rendered by JS from translations (faq.q1-q10 / faq.a1-a10) -->
+        <!-- FAQ list rendered by JS from translations (faq.q1-q15 / faq.a1-a15) -->
         <div id="faqList"></div>
       </div>
     </div>
@@ -1530,6 +1586,10 @@
     const PHI_LANGS      = ['ar','zh','cs','da','nl','en','fi','fr','de','he','hu','it','ja','ko','no','pl','pt','ru','es','sv','th','tr','uk'];
     const DEEPSEEK_LANGS = ['en','zh'];
     const LFM_LANGS      = ['en','ar','zh','fr','de','ja','ko','es'];
+    const LFM_VL_LANGS   = ['en','ar','zh','fr','de','ja','ko','pt','es'];
+    const LFM25_LANGS    = ['ar','zh','en','fr','de','hi','id','it','ja','ko','pl','pt','ru','es','th','vi'];
+    const SMOLLM3_LANGS  = ['en','fr','es','de','it','pt'];
+    const MINICPM_LANGS  = ['en','zh'];
     const MISTRAL_LANGS  = ['en','fr','de','es','it','pt','nl','zh','ja','ko','ar'];
     const GRANITE_LANGS  = ['en','de','es','fr','ja','pt','ar','cs','it','ko','nl','zh'];
     const ENGLISH_ONLY   = ['en'];
@@ -1543,23 +1603,42 @@
     // Sorted by release date (newest first). `tools` mirrors the app's TOOL_CAPABLE set (hammer badge).
     // Sizes are Q4_K_M except Qwen 3.5 (Q3_K_M) and GPT-OSS (MXFP4).
     const MODELS = [
+      // 2026-09-06
+      { name:'MiniCPM5 2B',             provider:'OpenBMB',   desc:'Hybrid reasoning model',          size:'1.56 GB',  quant:'Q4_K_M', tags:['new','reason','chat'],        tools:true,  langs:MINICPM_LANGS },
+      // 2026-08-25
+      { name:'Granite 4.2 3B',          provider:'IBM',       desc:'Hybrid reasoning model',          size:'2.24 GB',  quant:'Q4_K_M', tags:['new','reason','chat'],        tools:true,  langs:GRANITE_LANGS },
+      // 2026-08-24
+      { name:'Spark-X2.5 4B',           provider:'XHToken',   desc:'Hybrid reasoning model',          size:'2.60 GB',  quant:'Q4_K_M', tags:['new','reason','chat'],        tools:true,  langs:MULTILINGUAL_BROAD },
+      // 2026-08-19
+      { name:'LFM2.5 1.2B',             provider:'Liquid AI', desc:'Compact chat model',              size:'697 MB',   quant:'Q4_K_M', tags:['new','small','chat'],         tools:true,  langs:LFM25_LANGS },
+      // 2026-08-12
+      { name:'LFM2.5 VL 3B',            provider:'Liquid AI', desc:'Vision and OCR model',            size:'2.25 GB',  quant:'Q4_K_M', tags:['new','chat'],                 tools:true,  langs:LFM25_LANGS },
+      // 2026-07-28
+      { name:'LFM2.5 2.6B',             provider:'Liquid AI', desc:'Reasoning model',                 size:'1.67 GB',  quant:'Q4_K_M', tags:['new','reason'],               tools:true,  langs:LFM25_LANGS },
       // 2026-06-03
-      { name:'Gemma 4 12B',              provider:'Google',    desc:'Advanced with thinking',          size:'7.38 GB',  quant:'Q4_K_M', tags:['new','reason','chat'],         tools:true,  langs:MULTILINGUAL_BROAD },
+      { name:'Gemma 4 12B',              provider:'Google',    desc:'Advanced with thinking',          size:'7.38 GB',  quant:'Q4_K_M', tags:['reason','chat'],         tools:true,  langs:MULTILINGUAL_BROAD },
+      // 2026-05-21
+      { name:'MiniCPM5 1B',             provider:'OpenBMB',   desc:'Hybrid reasoning model',          size:'688 MB',   quant:'Q4_K_M', tags:['new','reason','small','chat'], tools:true,  langs:MINICPM_LANGS },
       // 2026-05-01
-      { name:'Granite 4.1 8B',           provider:'IBM',       desc:'Advanced enterprise model',       size:'5.35 GB',  quant:'Q4_K_M', tags:['new','chat'],                  tools:true,  langs:GRANITE_LANGS },
-      { name:'Granite 4.1 3B',           provider:'IBM',       desc:'Enterprise chat model',           size:'2.10 GB',  quant:'Q4_K_M', tags:['new','chat'],                  tools:true,  langs:GRANITE_LANGS },
+      { name:'Granite 4.1 8B',           provider:'IBM',       desc:'Advanced enterprise model',       size:'5.35 GB',  quant:'Q4_K_M', tags:['chat'],                  tools:true,  langs:GRANITE_LANGS },
+      // 2026-04-08
+      { name:'LFM2.5 VL 450M',          provider:'Liquid AI', desc:'Tiny vision model',               size:'332 MB',   quant:'Q4_K_M', tags:['new','small','chat'],         tools:true,  langs:LFM_VL_LANGS },
       // 2026-03-25
-      { name:'Gemma 4 E4B',              provider:'Google',    desc:'Efficient with thinking',         size:'4.98 GB',  quant:'Q4_K_M', tags:['new','reason','chat'],         tools:true,  langs:MULTILINGUAL_BROAD },
-      { name:'Gemma 4 E2B',              provider:'Google',    desc:'Efficient with thinking',         size:'3.11 GB',  quant:'Q4_K_M', tags:['new','reason','chat'],         tools:true,  langs:MULTILINGUAL_BROAD },
-      { name:'LFM2.5 350M',              provider:'Liquid AI', desc:'Ultra-lightweight chat',          size:'267 MB',   quant:'Q4_K_M', tags:['new','small','chat'],          tools:true,  langs:LFM_LANGS },
+      { name:'Gemma 4 E4B',              provider:'Google',    desc:'Efficient with thinking',         size:'4.98 GB',  quant:'Q4_K_M', tags:['reason','chat'],         tools:true,  langs:MULTILINGUAL_BROAD },
+      { name:'Gemma 4 E2B',              provider:'Google',    desc:'Efficient with thinking',         size:'3.11 GB',  quant:'Q4_K_M', tags:['reason','chat'],         tools:true,  langs:MULTILINGUAL_BROAD },
+      { name:'LFM2.5 350M',              provider:'Liquid AI', desc:'Ultra-lightweight chat',          size:'267 MB',   quant:'Q4_K_M', tags:['small','chat'],          tools:true,  langs:LFM_LANGS },
       // 2026-02-27
-      { name:'Qwen 3.5 4B',              provider:'Alibaba',   desc:'General-purpose with thinking',   size:'2.25 GB',  quant:'Q3_K_M', tags:['new','reason','chat'],         tools:true,  langs:MULTILINGUAL_BROAD },
-      { name:'Qwen 3.5 2B',              provider:'Alibaba',   desc:'General-purpose with thinking',   size:'1.07 GB',  quant:'Q3_K_M', tags:['new','reason','chat'],         tools:true,  langs:MULTILINGUAL_BROAD },
-      { name:'Qwen 3.5 0.8B',            provider:'Alibaba',   desc:'Lightweight with thinking',       size:'466 MB',   quant:'Q3_K_M', tags:['new','reason','small','chat'], tools:true,  langs:MULTILINGUAL_BROAD },
+      { name:'Qwen 3.5 4B',              provider:'Alibaba',   desc:'General-purpose with thinking',   size:'2.25 GB',  quant:'Q3_K_M', tags:['reason','chat'],         tools:true,  langs:MULTILINGUAL_BROAD },
+      { name:'Qwen 3.5 2B',              provider:'Alibaba',   desc:'General-purpose with thinking',   size:'1.07 GB',  quant:'Q3_K_M', tags:['reason','chat'],         tools:true,  langs:MULTILINGUAL_BROAD },
+      { name:'Qwen 3.5 0.8B',            provider:'Alibaba',   desc:'Lightweight with thinking',       size:'466 MB',   quant:'Q3_K_M', tags:['reason','small','chat'], tools:true,  langs:MULTILINGUAL_BROAD },
+      // 2026-01-05
+      { name:'LFM2.5 VL 1.6B',          provider:'Liquid AI', desc:'Compact vision model',            size:'1.31 GB',  quant:'Q4_K_M', tags:['new','chat'],                 tools:true,  langs:LFM_LANGS },
       // 2025-12-15
       { name:'Nemotron 3 Nano 4B',       provider:'NVIDIA',    desc:'Hybrid reasoning model',          size:'2.84 GB',  quant:'Q4_K_M', tags:['reason'],                      tools:true,  langs:ENGLISH_ONLY },
       // 2025-08-05
       { name:'GPT-OSS 20B',              provider:'OpenAI',    desc:'Large reasoning MoE',             size:'12.11 GB', quant:'MXFP4',  tags:['reason','chat'],               tools:true,  langs:MULTILINGUAL_BROAD },
+      // 2025-07-08
+      { name:'SmolLM3 3B',              provider:'Hugging Face', desc:'Hybrid reasoning model',          size:'1.92 GB',  quant:'Q4_K_M', tags:['new','reason','chat'],        tools:true,  langs:SMOLLM3_LANGS },
       // 2025-05-14
       { name:'Gemma 3n E4B',             provider:'Google',    desc:'Efficient with thinking',         size:'4.24 GB',  quant:'Q4_K_M', tags:['reason','chat'],               tools:false, langs:MULTILINGUAL_BROAD },
       { name:'Gemma 3n E2B',             provider:'Google',    desc:'Efficient with thinking',         size:'2.79 GB',  quant:'Q4_K_M', tags:['reason','chat'],               tools:false, langs:MULTILINGUAL_BROAD },
@@ -1578,8 +1657,6 @@
       { name:'DeepSeek R1 Distill 1.5B', provider:'DeepSeek',  desc:'Compact reasoning distill',       size:'1.12 GB',  quant:'Q4_K_M', tags:['reason'],                      tools:false, langs:DEEPSEEK_LANGS },
       // 2025-01-15
       { name:'Phi-4 mini',               provider:'Microsoft', desc:'Compact reasoning model',         size:'2.49 GB',  quant:'Q4_K_M', tags:['reason'],                      tools:true,  langs:PHI_LANGS },
-      // 2025-01-09
-      { name:'LFM2.5 1.2B Thinking',     provider:'Liquid AI', desc:'Compact thinking model',          size:'731 MB',   quant:'Q4_K_M', tags:['reason','small'],              tools:true,  langs:LFM_LANGS },
       // 2024-12-17
       { name:'Ministral 3 8B Reasoning', provider:'Mistral',   desc:'Advanced reasoning',              size:'5.2 GB',   quant:'Q4_K_M', tags:['reason'],                      tools:true,  langs:MISTRAL_LANGS },
       { name:'Ministral 3 8B Instruct',  provider:'Mistral',   desc:'General-purpose chat',            size:'5.2 GB',   quant:'Q4_K_M', tags:['chat'],                        tools:true,  langs:MISTRAL_LANGS },
@@ -1596,6 +1673,7 @@
     // Vision (image input) — mirrors the app's models that ship an mmproj
     // projector (ModelInfoProvider.kt). Drives the VISION badge + filter tab.
     const VISION_MODELS = new Set([
+      'LFM2.5 VL 3B', 'LFM2.5 VL 1.6B', 'LFM2.5 VL 450M',
       'Gemma 4 E4B', 'Gemma 4 E2B', 'Qwen 3.5 4B', 'Qwen 3.5 2B', 'Qwen 3.5 0.8B',
       'Gemma 3 4B', 'Ministral 3 8B Reasoning', 'Ministral 3 8B Instruct',
       'Ministral 3 3B Reasoning', 'Ministral 3 3B Instruct',
@@ -1772,7 +1850,7 @@
       if (!list) return;
       const ICON = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
       const html = [];
-      for (let i = 1; i <= 14; i++) {
+      for (let i = 1; i <= 15; i++) {
         const q = getTranslation(lang, 'faq.q' + i);
         const a = getTranslation(lang, 'faq.a' + i);
         if (!q || !a) continue;
