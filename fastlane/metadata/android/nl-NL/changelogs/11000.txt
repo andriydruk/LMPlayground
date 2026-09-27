@@ -1,0 +1,4 @@
+- Spraakdictatie — tik op de microfoon en spreek; je woorden verschijnen terwijl je praat, offline in 35 talen
+- Nieuwe modellen: MiniCPM5 2B, Granite 4.2 3B en Spark-X2.5 4B
+- LFM2.5 VL in 450M, 1.6B en 3B — kleine beeldmodellen die met je over je foto's praten
+- Verbeteringen in prestaties en stabiliteit

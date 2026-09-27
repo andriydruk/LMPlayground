@@ -1,0 +1,4 @@
+- Talediktering – trykk på mikrofonen og snakk; ordene dine vises mens du snakker, uten nett på 35 språk
+- Nye modeller: MiniCPM5 2B, Granite 4.2 3B og Spark-X2.5 4B
+- LFM2.5 VL i 450M, 1.6B og 3B – små bildemodeller som kan snakke om bildene dine
+- Forbedringer i ytelse og stabilitet

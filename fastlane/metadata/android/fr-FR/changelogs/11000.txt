@@ -1,0 +1,4 @@
+- Dictée vocale — touchez le micro et parlez ; vos mots s'affichent pendant que vous parlez, hors ligne dans 35 langues
+- Nouveaux modèles : MiniCPM5 2B, Granite 4.2 3B et Spark-X2.5 4B
+- LFM2.5 VL en 450M, 1.6B et 3B — de petits modèles de vision qui discutent de vos photos
+- Améliorations des performances et de la stabilité

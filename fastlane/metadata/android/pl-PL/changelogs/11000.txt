@@ -1,0 +1,4 @@
+- Dyktowanie głosowe — dotknij mikrofonu i mów; słowa pojawiają się, gdy mówisz, offline w 35 językach
+- Nowe modele: MiniCPM5 2B, Granite 4.2 3B i Spark-X2.5 4B
+- LFM2.5 VL w wersjach 450M, 1.6B i 3B — małe modele wizyjne, które rozmawiają o Twoich zdjęciach
+- Poprawki wydajności i stabilności

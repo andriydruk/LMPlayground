@@ -1,0 +1,4 @@
+- Sesle dikte — mikrofona dokunup konuşun; sözcükleriniz siz konuşurken görünür, 35 dilde çevrimdışı
+- Yeni modeller: MiniCPM5 2B, Granite 4.2 3B ve Spark-X2.5 4B
+- 450M, 1.6B ve 3B boyutlarında LFM2.5 VL — fotoğraflarınız hakkında sohbet eden küçük görsel modeller
+- Performans ve kararlılık iyileştirmeleri

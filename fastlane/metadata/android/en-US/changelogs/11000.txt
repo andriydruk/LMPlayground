@@ -1,0 +1,4 @@
+- Voice dictation — tap the mic and speak; your words appear as you talk, offline in 35 languages
+- New models: MiniCPM5 2B, Granite 4.2 3B and Spark-X2.5 4B
+- LFM2.5 VL in 450M, 1.6B and 3B — small vision models that chat about your photos
+- Performance and stability improvements

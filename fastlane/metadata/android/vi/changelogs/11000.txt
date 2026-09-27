@@ -1,0 +1,4 @@
+- Đọc chính tả bằng giọng nói — chạm vào micrô và nói; chữ hiện ra ngay khi bạn nói, ngoại tuyến với 35 ngôn ngữ
+- Mô hình mới: MiniCPM5 2B, Granite 4.2 3B và Spark-X2.5 4B
+- LFM2.5 VL với các cỡ 450M, 1.6B và 3B — mô hình thị giác nhỏ có thể trò chuyện về ảnh của bạn
+- Cải thiện hiệu năng và độ ổn định

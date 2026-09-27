@@ -1,0 +1,4 @@
+- Dettatura vocale — tocca il microfono e parla; le tue parole compaiono mentre parli, offline in 35 lingue
+- Nuovi modelli: MiniCPM5 2B, Granite 4.2 3B e Spark-X2.5 4B
+- LFM2.5 VL in 450M, 1.6B e 3B — piccoli modelli di visione che parlano delle tue foto
+- Miglioramenti di prestazioni e stabilità

@@ -1,0 +1,4 @@
+- Röstdiktering – tryck på mikrofonen och prata; dina ord visas medan du pratar, offline på 35 språk
+- Nya modeller: MiniCPM5 2B, Granite 4.2 3B och Spark-X2.5 4B
+- LFM2.5 VL i 450M, 1.6B och 3B – små bildmodeller som pratar om dina foton
+- Förbättringar av prestanda och stabilitet

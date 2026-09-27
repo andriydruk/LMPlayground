@@ -1,0 +1,4 @@
+- Ditado por voz — toque no microfone e fale; suas palavras aparecem enquanto você fala, offline em 35 idiomas
+- Novos modelos: MiniCPM5 2B, Granite 4.2 3B e Spark-X2.5 4B
+- LFM2.5 VL em 450M, 1.6B e 3B — modelos de visão pequenos que conversam sobre suas fotos
+- Melhorias de desempenho e estabilidade

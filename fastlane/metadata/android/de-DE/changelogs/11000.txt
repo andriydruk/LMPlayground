@@ -1,0 +1,4 @@
+- Sprachdiktat – tippe auf das Mikrofon und sprich; deine Worte erscheinen, während du sprichst, offline in 35 Sprachen
+- Neue Modelle: MiniCPM5 2B, Granite 4.2 3B und Spark-X2.5 4B
+- LFM2.5 VL in 450M, 1.6B und 3B – kleine Bildmodelle, die mit dir über deine Fotos sprechen
+- Verbesserungen bei Leistung und Stabilität
