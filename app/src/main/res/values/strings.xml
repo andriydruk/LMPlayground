@@ -122,6 +122,8 @@
     <string name="faq_a13">Only when you enable them. Web search sends the model\'s query to DuckDuckGo, and Fetch web page downloads the pages the model chooses to open \u2014 those requests go to the websites themselves, not to the developer. Run JavaScript stays entirely on your device with no internet access. With every tool off (the default), nothing leaves your device. See the Privacy Policy for details.</string>
     <string name="faq_q14">Will the app notify me when a response is ready?</string>
     <string name="faq_a14">Yes. While the app is in the background, a notification tracks the model\'s status \u2014 loaded, generating, then response ready \u2014 and lets you copy or share the reply. You can also enable a short completion chime in Settings \u2192 Sound and Haptic. Model downloads show their own progress notification with speed and ETA.</string>
+    <string name="faq_q15">Does voice dictation send my voice anywhere?</string>
+    <string name="faq_a15">No. Hold the microphone in the chat input and speak \u2014 a speech-recognition model turns your words into text on your phone as you talk, in 35 languages. The audio is never saved or sent anywhere, so dictation works fully offline. The model (718 MB) downloads once, the first time you use the microphone.</string>
 
     <!-- Models Screen -->
     <string name="models">Models</string>

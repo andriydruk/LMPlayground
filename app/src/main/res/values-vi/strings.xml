@@ -104,6 +104,8 @@
     <string name="faq_a13">Ch\u1EC9 khi b\u1EA1n b\u1EADt ch\u00FAng. T\u00ECm ki\u1EBFm web g\u1EEDi truy v\u1EA5n c\u1EE7a m\u00F4 h\u00ECnh \u0111\u1EBFn DuckDuckGo, v\u00E0 T\u1EA3i trang web t\u1EA3i xu\u1ED1ng c\u00E1c trang m\u00E0 m\u00F4 h\u00ECnh ch\u1ECDn m\u1EDF \u2014 nh\u1EEFng y\u00EAu c\u1EA7u \u0111\u00F3 \u0111i \u0111\u1EBFn ch\u00EDnh c\u00E1c trang web, kh\u00F4ng ph\u1EA3i \u0111\u1EBFn nh\u00E0 ph\u00E1t tri\u1EC3n. Ch\u1EA1y JavaScript v\u1EABn ho\u00E0n to\u00E0n n\u1EB1m tr\u00EAn thi\u1EBFt b\u1ECB c\u1EE7a b\u1EA1n v\u00E0 kh\u00F4ng c\u00F3 truy c\u1EADp internet. Khi t\u1EA5t c\u1EA3 c\u00F4ng c\u1EE5 \u0111\u1EC1u t\u1EAFt (m\u1EB7c \u0111\u1ECBnh), kh\u00F4ng c\u00F3 g\u00EC r\u1EDDi kh\u1ECFi thi\u1EBFt b\u1ECB c\u1EE7a b\u1EA1n. Xem Ch\u00EDnh s\u00E1ch B\u1EA3o m\u1EADt \u0111\u1EC3 bi\u1EBFt chi ti\u1EBFt.</string>
     <string name="faq_q14">\u1EE8ng d\u1EE5ng c\u00F3 th\u00F4ng b\u00E1o cho t\u00F4i khi ph\u1EA3n h\u1ED3i s\u1EB5n s\u00E0ng kh\u00F4ng?</string>
     <string name="faq_a14">C\u00F3. Khi \u1EE9ng d\u1EE5ng ch\u1EA1y n\u1EC1n, m\u1ED9t th\u00F4ng b\u00E1o s\u1EBD theo d\u00F5i tr\u1EA1ng th\u00E1i c\u1EE7a m\u00F4 h\u00ECnh \u2014 \u0111\u00E3 t\u1EA3i, \u0111ang t\u1EA1o, r\u1ED3i ph\u1EA3n h\u1ED3i \u0111\u00E3 s\u1EB5n s\u00E0ng \u2014 v\u00E0 cho ph\u00E9p b\u1EA1n sao ch\u00E9p ho\u1EB7c chia s\u1EBB c\u00E2u tr\u1EA3 l\u1EDDi. B\u1EA1n c\u0169ng c\u00F3 th\u1EC3 b\u1EADt \u00E2m b\u00E1o ho\u00E0n t\u1EA5t ng\u1EAFn trong C\u00E0i \u0111\u1EB7t \u2192 \u00C2m thanh v\u00E0 Rung. C\u00E1c b\u1EA3n t\u1EA3i m\u00F4 h\u00ECnh hi\u1EC3n th\u1ECB th\u00F4ng b\u00E1o ti\u1EBFn tr\u00ECnh ri\u00EAng v\u1EDBi t\u1ED1c \u0111\u1ED9 v\u00E0 th\u1EDDi gian d\u1EF1 ki\u1EBFn.</string>
+    <string name="faq_q15">Tính năng đọc chính tả có gửi giọng nói của tôi đi đâu không?</string>
+    <string name="faq_a15">Không. Nhấn giữ micrô trong ô tin nhắn và nói — một mô hình nhận dạng giọng nói chuyển lời của bạn thành văn bản ngay trên điện thoại khi bạn nói, với 35 ngôn ngữ. Âm thanh không bao giờ được lưu hay gửi đi đâu, nên tính năng đọc chính tả hoạt động hoàn toàn ngoại tuyến. Mô hình (718 MB) chỉ tải về một lần, vào lần đầu bạn dùng micrô.</string>
     <string name="models">M\u00F4 h\u00ECnh</string>
     <string name="change_folder">\u0110\u1ED5i th\u01B0 m\u1EE5c</string>
     <string name="delete_model">X\u00F3a</string>
@@ -345,4 +347,17 @@
     <string name="whats_new_documents">Tài liệu — đặt câu hỏi về tệp của bạn</string>
     <string name="whats_new_documents_detail">Đính kèm PDF, tệp Word, sách điện tử và hơn thế nữa</string>
     <string name="whats_new_documents_search">Tìm kiếm trên thiết bị tìm đúng đoạn cần</string>
+    <string name="whats_new_voice">Giọng nói — nhấn giữ micrô và nói</string>
+    <string name="whats_new_voice_detail">Chữ hiện ra ngay khi bạn nói</string>
+    <string name="whats_new_voice_languages">Hoạt động ngoại tuyến với 35 ngôn ngữ</string>
+    <string name="dictation_start">Nhấn giữ để đọc chính tả</string>
+    <string name="dictation_permission_granted">Nhấn giữ micrô để đọc chính tả.</string>
+    <string name="dictation_permission_denied">Cho phép truy cập micrô để đọc chính tả.</string>
+    <string name="dictation_record_failed">Không thể bắt đầu ghi âm.</string>
+    <string name="dictation_failed">Không thể chuyển bản ghi âm thành văn bản.</string>
+    <string name="dictation_no_speech">Không nghe rõ — hãy thử lại.</string>
+    <string name="dictation_storage_not_configured">Hãy thiết lập thư mục mô hình trước (Cài đặt → Mô hình).</string>
+    <string name="dictation_model_dialog_title">Bật đọc chính tả bằng giọng nói</string>
+    <string name="dictation_model_dialog_message">Để nói thay vì gõ, bạn cần một mô hình nhận dạng giọng nói, %1$s (%2$s), chỉ tải về một lần và lưu trên thiết bị của bạn. Mô hình hoạt động ngoại tuyến, với 35 ngôn ngữ.</string>
+    <string name="dictation_model_downloading">Đang tải mô hình đọc chính tả…</string>
 </resources>

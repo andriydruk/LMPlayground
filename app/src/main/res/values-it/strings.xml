@@ -104,6 +104,8 @@
     <string name="faq_a13">Solo quando li attivi. La Ricerca web invia la query del modello a DuckDuckGo, e Carica pagina web scarica le pagine che il modello decide di aprire \u2014 queste richieste vanno ai siti web stessi, non allo sviluppatore. Esegui JavaScript rimane interamente sul tuo dispositivo, senza accesso a Internet. Con tutti gli strumenti disattivati (l\'impostazione predefinita), nulla lascia il tuo dispositivo. Consulta l\'Informativa sulla Privacy per i dettagli.</string>
     <string name="faq_q14">L\'app mi avviser\u00E0 quando una risposta \u00E8 pronta?</string>
     <string name="faq_a14">S\u00EC. Mentre l\'app \u00E8 in background, una notifica tiene traccia dello stato del modello \u2014 caricato, in generazione e poi risposta pronta \u2014 e ti consente di copiare o condividere la risposta. Puoi anche attivare un breve suono di completamento in Impostazioni \u2192 Suono e vibrazione. I download dei modelli mostrano la propria notifica di avanzamento con velocit\u00E0 e tempo stimato.</string>
+    <string name="faq_q15">La dettatura vocale invia la mia voce da qualche parte?</string>
+    <string name="faq_a15">No. Tieni premuto il microfono nel campo del messaggio e parla: un modello di riconoscimento vocale trasforma le tue parole in testo sul telefono mentre parli, in 35 lingue. L\'audio non viene mai salvato né inviato da nessuna parte, quindi la dettatura funziona completamente offline. Il modello (718 MB) si scarica una sola volta, la prima volta che usi il microfono.</string>
     <string name="models">Modelli</string>
     <string name="change_folder">Cambia cartella</string>
     <string name="delete_model">Elimina</string>
@@ -351,4 +353,17 @@
     <string name="whats_new_documents">Documenti — fai domande sui tuoi file</string>
     <string name="whats_new_documents_detail">Allega PDF, file Word, ebook e altro</string>
     <string name="whats_new_documents_search">La ricerca sul dispositivo trova i passaggi giusti</string>
+    <string name="whats_new_voice">Voce — tieni premuto il microfono e parla</string>
+    <string name="whats_new_voice_detail">Le tue parole compaiono mentre parli</string>
+    <string name="whats_new_voice_languages">Funziona offline in 35 lingue</string>
+    <string name="dictation_start">Tieni premuto per dettare</string>
+    <string name="dictation_permission_granted">Tieni premuto il microfono per dettare.</string>
+    <string name="dictation_permission_denied">Consenti l\'accesso al microfono per dettare.</string>
+    <string name="dictation_record_failed">Impossibile avviare la registrazione.</string>
+    <string name="dictation_failed">Impossibile trascrivere la registrazione.</string>
+    <string name="dictation_no_speech">Non ho capito — riprova.</string>
+    <string name="dictation_storage_not_configured">Configura prima una cartella dei modelli (Impostazioni → Modelli).</string>
+    <string name="dictation_model_dialog_title">Attiva la dettatura vocale</string>
+    <string name="dictation_model_dialog_message">Per parlare invece di scrivere serve un modello di riconoscimento vocale, %1$s (%2$s), scaricato una sola volta e conservato sul tuo dispositivo. Funziona offline, in 35 lingue.</string>
+    <string name="dictation_model_downloading">Download del modello di dettatura…</string>
 </resources>

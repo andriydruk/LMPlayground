@@ -104,6 +104,8 @@
     <string name="faq_a13">Nur wenn Sie sie aktivieren. Die Websuche sendet die Anfrage des Modells an DuckDuckGo, und Webseite abrufen lädt die Seiten herunter, die das Modell öffnen möchte — diese Anfragen gehen an die Websites selbst, nicht an den Entwickler. JavaScript ausführen bleibt vollständig auf Ihrem Gerät ohne Internetzugang. Wenn alle Tools deaktiviert sind (Standard), verlässt nichts Ihr Gerät. Weitere Informationen finden Sie in der Datenschutzrichtlinie.</string>
     <string name="faq_q14">Benachrichtigt mich die App, wenn eine Antwort fertig ist?</string>
     <string name="faq_a14">Ja. Während die App im Hintergrund läuft, verfolgt eine Benachrichtigung den Status des Modells — geladen, generiert, dann Antwort bereit — und lässt Sie die Antwort kopieren oder teilen. Sie können unter Einstellungen → Ton und Haptik auch einen kurzen Abschlusston aktivieren. Modell-Downloads zeigen eine eigene Fortschrittsbenachrichtigung mit Geschwindigkeit und voraussichtlicher Restzeit an.</string>
+    <string name="faq_q15">Sendet das Sprachdiktat meine Stimme irgendwohin?</string>
+    <string name="faq_a15">Nein. Halte das Mikrofon im Eingabefeld gedrückt und sprich – ein Spracherkennungsmodell wandelt deine Worte direkt auf deinem Handy in Text um, während du sprichst, in 35 Sprachen. Die Aufnahme wird nie gespeichert oder irgendwohin gesendet, daher funktioniert das Diktat komplett offline. Das Modell (718 MB) wird einmal heruntergeladen, wenn du das Mikrofon zum ersten Mal verwendest.</string>
     <string name="models">Modelle</string>
     <string name="change_folder">Ordner ändern</string>
     <string name="delete_model">Löschen</string>
@@ -353,4 +355,17 @@
     <string name="whats_new_documents">Dokumente – stelle Fragen zu deinen Dateien</string>
     <string name="whats_new_documents_detail">Hänge PDFs, Word-Dateien, E-Books und mehr an</string>
     <string name="whats_new_documents_search">Die Suche auf dem Gerät findet die passenden Stellen</string>
+    <string name="whats_new_voice">Sprache – halte das Mikrofon gedrückt und sprich</string>
+    <string name="whats_new_voice_detail">Deine Worte erscheinen, während du sprichst</string>
+    <string name="whats_new_voice_languages">Funktioniert offline in 35 Sprachen</string>
+    <string name="dictation_start">Gedrückt halten zum Diktieren</string>
+    <string name="dictation_permission_granted">Halte das Mikrofon gedrückt, um zu diktieren.</string>
+    <string name="dictation_permission_denied">Erlaube den Mikrofonzugriff, um zu diktieren.</string>
+    <string name="dictation_record_failed">Aufnahme konnte nicht gestartet werden.</string>
+    <string name="dictation_failed">Die Aufnahme konnte nicht transkribiert werden.</string>
+    <string name="dictation_no_speech">Das habe ich nicht verstanden – versuch es noch einmal.</string>
+    <string name="dictation_storage_not_configured">Richte zuerst einen Modellordner ein (Einstellungen → Modelle).</string>
+    <string name="dictation_model_dialog_title">Sprachdiktat aktivieren</string>
+    <string name="dictation_model_dialog_message">Um zu sprechen statt zu tippen, brauchst du ein Spracherkennungsmodell, %1$s (%2$s), das einmal heruntergeladen und auf deinem Gerät gespeichert wird. Es funktioniert offline in 35 Sprachen.</string>
+    <string name="dictation_model_downloading">Diktiermodell wird heruntergeladen…</string>
 </resources>

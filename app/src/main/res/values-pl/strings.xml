@@ -104,6 +104,8 @@
     <string name="faq_a13">Tylko gdy je włączysz. Wyszukiwanie w sieci wysyła zapytanie modelu do DuckDuckGo, a Pobierz stronę internetową pobiera strony, które model zdecyduje się otworzyć — te żądania trafiają do samych witryn, a nie do dewelopera. Uruchom JavaScript działa w całości na Twoim urządzeniu bez dostępu do internetu. Gdy wszystkie narzędzia są wyłączone (ustawienie domyślne), nic nie opuszcza Twojego urządzenia. Szczegóły znajdziesz w Polityce prywatności.</string>
     <string name="faq_q14">Czy aplikacja powiadomi mnie, gdy odpowiedź będzie gotowa?</string>
     <string name="faq_a14">Tak. Gdy aplikacja działa w tle, powiadomienie śledzi stan modelu — załadowany, generowanie, a następnie odpowiedź gotowa — i pozwala skopiować lub udostępnić odpowiedź. Możesz też włączyć krótki dźwięk zakończenia w Ustawienia \u2192 Dźwięk i wibracje. Pobieranie modeli pokazuje własne powiadomienie o postępie z prędkością i szacowanym czasem.</string>
+    <string name="faq_q15">Czy dyktowanie głosowe wysyła gdzieś mój głos?</string>
+    <string name="faq_a15">Nie. Przytrzymaj mikrofon w polu wiadomości i mów — model rozpoznawania mowy zamienia Twoje słowa na tekst na telefonie, gdy mówisz, w 35 językach. Dźwięk nigdy nie jest zapisywany ani nigdzie wysyłany, więc dyktowanie działa całkowicie offline. Model (718 MB) pobiera się raz, przy pierwszym użyciu mikrofonu.</string>
     <string name="models">Modele</string>
     <string name="change_folder">Zmień folder</string>
     <string name="delete_model">Usuń</string>
@@ -345,4 +347,17 @@
     <string name="whats_new_documents">Dokumenty — zadawaj pytania o swoje pliki</string>
     <string name="whats_new_documents_detail">Załączaj pliki PDF, dokumenty Word, e-booki i więcej</string>
     <string name="whats_new_documents_search">Wyszukiwanie na urządzeniu znajduje właściwe fragmenty</string>
+    <string name="whats_new_voice">Głos — przytrzymaj mikrofon i mów</string>
+    <string name="whats_new_voice_detail">Słowa pojawiają się, gdy mówisz</string>
+    <string name="whats_new_voice_languages">Działa offline w 35 językach</string>
+    <string name="dictation_start">Przytrzymaj, aby dyktować</string>
+    <string name="dictation_permission_granted">Przytrzymaj mikrofon, aby dyktować.</string>
+    <string name="dictation_permission_denied">Zezwól na dostęp do mikrofonu, aby dyktować.</string>
+    <string name="dictation_record_failed">Nie udało się rozpocząć nagrywania.</string>
+    <string name="dictation_failed">Nie udało się przetworzyć nagrania na tekst.</string>
+    <string name="dictation_no_speech">Nic nie usłyszano — spróbuj ponownie.</string>
+    <string name="dictation_storage_not_configured">Najpierw skonfiguruj folder modeli (Ustawienia → Modele).</string>
+    <string name="dictation_model_dialog_title">Włącz dyktowanie głosowe</string>
+    <string name="dictation_model_dialog_message">Aby mówić zamiast pisać, potrzebny jest model rozpoznawania mowy, %1$s (%2$s), pobierany raz i przechowywany na Twoim urządzeniu. Działa offline, w 35 językach.</string>
+    <string name="dictation_model_downloading">Pobieranie modelu dyktowania…</string>
 </resources>

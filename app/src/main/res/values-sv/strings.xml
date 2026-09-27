@@ -119,6 +119,8 @@
     <string name="faq_a13">Endast när du aktiverar dem. Webbsökning skickar modellens sökfråga till DuckDuckGo, och Hämta webbsida laddar ned de sidor modellen väljer att öppna — dessa förfrågningar går till webbplatserna själva, inte till utvecklaren. Kör JavaScript stannar helt på din enhet utan internetåtkomst. Med alla verktyg avstängda (standarden) lämnar ingenting din enhet. Se integritetspolicyn för mer information.</string>
     <string name="faq_q14">Meddelar appen mig när ett svar är klart?</string>
     <string name="faq_a14">Ja. Medan appen är i bakgrunden följer en avisering modellens status — inläst, genererar, sedan svar klart — och låter dig kopiera eller dela svaret. Du kan även aktivera en kort slutförandeton i Inställningar → Ljud och haptik. Modellnedladdningar visar sin egen förloppsavisering med hastighet och beräknad återstående tid.</string>
+    <string name="faq_q15">Skickar röstdikteringen min röst någonstans?</string>
+    <string name="faq_a15">Nej. Håll ned mikrofonen i meddelandefältet och prata – en taligenkänningsmodell gör om dina ord till text på telefonen medan du pratar, på 35 språk. Ljudet sparas aldrig och skickas ingenstans, så dikteringen fungerar helt offline. Modellen (718 MB) laddas ned en gång, första gången du använder mikrofonen.</string>
 
     <!-- Models Screen -->
     <string name="models">Modeller</string>
@@ -393,4 +395,17 @@
     <string name="whats_new_documents">Dokument – ställ frågor om dina filer</string>
     <string name="whats_new_documents_detail">Bifoga PDF-filer, Word-filer, e-böcker och mer</string>
     <string name="whats_new_documents_search">Sökning på enheten hittar rätt avsnitt</string>
+    <string name="whats_new_voice">Röst – håll ned mikrofonen och prata</string>
+    <string name="whats_new_voice_detail">Dina ord visas medan du pratar</string>
+    <string name="whats_new_voice_languages">Fungerar offline på 35 språk</string>
+    <string name="dictation_start">Håll ned för att diktera</string>
+    <string name="dictation_permission_granted">Håll ned mikrofonen för att diktera.</string>
+    <string name="dictation_permission_denied">Tillåt mikrofonåtkomst för att diktera.</string>
+    <string name="dictation_record_failed">Det gick inte att starta inspelningen.</string>
+    <string name="dictation_failed">Det gick inte att transkribera inspelningen.</string>
+    <string name="dictation_no_speech">Det uppfattade jag inte – försök igen.</string>
+    <string name="dictation_storage_not_configured">Konfigurera en modellmapp först (Inställningar → Modeller).</string>
+    <string name="dictation_model_dialog_title">Aktivera röstdiktering</string>
+    <string name="dictation_model_dialog_message">För att prata i stället för att skriva behövs en taligenkänningsmodell, %1$s (%2$s), som laddas ned en gång och sparas på din enhet. Den fungerar offline, på 35 språk.</string>
+    <string name="dictation_model_downloading">Laddar ned dikteringsmodellen…</string>
 </resources>

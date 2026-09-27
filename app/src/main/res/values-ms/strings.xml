@@ -118,6 +118,8 @@
     <string name="faq_a13">Hanya apabila anda mendayakannya. Carian web menghantar pertanyaan model ke DuckDuckGo, dan Ambil halaman web memuat turun halaman yang model pilih untuk dibuka \u2014 permintaan tersebut pergi ke tapak web itu sendiri, bukan kepada pembangun. Jalankan JavaScript kekal sepenuhnya pada peranti anda tanpa akses internet. Dengan setiap alat dimatikan (lalai), tiada apa-apa meninggalkan peranti anda. Lihat Dasar Privasi untuk butiran.</string>
     <string name="faq_q14">Adakah aplikasi akan memberitahu saya apabila respons sedia?</string>
     <string name="faq_a14">Ya. Semasa aplikasi berada di latar belakang, satu pemberitahuan menjejaki status model \u2014 dimuatkan, menjana, kemudian respons sedia \u2014 dan membenarkan anda menyalin atau berkongsi balasan. Anda juga boleh mendayakan bunyi siap yang pendek di Tetapan \u2192 Bunyi dan Haptik. Muat turun model memaparkan pemberitahuan kemajuannya sendiri dengan kelajuan dan anggaran masa.</string>
+    <string name="faq_q15">Adakah imlak suara menghantar suara saya ke mana-mana?</string>
+    <string name="faq_a15">Tidak. Tekan lama mikrofon dalam ruang mesej dan bercakap — model pengecaman pertuturan menukar perkataan anda kepada teks pada telefon semasa anda bercakap, dalam 35 bahasa. Audio tidak pernah disimpan atau dihantar ke mana-mana, jadi imlak berfungsi sepenuhnya di luar talian. Model (718 MB) dimuat turun sekali, kali pertama anda menggunakan mikrofon.</string>
 
     <!-- Models Screen -->
     <string name="models">Model</string>
@@ -384,4 +386,17 @@
     <string name="whats_new_documents">Dokumen — tanya soalan tentang fail anda</string>
     <string name="whats_new_documents_detail">Lampirkan PDF, fail Word, e-buku dan banyak lagi</string>
     <string name="whats_new_documents_search">Carian pada peranti menemui petikan yang betul</string>
+    <string name="whats_new_voice">Suara — tekan lama mikrofon dan bercakap</string>
+    <string name="whats_new_voice_detail">Perkataan anda muncul semasa anda bercakap</string>
+    <string name="whats_new_voice_languages">Berfungsi di luar talian dalam 35 bahasa</string>
+    <string name="dictation_start">Tekan lama untuk imlak</string>
+    <string name="dictation_permission_granted">Tekan lama mikrofon untuk mengimlak.</string>
+    <string name="dictation_permission_denied">Benarkan akses mikrofon untuk mengimlak.</string>
+    <string name="dictation_record_failed">Tidak dapat memulakan rakaman.</string>
+    <string name="dictation_failed">Tidak dapat mentranskripsi rakaman.</string>
+    <string name="dictation_no_speech">Tidak dapat didengar — cuba lagi.</string>
+    <string name="dictation_storage_not_configured">Sediakan folder model dahulu (Tetapan → Model).</string>
+    <string name="dictation_model_dialog_title">Dayakan imlak suara</string>
+    <string name="dictation_model_dialog_message">Untuk bercakap dan bukannya menaip, anda memerlukan model pengecaman pertuturan, %1$s (%2$s), yang dimuat turun sekali dan disimpan pada peranti anda. Ia berfungsi di luar talian, dalam 35 bahasa.</string>
+    <string name="dictation_model_downloading">Memuat turun model imlak…</string>
 </resources>

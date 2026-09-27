@@ -119,6 +119,8 @@
     <string name="faq_a13">Kun når du aktiverer dem. Websøgning sender modellens forespørgsel til DuckDuckGo, og Hent webside downloader de sider, modellen vælger at åbne — disse forespørgsler går til webstederne selv, ikke til udvikleren. Kør JavaScript bliver udelukkende på din enhed uden internetadgang. Med alle værktøjer slået fra (standarden) forlader intet din enhed. Se privatlivspolitikken for detaljer.</string>
     <string name="faq_q14">Giver appen mig besked, når et svar er klar?</string>
     <string name="faq_a14">Ja. Mens appen er i baggrunden, følger en notifikation modellens status — indlæst, genererer, derefter svar klar — og lader dig kopiere eller dele svaret. Du kan også aktivere en kort fuldførelseslyd under Indstillinger → Lyd og haptik. Modeldownloads viser deres egen fremskridtsnotifikation med hastighed og forventet resttid.</string>
+    <string name="faq_q15">Sender stemmediktering min stemme nogen steder hen?</string>
+    <string name="faq_a15">Nej. Hold mikrofonen nede i beskedfeltet, og tal – en talegenkendelsesmodel gør dine ord til tekst på telefonen, mens du taler, på 35 sprog. Lyden gemmes aldrig og sendes ingen steder hen, så dikteringen virker helt offline. Modellen (718 MB) hentes én gang, første gang du bruger mikrofonen.</string>
 
     <!-- Models Screen -->
     <string name="models">Modeller</string>
@@ -393,4 +395,17 @@
     <string name="whats_new_documents">Dokumenter – stil spørgsmål om dine filer</string>
     <string name="whats_new_documents_detail">Vedhæft PDF\'er, Word-filer, e-bøger og mere</string>
     <string name="whats_new_documents_search">Søgning på enheden finder de rigtige passager</string>
+    <string name="whats_new_voice">Stemme – hold mikrofonen nede, og tal</string>
+    <string name="whats_new_voice_detail">Dine ord vises, mens du taler</string>
+    <string name="whats_new_voice_languages">Virker offline på 35 sprog</string>
+    <string name="dictation_start">Hold for at diktere</string>
+    <string name="dictation_permission_granted">Hold mikrofonen nede for at diktere.</string>
+    <string name="dictation_permission_denied">Giv adgang til mikrofonen for at diktere.</string>
+    <string name="dictation_record_failed">Kunne ikke starte optagelsen.</string>
+    <string name="dictation_failed">Kunne ikke transskribere optagelsen.</string>
+    <string name="dictation_no_speech">Det fangede jeg ikke – prøv igen.</string>
+    <string name="dictation_storage_not_configured">Opret først en modelmappe (Indstillinger → Modeller).</string>
+    <string name="dictation_model_dialog_title">Slå stemmediktering til</string>
+    <string name="dictation_model_dialog_message">For at tale i stedet for at skrive skal du bruge en talegenkendelsesmodel, %1$s (%2$s), som hentes én gang og gemmes på din enhed. Den virker offline på 35 sprog.</string>
+    <string name="dictation_model_downloading">Henter dikteringsmodellen…</string>
 </resources>

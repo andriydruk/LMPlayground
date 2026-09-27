@@ -104,6 +104,8 @@
     <string name="faq_a13">Hanya saat Anda mengaktifkannya. Pencarian web mengirim kueri model ke DuckDuckGo, dan Ambil halaman web mengunduh halaman yang dipilih model untuk dibuka \u2014 permintaan tersebut menuju ke situs web itu sendiri, bukan ke pengembang. Jalankan JavaScript tetap sepenuhnya di perangkat Anda tanpa akses internet. Dengan setiap alat nonaktif (default), tidak ada yang meninggalkan perangkat Anda. Lihat Kebijakan Privasi untuk detailnya.</string>
     <string name="faq_q14">Apakah aplikasi akan memberi tahu saya saat respons siap?</string>
     <string name="faq_a14">Ya. Saat aplikasi berada di latar belakang, sebuah notifikasi melacak status model \u2014 dimuat, sedang membuat, lalu respons siap \u2014 dan memungkinkan Anda menyalin atau membagikan balasan. Anda juga dapat mengaktifkan nada singkat penyelesaian di Pengaturan \u2192 Suara dan Haptik. Unduhan model menampilkan notifikasi progresnya sendiri dengan kecepatan dan perkiraan waktu.</string>
+    <string name="faq_q15">Apakah dikte suara mengirim suara saya ke suatu tempat?</string>
+    <string name="faq_a15">Tidak. Tahan mikrofon di kolom pesan lalu bicara — model pengenalan ucapan mengubah kata-kata Anda menjadi teks di ponsel saat Anda berbicara, dalam 35 bahasa. Audio tidak pernah disimpan atau dikirim ke mana pun, jadi dikte berfungsi sepenuhnya offline. Model (718 MB) diunduh sekali, saat Anda pertama kali menggunakan mikrofon.</string>
     <string name="models">Model</string>
     <string name="change_folder">Ubah Folder</string>
     <string name="delete_model">Hapus</string>
@@ -345,4 +347,17 @@
     <string name="whats_new_documents">Dokumen — ajukan pertanyaan tentang file Anda</string>
     <string name="whats_new_documents_detail">Lampirkan PDF, file Word, ebook, dan lainnya</string>
     <string name="whats_new_documents_search">Penelusuran di perangkat menemukan bagian yang tepat</string>
+    <string name="whats_new_voice">Suara — tahan mikrofon lalu bicara</string>
+    <string name="whats_new_voice_detail">Kata-kata Anda muncul saat Anda berbicara</string>
+    <string name="whats_new_voice_languages">Berfungsi offline dalam 35 bahasa</string>
+    <string name="dictation_start">Tahan untuk mendikte</string>
+    <string name="dictation_permission_granted">Tahan mikrofon untuk mendikte.</string>
+    <string name="dictation_permission_denied">Izinkan akses mikrofon untuk mendikte.</string>
+    <string name="dictation_record_failed">Tidak dapat memulai perekaman.</string>
+    <string name="dictation_failed">Tidak dapat mentranskripsi rekaman.</string>
+    <string name="dictation_no_speech">Tidak terdengar — coba lagi.</string>
+    <string name="dictation_storage_not_configured">Siapkan folder model terlebih dahulu (Pengaturan → Model).</string>
+    <string name="dictation_model_dialog_title">Aktifkan dikte suara</string>
+    <string name="dictation_model_dialog_message">Untuk berbicara alih-alih mengetik, diperlukan model pengenalan ucapan, %1$s (%2$s), yang diunduh sekali dan disimpan di perangkat Anda. Model ini berfungsi offline, dalam 35 bahasa.</string>
+    <string name="dictation_model_downloading">Mengunduh model dikte…</string>
 </resources>

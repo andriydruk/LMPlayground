@@ -104,6 +104,8 @@
     <string name="faq_a13">有効にしたときだけです。ウェブ検索はモデルのクエリを DuckDuckGo に送信し、ウェブページを取得はモデルが開くことを選んだページをダウンロードします——これらのリクエストは開発者ではなくウェブサイト自体に送られます。JavaScript を実行はインターネットにアクセスせず、完全にデバイス上にとどまります。すべてのツールがオフのとき（デフォルト）、何もデバイスから外部に出ることはありません。詳細はプライバシーポリシーをご覧ください。</string>
     <string name="faq_q14">応答の準備ができたらアプリは通知してくれますか？</string>
     <string name="faq_a14">はい。アプリがバックグラウンドにある間、通知がモデルの状態——読み込み済み、生成中、そして応答の準備完了——を追跡し、応答をコピーまたは共有できるようにします。設定 \u2192 サウンドと触覚 で短い完了チャイムを有効にすることもできます。モデルのダウンロードは、速度と残り時間を示す専用の進捗通知を表示します。</string>
+    <string name="faq_q15">音声入力で自分の声がどこかに送信されますか？</string>
+    <string name="faq_a15">いいえ。チャット入力欄のマイクを長押しして話すと、音声認識モデルが話しているそばから端末上で文字に変換します（35 言語対応）。音声が保存されたり送信されたりすることはなく、音声入力は完全にオフラインで動作します。モデル（718 MB）は、初めてマイクを使うときに一度だけダウンロードされます。</string>
     <string name="models">モデル</string>
     <string name="change_folder">フォルダを変更</string>
     <string name="delete_model">削除</string>
@@ -349,4 +351,17 @@
     <string name="whats_new_documents">ドキュメント — ファイルについて質問</string>
     <string name="whats_new_documents_detail">PDF、Wordファイル、電子書籍などを添付</string>
     <string name="whats_new_documents_search">デバイス内検索で適切な箇所を見つけます</string>
+    <string name="whats_new_voice">音声 — マイクを長押しして話す</string>
+    <string name="whats_new_voice_detail">話すそばから文字が表示されます</string>
+    <string name="whats_new_voice_languages">35 言語でオフライン動作</string>
+    <string name="dictation_start">長押しで音声入力</string>
+    <string name="dictation_permission_granted">マイクを長押しして音声入力します。</string>
+    <string name="dictation_permission_denied">音声入力にはマイクへのアクセスを許可してください。</string>
+    <string name="dictation_record_failed">録音を開始できませんでした。</string>
+    <string name="dictation_failed">録音を文字に変換できませんでした。</string>
+    <string name="dictation_no_speech">聞き取れませんでした — もう一度お試しください。</string>
+    <string name="dictation_storage_not_configured">先にモデルフォルダを設定してください（設定 → モデル）。</string>
+    <string name="dictation_model_dialog_title">音声入力を有効にする</string>
+    <string name="dictation_model_dialog_message">入力の代わりに話すには、音声認識モデル %1$s（%2$s）が必要です。一度ダウンロードすれば端末に保存され、オフラインで 35 言語に対応します。</string>
+    <string name="dictation_model_downloading">音声入力モデルをダウンロード中…</string>
 </resources>

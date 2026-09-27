@@ -120,6 +120,8 @@
     <string name="faq_a13">Pouze když je zapnete. Vyhledávání na webu odešle dotaz modelu do DuckDuckGo a Načíst webovou stránku stáhne stránky, které se model rozhodne otevřít — tyto požadavky jdou na samotné weby, nikoli vývojáři. Spustit JavaScript zůstává zcela ve vašem zařízení bez přístupu k internetu. Když jsou všechny nástroje vypnuté (výchozí stav), nic neopustí vaše zařízení. Podrobnosti naleznete v zásadách ochrany osobních údajů.</string>
     <string name="faq_q14">Upozorní mě aplikace, až bude odpověď připravena?</string>
     <string name="faq_a14">Ano. Když je aplikace na pozadí, oznámení sleduje stav modelu — načteno, generování, poté odpověď připravena — a umožňuje vám odpověď zkopírovat nebo sdílet. V Nastavení \u2192 Zvuk a haptika můžete také zapnout krátký tón dokončení. Stahování modelů zobrazuje vlastní oznámení o průběhu s rychlostí a odhadovaným časem.</string>
+    <string name="faq_q15">Posílá hlasové diktování můj hlas někam?</string>
+    <string name="faq_a15">Ne. Podržte mikrofon v poli zprávy a mluvte – model pro rozpoznávání řeči převádí vaše slova na text přímo v telefonu, zatímco mluvíte, ve 35 jazycích. Zvuk se nikdy neukládá ani nikam neodesílá, takže diktování funguje zcela offline. Model (718 MB) se stáhne jednou, když mikrofon použijete poprvé.</string>
 
     <!-- Models Screen -->
     <string name="models">Modely</string>
@@ -385,4 +387,17 @@
     <string name="whats_new_documents">Dokumenty – ptejte se na své soubory</string>
     <string name="whats_new_documents_detail">Připojte soubory PDF, Word, e-knihy a další</string>
     <string name="whats_new_documents_search">Vyhledávání v zařízení najde ty správné pasáže</string>
+    <string name="whats_new_voice">Hlas – podržte mikrofon a mluvte</string>
+    <string name="whats_new_voice_detail">Slova se zobrazují, zatímco mluvíte</string>
+    <string name="whats_new_voice_languages">Funguje offline ve 35 jazycích</string>
+    <string name="dictation_start">Podržením diktujte</string>
+    <string name="dictation_permission_granted">Pro diktování podržte mikrofon.</string>
+    <string name="dictation_permission_denied">Pro diktování povolte přístup k mikrofonu.</string>
+    <string name="dictation_record_failed">Nahrávání se nepodařilo spustit.</string>
+    <string name="dictation_failed">Nahrávku se nepodařilo přepsat.</string>
+    <string name="dictation_no_speech">Nepodařilo se to zachytit – zkuste to znovu.</string>
+    <string name="dictation_storage_not_configured">Nejprve nastavte složku s modely (Nastavení → Modely).</string>
+    <string name="dictation_model_dialog_title">Zapnout hlasové diktování</string>
+    <string name="dictation_model_dialog_message">Mluvení místo psaní vyžaduje model pro rozpoznávání řeči, %1$s (%2$s), který se stáhne jednou a zůstane ve vašem zařízení. Funguje offline ve 35 jazycích.</string>
+    <string name="dictation_model_downloading">Stahuje se model pro diktování…</string>
 </resources>

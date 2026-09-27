@@ -104,6 +104,8 @@
     <string name="faq_a13">Uniquement lorsque vous les activez. La Recherche web envoie la requ\u00EAte du mod\u00E8le \u00E0 DuckDuckGo, et Charger une page web t\u00E9l\u00E9charge les pages que le mod\u00E8le d\u00E9cide d\'ouvrir \u2014 ces requ\u00EAtes vont aux sites web eux-m\u00EAmes, pas au d\u00E9veloppeur. Ex\u00E9cuter JavaScript reste enti\u00E8rement sur votre appareil, sans acc\u00E8s \u00E0 Internet. Avec tous les outils d\u00E9sactiv\u00E9s (le r\u00E9glage par d\u00E9faut), rien ne quitte votre appareil. Consultez la Politique de Confidentialit\u00E9 pour plus de d\u00E9tails.</string>
     <string name="faq_q14">L\'application me pr\u00E9viendra-t-elle lorsqu\'une r\u00E9ponse est pr\u00EAte ?</string>
     <string name="faq_a14">Oui. Lorsque l\'application est en arri\u00E8re-plan, une notification suit l\'\u00E9tat du mod\u00E8le \u2014 charg\u00E9, en cours de g\u00E9n\u00E9ration, puis r\u00E9ponse pr\u00EAte \u2014 et vous permet de copier ou de partager la r\u00E9ponse. Vous pouvez aussi activer un court carillon de fin dans Param\u00E8tres \u2192 Son et retour haptique. Les t\u00E9l\u00E9chargements de mod\u00E8les affichent leur propre notification de progression avec la vitesse et le temps estim\u00E9.</string>
+    <string name="faq_q15">La dictée vocale envoie-t-elle ma voix quelque part ?</string>
+    <string name="faq_a15">Non. Maintenez le micro dans le champ de message et parlez : un modèle de reconnaissance vocale transforme vos paroles en texte sur votre téléphone pendant que vous parlez, dans 35 langues. L\'audio n\'est jamais enregistré ni envoyé nulle part, la dictée fonctionne donc entièrement hors ligne. Le modèle (718 Mo) se télécharge une seule fois, la première fois que vous utilisez le micro.</string>
     <string name="models">Mod\u00E8les</string>
     <string name="change_folder">Changer de dossier</string>
     <string name="delete_model">Supprimer</string>
@@ -351,4 +353,17 @@
     <string name="whats_new_documents">Documents — posez des questions sur vos fichiers</string>
     <string name="whats_new_documents_detail">Joignez des PDF, des fichiers Word, des ebooks et plus</string>
     <string name="whats_new_documents_search">La recherche sur l\'appareil trouve les bons passages</string>
+    <string name="whats_new_voice">Voix — maintenez le micro et parlez</string>
+    <string name="whats_new_voice_detail">Vos mots s\'affichent pendant que vous parlez</string>
+    <string name="whats_new_voice_languages">Fonctionne hors ligne dans 35 langues</string>
+    <string name="dictation_start">Maintenir pour dicter</string>
+    <string name="dictation_permission_granted">Maintenez le micro pour dicter.</string>
+    <string name="dictation_permission_denied">Autorisez l\'accès au micro pour dicter.</string>
+    <string name="dictation_record_failed">Impossible de démarrer l\'enregistrement.</string>
+    <string name="dictation_failed">Impossible de transcrire l\'enregistrement.</string>
+    <string name="dictation_no_speech">Je n\'ai pas compris — réessayez.</string>
+    <string name="dictation_storage_not_configured">Configurez d\'abord un dossier de modèles (Paramètres → Modèles).</string>
+    <string name="dictation_model_dialog_title">Activer la dictée vocale</string>
+    <string name="dictation_model_dialog_message">Pour parler au lieu de taper, il faut un modèle de reconnaissance vocale, %1$s (%2$s), téléchargé une seule fois et conservé sur votre appareil. Il fonctionne hors ligne, dans 35 langues.</string>
+    <string name="dictation_model_downloading">Téléchargement du modèle de dictée…</string>
 </resources>

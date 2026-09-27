@@ -104,6 +104,8 @@
     <string name="faq_a13">Yaln\u0131zca onlar\u0131 etkinle\u015Ftirdi\u011Finizde. Web aramas\u0131, modelin sorgusunu DuckDuckGo\'ya g\u00F6nderir ve Web sayfas\u0131 getir, modelin a\u00E7may\u0131 se\u00E7ti\u011Fi sayfalar\u0131 indirir \u2014 bu istekler geli\u015Ftiriciye de\u011Fil, web sitelerinin kendilerine gider. JavaScript \u00E7al\u0131\u015Ft\u0131r tamamen cihaz\u0131n\u0131zda kal\u0131r ve internet eri\u015Fimi yoktur. T\u00FCm ara\u00E7lar kapal\u0131yken (varsay\u0131lan), cihaz\u0131n\u0131zdan hi\u00E7bir \u015Fey \u00E7\u0131kmaz. Ayr\u0131nt\u0131lar i\u00E7in Gizlilik Politikas\u0131na bak\u0131n.</string>
     <string name="faq_q14">Yan\u0131t haz\u0131r oldu\u011Funda uygulama beni bilgilendirir mi?</string>
     <string name="faq_a14">Evet. Uygulama arka plandayken bir bildirim, modelin durumunu \u2014 y\u00FCklendi, \u00FCretiyor, ard\u0131ndan yan\u0131t haz\u0131r \u2014 takip eder ve yan\u0131t\u0131 kopyalaman\u0131za veya payla\u015Fman\u0131za olanak tan\u0131r. Ayr\u0131ca Ayarlar \u2192 Ses ve Titre\u015Fim b\u00F6l\u00FCm\u00FCnden k\u0131sa bir tamamlanma sesini etkinle\u015Ftirebilirsiniz. Model indirmeleri ise h\u0131z ve tahmini s\u00FCreyle kendi ilerleme bildirimini g\u00F6sterir.</string>
+    <string name="faq_q15">Sesle dikte sesimi bir yere gönderir mi?</string>
+    <string name="faq_a15">Hayır. Mesaj alanındaki mikrofonu basılı tutup konuşun — bir konuşma tanıma modeli, siz konuşurken sözcüklerinizi telefonunuzda metne dönüştürür, 35 dilde. Ses asla kaydedilmez ve hiçbir yere gönderilmez; bu yüzden dikte tamamen çevrimdışı çalışır. Model (718 MB), mikrofonu ilk kez kullandığınızda bir kez indirilir.</string>
     <string name="models">Modeller</string>
     <string name="change_folder">Klas\u00F6r\u00FC De\u011Fi\u015Ftir</string>
     <string name="delete_model">Sil</string>
@@ -352,4 +354,17 @@
     <string name="whats_new_documents">Belgeler — dosyalarınız hakkında soru sorun</string>
     <string name="whats_new_documents_detail">PDF, Word dosyaları, e-kitaplar ve daha fazlasını ekleyin</string>
     <string name="whats_new_documents_search">Cihaz üzerinde arama doğru bölümleri bulur</string>
+    <string name="whats_new_voice">Ses — mikrofonu basılı tutup konuşun</string>
+    <string name="whats_new_voice_detail">Siz konuşurken sözcükleriniz görünür</string>
+    <string name="whats_new_voice_languages">35 dilde çevrimdışı çalışır</string>
+    <string name="dictation_start">Dikte için basılı tutun</string>
+    <string name="dictation_permission_granted">Dikte etmek için mikrofonu basılı tutun.</string>
+    <string name="dictation_permission_denied">Dikte için mikrofon erişimine izin verin.</string>
+    <string name="dictation_record_failed">Kayıt başlatılamadı.</string>
+    <string name="dictation_failed">Kayıt metne dönüştürülemedi.</string>
+    <string name="dictation_no_speech">Anlaşılamadı — tekrar deneyin.</string>
+    <string name="dictation_storage_not_configured">Önce bir model klasörü ayarlayın (Ayarlar → Modeller).</string>
+    <string name="dictation_model_dialog_title">Sesle dikteyi etkinleştir</string>
+    <string name="dictation_model_dialog_message">Yazmak yerine konuşmak için bir kez indirilip cihazınızda saklanan bir konuşma tanıma modeli gerekir: %1$s (%2$s). Çevrimdışı ve 35 dilde çalışır.</string>
+    <string name="dictation_model_downloading">Dikte modeli indiriliyor…</string>
 </resources>

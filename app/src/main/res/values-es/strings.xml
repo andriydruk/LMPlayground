@@ -104,6 +104,8 @@
     <string name="faq_a13">Solo cuando las activas. La B\u00FAsqueda web env\u00EDa la consulta del modelo a DuckDuckGo, y Obtener p\u00E1gina web descarga las p\u00E1ginas que el modelo decide abrir: esas solicitudes van a los propios sitios web, no al desarrollador. Ejecutar JavaScript permanece por completo en tu dispositivo, sin acceso a Internet. Con todas las herramientas desactivadas (lo predeterminado), nada sale de tu dispositivo. Consulta la Pol\u00EDtica de Privacidad para m\u00E1s detalles.</string>
     <string name="faq_q14">\u00BFLa aplicaci\u00F3n me avisar\u00E1 cuando una respuesta est\u00E9 lista?</string>
     <string name="faq_a14">S\u00ED. Mientras la aplicaci\u00F3n est\u00E1 en segundo plano, una notificaci\u00F3n muestra el estado del modelo \u2014 cargado, generando y luego respuesta lista \u2014 y te permite copiar o compartir la respuesta. Tambi\u00E9n puedes activar un breve tono de finalizaci\u00F3n en Ajustes \u2192 Sonido y vibraci\u00F3n. Las descargas de modelos muestran su propia notificaci\u00F3n de progreso con velocidad y tiempo estimado.</string>
+    <string name="faq_q15">¿El dictado por voz envía mi voz a algún sitio?</string>
+    <string name="faq_a15">No. Mantén pulsado el micrófono en el campo de mensaje y habla: un modelo de reconocimiento de voz convierte tus palabras en texto en tu teléfono mientras hablas, en 35 idiomas. El audio nunca se guarda ni se envía a ningún sitio, así que el dictado funciona totalmente sin conexión. El modelo (718 MB) se descarga una vez, la primera vez que usas el micrófono.</string>
     <string name="models">Modelos</string>
     <string name="change_folder">Cambiar carpeta</string>
     <string name="delete_model">Eliminar</string>
@@ -351,4 +353,17 @@
     <string name="whats_new_documents">Documentos: haz preguntas sobre tus archivos</string>
     <string name="whats_new_documents_detail">Adjunta PDF, archivos de Word, libros electrónicos y más</string>
     <string name="whats_new_documents_search">La búsqueda en el dispositivo encuentra los pasajes correctos</string>
+    <string name="whats_new_voice">Voz: mantén pulsado el micrófono y habla</string>
+    <string name="whats_new_voice_detail">Tus palabras aparecen mientras hablas</string>
+    <string name="whats_new_voice_languages">Funciona sin conexión en 35 idiomas</string>
+    <string name="dictation_start">Mantén pulsado para dictar</string>
+    <string name="dictation_permission_granted">Mantén pulsado el micrófono para dictar.</string>
+    <string name="dictation_permission_denied">Permite el acceso al micrófono para dictar.</string>
+    <string name="dictation_record_failed">No se pudo iniciar la grabación.</string>
+    <string name="dictation_failed">No se pudo transcribir la grabación.</string>
+    <string name="dictation_no_speech">No te he entendido: inténtalo de nuevo.</string>
+    <string name="dictation_storage_not_configured">Primero configura una carpeta de modelos (Ajustes → Modelos).</string>
+    <string name="dictation_model_dialog_title">Activar el dictado por voz</string>
+    <string name="dictation_model_dialog_message">Para hablar en lugar de escribir se necesita un modelo de reconocimiento de voz, %1$s (%2$s), que se descarga una vez y se guarda en tu dispositivo. Funciona sin conexión, en 35 idiomas.</string>
+    <string name="dictation_model_downloading">Descargando el modelo de dictado…</string>
 </resources>
