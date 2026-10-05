@@ -33,6 +33,12 @@ constexpr size_t kUserMarkerSearchWindow = 80;
 // permanent block; begin/end bracket the encoder init in LlamaModel and the
 // encode in processImageTurn. clipSentinelBlockVulkan() blocks it outright,
 // for a failure that was caught rather than crashed.
+//
+// clipVisionDevice() resolves MTMD_BACKEND_DEVICE (our own process-wide
+// choice, set in init and flipped to "CPU" by a block) to the device to pass
+// in mtmd_context_params; nullptr means CPU. clip.cpp no longer reads the env
+// var itself (upstream #23255, since b11200), so it must be passed explicitly.
+ggml_backend_dev_t clipVisionDevice();
 void clipSentinelInit(const std::string &stateDir);
 bool clipSentinelVulkanBlocked();
 bool clipSentinelVulkanActive();

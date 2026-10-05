@@ -167,9 +167,15 @@ void clipSentinelInit(const std::string &stateDir) {
 bool clipSentinelVulkanBlocked() {
     return !g_clipStateDir.empty() && fileExists(clipBlockedPath());
 }
-bool clipSentinelVulkanActive() {
+ggml_backend_dev_t clipVisionDevice() {
     const char *backend = std::getenv("MTMD_BACKEND_DEVICE");
-    return backend != nullptr && strcmp(backend, "CPU") != 0;
+    if (backend == nullptr || strcmp(backend, "CPU") == 0) return nullptr;
+    ggml_backend_dev_t dev = ggml_backend_dev_by_name(backend);
+    if (dev == nullptr) LOGw("vision backend %s not found; using CPU", backend);
+    return dev;
+}
+bool clipSentinelVulkanActive() {
+    return clipVisionDevice() != nullptr;
 }
 void clipSentinelBeginVulkanAttempt() {
     if (!g_clipStateDir.empty()) touchFile(clipInflightPath());
@@ -228,8 +234,9 @@ Java_com_druk_llamacpp_jni_NativeLlamaCpp_init(JNIEnv *env, jobject object, jstr
     }
 
     // Pick the CLIP vision-encoder backend now that the Vulkan backend (if any)
-    // is loaded and its devices are enumerable. clip.cpp selects by device name
-    // (MTMD_BACKEND_DEVICE, e.g. "Vulkan0"). Use the GPU (much faster than CPU
+    // is loaded and its devices are enumerable. Recorded by device name in
+    // MTMD_BACKEND_DEVICE (e.g. "Vulkan0"); loadMmprojModel resolves it via
+    // clipVisionDevice(). Use the GPU (much faster than CPU
     // vision) only for allowlisted parts whose Vulkan driver is known to handle
     // the CLIP graph; default to "CPU". Mobile GPUs register as IGPU (not
     // GPU), so dev_by_type(GPU) misses them; enumerate instead. Reading the

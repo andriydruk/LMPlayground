@@ -55,7 +55,7 @@ void LlamaModel::loadModel(const std::string &modelPath,
     // vision models (Qwen3VL) then fails on the Mali Vulkan backend
     // (ggml graph compute status 1 -> garbage output). Pinning the model to a
     // CPU-only device list removes Vulkan from the text graph entirely. The
-    // mtmd CLIP context selects Vulkan0 independently (MTMD_BACKEND_DEVICE),
+    // mtmd CLIP context gets its own device (clipVisionDevice()),
     // so vision encoding still runs on the GPU.
 #if defined(__ANDROID__)
     model_params.n_gpu_layers = 0;
@@ -124,6 +124,11 @@ void LlamaModel::loadMmprojModel(const std::string &mmprojPath) {
     params.n_threads = std::max(1, std::min(kMaxVisionThreads, (int) sysconf(_SC_NPROCESSORS_ONLN) - 2));
     params.warmup = false;
     params.print_timings = true;
+    // With device=nullptr and use_gpu=true, clip.cpp takes the first GPU —
+    // Vulkan on every Android device, bypassing the allowlist and the
+    // sentinel's CPU fallback. Always pass the device we chose.
+    params.device = clipVisionDevice();
+    params.use_gpu = params.device != nullptr;
     // Use model defaults for image tokens (-1). Some models like Gemma 4
     // have high minimum pixel requirements that reject low token caps.
     // LMP_IMAGE_MAX_TOKENS overrides it for measurement: CLIP encode time
@@ -140,7 +145,7 @@ void LlamaModel::loadMmprojModel(const std::string &mmprojPath) {
     // an uncatchable crash, not a C++ exception. Bracket it with the sentinel so
     // a crash here is detected on the next launch and Vulkan vision is disabled.
     // CPU encodes never hit this, so only mark the Vulkan path.
-    bool clip_on_vulkan = clipSentinelVulkanActive();
+    bool clip_on_vulkan = params.use_gpu;
     if (clip_on_vulkan) clipSentinelBeginVulkanAttempt();
 
     // mtmd_init_from_file catches exceptions internally and returns null,
