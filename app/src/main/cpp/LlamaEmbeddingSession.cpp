@@ -85,9 +85,14 @@ int LlamaEmbeddingSession::embed(const std::string &text, float *out) {
 
     llama_batch batch = llama_batch_init((int32_t) tokens.size(), 0, 1);
     for (size_t i = 0; i < tokens.size(); i++) {
+        batch.token[i]     = tokens[i];
+        batch.pos[i]       = (llama_pos) i;
+        batch.n_seq_id[i]  = 1;
+        batch.seq_id[i][0] = 0;
         // logits=true on every token: mean pooling needs all outputs.
-        common_batch_add(batch, tokens[i], (llama_pos) i, {0}, true);
+        batch.logits[i]    = true;
     }
+    batch.n_tokens = (int32_t) tokens.size();
 
     int rc;
     if (llama_model_has_encoder(model) && !llama_model_has_decoder(model)) {
