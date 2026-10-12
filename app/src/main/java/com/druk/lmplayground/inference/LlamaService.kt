@@ -118,6 +118,18 @@ class LlamaService : Service() {
         @Volatile var pendingDestroy: Boolean = false
 
         /**
+         * Held by every native call a binder thread makes directly on
+         * [nativeSession] (see [withSession]), so the native destroy can't
+         * run under one. [worker] only covers generate(), but addMessage
+         * prefills the preamble or encodes an image, which takes seconds on
+         * a slow phone; an unload landing meanwhile freed the context and
+         * unmapped the model under that decode. Teardown never waits on it:
+         * [finalizeSessionTeardown] only tries it, and leaves the destroy to
+         * the call that holds it.
+         */
+        val callLock = ReentrantLock()
+
+        /**
          * Accumulators for chunked replayHistory. Each call carries at
          * most one string (≤700 KB) so it fits under the binder cap; we
          * zip the two lists into the native call on finalize.
@@ -252,7 +264,8 @@ class LlamaService : Service() {
      * if the worker is still alive — in which case the entry stays in
      * [sessions] under the `pendingDestroy` flag and will be finalized
      * by [onWorkerExit] when the worker eventually returns from
-     * `nativeSession.generate()`.
+     * `nativeSession.generate()` — or if a binder call is still inside the
+     * native session, which [withSession] finalizes when it returns.
      *
      * Critical for UAF avoidance: callers MUST NOT remove [entry] from
      * [sessions] themselves on a `false` return, otherwise a follow-up
@@ -303,15 +316,35 @@ class LlamaService : Service() {
      * native destroy is still safe).
      */
     private fun finalizeSessionTeardown(entry: SessionEntry): Boolean {
+        // A binder call is still inside the native session: it sees
+        // pendingDestroy when it returns and finishes the teardown then.
+        if (!entry.callLock.tryLock()) return false
         // remove() returns the prior value; we own the destroy iff WE
         // removed it. Avoids double-free when destroySession races with
         // onWorkerExit.
-        val removed = sessions.remove(entry.sessionId, entry)
-        if (removed) {
-            entry.nativeSession.destroy()
-            tryFinalizeModelTeardown(entry.modelId)
+        val removed = try {
+            sessions.remove(entry.sessionId, entry).also { if (it) entry.nativeSession.destroy() }
+        } finally {
+            entry.callLock.unlock()
         }
+        if (removed) tryFinalizeModelTeardown(entry.modelId)
         return removed
+    }
+
+    /**
+     * Run [block] on [sessionId]'s native session under its
+     * [SessionEntry.callLock]. Returns null if the session is gone or being
+     * torn down. A teardown that came in while [block] ran found the lock
+     * held and left the destroy to us, so finish it here.
+     */
+    private inline fun <T> withSession(sessionId: Int, block: (NativeLlamaSession) -> T): T? {
+        val entry = sessions[sessionId] ?: return null
+        val result = entry.callLock.withLock {
+            if (entry.pendingDestroy) null else block(entry.nativeSession)
+        }
+        // A live worker finishes it in onWorkerExit instead.
+        if (entry.pendingDestroy && entry.worker.get() == null) finalizeSessionTeardown(entry)
+        return result
     }
 
     /**
@@ -558,14 +591,14 @@ class LlamaService : Service() {
         }
 
         override fun addMessage(sessionId: Int, message: String, enableThinking: Boolean) {
-            val rc = sessions[sessionId]?.nativeSession?.addMessage(message, enableThinking)
+            val rc = withSession(sessionId) { it.addMessage(message, enableThinking) }
             if (rc != null && rc != 0) {
                 Log.w(TAG, "addMessage rejected for session $sessionId (rc=$rc); turn dropped")
             }
         }
 
         override fun setImageData(sessionId: Int, data: ByteArray) {
-            sessions[sessionId]?.nativeSession?.setImageData(data)
+            withSession(sessionId) { it.setImageData(data) }
         }
 
         override fun beginReplayHistory(sessionId: Int) {
@@ -600,7 +633,7 @@ class LlamaService : Service() {
             val u = users.toTypedArray()
             val a = assistants.toTypedArray()
             users.clear(); assistants.clear()
-            entry.nativeSession.replayHistory(u, a)
+            withSession(sessionId) { it.replayHistory(u, a) }
         }
 
         override fun startGeneration(sessionId: Int, cb: ILlamaGenerationCallback) {
@@ -672,10 +705,10 @@ class LlamaService : Service() {
         }
 
         override fun getSessionReport(sessionId: Int): String =
-            sessions[sessionId]?.nativeSession?.getReport() ?: ""
+            withSession(sessionId) { it.getReport() } ?: ""
 
         override fun printSessionReport(sessionId: Int) {
-            sessions[sessionId]?.nativeSession?.printReport()
+            withSession(sessionId) { it.printReport() }
         }
 
         override fun destroySession(sessionId: Int) {
@@ -688,19 +721,18 @@ class LlamaService : Service() {
         }
 
         override fun setTools(sessionId: Int, toolsJson: String) {
-            sessions[sessionId]?.nativeSession?.setTools(toolsJson)
+            withSession(sessionId) { it.setTools(toolsJson) }
         }
 
         override fun getToolCallsJson(sessionId: Int): String =
-            sessions[sessionId]?.nativeSession?.getToolCallsJson() ?: "[]"
+            withSession(sessionId) { it.getToolCallsJson() } ?: "[]"
 
         override fun submitToolResults(
             sessionId: Int,
             resultsJson: String,
             enableThinking: Boolean,
         ): Int {
-            val entry = sessions[sessionId] ?: return 1
-            return entry.nativeSession.submitToolResults(resultsJson, enableThinking)
+            return withSession(sessionId) { it.submitToolResults(resultsJson, enableThinking) } ?: 1
         }
 
         override fun setPreambleCachePath(
@@ -708,7 +740,7 @@ class LlamaService : Service() {
             path: String,
             fingerprint: String,
         ) {
-            sessions[sessionId]?.nativeSession?.setPreambleCachePath(path, fingerprint)
+            withSession(sessionId) { it.setPreambleCachePath(path, fingerprint) }
         }
 
         override fun transcribeSamples(pcm: FloatArray, targetLang: String): String? {
