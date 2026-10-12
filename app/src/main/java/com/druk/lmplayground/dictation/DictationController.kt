@@ -284,7 +284,9 @@ class DictationController(
 
             try {
                 recognizer.withLock {
-                    val streamId = manager.beginStream()
+                    // Off the main thread: this may bind the service and load the
+                    // dictation model, which ANRs when the bind is slow.
+                    val streamId = withContext(Dispatchers.IO) { manager.beginStream() }
                     if (streamId == 0) {
                         _error.postValue(app.getString(R.string.dictation_failed))
                         audio.cancel()
@@ -305,7 +307,7 @@ class DictationController(
                         synchronized(session.transcript) { session.transcript.endUtterance() }
                         // Abandoned part-way: the native stream still has to
                         // be released.
-                        if (!closed) withContext(NonCancellable) { manager.cancelStream(streamId) }
+                        if (!closed) withContext(NonCancellable + Dispatchers.IO) { manager.cancelStream(streamId) }
                     }
                 }
             } catch (t: CancellationException) {
