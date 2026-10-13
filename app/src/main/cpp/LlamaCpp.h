@@ -34,6 +34,10 @@ constexpr size_t kUserMarkerSearchWindow = 80;
 // encode in processImageTurn. clipSentinelBlockVulkan() blocks it outright,
 // for a failure that was caught rather than crashed.
 //
+// clipVulkanFailed() reports such a caught failure in this process. The GPU
+// is then gone: a projector on it must not be used or freed again (freeing
+// runs Vulkan cleanup, which can crash in the driver too).
+//
 // clipVisionDevice() resolves MTMD_BACKEND_DEVICE (our own process-wide
 // choice, set in init and flipped to "CPU" by a block) to the device to pass
 // in mtmd_context_params; nullptr means CPU. clip.cpp no longer reads the env
@@ -41,7 +45,7 @@ constexpr size_t kUserMarkerSearchWindow = 80;
 ggml_backend_dev_t clipVisionDevice();
 void clipSentinelInit(const std::string &stateDir);
 bool clipSentinelVulkanBlocked();
-bool clipSentinelVulkanActive();
+bool clipVulkanFailed();
 void clipSentinelBeginVulkanAttempt();
 void clipSentinelEndVulkanAttempt();
 void clipSentinelBlockVulkan();
@@ -67,7 +71,7 @@ public:
     ~LlamaGenerationSession();
 
     void init(llama_model *model, const struct common_chat_templates *chat_tmpls,
-              mtmd_context *mtmd_ctx, const SamplerParams &params);
+              mtmd_context *mtmd_ctx, bool mtmd_on_vulkan, const SamplerParams &params);
 
     void printReport();
 
@@ -164,6 +168,8 @@ private:
     llama_sampler * smpl = nullptr;
     const struct common_chat_templates * chat_tmpls = nullptr;
     mtmd_context * mtmd_ctx = nullptr;
+    // mtmd_ctx encodes on Vulkan.
+    bool mtmd_on_vulkan = false;
     bool prev_had_thinking = false;
     bool prev_enable_thinking = false;
     std::string prev_rendered_prompt;
@@ -296,6 +302,13 @@ private:
     mtmd_context *mtmd_ctx = nullptr;
     // Path backing mtmd_ctx, so re-attaching the same projector is a no-op.
     std::string mmproj_path;
+    bool mtmd_on_vulkan = false;
+
+    // The projector's Vulkan device was lost by an encode in this process.
+    bool mmprojLost() const { return mtmd_on_vulkan && clipVulkanFailed(); }
+    // Free mtmd_ctx, or abandon it when mmprojLost(): sessions may still hold
+    // the pointer, and freeing runs Vulkan cleanup on the lost device.
+    void releaseMmproj();
 };
 
 #endif //LMPLAYGROUND_LLAMACPP_H

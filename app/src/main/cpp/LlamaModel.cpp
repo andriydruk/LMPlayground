@@ -108,16 +108,16 @@ void LlamaModel::loadMmprojModel(const std::string &mmprojPath) {
     // this pointer, so replacing it underneath them would dangle. Attaching
     // the projector that is already attached is therefore a no-op; only an
     // actual change of projector frees and reloads.
+    // A projector whose GPU was lost is replaced even by the same file: the
+    // reload runs on CPU, since the failure also switched the vision device.
     if (mtmd_ctx != nullptr) {
-        if (mmproj_path == mmprojPath) {
+        if (mmproj_path == mmprojPath && !mmprojLost()) {
             LOGi("loadMmprojModel: %s already attached, nothing to do", mmprojPath.c_str());
             return;
         }
         LOGi("loadMmprojModel: replacing projector %s with %s",
              mmproj_path.c_str(), mmprojPath.c_str());
-        mtmd_free(mtmd_ctx);
-        mtmd_ctx = nullptr;
-        mmproj_path.clear();
+        releaseMmproj();
     }
 
     mtmd_context_params params = mtmd_context_params_default();
@@ -175,6 +175,7 @@ void LlamaModel::loadMmprojModel(const std::string &mmprojPath) {
         LOGe("loadMmprojModel: FAILED to load mmproj model '%s'", mmprojPath.c_str());
     } else {
         mmproj_path = mmprojPath;
+        mtmd_on_vulkan = params.use_gpu;
         LOGi("loadMmprojModel: OK, vision=%d", mtmd_support_vision(mtmd_ctx));
     }
 }
@@ -198,8 +199,13 @@ LlamaGenerationSession* LlamaModel::createGenerationSession(const SamplerParams 
     }
     // unique_ptr guards the allocation through init(); released to the
     // caller (the JNI layer owns it via the Kotlin object's handle).
+    if (mmprojLost()) {
+        // Copy: the reload clears mmproj_path before it reads the path.
+        const std::string path = mmproj_path;
+        loadMmprojModel(path);
+    }
     auto session = std::make_unique<LlamaGenerationSession>();
-    session->init(model, chat_tmpls.get(), mtmd_ctx, params);
+    session->init(model, chat_tmpls.get(), mtmd_ctx, mtmd_on_vulkan, params);
     return session.release();
 }
 
@@ -265,12 +271,21 @@ std::string LlamaModel::getModelReport() {
     return report.str();
 }
 
-void LlamaModel::unloadModel() {
+void LlamaModel::releaseMmproj() {
     if (mtmd_ctx != nullptr) {
-        mtmd_free(mtmd_ctx);
+        if (mmprojLost()) {
+            LOGw("abandoning vision projector %s: its Vulkan device was lost", mmproj_path.c_str());
+        } else {
+            mtmd_free(mtmd_ctx);
+        }
         mtmd_ctx = nullptr;
     }
+    mtmd_on_vulkan = false;
     mmproj_path.clear();
+}
+
+void LlamaModel::unloadModel() {
+    releaseMmproj();
     chat_tmpls.reset();
     if (model != nullptr) {
         llama_model_free(model);

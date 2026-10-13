@@ -174,8 +174,9 @@ ggml_backend_dev_t clipVisionDevice() {
     if (dev == nullptr) LOGw("vision backend %s not found; using CPU", backend);
     return dev;
 }
-bool clipSentinelVulkanActive() {
-    return clipVisionDevice() != nullptr;
+static std::atomic<bool> g_clipVulkanFailed{false};
+bool clipVulkanFailed() {
+    return g_clipVulkanFailed.load();
 }
 void clipSentinelBeginVulkanAttempt() {
     if (!g_clipStateDir.empty()) touchFile(clipInflightPath());
@@ -185,6 +186,7 @@ void clipSentinelEndVulkanAttempt() {
 }
 void clipSentinelBlockVulkan() {
     if (!g_clipStateDir.empty()) touchFile(clipBlockedPath());
+    g_clipVulkanFailed = true;
     // The next projector load in this process goes to CPU too, not only the
     // next launch: the Vulkan device is gone.
     setenv("MTMD_BACKEND_DEVICE", "CPU", 1);

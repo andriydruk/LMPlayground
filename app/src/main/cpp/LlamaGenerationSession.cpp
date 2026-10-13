@@ -161,8 +161,9 @@ void LlamaGenerationSession::setImageData(const unsigned char *data, size_t len)
 }
 
 void LlamaGenerationSession::init(llama_model *model, const struct common_chat_templates *tmpls,
-                                   mtmd_context *mtmd, const SamplerParams &params) {
+                                   mtmd_context *mtmd, bool mtmdOnVulkan, const SamplerParams &params) {
     mtmd_ctx = mtmd;
+    mtmd_on_vulkan = mtmdOnVulkan;
 
     vocab = llama_model_get_vocab(model);
     chat_tmpls = tmpls;
@@ -366,7 +367,11 @@ int LlamaGenerationSession::addMessage(const char *string, bool enableThinking) 
     // vision are mutually exclusive in the UI, so the tool sampler above is a
     // no-op here.)
     if (has_image) {
-        return processImageTurn(image_data, enableThinking);
+        int rc = processImageTurn(image_data, enableThinking);
+        // Drop the failed turn, or the next one follows an unanswered user
+        // message (and its media marker).
+        if (rc != 0) messages.pop_back();
+        return rc;
     }
 
     // Text-only path
@@ -586,6 +591,13 @@ int LlamaGenerationSession::compactContextIfNeeded(
 int LlamaGenerationSession::processImageTurn(std::vector<unsigned char> &image_data, bool enableThinking) {
     LOGi("Vision path: processing image (%zu bytes) with prompt", image_data.size());
 
+    // An earlier encode in this process lost the GPU this projector runs on.
+    // New sessions get a CPU projector (see createGenerationSession).
+    if (mtmd_on_vulkan && clipVulkanFailed()) {
+        LOGe("Vision unavailable in this session: its Vulkan device was lost");
+        return 1;
+    }
+
     // Strip media markers from older user messages — we can't re-encode old images,
     // and mtmd_tokenize requires marker count == bitmap count
     std::string marker = mtmd_default_marker();
@@ -667,10 +679,12 @@ int LlamaGenerationSession::processImageTurn(std::vector<unsigned char> &image_d
     int n_batch = llama_n_batch(ctx);
     llama_pos new_n_past = 0;
     // The encode is the other crash-prone Vulkan step. On Adreno 7xx/8xx the
-    // GPU can be lost mid-encode, and ggml's fault report then segfaults in
-    // the driver's vkGetDeviceFaultInfoEXT. Bracket it with the sentinel like
-    // the encoder init, so that costs one crash rather than one per image.
-    bool clip_on_vulkan = clipSentinelVulkanActive();
+    // GPU can be lost mid-encode. ggml's fault report used to segfault in the
+    // driver's vkGetDeviceFaultInfoEXT; the fork no longer queries it there,
+    // so the loss arrives as vk::DeviceLostError below. Still bracket it with
+    // the sentinel like the encoder init: a crash elsewhere in a driver then
+    // costs one crash rather than one per image.
+    bool clip_on_vulkan = mtmd_on_vulkan;
     if (clip_on_vulkan) clipSentinelBeginVulkanAttempt();
     int32_t eval_result;
     try {
