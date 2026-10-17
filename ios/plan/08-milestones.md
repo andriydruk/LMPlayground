@@ -15,16 +15,21 @@ M0 restructure ─► M1 engine on Apple + device spike ─► M2 models ─► 
 
 See [02-repo-restructure.md](02-repo-restructure.md).
 
-- [ ] Delete the prototype worktree and branch (D1).
-- [ ] Commit 1: Android tree → `android/`, path fixes (Gradle,
-      workflows, fastlane, `.gitignore`, skills, README).
-- [ ] Commit 2: engine → `core/llamacore`, submodule → `core/llama.cpp`,
-      `core/CMakeLists.txt` superbuild, chat templates → `core/resources/chat_templates`.
-- [ ] Commit 3: Tier A extraction ([03 §3.3](03-cpp-reuse.md#33-moved-into-the-core-first-tier-a)),
-      `lmp_log.h` `os_log` branch.
-- [ ] Commit 4: golden fixtures → `core/testdata`, with the Kotlin tests
-      reading them.
-- [ ] Update the memory notes and `update-llama-cpp` skill.
+- [x] Delete the prototype worktree and branch (D1).
+- [x] Commit 1 (`2cc7ed466`): Android tree → `android/`, path fixes (Gradle,
+      workflows, fastlane, `.gitignore`, README).
+- [x] Commit 2 (`4255ac10f`): engine → `core/llamacore`, submodule →
+      `core/llama.cpp`, `core/CMakeLists.txt`, chat templates →
+      `core/resources/chat_templates`.
+- [x] Commit 3 (`61cff161c`): Tier A extraction ([03 §3.3](03-cpp-reuse.md#33-moved-into-the-core-first-tier-a)).
+- [ ] Copy the updated repo skills into the main checkout after merge
+      (`.claude/` is globally gitignored, so skill edits don't travel with
+      the branch).
+- [ ] Update the memory notes for the new paths.
+- [ ] Merge, then publish an Android point release.
+
+Golden fixtures move to `core/testdata` per milestone, alongside each Swift
+port ([03 §3.5](03-cpp-reuse.md#35-shared-data-instead-of-shared-code)).
 
 **Exit:** the verification list in [02 §2.5](02-repo-restructure.md#25-verification-for-m0)
 passes, and the Android point release is published.
@@ -33,7 +38,8 @@ passes, and the Android point release is published.
 
 - [ ] `build-xcframework.sh` (iOS device, iOS simulator, macOS; static;
       `RelWithDebInfo`; symbol checks; stamp).
-- [ ] Apple `VisionDevicePolicy`, `Threads.h` P-core default.
+- [ ] `VisionPolicy::AnyGpu` on Apple (CPU in the simulator), `Threads.h`,
+      `LoadSentinel`, `lmp_log.h` `os_log` branch, extended `ModelProbe`.
 - [ ] Xcode project skeleton: `Config/*.xcconfig`, `LlamaKit` (iOS + macOS),
       `LlamaKitTests`, empty app target, entitlements.
 - [ ] LlamaKit ObjC++ bridge + Swift API (Engine, Model, GenerationSession,

@@ -33,19 +33,27 @@ pinned by shared golden fixtures** (§3.5).
 
 ## 3.3 Moved into the core first (Tier A)
 
-These are extracted from `native-lib.cpp` / `AsrEngine.cpp` in M0 (the
-third restructure commit). The JNI files become pure marshalling.
+**Done in M0** (commit `61cff161c`). These were defined in `native-lib.cpp` /
+`AsrEngine.cpp` mixed with JNI, so `core/` could not build without the
+Android shim. The JNI files now only marshal arguments and read Android
+system properties.
 
-| New core unit | Extracted from | Content |
-|---------------|----------------|---------|
-| `EngineRuntime.{h,cpp}` | `NativeLlamaCpp_init`, `log_callback`, `systemInfo` | `engineInit(EngineConfig)`: log routing (llama, ggml, mtmd → `lmp_log`), backend loading (dynamic on Android and host, no-op for static Apple builds), device enumeration, `llama_backend_init`. Returns a `DeviceReport`. |
-| `VisionDevicePolicy.{h,cpp}` | `clipVulkanIsKnownGood`, sentinel functions, `clipVisionDevice` | One interface. **Android policy:** the Vulkan allowlist + crash sentinel, unchanged. **Apple policy:** the Metal device, or CPU in the simulator. **Host policy:** first GPU, with the `LMP_MTMD_BACKEND` override. |
-| `LoadSentinel.{h,cpp}` | generalised CLIP sentinel | A file-marker bracket around crash-prone steps (model load, mmproj init, first encode). On the next launch it reports "model X crashed while loading", which replaces the safety net Android gets from `:llama`. |
-| `ModelProbe.{h,cpp}` | `probeModelMetadata` | GGUF header read: name, architecture, parameter count, `context_length`, layer/head dims (for the KV estimate), chat-template presence, and the file kind (LLM / mmproj / ASR). |
-| `Utf8.h` | lambda in `NativeLlamaSession_generate` | Trims an incomplete trailing UTF-8 sequence. Needed by both bridges. |
-| `AsrEngine.{h,cpp}` | `AsrEngine.cpp` | `AsrModel` / `AsrStream` RAII over the parakeet C API, plus thread config. The JNI part stays in `android/`. |
-| `PreambleCache.{h,cpp}` | fingerprint + LRU prune from `PreambleCacheManager.kt` | `setPreambleCacheDir(dir, modelKey)`. SHA-1 via `vendor/hash`. The engine already owns these files. |
-| `Threads.h` | `kMaxGenerationThreads`, `kMaxVisionThreads`, `kAsrThreads` | Per-platform defaults. On Apple, the performance-core count (`hw.perflevel0.physicalcpu`, 2 on iPhone). |
+| Core unit | Extracted from | Content |
+|-----------|----------------|---------|
+| `EngineRuntime.{h,cpp}` | `NativeLlamaCpp_init`, `log_callback` | `engineInit(EngineConfig)`: sentinel init, log routing (llama, ggml, mtmd → `lmp_log`), backend loading (`backendDir` for `GGML_BACKEND_DL` builds, otherwise `ggml_backend_load_all`), vision device choice, `llama_backend_init`. |
+| `VisionDevice.{h,cpp}` | `clipVulkanIsKnownGood`, sentinel functions, `clipVisionDevice`, device enumeration | `VisionPolicy::VulkanAllowlist` (Android: allowlist + crash sentinel, unchanged) or `VisionPolicy::AnyGpu` (host and Apple: the Metal device). The override string replaces `debug.lmp.mtmd_backend` / `LMP_MTMD_BACKEND`, which stay in the JNI layer. |
+| `ModelProbe.{h,cpp}` | `probeModelMetadata` | `probeGgufMetadata()`: `general.name` and chat-template presence. Extended in M1 with architecture, `context_length`, layer and head dims (KV estimate) and the file kind (LLM / mmproj / ASR). |
+| `Utf8.h` | lambda in `NativeLlamaSession_generate` | `utf8TrimIncompleteTail()`, needed by both bridges. |
+| `AsrEngine.{h,cpp}` | `AsrEngine.cpp` (now `android/.../AsrJni.cpp`) | `asrConfigureBackend(threadsOverride)` and `asrStripLocaleTags()`. Bridges call the parakeet C API directly. |
+
+**Moved to M1**, where the first non-Android consumer needs them:
+
+| Core unit | Content |
+|-----------|---------|
+| `LoadSentinel.{h,cpp}` | A file-marker bracket around crash-prone steps (model load, mmproj init, first encode). On the next launch it reports "model X crashed while loading", which replaces the safety net Android gets from `:llama`. |
+| `Threads.h` | Per-platform thread defaults. On Apple, the performance-core count (`hw.perflevel0.physicalcpu`, 2 on iPhone). Android keeps today's constants. |
+| `lmp_log.h` `os_log` branch | Enabled by the iOS build only. The macOS harness keeps stderr, which it folds into its report. |
+| `PreambleCache.{h,cpp}` (M3) | `setPreambleCacheDir(dir, modelKey)`: SHA-1 fingerprint (`vendor/hash`) and LRU prune, from `PreambleCacheManager.kt`. |
 
 Added later, still shared:
 
@@ -71,7 +79,7 @@ Added later, still shared:
 | Asset | Location after M0 | Consumers |
 |-------|-------------------|-----------|
 | Chat-template overrides | `core/resources/chat_templates/*.jinja` + `overrides.json` (filename → template) | Android assets (extra `srcDir`), iOS bundle resources. |
-| Golden fixtures | `core/testdata/*.json` (ResponseProcessor, ToolCallPairing, DictationTranscript, WER, WebLinkStore, TextChunker, ToolCallLoop transcripts) | Kotlin unit tests and Swift unit tests. A behaviour change must update the fixture, so the other platform's tests then fail until it follows. |
+| Golden fixtures | `core/testdata/*.json` (ResponseProcessor, ToolCallPairing, DictationTranscript, WER, WebLinkStore, TextChunker, ToolCallLoop transcripts) | Kotlin unit tests and Swift unit tests. Each fixture moves out of the Kotlin tests in the milestone that ports its logic to Swift, so the second consumer exists from day one. A behaviour change must update the fixture, so the other platform's tests then fail until it follows. |
 | Harness fixtures | `android/model-harness` prompts, audio, expectations → `core/testdata/harness/` | `:model-harness` and LlamaKit's macOS tests. |
 | Model catalog | `ModelInfoProvider.kt` (source of truth) + `ios/catalog/ios-catalog.json` (the subset verified on device, with measured numbers) | `generate-catalog.py` merges them into Swift. See [06 §6.6](06-build-and-release.md#66-catalog-and-strings-generation). |
 | Strings (351 × 28 locales) | `android/app/src/main/res/values*/strings.xml` | `generate-strings.py` → `ios/LMPlayground/Localizable.xcstrings`. |

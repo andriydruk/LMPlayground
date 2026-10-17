@@ -64,7 +64,7 @@ reads it via `rootProject.file("../version.properties")`, and the iOS
 | `debug.keystore` | `android/` | `git mv` |
 | `ARCHITECTURE.md` | `android/ARCHITECTURE.md` | `git mv`, then add a short root section to README pointing to both architectures |
 | `app/src/main/cpp/{LlamaCpp.h,LlamaModel.cpp,LlamaGenerationSession.cpp,LlamaEmbeddingSession.cpp,lmp_log.h}` | `core/llamacore/` | `git mv` |
-| `app/src/main/cpp/AsrEngine.cpp` | split: portable part → `core/llamacore/AsrEngine.{h,cpp}`, JNI part stays as `android/app/src/main/cpp/asr-jni.cpp` | move + edit (M0 step 3) |
+| `app/src/main/cpp/AsrEngine.cpp` | split: portable part → `core/llamacore/AsrEngine.{h,cpp}`, JNI part stays as `android/app/src/main/cpp/AsrJni.cpp` | move + edit (M0 step 3) |
 | `app/src/main/cpp/llama.cpp` (submodule) | `core/llama.cpp` | `git mv` (updates `.gitmodules` and the gitlink) |
 | `app/src/main/assets/chat_templates/` | `core/resources/chat_templates/` | `git mv`. Gradle adds `../../core/resources` as an extra assets source dir |
 
@@ -89,7 +89,7 @@ Do these as **separate commits** so each one is reviewable and bisectable:
 | `android/fastlane/Fastfile` | Gradle task paths are relative to `android/`, so there's no change if fastlane runs from `android/`. Check `aab` / mapping output paths. |
 | `.gitmodules` | `path = core/llama.cpp`. |
 | `.gitignore` | Prefix the Android entries with `android/` where they were rooted (`android/app/release`, `android/app/src/main/cpp/clblast`). Add the Xcode ignores (`ios/build-apple/`, `xcuserdata/`, `*.xcarchive`, `DerivedData/`) and `core/build*/`. |
-| `.claude/skills/*` | 53 path references across 8 skills (`update-llama-cpp` 14, `fix-crashes` 10, `record-screenshots` 8, `release` 7, `translate-strings` 5, `model-testing` 4, `model-scout` 3 + `scout.py` 2). Update `./gradlew` → `cd android && ./gradlew`, `app/src/...` → `android/app/src/...`, submodule → `core/llama.cpp`. |
+| `.claude/skills/*` (globally gitignored, so copied to the main checkout by hand after merge) | 53 path references across 8 skills (`update-llama-cpp` 14, `fix-crashes` 10, `record-screenshots` 8, `release` 7, `translate-strings` 5, `model-testing` 4, `model-scout` 3 + `scout.py` 2). Update `./gradlew` → `cd android && ./gradlew`, `app/src/...` → `android/app/src/...`, submodule → `core/llama.cpp`. |
 | `.claude/launch.json` | Re-check any paths. |
 | `README.md` | Build instructions for both platforms. |
 | Memory notes | `project_llama_submodule_remotes`, `project_fork_carried_patches`, `project_worktree_submodule_init`, `project_native_crash_symbolication` (`.cxx` path is now `android/app/.cxx`), `project_ios_port`. |
