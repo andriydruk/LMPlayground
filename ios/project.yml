@@ -74,6 +74,10 @@ targets:
     sources:
       - path: LMPlayground
         type: syncedFolder
+      # Chat-template overrides shared with Android, bundled as a folder.
+      - path: ../core/resources/chat_templates
+        type: folder
+        buildPhase: resources
     dependencies:
       - target: LlamaKit
         embed: true

@@ -23,7 +23,12 @@ inline std::string LMKString(NSString *_Nullable s) {
 }
 
 @interface LMKModelMetadata ()
-- (instancetype)initWithName:(NSString *)name hasChatTemplate:(BOOL)hasChatTemplate;
+- (instancetype)initWithName:(NSString *)name
+              hasChatTemplate:(BOOL)hasChatTemplate
+                 architecture:(NSString *)architecture
+                contextLength:(uint32_t)contextLength
+              kvBytesPerToken:(uint64_t)kvBytesPerToken
+                  isProjector:(BOOL)isProjector;
 @end
 
 @interface LMKModel ()

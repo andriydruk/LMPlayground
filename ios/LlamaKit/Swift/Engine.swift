@@ -19,6 +19,13 @@ public actor InferenceActor {
 public struct ModelMetadata: Sendable, Equatable {
     public let name: String
     public let hasChatTemplate: Bool
+    /// general.architecture, e.g. "qwen35"; "clip" for a vision projector.
+    public let architecture: String
+    /// Trained context length; 0 if undeclared.
+    public let contextLength: Int
+    /// Upper bound on f16 KV-cache bytes per context token; 0 if unknown.
+    public let kvBytesPerToken: UInt64
+    public let isProjector: Bool
 }
 
 public struct LoadOptions: Sendable {
@@ -73,7 +80,12 @@ public enum Engine {
     /// Read a GGUF header without loading tensors. Nil if it isn't GGUF.
     public static func probe(_ url: URL) -> ModelMetadata? {
         guard let meta = LMKEngine.probeModel(atPath: url.path) else { return nil }
-        return ModelMetadata(name: meta.name, hasChatTemplate: meta.hasChatTemplate)
+        return ModelMetadata(name: meta.name,
+                             hasChatTemplate: meta.hasChatTemplate,
+                             architecture: meta.architecture,
+                             contextLength: Int(meta.contextLength),
+                             kvBytesPerToken: meta.kvBytesPerToken,
+                             isProjector: meta.isProjector)
     }
 
     @InferenceActor

@@ -48,10 +48,19 @@ NSError *LMKMakeError(LMKErrorCode code, NSString *description) {
 
 @implementation LMKModelMetadata
 
-- (instancetype)initWithName:(NSString *)name hasChatTemplate:(BOOL)hasChatTemplate {
+- (instancetype)initWithName:(NSString *)name
+              hasChatTemplate:(BOOL)hasChatTemplate
+                 architecture:(NSString *)architecture
+                contextLength:(uint32_t)contextLength
+              kvBytesPerToken:(uint64_t)kvBytesPerToken
+                  isProjector:(BOOL)isProjector {
     if ((self = [super init])) {
         _name = [name copy];
         _hasChatTemplate = hasChatTemplate;
+        _architecture = [architecture copy];
+        _contextLength = contextLength;
+        _kvBytesPerToken = kvBytesPerToken;
+        _isProjector = isProjector;
     }
     return self;
 }
@@ -83,7 +92,13 @@ NSError *LMKMakeError(LMKErrorCode code, NSString *description) {
         return nil;
     }
     NSString *name = [NSString stringWithUTF8String:meta.name.c_str()] ?: @"";
-    return [[LMKModelMetadata alloc] initWithName:name hasChatTemplate:meta.hasChatTemplate];
+    NSString *arch = [NSString stringWithUTF8String:meta.architecture.c_str()] ?: @"";
+    return [[LMKModelMetadata alloc] initWithName:name
+                                  hasChatTemplate:meta.hasChatTemplate
+                                     architecture:arch
+                                    contextLength:meta.contextLength
+                                  kvBytesPerToken:meta.kvBytesPerToken()
+                                      isProjector:meta.isProjector()];
 }
 
 + (LMKModel *)loadModelAtPath:(NSString *)path

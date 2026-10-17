@@ -4,16 +4,21 @@ import LlamaKit
 /// Debug screen for the M1 device spike: benchmarks every model in
 /// Documents/Models. See EngineLab.
 struct EngineLabView: View {
+    @Environment(ModelStore.self) private var store
+    @Environment(DownloadManager.self) private var downloads
     @State private var files: [URL] = []
+    @State private var status = ""
     @State private var results: [LabResult] = []
     @State private var running = false
 
     var body: some View {
-        NavigationStack {
             List {
                 Section("Memory") {
                     LabeledContent("Available", value: "\(ProcessMemory.available.megabytes) MB")
                     LabeledContent("Footprint", value: "\(ProcessMemory.footprint.megabytes) MB")
+                }
+                if !status.isEmpty {
+                    Section("Status") { Text(status) }
                 }
                 Section("Models in Documents/Models") {
                     if files.isEmpty {
@@ -46,11 +51,12 @@ struct EngineLabView: View {
             }
             .onAppear {
                 files = EngineLab.modelFiles()
-                if UserDefaults.standard.bool(forKey: "labAutorun"), !running {
+                if let list = UserDefaults.standard.string(forKey: "labDownload"), !running {
+                    downloadThenRun(list.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespaces) })
+                } else if UserDefaults.standard.bool(forKey: "labAutorun"), !running {
                     run()
                 }
             }
-        }
     }
 
     private func summary(_ r: LabResult) -> String {
@@ -62,6 +68,34 @@ struct EngineLabView: View {
         if let p = r.peakFootprintMB { parts.append("peak \(p) MB") }
         if let v = r.visionSeconds { parts.append(String(format: "vision %.1fs", v)) }
         return parts.joined(separator: " · ")
+    }
+
+    /// `-labDownload "a.gguf,b.gguf"`: download catalog models (with their
+    /// image modules) through the app's DownloadManager, then benchmark.
+    private func downloadThenRun(_ filenames: [String]) {
+        running = true
+        Task {
+            for name in filenames {
+                guard let model = ModelCatalog.model(forFilename: name) else {
+                    status += "unknown model \(name)\n"
+                    continue
+                }
+                downloads.download(model, includeProjector: true)
+            }
+            while downloads.downloads.values.contains(where: { $0.failure == nil }) {
+                let lines = downloads.downloads.map { name, p in
+                    "\(name): \(Int(p.fraction * 100))% \(UInt64(p.bytesPerSecond).formattedBytes)/s"
+                }
+                status = lines.sorted().joined(separator: "\n")
+                try? await Task.sleep(for: .seconds(2))
+            }
+            let failures = downloads.downloads.compactMap { name, p in p.failure.map { "\(name): \($0)" } }
+            status = failures.isEmpty ? "downloads complete" : failures.joined(separator: "\n")
+            store.refresh()
+            files = EngineLab.modelFiles()
+            running = false
+            run()
+        }
     }
 
     private func run() {

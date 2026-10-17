@@ -55,6 +55,13 @@ typedef NS_ENUM(NSInteger, LMKVisionDevice) {
 @interface LMKModelMetadata : NSObject
 @property (nonatomic, readonly, copy) NSString *name;
 @property (nonatomic, readonly) BOOL hasChatTemplate;
+/// general.architecture, e.g. "qwen35"; "clip" for a vision projector.
+@property (nonatomic, readonly, copy) NSString *architecture;
+/// Trained context length; 0 if undeclared.
+@property (nonatomic, readonly) uint32_t contextLength;
+/// Upper bound on f16 KV-cache bytes per context token; 0 if unknown.
+@property (nonatomic, readonly) uint64_t kvBytesPerToken;
+@property (nonatomic, readonly) BOOL isProjector;
 @end
 
 NS_ASSUME_NONNULL_END
