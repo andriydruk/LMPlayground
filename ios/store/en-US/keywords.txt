@@ -1,0 +1,1 @@
+llm,ai,chat,offline,local,private,gguf,llama,qwen,gemma,assistant,chatbot,on-device,model

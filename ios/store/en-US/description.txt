@@ -1,0 +1,37 @@
+LM Playground runs large language models directly on your iPhone and iPad. Download a model, load it in one tap, and chat — privately, on your device. No cloud servers, no API keys, no account, and no data leaving your device.
+
+KEY FEATURES
+
+On-device inference — every reply is generated locally with Metal on your iPhone or iPad. Your conversations stay private.
+
+Chat history — conversations are saved and organized. Pin, rename, or delete them, and pick up any chat right where you left off. On iPad, your chats sit in a sidebar next to the conversation.
+
+Rich replies — answers are rendered with full Markdown: headings, code blocks with a copy button, lists, tables, bold and italic.
+
+Documents — attach a file to a chat and ask questions about it. On-device search finds the most relevant passages by meaning and hands them to the model, so answers come straight from your document, which never leaves your device. Supports PDF, Word, EPUB, HTML, Markdown and plain text; a small embedding model downloads once on first use.
+
+Vision — send a photo and chat about it. Pick an image from your library or take one with the camera, then ask the model what it sees: describe a scene, identify objects, or read text. The image is understood right on your device.
+
+Voice dictation — tap the microphone and speak; your words appear as you talk, in 35 languages. Speech is recognized on your device and never saved or sent.
+
+Reasoning models — watch the thinking of reasoning models in a collapsible section, with an adjustable thinking budget.
+
+Tools — capable models can search the web, read a page, and run JavaScript in a sandbox during a reply. Each tool is off by default; turn on only the ones you want, per model. Web search and page reading reach the internet only when you switch them on.
+
+Speed at a glance — see token count and tokens per second for every reply.
+
+Your settings, per chat — context size, thinking budget, temperature, Top-P, Top-K, Min-P, repetition penalty and seed.
+
+System prompts — save reusable instructions once and use them with any model to keep tone, role or output format consistent.
+
+Custom models — import your own GGUF models from the Files app, alongside the built-in catalog.
+
+Reliable downloads — models download in the background with progress, speed and time remaining, and resume after a network interruption.
+
+MODELS
+
+A catalog of models tested on iPhone and iPad, from Qwen, Gemma, Llama, LFM, Granite and more, starting at a few hundred megabytes. The app checks free memory before loading a model and tells you when one is too large for your device.
+
+OPEN SOURCE
+
+LM Playground is open source under the MIT License. Powered by llama.cpp, with models from Hugging Face.
