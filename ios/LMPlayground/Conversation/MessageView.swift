@@ -6,12 +6,28 @@ struct MessageView: View {
     let message: ChatMessage
     let isStreaming: Bool
     var onRegenerate: (() -> Void)?
+    @State private var viewing: String?
+
+    private struct ViewedImage: Identifiable {
+        let path: String
+        var id: String { path }
+    }
 
     var body: some View {
         switch message.role {
         case .user:
             HStack {
                 Spacer(minLength: 48)
+                VStack(alignment: .trailing, spacing: 6) {
+                if let path = message.imagePath {
+                    Button { viewing = path } label: {
+                        StoredImage(path: path)
+                            .frame(width: 180, height: 180)
+                            .clipShape(RoundedRectangle(cornerRadius: 14))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Attached image")
+                }
                 Text(message.content)
                     .textSelection(.enabled)
                     .padding(.horizontal, 14)
@@ -19,6 +35,10 @@ struct MessageView: View {
                     .background(Color.accentColor, in: UnevenRoundedRectangle(
                         topLeadingRadius: 20, bottomLeadingRadius: 20, bottomTrailingRadius: 4, topTrailingRadius: 20))
                     .foregroundStyle(.white)
+                }
+            }
+            .fullScreenCover(item: Binding(get: { viewing.map(ViewedImage.init) }, set: { viewing = $0?.path })) { item in
+                ImageViewer(path: item.path)
             }
         case .assistant:
             AssistantMessageView(message: message, isStreaming: isStreaming, onRegenerate: onRegenerate)
@@ -54,10 +74,13 @@ private struct AssistantMessageView: View {
 
             if !split.response.isEmpty {
                 MarkdownView(text: split.response)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityIdentifier("assistantAnswer")
             }
 
             if message.interrupted {
                 Label("Stopped when the app went to the background", systemImage: "pause.circle")
+                    .accessibilityIdentifier("interruptedLabel")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

@@ -39,7 +39,31 @@
          </BuildableReference>
       </MacroExpansion>
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3AED9EE5FFDB7D5999F8F5F2"
+               BuildableName = "LMPlaygroundTests.xctest"
+               BlueprintName = "LMPlaygroundTests"
+               ReferencedContainer = "container:LMPlayground.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "852A2BCABA5B887AD838D7BA"
+               BuildableName = "LMPlaygroundUITests.xctest"
+               BlueprintName = "LMPlaygroundUITests"
+               ReferencedContainer = "container:LMPlayground.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"

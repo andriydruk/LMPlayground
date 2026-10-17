@@ -101,6 +101,38 @@ targets:
         ENABLE_PREVIEWS: YES
         SWIFT_EMIT_LOC_STRINGS: YES
 
+  # App logic (thinking split, pairing, catalog, database). Runs on a device:
+  # there is no iOS 26 simulator runtime on the build Mac yet.
+  LMPlaygroundTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: LMPlaygroundTests
+        type: syncedFolder
+    dependencies:
+      - target: LMPlayground
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.druk.lmplayground.Tests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/LMPlayground.app/LMPlayground
+        BUNDLE_LOADER: $(TEST_HOST)
+
+  # End-to-end flows on a device with models in Documents/Models.
+  LMPlaygroundUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: LMPlaygroundUITests
+        type: syncedFolder
+    dependencies:
+      - target: LMPlayground
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.druk.lmplayground.UITests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: LMPlayground
+
 schemes:
   LMPlayground:
     build:
@@ -108,6 +140,11 @@ schemes:
         LMPlayground: all
     run:
       config: Debug
+    test:
+      config: Debug
+      targets:
+        - LMPlaygroundTests
+        - LMPlaygroundUITests
     archive:
       config: Release
 

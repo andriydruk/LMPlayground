@@ -142,6 +142,7 @@ struct ModelPicker: View {
             }
             .font(.headline)
         }
+        .accessibilityIdentifier("modelPicker")
         .disabled(model.isGenerating)
     }
 
@@ -162,7 +163,15 @@ struct InputBar: View {
 
     var body: some View {
         @Bindable var model = model
+        VStack(spacing: 6) {
+        if let image = model.pendingImage {
+            PendingImagePreview(path: image)
+        }
         HStack(alignment: .bottom, spacing: 8) {
+            if runtime.loaded?.supportsVision == true {
+                AttachmentMenu()
+                    .disabled(model.isGenerating)
+            }
             if runtime.loaded?.descriptor.offersThinkingToggle == true {
                 Button {
                     model.thinkingEnabled.toggle()
@@ -172,11 +181,13 @@ struct InputBar: View {
                         .frame(width: 36, height: 36)
                 }
                 .accessibilityLabel(model.thinkingEnabled ? "Thinking on" : "Thinking off")
+                .accessibilityIdentifier("thinkingToggle")
                 .buttonStyle(.borderless)
             }
             TextField("Message", text: $model.draft, axis: .vertical)
                 .lineLimit(1...8)
                 .focused($focused)
+                .accessibilityIdentifier("messageField")
                 .padding(.horizontal, 14)
                 .padding(.vertical, 9)
                 .contentShape(.rect)
@@ -188,15 +199,18 @@ struct InputBar: View {
                     .labelStyle(.iconOnly)
                     .font(.title)
                     .keyboardShortcut(".", modifiers: .command)
+                    .accessibilityIdentifier("stopButton")
             } else {
                 Button("Send", systemImage: "arrow.up.circle.fill") { model.send() }
                     .labelStyle(.iconOnly)
                     .font(.title)
                     .disabled(!model.canSend)
+                    .accessibilityIdentifier("sendButton")
                     .keyboardShortcut(.return, modifiers: .command)
             }
         }
         .padding(.horizontal)
+        }
         .padding(.vertical, 8)
         .background(.bar)
     }
