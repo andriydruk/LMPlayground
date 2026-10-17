@@ -1,0 +1,5 @@
+{
+  "_comment": "Models verified on the reference device (iPhone 16 Pro, the 8 GB floor of the supported tier). status: verified (shown in release builds), candidate (debug builds only; the default for models not listed), excluded (never shown). measured: from the Engine Lab. See ios/plan/05-platform-research.md.",
+  "referenceDevice": "iPhone 16 Pro (iPhone17,1)",
+  "models": {}
+}
