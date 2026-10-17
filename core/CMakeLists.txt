@@ -60,7 +60,11 @@ add_library(llamacore INTERFACE)
 target_sources(llamacore INTERFACE
         ${LMP_CORE_DIR}/llamacore/LlamaModel.cpp
         ${LMP_CORE_DIR}/llamacore/LlamaGenerationSession.cpp
-        ${LMP_CORE_DIR}/llamacore/LlamaEmbeddingSession.cpp)
+        ${LMP_CORE_DIR}/llamacore/LlamaEmbeddingSession.cpp
+        ${LMP_CORE_DIR}/llamacore/EngineRuntime.cpp
+        ${LMP_CORE_DIR}/llamacore/VisionDevice.cpp
+        ${LMP_CORE_DIR}/llamacore/ModelProbe.cpp
+        ${LMP_CORE_DIR}/llamacore/AsrEngine.cpp)
 
 target_include_directories(llamacore INTERFACE
         ${LMP_CORE_DIR}/llamacore
