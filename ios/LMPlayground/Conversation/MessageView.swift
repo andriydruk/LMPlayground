@@ -140,10 +140,12 @@ struct ThinkingSection: View {
             } label: {
                 HStack(spacing: 6) {
                     Image(systemName: "brain")
+                        .accessibilityHidden(true)
                     Text(title)
                     Image(systemName: "chevron.right")
                         .rotationEffect(.degrees(expanded ? 90 : 0))
                         .font(.caption2)
+                        .accessibilityHidden(true)
                 }
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
@@ -197,5 +199,6 @@ struct ToolCallView: View {
 private struct TypingIndicator: View {
     var body: some View {
         ProgressView().controlSize(.small)
+            .accessibilityLabel("Generating")
     }
 }

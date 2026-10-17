@@ -55,6 +55,7 @@ struct MicButton: View {
 /// gets louder.
 private struct ListeningRing: View {
     var level: Float
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private static let colors: [Color] = [
         Color(red: 0.31, green: 0.55, blue: 1.0),
@@ -68,7 +69,8 @@ private struct ListeningRing: View {
     var body: some View {
         let voice = CGFloat(level)
         TimelineView(.animation) { context in
-            let angle = context.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 3.2) / 3.2 * 360
+            // Still breathes with the voice, but doesn't spin, with Reduce Motion.
+            let angle = reduceMotion ? 0 : context.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 3.2) / 3.2 * 360
             Circle()
                 .strokeBorder(AngularGradient(colors: Self.colors, center: .center),
                               lineWidth: 2 + 2.5 * voice)
