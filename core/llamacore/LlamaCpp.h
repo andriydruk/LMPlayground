@@ -169,6 +169,25 @@ private:
     // prompt prefix.
     int last_prompt_end_pos = 0;
     llama_token last_token = 0;
+    // What the KV cache holds after this turn's prompt was decoded:
+    // [last_full_prompt] plus the generated tokens that were decoded since.
+    // Never the end-of-generation token that stopped the turn, nor the token
+    // sampled just before a Stop. [decoded_response] is those decoded tokens'
+    // text and [pending_piece] the sampled token waiting for its decode, so
+    // finalizeResponse can point the next turn's prefix match at exactly what
+    // is cached, and the next turn feeds the turn's closing markers too.
+    //   Prompt — the cache holds last_full_prompt + decoded_response.
+    //   Stale  — this turn's prompt isn't (fully) in the cache: its decode
+    //            failed or the turn ended before it ran. Start over next turn.
+    //   Unknown — not tracked (vision turns cache image embeddings).
+    enum class KvState { Unknown, Prompt, Stale };
+    KvState kv_state = KvState::Unknown;
+    std::string decoded_response;
+    std::string pending_piece;
+    // A turn is being generated: set when its prompt is prepared, cleared when
+    // finalizeResponse commits the reply (or a tool round hands control back).
+    // Keeps the stop-between-tokens path from committing a reply twice.
+    bool turn_open = false;
     // Pending tokens for the next generate() decode. Zero-initialized and
     // re-invalidated at the start of every addMessage/submitToolResults so a
     // turn that fails (or never runs) leaves no batch behind — generate()

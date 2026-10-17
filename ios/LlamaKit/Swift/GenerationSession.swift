@@ -73,7 +73,10 @@ public final class GenerationSession {
             case .more:
                 tokens += 1
                 if tokens >= maxTokens || Task.isCancelled {
+                    // One more step with the abort set ends the turn in the
+                    // engine, committing the partial reply to its history.
                     native.requestAbort()
+                    _ = native.generateStep { _ in }
                     return .finished
                 }
             case .done:

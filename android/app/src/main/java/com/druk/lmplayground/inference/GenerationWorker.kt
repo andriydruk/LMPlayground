@@ -97,6 +97,17 @@ internal class GenerationWorker(
                     statusCode = if (rc == 1) 0 else rc
                     break
                 }
+                if (cancelled) {
+                    // Stopped between tokens: one more generate() with the
+                    // abort set ends the turn natively, committing the partial
+                    // reply to the session's history so the next message
+                    // follows it instead of an unanswered user turn.
+                    try {
+                        nativeSession.generate(object : LlamaGenerationCallback {
+                            override fun onFullResponse(response: String) {}
+                        })
+                    } catch (_: Throwable) {}
+                }
             }
             if (cancelled) statusCode = -1
         } catch (t: Throwable) {

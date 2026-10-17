@@ -258,6 +258,9 @@ void LlamaGenerationSession::clearKvCacheForFreshPrompt() {
     prev_len = 0;
     last_full_prompt.clear();
     last_prompt_end_pos = 0;
+    kv_state = KvState::Unknown;
+    decoded_response.clear();
+    pending_piece.clear();
 }
 
 void LlamaGenerationSession::requestAbort() {
@@ -430,6 +433,10 @@ int LlamaGenerationSession::addMessage(const char *string, bool enableThinking) 
     // after llama_decode has actually committed these tokens to the
     // KV cache.
     last_full_prompt = full_prompt;
+    kv_state = KvState::Stale;  // until generate() decodes the prompt
+    decoded_response.clear();
+    pending_piece.clear();
+    turn_open = true;
 
 
     maybeAddBudgetSampler(result, enableThinking);
@@ -621,6 +628,11 @@ int LlamaGenerationSession::processImageTurn(std::vector<unsigned char> &image_d
     // Always clear KV cache for vision — we re-eval the full prompt
     llama_memory_clear(llama_get_memory(ctx), true);
     prev_len = 0;
+    // The cache will hold image embeddings, not text: prefix tracking is off
+    // for this turn.
+    kv_state = KvState::Unknown;
+    decoded_response.clear();
+    pending_piece.clear();
 
     // Create bitmap from image data.
     // The helper returns a mtmd_helper_bitmap_wrapper and takes a
@@ -714,10 +726,12 @@ int LlamaGenerationSession::processImageTurn(std::vector<unsigned char> &image_d
 
     // After mtmd eval, logits are ready — skip first decode in generate()
     skip_first_decode = true;
+    turn_open = true;
     return 0;
 }
 
 void LlamaGenerationSession::finalizeResponse() {
+    turn_open = false;
     common_chat_msg assistant_msg;
     assistant_msg.role = "assistant";
     assistant_msg.content = response;
@@ -740,8 +754,26 @@ void LlamaGenerationSession::finalizeResponse() {
 
     try {
         auto result = renderTemplate(prev_enable_thinking, /*addGenerationPrompt=*/false);
-        prev_rendered_prompt = result.prompt;
-        prev_len = (int)prev_rendered_prompt.size();
+        const std::string cached = last_full_prompt + decoded_response;
+        if (kv_state == KvState::Stale) {
+            // This turn's prompt isn't (fully) in the cache: the next turn
+            // starts from a clean one and feeds the whole conversation.
+            LOGi("finalizeResponse: KV cache doesn't hold this turn, clearing");
+            clearKvCacheForFreshPrompt();
+            prev_rendered_prompt.clear();
+        } else if (kv_state == KvState::Prompt && !last_full_prompt.empty() &&
+                   result.prompt.size() >= cached.size() &&
+                   result.prompt.compare(0, cached.size(), cached) == 0) {
+            // Match the next turn against exactly what is cached, so it also
+            // feeds what the cache lacks: the end-of-turn markers the template
+            // renders after the reply (the token that ended generation is
+            // never decoded) and, after a Stop, the last sampled token.
+            prev_rendered_prompt = cached;
+            prev_len = (int)cached.size();
+        } else {
+            prev_rendered_prompt = result.prompt;
+            prev_len = (int)prev_rendered_prompt.size();
+        }
     } catch (const std::exception &e) {
         LOGe("Failed to render chat template in finalizeResponse: %s", e.what());
         prev_rendered_prompt.clear();
@@ -759,6 +791,15 @@ int LlamaGenerationSession::generate(const ResponseCallback& callback) {
         return 1;
     }
 
+    // Stopped between tokens: end the turn here, like a natural stop, so the
+    // partial reply is committed to the history the next turn renders. The
+    // sampled token waiting in [batch] is not decoded. Callers that stop
+    // between tokens call generate() once more to get here.
+    if (abort_requested.load()) {
+        if (turn_open) finalizeResponse();
+        return 1;
+    }
+
     // After vision eval, logits are already computed — skip to sampling
     if (skip_first_decode) {
         skip_first_decode = false;
@@ -772,6 +813,7 @@ int LlamaGenerationSession::generate(const ResponseCallback& callback) {
             LOGe("generate called with no pending batch");
             return 1;
         }
+        const bool decoding_prompt = !prompt_tokens.empty();
         int n_ctx = llama_n_ctx(ctx);
         int n_ctx_used = llama_memory_seq_pos_max(llama_get_memory(ctx), 0);
         if (n_ctx_used + batch.n_tokens > n_ctx) {
@@ -788,6 +830,7 @@ int LlamaGenerationSession::generate(const ResponseCallback& callback) {
             llama_batch chunk = llama_batch_get_one(batch.token, n_batch_limit);
             if (llama_decode(ctx, chunk)) {
                 LOGe("failed to decode prompt chunk");
+                kv_state = KvState::Stale;
                 finalizeResponse();
                 return 1;
             }
@@ -796,9 +839,18 @@ int LlamaGenerationSession::generate(const ResponseCallback& callback) {
 
         if (llama_decode(ctx, batch)) {
             LOGe("failed to decode the batch");
+            // An aborted or failed decode may leave part of the batch in the
+            // cache: don't trust it for the next turn.
+            kv_state = KvState::Stale;
             finalizeResponse();
             return 1;
         }
+        if (decoding_prompt) {
+            if (kv_state == KvState::Stale) kv_state = KvState::Prompt;
+        } else {
+            decoded_response += pending_piece;
+        }
+        pending_piece.clear();
     }
 
     // Reset sampler and feed prompt tokens so the reasoning budget sampler
@@ -848,6 +900,7 @@ int LlamaGenerationSession::generate(const ResponseCallback& callback) {
         }
         std::string piece(buf, n);
         response += piece;
+        pending_piece = piece;
 
         for (const auto& stop : additional_stops) {
             if (response.size() >= stop.size() &&
@@ -948,11 +1001,14 @@ int LlamaGenerationSession::generate(const ResponseCallback& callback) {
                     llama_get_memory(ctx), 0, last_prompt_end_pos, -1);
                 prev_rendered_prompt = last_full_prompt;
                 prev_len = (int)last_full_prompt.size();
+                decoded_response.clear();
+                pending_piece.clear();
             }
 
             LOGi("Tool calls detected: %zu calls (KV preserved at pos %d)",
                  pending_tool_calls.size(), last_prompt_end_pos);
             response.clear();
+            turn_open = false;  // reopened by submitToolResults
             return 2;
         }
     }
@@ -991,6 +1047,9 @@ void LlamaGenerationSession::replayHistory(const std::vector<std::pair<std::stri
     response.clear();
     last_full_prompt.clear();
     last_prompt_end_pos = 0;
+    kv_state = KvState::Unknown;
+    decoded_response.clear();
+    pending_piece.clear();
     if (ctx != nullptr) {
         llama_memory_clear(llama_get_memory(ctx), true);
     }
@@ -1376,6 +1435,10 @@ int LlamaGenerationSession::submitToolResults(const char *resultsJson, bool enab
 
     // Track the new full prompt for the next round's tool-call rollback.
     last_full_prompt = full_prompt;
+    kv_state = KvState::Stale;  // until generate() decodes the prompt
+    decoded_response.clear();
+    pending_piece.clear();
+    turn_open = true;
 
     if (!result.parser.empty()) {
         parser_params = common_chat_parser_params(result);
