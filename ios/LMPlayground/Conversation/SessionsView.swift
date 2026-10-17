@@ -69,6 +69,7 @@ struct SessionsView: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button("Settings", systemImage: "gearshape") { showSettings = true }
+                    .keyboardShortcut(",", modifiers: .command)
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button("New chat", systemImage: "square.and.pencil") {
