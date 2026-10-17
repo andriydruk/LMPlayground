@@ -14,6 +14,9 @@ final class ConversationModel {
     private(set) var messages: [ChatMessage] = []
     private(set) var isGenerating = false
     var draft = ""
+    /// A picked or captured image waiting to go with the next message (saved
+    /// name in ChatImageStore).
+    var pendingImage: String?
     var thinkingEnabled = true
     var params = GenerationParams()
     var systemPrompt = ""
@@ -49,6 +52,7 @@ final class ConversationModel {
         stop()
         session = nil
         messages = []
+        discardPendingImage()
         systemPrompt = ""
         params = GenerationParams()
         invalidateGeneration()
@@ -79,6 +83,19 @@ final class ConversationModel {
             try? store.updateSession(id) { $0.systemPrompt = text }
         }
         invalidateGeneration()
+    }
+
+    // MARK: Images
+
+    func attachImage(_ data: Data) {
+        discardPendingImage()
+        pendingImage = ChatImageStore.persist(data)
+        if pendingImage == nil { errorMessage = String(localized: "This image couldn't be read.") }
+    }
+
+    func discardPendingImage() {
+        if let pendingImage { ChatImageStore.delete([pendingImage]) }
+        pendingImage = nil
     }
 
     // MARK: Models
@@ -121,7 +138,10 @@ final class ConversationModel {
         }
         guard let sessionId = session?.id else { return }
 
-        var user = ChatMessage(role: .user, content: text)
+        // Only a model with an attached projector can see the image.
+        let image = loaded.supportsVision ? pendingImage : nil
+        pendingImage = nil
+        var user = ChatMessage(role: .user, content: text, imagePath: image)
         user.recordId = (try? store.insert(user.record(sessionId: sessionId)))?.id
         messages.append(user)
 
@@ -139,7 +159,12 @@ final class ConversationModel {
             do {
                 let generation = try await prepareGeneration(for: loaded)
                 let observer = makeObserver()
-                _ = try await TurnRunner.run(session: generation, message: text, image: nil,
+                let imageData: Data? = if let image {
+                    await Task.detached { ChatImageStore.visionData(for: image) }.value
+                } else {
+                    nil
+                }
+                _ = try await TurnRunner.run(session: generation, message: text, image: imageData,
                                              enableThinking: thinking, supportsThinking: supportsThinking,
                                              tools: tools, observer: observer)
             } catch {
