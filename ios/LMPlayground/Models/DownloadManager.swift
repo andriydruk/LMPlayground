@@ -79,13 +79,25 @@ final class DownloadManager {
     }
 
     func start(filename: String, url: URL) {
-        guard !isDownloading(filename),
-              !FileManager.default.fileExists(atPath: directory.appending(path: filename).path) else { return }
+        guard !FileManager.default.fileExists(atPath: directory.appending(path: filename).path) else { return }
         requestNotificationPermission()
         sources[filename] = url
         retries[filename] = 0
-        downloads[filename] = Progress()
-        session.downloadTask(with: request(for: url)).tagged(filename).resume()
+        if downloads[filename] == nil || downloads[filename]?.failure != nil {
+            downloads[filename] = Progress()
+        }
+        // Reuse a live transfer for this file (one that survived a relaunch)
+        // rather than starting a second one; otherwise start fresh.
+        Task {
+            let live = await session.allTasks.filter {
+                $0.taskDescription == filename && ($0.state == .running || $0.state == .suspended)
+            }
+            if let task = live.first {
+                if task.state == .suspended { task.resume() }
+                return
+            }
+            session.downloadTask(with: request(for: url)).tagged(filename).resume()
+        }
     }
 
     func cancel(_ filename: String) {
@@ -94,6 +106,18 @@ final class DownloadManager {
         }
         downloads[filename] = nil
         sources[filename] = nil
+    }
+
+    /// One line per URLSession task, for diagnostics.
+    func taskSummary() async -> [String] {
+        let tasks = await session.allTasks
+        let states = ["running", "suspended", "canceling", "completed"]
+        return tasks.map { task in
+            let state = states.indices.contains(task.state.rawValue) ? states[task.state.rawValue] : "?"
+            let error = task.error.map { " error=\($0.localizedDescription)" } ?? ""
+            let name = task.taskDescription ?? "?"
+            return "\(name) task=\(state) \(UInt64(task.countOfBytesReceived).formattedBytes)/\(UInt64(max(task.countOfBytesExpectedToReceive, 0)).formattedBytes) retries=\(retries[name] ?? 0)\(error)"
+        }
     }
 
     func dismissFailure(_ filename: String) {
@@ -107,11 +131,15 @@ final class DownloadManager {
         return request
     }
 
-    /// Re-attach progress to transfers that survived a relaunch.
+    /// Re-attach progress to transfers that survived a relaunch. Tasks the
+    /// system already cancelled or finished are left out: their outcome
+    /// arrives through the delegate.
     private func restore() {
         session.getAllTasks { [weak self] tasks in
             let running = tasks.compactMap { task -> (String, Int64, Int64)? in
-                guard let name = task.taskDescription else { return nil }
+                guard let name = task.taskDescription,
+                      task.state == .running || task.state == .suspended else { return nil }
+                if task.state == .suspended { task.resume() }
                 return (name, task.countOfBytesReceived, task.countOfBytesExpectedToReceive)
             }
             Task { @MainActor in

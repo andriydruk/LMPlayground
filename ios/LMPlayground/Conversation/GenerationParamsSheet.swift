@@ -34,6 +34,10 @@ struct GenerationParamsSheet: View {
                     Text("Larger contexts remember longer conversations but use more memory.")
                 }
 
+                if let loaded = runtime.loaded, loaded.supportsToolCalling {
+                    ModelToolsSection(modelFilename: loaded.descriptor.filename)
+                }
+
                 Section("Sampling") {
                     slider("Temperature", value: $params.temperature, range: 0...2, format: "%.2f")
                     slider("Top P", value: $params.topP, range: 0...1, format: "%.2f")

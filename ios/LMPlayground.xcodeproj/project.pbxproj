@@ -16,6 +16,7 @@
 		1908DD4114F69275D44B53CE /* chat_templates in Resources */ = {isa = PBXBuildFile; fileRef = B991F636776FFE2A9EF5064E /* chat_templates */; };
 		1957B3A77C415AB2C9AE0668 /* LMKGenerationSession.mm in Sources */ = {isa = PBXBuildFile; fileRef = ED7925841C2C7C2348FB4391 /* LMKGenerationSession.mm */; };
 		1DB33D7C00F3C05327F40A8A /* Utf8.h in Headers */ = {isa = PBXBuildFile; fileRef = 56D61FC60939CE7D4E64EFB9 /* Utf8.h */; };
+		21B81B8D83871EA03C5BDD1E /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 5C6477E85A66CEDBEA682C62 /* SwiftSoup */; };
 		2A90C7F23E623168DB0B7839 /* LMKModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = E93D3301E6C3A4EFCE143AC3 /* LMKModel.mm */; };
 		2CA68810DD5BDAC4C1D574BC /* LlamaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19BC15AFD6227807E4FE4EFD /* LlamaKit.framework */; };
 		30A6C04AC649E1DB92C82AEF /* LlamaModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4959FAF0A82587972EA2AB7 /* LlamaModel.cpp */; };
@@ -216,6 +217,7 @@
 				ECD70E3AFDB10A3A5378E642 /* LlamaKit.framework in Frameworks */,
 				65079D6FA9A16BBDEECCFE7B /* GRDB in Frameworks */,
 				3C5394ADC36F8EDB9E4D138F /* Markdown in Frameworks */,
+				21B81B8D83871EA03C5BDD1E /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,6 +459,7 @@
 			packageProductDependencies = (
 				019FF171DB5E58F92033FF78 /* GRDB */,
 				C72A1CD2C7DA1DA95EB7373D /* Markdown */,
+				5C6477E85A66CEDBEA682C62 /* SwiftSoup */,
 			);
 			productName = LMPlayground;
 			productReference = AAEA5C7795687C95A96E7586 /* LMPlayground.app */;
@@ -548,6 +551,7 @@
 			packageReferences = (
 				66B56AB800F3F3D4FE39DCB2 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 				1D0116B10D1A404CBC4B5137 /* XCRemoteSwiftPackageReference "swift-markdown" */,
+				BDE9AB898511AD1A51D94704 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 221B26EAC06EA3D781CBB66C /* Products */;
@@ -1082,6 +1086,14 @@
 				version = 7.11.1;
 			};
 		};
+		BDE9AB898511AD1A51D94704 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup";
+			requirement = {
+				kind = exactVersion;
+				version = 2.14.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1089,6 +1101,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 66B56AB800F3F3D4FE39DCB2 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
 			productName = GRDB;
+		};
+		5C6477E85A66CEDBEA682C62 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BDE9AB898511AD1A51D94704 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
 		};
 		C72A1CD2C7DA1DA95EB7373D /* Markdown */ = {
 			isa = XCSwiftPackageProductDependency;
