@@ -17,6 +17,7 @@ struct LabResult: Codable, Sendable, Identifiable {
     var tokens: Int?
     var tokensPerSecond: Double?
     var peakFootprintMB: Int?
+    var footprintAfterUnloadMB: Int?
     var visionSeconds: Double?
     var output: String?
     var report: String?
@@ -25,6 +26,8 @@ struct LabResult: Codable, Sendable, Identifiable {
 
 struct LabRun: Codable, Sendable {
     var device: String
+    /// When this binary was built, to tell runs of different builds apart.
+    var binaryDate: Date?
     var systemVersion: String
     var startedAt: Date
     var systemInfo: String
@@ -77,6 +80,7 @@ enum EngineLab {
 
     static func runAll(progress: @escaping @Sendable (LabResult) -> Void) async -> LabRun {
         var run = LabRun(device: await deviceDescription(),
+                         binaryDate: (try? Bundle.main.executableURL?.resourceValues(forKeys: [.contentModificationDateKey]))?.contentModificationDate,
                          systemVersion: await UIDevice.current.systemVersion,
                          startedAt: Date(),
                          systemInfo: Engine.systemInfo,
@@ -94,8 +98,10 @@ enum EngineLab {
             case .asr:
                 result = await benchmarkASR(url)
             }
-            run.results.append(result)
-            progress(result)
+            var measured = result
+            measured.footprintAfterUnloadMB = ProcessMemory.footprint.megabytes
+            run.results.append(measured)
+            progress(measured)
         }
         if let data = try? JSONEncoder.lab.encode(run) {
             try? data.write(to: resultsURL)
