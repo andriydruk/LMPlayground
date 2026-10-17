@@ -35,7 +35,7 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../../../../core ${CMAKE_BINARY_DI
 
 add_library(${CMAKE_PROJECT_NAME} SHARED
         native-lib.cpp
-        AsrEngine.cpp)
+        AsrJni.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME}
         llamacore

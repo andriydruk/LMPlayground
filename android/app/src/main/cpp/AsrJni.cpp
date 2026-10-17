@@ -1,17 +1,17 @@
-// Voice dictation via parakeet.cpp (NVIDIA Parakeet TDT on ggml).
+// Voice dictation via parakeet.cpp (NVIDIA Parakeet TDT on ggml): JNI bindings.
 //
 // The engine is deliberately independent of the chat model: a context is loaded
 // on demand, holds one Parakeet GGUF, and transcribes 16 kHz mono f32 PCM that
 // the app records itself. Callers must serialize transcribe() calls per context
 // (parakeet's graph state is not re-entrant); LlamaService does that with a
-// single-threaded executor.
+// single-threaded executor. Backend setup and output cleanup are shared with the
+// iOS app in core/llamacore/AsrEngine.
 
 #include <jni.h>
 
 #include <cerrno>
 #include <fcntl.h>
 #include <cstdlib>
-#include <cctype>
 #include <cstring>
 #include <string>
 #include <unistd.h>
@@ -25,43 +25,17 @@
 #include "lmp_log.h"
 
 #include "parakeet_capi.h"
+#include "AsrEngine.h"
 
-// Parakeet's own default is tuned for desktop core counts. On a big.LITTLE
-// phone every extra thread is a liability: ggml waits for the slowest worker at
-// each graph node, so pulling in efficiency cores stalls the whole encoder.
-// Measured on a Pixel 7 Pro (2x X1 + 2x A78 + 4x A55), streaming a fixed clip:
-//   2 threads 1.48x realtime · 3: 1.67x · 4: 1.54x · 6: 2.83x · 8: 30.5x
-// Two — the big cores alone — is both the fastest and the safest default.
-// Override with `setprop debug.lmp.asr_threads N`.
-static constexpr int kAsrThreads = 2;
-
-// Mobile GPU drivers have repeatedly mishandled encoder graphs in this app (the
-// CLIP vision denylist exists for exactly that reason), and parakeet's conformer
-// uses op patterns those drivers have never seen. parakeet auto-selects a
-// GPU/IGPU device when one is registered, so pin it to CPU before the first load.
-//
-// Both settings honour an existing environment value rather than overwriting it,
-// so the macOS harness can measure the Metal backend or a different thread count
-// without a rebuild. Nothing sets them on Android, where the defaults stand.
-static void asrConfigureBackend() {
-    static bool done = false;
-    if (done) return;
-    setenv("PARAKEET_DEVICE", "cpu", 0);
-
-    // Thread count: `setprop debug.lmp.asr_threads N` on Android (same
-    // convention as debug.lmp.mtmd_backend), $LMP_ASR_THREADS on the host.
-    int n = 0;
+// Thread count override: `setprop debug.lmp.asr_threads N` (same convention as
+// debug.lmp.mtmd_backend). The host build reads $LMP_ASR_THREADS instead, in
+// asrConfigureBackend itself.
+static int asrThreadsProperty() {
 #if defined(__ANDROID__)
     char prop[PROP_VALUE_MAX] = {0};
-    if (__system_property_get("debug.lmp.asr_threads", prop) > 0) n = atoi(prop);
+    if (__system_property_get("debug.lmp.asr_threads", prop) > 0) return atoi(prop);
 #endif
-    if (n <= 0) {
-        const char *threads = getenv("LMP_ASR_THREADS");
-        n = threads != nullptr ? atoi(threads) : 0;
-    }
-    parakeet_capi_set_num_threads(n > 0 ? n : kAsrThreads);
-    LOGi("ASR threads: %d", n > 0 ? n : kAsrThreads);
-    done = true;
+    return 0;
 }
 
 // Reads the whole fd as little-endian f32 samples. The file is written by
@@ -88,7 +62,7 @@ static bool readPcmF32(int fd, std::vector<float> &out) {
 extern "C"
 JNIEXPORT jlong JNICALL
 Java_com_druk_llamacpp_jni_NativeAsr_loadModel(JNIEnv *env, jobject thiz, jstring modelPath) {
-    asrConfigureBackend();
+    asrConfigureBackend(asrThreadsProperty());
 
     const char *path = env->GetStringUTFChars(modelPath, nullptr);
     LOGi("loading ASR model: %s", path);
@@ -189,31 +163,6 @@ Java_com_druk_llamacpp_jni_NativeAsr_transcribeSamples(JNIEnv *env, jobject thiz
     return result;
 }
 
-// The streaming decoder emits the locale it settled on as a literal token at
-// utterance boundaries ("<en-US>"), which the offline path never does. Left in,
-// those tags would appear verbatim in the user's dictated text.
-static std::string stripLocaleTags(const char *text) {
-    std::string out(text);
-    size_t at = 0;
-    while ((at = out.find('<', at)) != std::string::npos) {
-        const size_t close = out.find('>', at);
-        if (close == std::string::npos) break;
-        const std::string tag = out.substr(at + 1, close - at - 1);
-        // Only "xx" / "xx-YY" locale tags — never angle brackets that were
-        // actually dictated.
-        bool locale = tag.size() >= 2 && tag.size() <= 7 &&
-                      islower(static_cast<unsigned char>(tag[0])) &&
-                      islower(static_cast<unsigned char>(tag[1]));
-        for (size_t i = 2; locale && i < tag.size(); ++i) {
-            const char c = tag[i];
-            locale = (i == 2) ? c == '-' : (isalnum(static_cast<unsigned char>(c)) != 0);
-        }
-        if (!locale) { at = close + 1; continue; }
-        out.erase(at, close - at + 1);
-    }
-    return out;
-}
-
 // ---------------------------------------------------------------------------
 // Streaming. A stream is begun from a loaded context and fed PCM as it is
 // recorded; each feed returns the text finalized *since the last feed*, so the
@@ -255,7 +204,7 @@ Java_com_druk_llamacpp_jni_NativeAsr_streamFeed(JNIEnv *env, jobject thiz, jlong
     env->ReleaseFloatArrayElements(pcm, samples, JNI_ABORT);  // read-only
 
     if (text == nullptr) return nullptr;
-    jstring result = env->NewStringUTF(stripLocaleTags(text).c_str());
+    jstring result = env->NewStringUTF(asrStripLocaleTags(text).c_str());
     parakeet_capi_free_string(text);
     return result;
 }
@@ -268,7 +217,7 @@ Java_com_druk_llamacpp_jni_NativeAsr_streamFinalize(JNIEnv *env, jobject thiz, j
 
     char *text = parakeet_capi_stream_finalize(stream);
     if (text == nullptr) return nullptr;
-    jstring result = env->NewStringUTF(stripLocaleTags(text).c_str());
+    jstring result = env->NewStringUTF(asrStripLocaleTags(text).c_str());
     parakeet_capi_free_string(text);
     return result;
 }

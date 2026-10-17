@@ -51,7 +51,7 @@ find_package(JNI REQUIRED)
 # Target name is load-bearing: Kotlin calls System.loadLibrary("llamacpp").
 add_library(llamacpp SHARED
         ${LMP_CPP_DIR}/native-lib.cpp
-        ${LMP_CPP_DIR}/AsrEngine.cpp)
+        ${LMP_CPP_DIR}/AsrJni.cpp)
 
 target_include_directories(llamacpp PRIVATE ${JNI_INCLUDE_DIRS})
 

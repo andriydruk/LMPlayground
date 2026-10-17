@@ -11,6 +11,8 @@
 #include "mtmd.h"
 #include "mtmd-helper.h"
 
+#include "VisionDevice.h"
+
 #include <atomic>
 #include <memory>
 #include <mutex>
@@ -25,30 +27,8 @@ constexpr int kMaxVisionThreads = 8;
 // search for the opening '<' of a template's user-turn marker.
 constexpr size_t kUserMarkerSearchWindow = 80;
 
-// Vulkan CLIP crash sentinel (implemented in native-lib.cpp). A marker file is
-// written right before each crash-prone Vulkan vision step and removed right
-// after it returns; if it survives to the next process start, the attempt took
-// the :llama process down, so Vulkan vision is disabled for this install and
-// CLIP runs on CPU. clipSentinelInit() promotes a surviving marker to a
-// permanent block; begin/end bracket the encoder init in LlamaModel and the
-// encode in processImageTurn. clipSentinelBlockVulkan() blocks it outright,
-// for a failure that was caught rather than crashed.
-//
-// clipVulkanFailed() reports such a caught failure in this process. The GPU
-// is then gone: a projector on it must not be used or freed again (freeing
-// runs Vulkan cleanup, which can crash in the driver too).
-//
-// clipVisionDevice() resolves MTMD_BACKEND_DEVICE (our own process-wide
-// choice, set in init and flipped to "CPU" by a block) to the device to pass
-// in mtmd_context_params; nullptr means CPU. clip.cpp no longer reads the env
-// var itself (upstream #23255, since b11200), so it must be passed explicitly.
-ggml_backend_dev_t clipVisionDevice();
-void clipSentinelInit(const std::string &stateDir);
-bool clipSentinelVulkanBlocked();
-bool clipVulkanFailed();
-void clipSentinelBeginVulkanAttempt();
-void clipSentinelEndVulkanAttempt();
-void clipSentinelBlockVulkan();
+// Vision device choice and the Vulkan CLIP crash sentinel (clipVisionDevice,
+// clipSentinel*, clipVulkanFailed) are declared in VisionDevice.h.
 
 struct SamplerParams {
     int n_ctx;
