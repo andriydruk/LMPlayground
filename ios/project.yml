@@ -20,6 +20,14 @@ configFiles:
   Debug: Config/Debug.xcconfig
   Release: Config/Release.xcconfig
 
+packages:
+  GRDB:
+    url: https://github.com/groue/GRDB.swift
+    exactVersion: 7.11.1
+  Markdown:
+    url: https://github.com/swiftlang/swift-markdown
+    exactVersion: 0.9.0
+
 targets:
 
   # The ObjC++ bridge plus the shared C++ engine (core/llamacore), built for
@@ -81,6 +89,8 @@ targets:
     dependencies:
       - target: LlamaKit
         embed: true
+      - package: GRDB
+      - package: Markdown
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.druk.lmplayground

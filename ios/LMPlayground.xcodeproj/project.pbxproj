@@ -23,11 +23,13 @@
 		3443DCA50C3DF9CB42428664 /* llama.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDF0D4D6E37716F87144F3DB /* llama.xcframework */; };
 		37C803B064622BC18392E046 /* LMKEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DE881DA04FE4569CF5E749 /* LMKEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		39892C8028FFD16EDE131768 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B67A8D0FF824D1364C8532 /* Engine.swift */; };
+		3C5394ADC36F8EDB9E4D138F /* Markdown in Frameworks */ = {isa = PBXBuildFile; productRef = C72A1CD2C7DA1DA95EB7373D /* Markdown */; };
 		3E7845C63BE780C6699946CD /* LMKGenerationSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 8327794C5E8C3945B4CCFF3D /* LMKGenerationSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		424D308F5F0CC86958D22601 /* LMKInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D2E6CA820FF8E88A8E589CB /* LMKInternal.h */; };
 		438D7DA738D2C23F0DC1B959 /* LlamaKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 19BC15AFD6227807E4FE4EFD /* LlamaKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		46F02BF7A7A8D6914BC80124 /* ModelProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC6CF6535E03CF5D0CA0813A /* ModelProbe.cpp */; };
 		527CA7056F69F53661B573B2 /* ModelProbe.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCB7D066DDFC5068251A66D /* ModelProbe.h */; };
+		65079D6FA9A16BBDEECCFE7B /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 019FF171DB5E58F92033FF78 /* GRDB */; };
 		66DDCF2D179B49FB50C3374A /* LlamaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 245431E88B4867596499665A /* LlamaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6DC6477313107ACC043F89EE /* LMKAsrModel.h in Headers */ = {isa = PBXBuildFile; fileRef = D74889405064048DA935D02F /* LMKAsrModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7325DC4F555D05433CF53CA9 /* LMKTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 744D85F3F25F0AF1D7AACAB6 /* LMKTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -178,6 +180,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				ECD70E3AFDB10A3A5378E642 /* LlamaKit.framework in Frameworks */,
+				65079D6FA9A16BBDEECCFE7B /* GRDB in Frameworks */,
+				3C5394ADC36F8EDB9E4D138F /* Markdown in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,6 +395,8 @@
 			);
 			name = LMPlayground;
 			packageProductDependencies = (
+				019FF171DB5E58F92033FF78 /* GRDB */,
+				C72A1CD2C7DA1DA95EB7373D /* Markdown */,
 			);
 			productName = LMPlayground;
 			productReference = AAEA5C7795687C95A96E7586 /* LMPlayground.app */;
@@ -448,6 +454,10 @@
 			);
 			mainGroup = 13527B236BB289193EADC008;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				66B56AB800F3F3D4FE39DCB2 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+				1D0116B10D1A404CBC4B5137 /* XCRemoteSwiftPackageReference "swift-markdown" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 221B26EAC06EA3D781CBB66C /* Products */;
 			projectDirPath = "";
@@ -837,6 +847,38 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1D0116B10D1A404CBC4B5137 /* XCRemoteSwiftPackageReference "swift-markdown" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/swiftlang/swift-markdown";
+			requirement = {
+				kind = exactVersion;
+				version = 0.9.0;
+			};
+		};
+		66B56AB800F3F3D4FE39DCB2 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift";
+			requirement = {
+				kind = exactVersion;
+				version = 7.11.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		019FF171DB5E58F92033FF78 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 66B56AB800F3F3D4FE39DCB2 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
+		};
+		C72A1CD2C7DA1DA95EB7373D /* Markdown */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1D0116B10D1A404CBC4B5137 /* XCRemoteSwiftPackageReference "swift-markdown" */;
+			productName = Markdown;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A2D53783DAAFC93830595148 /* Project object */;
 }
