@@ -30,6 +30,7 @@
   "Edit prompt": "プロンプトを編集",
   "Everything runs on this device.": "すべてこのデバイス上で動作します。",
   "Free space": "空き容量",
+  "Generating": "生成中",
   "Go to Settings, then Models. Swipe left on a downloaded model and tap Delete.": "設定 → モデルを開き、ダウンロード済みのモデルを左にスワイプして「削除」をタップします。",
   "Image module": "画像モジュール",
   "Image module for the downloaded model": "ダウンロード済みモデル用の画像モジュール",
