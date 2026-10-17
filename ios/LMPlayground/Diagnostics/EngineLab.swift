@@ -69,6 +69,7 @@ enum EngineLab {
         UInt64((try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0)
     }
 
+    @MainActor
     static func deviceDescription() -> String {
         var info = utsname()
         uname(&info)
@@ -81,7 +82,7 @@ enum EngineLab {
     static func runAll(progress: @escaping @Sendable (LabResult) -> Void) async -> LabRun {
         var run = LabRun(device: await deviceDescription(),
                          binaryDate: (try? Bundle.main.executableURL?.resourceValues(forKeys: [.contentModificationDateKey]))?.contentModificationDate,
-                         systemVersion: await UIDevice.current.systemVersion,
+                         systemVersion: await MainActor.run { UIDevice.current.systemVersion },
                          startedAt: Date(),
                          systemInfo: Engine.systemInfo,
                          results: [])

@@ -87,10 +87,14 @@ struct EngineLabView: View {
                     "\(name): \(Int(p.fraction * 100))% \(UInt64(p.bytesPerSecond).formattedBytes)/s"
                 }
                 status = lines.sorted().joined(separator: "\n")
+                try? (Date().formatted() + "\n" + status).write(to: AppDirectories.documents.appending(path: "lab-status.txt"),
+                                                               atomically: true, encoding: .utf8)
                 try? await Task.sleep(for: .seconds(2))
             }
             let failures = downloads.downloads.compactMap { name, p in p.failure.map { "\(name): \($0)" } }
             status = failures.isEmpty ? "downloads complete" : failures.joined(separator: "\n")
+            try? (Date().formatted() + "\n" + status).write(to: AppDirectories.documents.appending(path: "lab-status.txt"),
+                                                           atomically: true, encoding: .utf8)
             store.refresh()
             files = EngineLab.modelFiles()
             running = false

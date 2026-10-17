@@ -19,6 +19,8 @@ struct LMPlaygroundApp: App {
                 .environment(services.store)
                 .environment(services.downloads)
                 .environment(services.runtime)
+                .environment(services.conversation)
+                .environment(\.chatStore, services.chatStore)
         }
     }
 }
@@ -31,13 +33,29 @@ final class AppServices {
     let store: ModelStore
     let downloads: DownloadManager
     let runtime: ModelRuntime
+    let chatStore: ChatStore
+    let conversation: ConversationModel
 
     private init() {
         store = ModelStore()
         downloads = DownloadManager()
         runtime = ModelRuntime(store: store)
+        let database: AppDatabase
+        do {
+            database = try AppDatabase.makeShared()
+        } catch {
+            // A database that can't open is unrecoverable for chat history;
+            // keep the app usable with an in-memory store instead.
+            database = try! AppDatabase.makeEmpty()
+        }
+        chatStore = ChatStore(database: database)
+        conversation = ConversationModel(store: chatStore, runtime: runtime, models: store)
         downloads.onFinished = { [store] _ in store.refresh() }
     }
+}
+
+extension EnvironmentValues {
+    @Entry var chatStore: ChatStore?
 }
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
