@@ -19,7 +19,7 @@ See [02-repo-restructure.md](02-repo-restructure.md).
 - [ ] Commit 1: Android tree → `android/`, path fixes (Gradle,
       workflows, fastlane, `.gitignore`, skills, README).
 - [ ] Commit 2: engine → `core/llamacore`, submodule → `core/llama.cpp`,
-      `core/CMakeLists.txt` superbuild, chat templates → `core/chat_templates`.
+      `core/CMakeLists.txt` superbuild, chat templates → `core/resources/chat_templates`.
 - [ ] Commit 3: Tier A extraction ([03 §3.3](03-cpp-reuse.md#33-moved-into-the-core-first-tier-a)),
       `lmp_log.h` `os_log` branch.
 - [ ] Commit 4: golden fixtures → `core/testdata`, with the Kotlin tests

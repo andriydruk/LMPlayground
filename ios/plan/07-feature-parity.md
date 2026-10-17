@@ -20,7 +20,7 @@ column refers to [08-milestones.md](08-milestones.md).
 | Capability caching after first load | Stored in the database / preferences | engine | M2 |
 | Measured `ThinkingMode` | From the catalog | — | M2 |
 | Legacy entries and superseded-file cleanup | Port of `SupersededFileCleanup` | — | M2 |
-| Chat-template overrides | `core/chat_templates` bundle resources | engine | M1 |
+| Chat-template overrides | `core/resources/chat_templates` bundle resources | engine | M1 |
 | Delete model (and its paired projector) | One action, shows reclaimed size | — | M2 |
 
 ## 7.2 Chat

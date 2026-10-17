@@ -70,7 +70,7 @@ Added later, still shared:
 
 | Asset | Location after M0 | Consumers |
 |-------|-------------------|-----------|
-| Chat-template overrides | `core/chat_templates/*.jinja` + `overrides.json` (filename → template) | Android assets (extra `srcDir`), iOS bundle resources. |
+| Chat-template overrides | `core/resources/chat_templates/*.jinja` + `overrides.json` (filename → template) | Android assets (extra `srcDir`), iOS bundle resources. |
 | Golden fixtures | `core/testdata/*.json` (ResponseProcessor, ToolCallPairing, DictationTranscript, WER, WebLinkStore, TextChunker, ToolCallLoop transcripts) | Kotlin unit tests and Swift unit tests. A behaviour change must update the fixture, so the other platform's tests then fail until it follows. |
 | Harness fixtures | `android/model-harness` prompts, audio, expectations → `core/testdata/harness/` | `:model-harness` and LlamaKit's macOS tests. |
 | Model catalog | `ModelInfoProvider.kt` (source of truth) + `ios/catalog/ios-catalog.json` (the subset verified on device, with measured numbers) | `generate-catalog.py` merges them into Swift. See [06 §6.6](06-build-and-release.md#66-catalog-and-strings-generation). |

@@ -33,7 +33,7 @@ an Android point release before any iOS work depends on it.
 │   ├── CMakeLists.txt       superbuild: llama.cpp + mtmd + parakeet (+ llamacore)
 │   ├── llamacore/           shared engine sources (from app/src/main/cpp)
 │   ├── llama.cpp/           submodule (from app/src/main/cpp/llama.cpp)
-│   ├── chat_templates/      *.jinja + overrides.json (from app assets)
+│   ├── resources/           chat_templates/*.jinja (+ overrides.json), packaged by both apps
 │   └── testdata/            golden fixtures shared by Kotlin and Swift tests
 │
 └── ios/
@@ -66,7 +66,7 @@ reads it via `rootProject.file("../version.properties")`, and the iOS
 | `app/src/main/cpp/{LlamaCpp.h,LlamaModel.cpp,LlamaGenerationSession.cpp,LlamaEmbeddingSession.cpp,lmp_log.h}` | `core/llamacore/` | `git mv` |
 | `app/src/main/cpp/AsrEngine.cpp` | split: portable part → `core/llamacore/AsrEngine.{h,cpp}`, JNI part stays as `android/app/src/main/cpp/asr-jni.cpp` | move + edit (M0 step 3) |
 | `app/src/main/cpp/llama.cpp` (submodule) | `core/llama.cpp` | `git mv` (updates `.gitmodules` and the gitlink) |
-| `app/src/main/assets/chat_templates/` | `core/chat_templates/` | `git mv`. Gradle adds `../../core/chat_templates` as an extra assets source dir |
+| `app/src/main/assets/chat_templates/` | `core/resources/chat_templates/` | `git mv`. Gradle adds `../../core/resources` as an extra assets source dir |
 
 Do these as **separate commits** so each one is reviewable and bisectable:
 
@@ -81,7 +81,7 @@ Do these as **separate commits** so each one is reviewable and bisectable:
 
 | Where | Change |
 |-------|--------|
-| `android/app/build.gradle.kts` | `version.properties` → `../version.properties`. CMake path unchanged (`src/main/cpp/CMakeLists.txt`). Add `../../core/chat_templates` to `assets.srcDirs`. |
+| `android/app/build.gradle.kts` | `version.properties` → `../version.properties`. CMake path unchanged (`src/main/cpp/CMakeLists.txt`). Add `../../core/resources` as an extra assets source dir. |
 | `android/app/src/main/cpp/CMakeLists.txt` | `add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../../../../../core ${CMAKE_BINARY_DIR}/core)`. The library target keeps the name `llamacpp` (Kotlin loads `System.loadLibrary("llamacpp")`). |
 | `android/llamacpp/native/CMakeLists.txt` | Point `LMP_LLAMA_DIR` / sources at `core/` (or `add_subdirectory(core)`). |
 | `android/model-harness/build.gradle.kts` | No change (uses `rootProject`, which is now `android/`). |

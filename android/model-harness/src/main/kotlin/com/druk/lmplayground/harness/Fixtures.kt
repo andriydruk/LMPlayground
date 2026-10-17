@@ -16,8 +16,9 @@ object Fixtures {
     }
 }
 
-/** Locates the repo root from the harness's working directory. */
+/** Locates the Android project (android/) and repository roots from the working directory. */
 object Repo {
+    /** The Gradle root, `android/`. */
     fun root(): File {
         var d: File? = File(System.getProperty("user.dir"))
         while (d != null) {
@@ -26,4 +27,7 @@ object Repo {
         }
         return File(System.getProperty("user.dir"))
     }
+
+    /** The repository root, which holds `core/` shared with the iOS app. */
+    fun top(): File = root().absoluteFile.parentFile
 }
