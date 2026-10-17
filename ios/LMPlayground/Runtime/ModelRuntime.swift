@@ -164,3 +164,16 @@ enum ChatTemplateOverrides {
 
     static var overriddenFilenames: Set<String> { Set(overrides.keys) }
 }
+
+extension LlamaError: @retroactive LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .templateRenderFailed:
+            String(localized: "This model's chat template couldn't format the conversation.")
+        case .toolResultsRejected:
+            String(localized: "The model couldn't read the tool results.")
+        case .cannotContinue:
+            String(localized: "This reply can't be continued. Send a new message instead.")
+        }
+    }
+}

@@ -114,7 +114,8 @@ private struct AssistantMessageView: View {
     }
 
     private var stats: AttributedString {
-        var text = AttributedString(localized: "^[\(message.totalTokens) token](inflect: true)")
+        // Plural forms per language come from the string catalog.
+        var text = AttributedString(localized: "\(message.totalTokens) tokens")
         if message.responseDurationSeconds > 0 {
             let rate = (Double(message.totalTokens) / message.responseDurationSeconds)
                 .formatted(.number.precision(.fractionLength(1)))

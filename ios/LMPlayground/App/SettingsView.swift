@@ -30,19 +30,19 @@ struct SettingsView: View {
                     NavigationLink {
                         ModelLibraryView()
                     } label: {
-                        SettingsRow(title: "Models", subtitle: "Download and manage models",
+                        SettingsRow(title: "Models", subtitle: Text("Download and manage models"),
                                     systemImage: "square.stack.3d.down.right")
                     }
                     NavigationLink {
                         SystemPromptsView()
                     } label: {
-                        SettingsRow(title: "System prompts", subtitle: "Reusable instructions for any model",
+                        SettingsRow(title: "System prompts", subtitle: Text("Reusable instructions for any model"),
                                     systemImage: "text.quote")
                     }
                     NavigationLink {
                         ToolsSettingsView()
                     } label: {
-                        SettingsRow(title: "Tools", subtitle: "Let capable models take actions",
+                        SettingsRow(title: "Tools", subtitle: Text("Let capable models take actions"),
                                     systemImage: "wrench.and.screwdriver")
                     }
                 }
@@ -50,19 +50,19 @@ struct SettingsView: View {
                 Section {
                     Toggle(isOn: $haptics) {
                         SettingsRow(title: "Haptic feedback on generation",
-                                    subtitle: "A gentle tick as each part of the response streams in.",
+                                    subtitle: Text("A gentle tick as each part of the response streams in."),
                                     systemImage: "iphone.radiowaves.left.and.right")
                     }
                     NavigationLink {
                         AdvancedSettingsView()
                     } label: {
-                        SettingsRow(title: "Advanced", subtitle: "Memory and performance options",
+                        SettingsRow(title: "Advanced", subtitle: Text("Memory and performance options"),
                                     systemImage: "slider.horizontal.3")
                     }
                     Button {
                         if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
                     } label: {
-                        SettingsRow(title: "Language", subtitle: currentLanguage, systemImage: "globe")
+                        SettingsRow(title: "Language", subtitle: Text(verbatim: currentLanguage), systemImage: "globe")
                     }
                     .foregroundStyle(.primary)
                 }
@@ -76,7 +76,7 @@ struct SettingsView: View {
                     NavigationLink {
                         FAQView()
                     } label: {
-                        SettingsRow(title: "FAQ", subtitle: "Frequently asked questions",
+                        SettingsRow(title: "FAQ", subtitle: Text("Frequently asked questions"),
                                     systemImage: "questionmark.circle")
                     }
                 } footer: {
@@ -117,28 +117,14 @@ struct SettingsView: View {
 
 private struct SettingsRow: View {
     let title: LocalizedStringKey
-    let subtitle: LocalizedStringKey?
+    let subtitle: Text?
     let systemImage: String
-
-    init(title: LocalizedStringKey, subtitle: LocalizedStringKey?, systemImage: String) {
-        self.title = title
-        self.subtitle = subtitle
-        self.systemImage = systemImage
-    }
-
-    init(title: LocalizedStringKey, subtitle: String, systemImage: String) {
-        self.title = title
-        self.subtitle = LocalizedStringKey(subtitle)
-        self.systemImage = systemImage
-    }
 
     var body: some View {
         Label {
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                if let subtitle {
-                    Text(subtitle).font(.subheadline).foregroundStyle(.secondary)
-                }
+                subtitle?.font(.subheadline).foregroundStyle(.secondary)
             }
         } icon: {
             Image(systemName: systemImage)

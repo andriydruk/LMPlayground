@@ -1,0 +1,352 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "NSCameraUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التقط صورة لتسأل النموذج عنها. تبقى الصور على هذا الجهاز."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "মডেলকে জিজ্ঞেস করতে একটি ছবি তুলুন। ছবিগুলো এই ডিভাইসেই থাকে।"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vyfoťte něco a zeptejte se na to modelu. Fotky zůstávají v tomto zařízení."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag et foto, og spørg modellen om det. Fotos bliver på denne enhed."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nimm ein Foto auf, um das Modell dazu zu befragen. Fotos bleiben auf diesem Gerät."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Take a photo to ask the model about it. Photos stay on this device."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haz una foto para preguntarle al modelo sobre ella. Las fotos se quedan en este dispositivo."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ota kuva ja kysy siitä mallilta. Kuvat pysyvät tällä laitteella."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kumuha ng larawan para itanong ito sa modelo. Nananatili sa device na ito ang mga larawan."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prenez une photo pour interroger le modèle à son sujet. Les photos restent sur cet appareil."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "צלמו תמונה כדי לשאול עליה את המודל. התמונות נשארות במכשיר הזה."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "मॉडल से किसी फ़ोटो के बारे में पूछने के लिए फ़ोटो लें। फ़ोटो इसी डिवाइस पर रहती हैं।"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambil foto untuk ditanyakan ke model. Foto tetap tersimpan di perangkat ini."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scatta una foto per chiedere al modello di cosa si tratta. Le foto restano su questo dispositivo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "写真を撮ってモデルに質問できます。写真はこのデバイスから出ません。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진을 찍어 모델에게 질문할 수 있습니다. 사진은 이 기기에만 저장됩니다."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambil foto untuk ditanya kepada model. Foto kekal pada peranti ini."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta et bilde for å spørre modellen om det. Bildene blir på denne enheten."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maak een foto om het model erover te vragen. Foto’s blijven op dit apparaat."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zrób zdjęcie, aby zapytać o nie model. Zdjęcia pozostają na tym urządzeniu."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tire uma foto para perguntar ao modelo sobre ela. As fotos ficam neste dispositivo."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fă o fotografie ca să întrebi modelul despre ea. Fotografiile rămân pe acest dispozitiv."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta ett foto för att fråga modellen om det. Foton stannar på den här enheten."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ถ่ายรูปเพื่อถามโมเดลเกี่ยวกับรูปนั้น รูปภาพจะอยู่บนอุปกรณ์นี้เท่านั้น"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modele sormak için bir fotoğraf çek. Fotoğraflar bu cihazda kalır."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Зробіть фото, щоб запитати про нього модель. Фото залишаються на цьому пристрої."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chụp ảnh để hỏi mô hình về ảnh đó. Ảnh chỉ lưu trên thiết bị này."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "拍一张照片向模型提问。照片只保存在这台设备上。"
+          }
+        }
+      }
+    },
+    "NSMicrophoneUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أملِ رسائلك بدلًا من كتابتها. يتم التعرّف على الكلام على هذا الجهاز ولا يُحفظ أو يُرسل أبدًا."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "টাইপ না করে বার্তা বলে লিখুন। কথা এই ডিভাইসেই শনাক্ত হয় এবং কখনো সংরক্ষণ বা পাঠানো হয় না।"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktujte zprávy místo psaní. Řeč se rozpoznává v tomto zařízení a nikdy se neukládá ani neodesílá."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dikter beskeder i stedet for at skrive. Tale genkendes på denne enhed og bliver aldrig gemt eller sendt."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktiere Nachrichten, statt zu tippen. Sprache wird auf diesem Gerät erkannt und nie gespeichert oder gesendet."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dictate messages instead of typing. Speech is recognized on this device and never saved or sent."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dicta mensajes en lugar de escribirlos. La voz se reconoce en este dispositivo y nunca se guarda ni se envía."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sanele viestit kirjoittamisen sijaan. Puhe tunnistetaan tällä laitteella, eikä sitä koskaan tallenneta tai lähetetä."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mag-dictate ng mensahe sa halip na mag-type. Kinikilala ang pananalita sa device na ito at hindi kailanman sine-save o ipinapadala."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dictez vos messages au lieu de les taper. La parole est reconnue sur cet appareil et n’est jamais enregistrée ni envoyée."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "הכתיבו הודעות במקום להקליד. הדיבור מזוהה במכשיר הזה ולעולם לא נשמר או נשלח."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "टाइप करने के बजाय संदेश बोलकर लिखें। आवाज़ इसी डिवाइस पर पहचानी जाती है और कभी सेव या भेजी नहीं जाती।"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktekan pesan alih-alih mengetik. Ucapan dikenali di perangkat ini dan tidak pernah disimpan atau dikirim."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detta i messaggi invece di scriverli. Il parlato viene riconosciuto su questo dispositivo e non viene mai salvato né inviato."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "入力する代わりに音声でメッセージを作成できます。音声はこのデバイス上で認識され、保存や送信は一切されません。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "입력 대신 받아쓰기로 메시지를 작성하세요. 음성은 이 기기에서 인식되며 저장되거나 전송되지 않습니다."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imlakkan mesej dan bukannya menaip. Pertuturan dikenal pasti pada peranti ini dan tidak pernah disimpan atau dihantar."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dikter meldinger i stedet for å skrive. Tale gjenkjennes på denne enheten og blir aldri lagret eller sendt."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dicteer berichten in plaats van te typen. Spraak wordt op dit apparaat herkend en nooit opgeslagen of verstuurd."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dyktuj wiadomości zamiast pisać. Mowa jest rozpoznawana na tym urządzeniu i nigdy nie jest zapisywana ani wysyłana."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dite mensagens em vez de digitar. A fala é reconhecida neste dispositivo e nunca é salva nem enviada."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dictează mesajele în loc să le tastezi. Vorbirea este recunoscută pe acest dispozitiv și nu este niciodată salvată sau trimisă."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktera meddelanden i stället för att skriva. Tal känns igen på den här enheten och sparas eller skickas aldrig."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "พูดข้อความแทนการพิมพ์ เสียงพูดจะถูกรู้จำบนอุปกรณ์นี้และไม่ถูกบันทึกหรือส่งไปที่ใด"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yazmak yerine mesajlarını dikte et. Konuşma bu cihazda tanınır, asla kaydedilmez veya gönderilmez."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Диктуйте повідомлення замість набирання. Мовлення розпізнається на цьому пристрої й ніколи не зберігається та не надсилається."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đọc tin nhắn thay vì gõ. Giọng nói được nhận dạng trên thiết bị này và không bao giờ được lưu hay gửi đi."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "用语音输入消息，无需打字。语音在这台设备上识别，绝不会被保存或发送。"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

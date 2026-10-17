@@ -364,7 +364,7 @@ final class ConversationModel {
                                              enableThinking: thinking, supportsThinking: supportsThinking,
                                              tools: tools, observer: makeObserver())
             } catch LlamaError.cannotContinue {
-                errorMessage = String(localized: "This reply can't be continued. Send a new message instead.")
+                errorMessage = LlamaError.cannotContinue.localizedDescription
                 if let last = messages.indices.last { messages[last].interrupted = true }
             } catch {
                 errorMessage = error.localizedDescription
