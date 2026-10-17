@@ -8,6 +8,12 @@
 
 #include "parakeet_capi.h"
 
+#include <atomic>
+
+// Internal to the vendored parakeet (tools/parakeet/src/ggml_graph.hpp): frees
+// the process-wide backend, which the C API never does.
+namespace pk { void shutdown_backend(); }
+
 // Parakeet's own default is tuned for desktop core counts. On a big.LITTLE
 // phone every extra thread is a liability: ggml waits for the slowest worker at
 // each graph node, so pulling in efficiency cores stalls the whole encoder.
@@ -37,6 +43,23 @@ void asrConfigureBackend(int threadsOverride) {
     parakeet_capi_set_num_threads(n > 0 ? n : kAsrThreads);
     LOGi("ASR threads: %d", n > 0 ? n : kAsrThreads);
     done = true;
+}
+
+static std::atomic<int> g_liveModels{0};
+
+parakeet_ctx *asrLoadModel(const char *path) {
+    parakeet_ctx *ctx = parakeet_capi_load(path);
+    if (ctx != nullptr) g_liveModels++;
+    return ctx;
+}
+
+void asrFreeModel(parakeet_ctx *ctx) {
+    if (ctx == nullptr) return;
+    parakeet_capi_free(ctx);
+    if (--g_liveModels == 0) {
+        pk::shutdown_backend();
+        LOGi("ASR backend released");
+    }
 }
 
 // The streaming decoder emits the locale it settled on as a literal token at

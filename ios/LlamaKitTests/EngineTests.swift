@@ -178,6 +178,20 @@ struct AsrTests {
     }
 
     @Test(.enabled(if: TestSupport.has(TestSupport.asrModel)))
+    func unloadReleasesMemory() throws {
+        let before = TestSupport.footprintMB
+        do {
+            let model = try AsrModel(url: TestSupport.model(TestSupport.asrModel))
+            let samples = try AudioFile.samples(TestSupport.fixtures.appending(path: "audio/jfk.wav"))
+            _ = try model.transcribe(samples)
+            #expect(TestSupport.footprintMB > before + 200)
+            model.unload()
+        }
+        // Parakeet's process-wide compute backend must go with the last model.
+        #expect(TestSupport.footprintMB < before + 100)
+    }
+
+    @Test(.enabled(if: TestSupport.has(TestSupport.asrModel)))
     func streamsSpeech() throws {
         let model = try AsrModel(url: TestSupport.model(TestSupport.asrModel))
         defer { model.unload() }

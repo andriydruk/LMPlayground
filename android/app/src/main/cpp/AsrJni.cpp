@@ -66,7 +66,7 @@ Java_com_druk_llamacpp_jni_NativeAsr_loadModel(JNIEnv *env, jobject thiz, jstrin
 
     const char *path = env->GetStringUTFChars(modelPath, nullptr);
     LOGi("loading ASR model: %s", path);
-    parakeet_ctx *ctx = parakeet_capi_load(path);
+    parakeet_ctx *ctx = asrLoadModel(path);
     env->ReleaseStringUTFChars(modelPath, path);
 
     if (ctx == nullptr) {
@@ -243,6 +243,6 @@ JNIEXPORT void JNICALL
 Java_com_druk_llamacpp_jni_NativeAsr_freeModel(JNIEnv *env, jobject thiz, jlong handle) {
     auto *ctx = reinterpret_cast<parakeet_ctx *>(handle);
     if (ctx == nullptr) return;
-    parakeet_capi_free(ctx);
+    asrFreeModel(ctx);
     LOGi("ASR model unloaded");
 }

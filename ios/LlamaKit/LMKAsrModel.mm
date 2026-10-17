@@ -25,7 +25,7 @@ static NSString *LMKTakeString(char *text) {
 
 + (instancetype)loadModelAtPath:(NSString *)path threads:(int32_t)threads error:(NSError **)error {
     asrConfigureBackend(threads);
-    parakeet_ctx *ctx = parakeet_capi_load(path.UTF8String);
+    parakeet_ctx *ctx = asrLoadModel(path.UTF8String);
     if (ctx == nullptr) {
         if (error) *error = LMKMakeError(LMKErrorAsrFailed,
                                          [NSString stringWithFormat:@"Failed to load %@", path.lastPathComponent]);
@@ -76,7 +76,7 @@ static NSString *LMKTakeString(char *text) {
 
 - (void)unload {
     if (_ctx != nullptr) {
-        parakeet_capi_free(_ctx);
+        asrFreeModel(_ctx);
         _ctx = nullptr;
     }
 }
