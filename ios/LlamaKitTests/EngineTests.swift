@@ -19,6 +19,23 @@ struct EngineTests {
         #expect(meta.hasChatTemplate)
         #expect(!meta.name.isEmpty)
         #expect(Engine.probe(TestSupport.fixtures.appending(path: "test_cat.jpg")) == nil)
+        #expect(!meta.isProjector)
+        #expect(meta.contextLength > 0)
+        #expect(meta.kvBytesPerToken > 0)
+    }
+
+    @Test(.enabled(if: TestSupport.has(TestSupport.visionProjector)))
+    func probeRecognizesProjectors() throws {
+        let meta = try #require(Engine.probe(TestSupport.model(TestSupport.visionProjector)))
+        #expect(meta.isProjector)
+    }
+
+    @Test func probeReportsEveryLocalModel() {
+        let files = (try? FileManager.default.contentsOfDirectory(atPath: TestSupport.modelsDir.path)) ?? []
+        for file in files.sorted() where file.hasSuffix(".gguf") {
+            guard let m = Engine.probe(TestSupport.model(file)) else { continue }
+            print("probe \(file): arch=\(m.architecture) ctx=\(m.contextLength) kv/token=\(m.kvBytesPerToken) projector=\(m.isProjector) template=\(m.hasChatTemplate)")
+        }
     }
 
     @Test(.enabled(if: TestSupport.has(TestSupport.textModel)))

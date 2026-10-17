@@ -1,0 +1,5 @@
+{
+  "_comment": "GGUF filename -> replacement chat template in this folder. Same list as android/.../models/ChatTemplateOverrides.kt, which documents why each override exists.",
+  "HuggingFaceTB_SmolLM3-3B-Q4_K_M.gguf": "HuggingFaceTB_SmolLM3-3B-Q4_K_M.jinja",
+  "LFM2.5-VL-450M-Q4_K_M.gguf": "LFM2.5-VL-450M-Q4_K_M.jinja"
+}

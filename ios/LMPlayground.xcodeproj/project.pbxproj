@@ -13,6 +13,7 @@
 		0D13D77B0DFACA5C9E9FFE2C /* LlamaEmbeddingSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1AA1792EDA9F49E4B8F10C4C /* LlamaEmbeddingSession.cpp */; };
 		112B6DD735CD4A93895FF9F3 /* AsrEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 44A427FC3B11C12936D37F23 /* AsrEngine.h */; };
 		175A6BF19A7A41C0A50B00BB /* LlamaGenerationSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94C4E745B0B1A1065E5C1B4A /* LlamaGenerationSession.cpp */; };
+		1908DD4114F69275D44B53CE /* chat_templates in Resources */ = {isa = PBXBuildFile; fileRef = B991F636776FFE2A9EF5064E /* chat_templates */; };
 		1957B3A77C415AB2C9AE0668 /* LMKGenerationSession.mm in Sources */ = {isa = PBXBuildFile; fileRef = ED7925841C2C7C2348FB4391 /* LMKGenerationSession.mm */; };
 		1DB33D7C00F3C05327F40A8A /* Utf8.h in Headers */ = {isa = PBXBuildFile; fileRef = 56D61FC60939CE7D4E64EFB9 /* Utf8.h */; };
 		2A90C7F23E623168DB0B7839 /* LMKModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = E93D3301E6C3A4EFCE143AC3 /* LMKModel.mm */; };
@@ -113,6 +114,7 @@
 		B20DAAA28F8885F609318B0E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		B4959FAF0A82587972EA2AB7 /* LlamaModel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LlamaModel.cpp; sourceTree = "<group>"; };
 		B71503B34B059BFFB4D851D2 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		B991F636776FFE2A9EF5064E /* chat_templates */ = {isa = PBXFileReference; lastKnownFileType = folder; name = chat_templates; path = ../core/resources/chat_templates; sourceTree = SOURCE_ROOT; };
 		BDF0D4D6E37716F87144F3DB /* llama.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = llama.xcframework; path = "build-apple/llama.xcframework"; sourceTree = "<group>"; };
 		C164ADA1C36F0AB83FF20763 /* AsrModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsrModel.swift; sourceTree = "<group>"; };
 		CDA85AE75C80CCA770EF23CD /* VisionDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisionDevice.h; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 			isa = PBXGroup;
 			children = (
 				4700036D6B6D47D85B301B35 /* llamacore */,
+				8EA4F676C6C14294025BA5D7 /* resources */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -274,6 +277,14 @@
 				BDF0D4D6E37716F87144F3DB /* llama.xcframework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8EA4F676C6C14294025BA5D7 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				B991F636776FFE2A9EF5064E /* chat_templates */,
+			);
+			path = resources;
 			sourceTree = "<group>";
 		};
 		A4DE4B44D8F5B67AEA5F2F9E /* include */ = {
@@ -461,6 +472,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1908DD4114F69275D44B53CE /* chat_templates in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
