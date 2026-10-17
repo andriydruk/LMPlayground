@@ -25,6 +25,11 @@ final class ChatStore: Sendable {
             .values(in: writer)
     }
 
+    /// The most recently updated conversation.
+    func latestSession() async -> ChatSession? {
+        try? await writer.read { try ChatSession.order(Column("updatedAt").desc).fetchOne($0) }
+    }
+
     func session(_ id: String) throws -> ChatSession? {
         try writer.read { try ChatSession.fetchOne($0, key: id) }
     }

@@ -114,9 +114,12 @@ final class ModelRuntime {
                                      progress: @escaping @Sendable (Double) -> Void) throws -> EngineResult {
         LoadSentinel.begin(filename: filename, step: "load")
         defer { LoadSentinel.end() }
-        let model = try Engine.loadModel(at: url,
-                                         options: LoadOptions(chatTemplateOverride: template),
-                                         progress: progress)
+        // Without the GPU, keep the weights memory-mapped rather than
+        // repacked into RAM: the memory check assumes mapped weights.
+        let gpu = AppSettings.useGPU
+        let options = LoadOptions(gpuLayers: gpu ? Engine.defaultGPULayers : 0, disableRepack: !gpu,
+                                  chatTemplateOverride: template)
+        let model = try Engine.loadModel(at: url, options: options, progress: progress)
         if let projector {
             LoadSentinel.begin(filename: filename, step: "vision")
             // A projector that fails to load leaves the model usable as

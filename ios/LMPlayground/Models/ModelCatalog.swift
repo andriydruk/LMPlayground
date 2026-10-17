@@ -98,6 +98,8 @@ enum ModelCatalog {
         var names = Set(chatModels.flatMap { [$0.filename, $0.mmprojFilename].compactMap { $0 } })
         names.insert(embeddingModel.filename)
         names.insert(dictationModel.filename)
+        // Retired files waiting for SupersededFileCleanup aren't custom models.
+        names.formUnion(SupersededFileCleanup.superseded.keys)
         return names
     }
 }

@@ -10,6 +10,9 @@ struct ConversationView: View {
     @State private var showParams = false
     @State private var showLibrary = false
     @State private var pendingTooLarge: (ModelDescriptor, String)?
+    /// Whether the end of the conversation is on screen: streaming keeps it
+    /// there, and scrolling up offers a way back instead.
+    @State private var atBottom = true
 
     var body: some View {
         @Bindable var model = model
@@ -27,15 +30,34 @@ struct ConversationView: View {
                                         ? { model.continueReply() } : nil)
                             .id(message.id)
                     }
+                    // On screen exactly when the end of the conversation is.
                     Color.clear.frame(height: 1).id("bottom")
+                        .onAppear { atBottom = true }
+                        .onDisappear { atBottom = false }
                 }
                 .padding()
             }
             .defaultScrollAnchor(.bottom)
             .scrollDismissesKeyboard(.interactively)
             .onChange(of: model.messages.last?.content) {
-                if model.isGenerating { proxy.scrollTo("bottom", anchor: .bottom) }
+                if model.isGenerating && atBottom { proxy.scrollTo("bottom", anchor: .bottom) }
             }
+            .overlay(alignment: .bottomTrailing) {
+                if !atBottom && !model.messages.isEmpty {
+                    Button("Jump to bottom", systemImage: "arrow.down") {
+                        withAnimation { proxy.scrollTo("bottom", anchor: .bottom) }
+                    }
+                    .labelStyle(.iconOnly)
+                    .font(.headline)
+                    .padding(12)
+                    .background(.regularMaterial, in: Circle())
+                    .overlay(Circle().stroke(.quaternary))
+                    .padding()
+                    .transition(.opacity.combined(with: .scale))
+                    .accessibilityIdentifier("jumpToBottom")
+                }
+            }
+            .animation(.easeInOut(duration: 0.2), value: atBottom)
         }
         .safeAreaInset(edge: .bottom) {
             InputBar()

@@ -35,8 +35,9 @@ column refers to [08-milestones.md](08-milestones.md).
 | Generation params (temperature, top-p/k, min-p, repetition penalty, context, seed) | Sheet. A change recreates the session and replays history. | engine | M3 |
 | GFM markdown, code blocks with copy | swift-markdown + SwiftUI renderer matching `MessageFormatter` | — | M3 |
 | Copy, share | Buttons under the reply, `ShareLink` | — | M3 |
-| Rating prompt | `requestReview` (StoreKit) at the same trigger points | — | M8 |
-| Haptics per token, completion sound | Throttled `UIImpactFeedbackGenerator` (60 ms), `AVAudioPlayer` earcon, Sound & Haptics settings | — | M8 |
+| Rating prompt | Not in the Android app (only unused upvote/downvote strings); nothing to port | — | — |
+| Haptics per token | Throttled `UIImpactFeedbackGenerator` (60 ms), toggle in Settings | — | M8 |
+| Completion chime while in the background | *Replaced:* replies stop in the background on iOS, so there's nothing to chime for | — | — |
 | Jump-to-bottom, auto-scroll | `scrollPosition` | — | M3 |
 | Interrupted message + reload after an engine crash | Interrupted after backgrounding (Continue via `continueResponse()`) or after a sentinel-detected crash | engine | M3 |
 | Ongoing-generation notification with quick actions | *Replaced:* no background GPU on iPhone. Interrupt + Continue instead. | — | — |
@@ -49,7 +50,7 @@ column refers to [08-milestones.md](08-milestones.md).
 | History: pin, rename, delete, resume | GRDB. iPhone: `NavigationStack`. iPad: `NavigationSplitView` sidebar. | M3 |
 | Resume (history replay into a fresh context) | `replay(turns)` | M3 |
 | Reusable system prompts with usage ordering | `system_prompts` table + picker row + editor | M3 |
-| What's New | Sheet keyed by version | M8 |
+| What's New | Not needed for the first release; add with the first update | — |
 
 ## 7.4 Vision
 
@@ -57,7 +58,7 @@ column refers to [08-milestones.md](08-milestones.md).
 |-----------------|--------------------|:------:|:-:|
 | Attach photo (gallery, camera) | `PhotosPicker` + camera; ImageIO downscale to the same max edge | engine | M4 |
 | Image persisted with the message | `Application Support/ChatImages/` | — | M4 |
-| OCR models, image-only chat mode | Same catalog flag and mode | engine | M4 |
+| OCR models, image-only chat mode | Not on Android main yet (only a catalog description mentions OCR); nothing to port for 1.0 | — | — |
 | Vulkan allowlist and sentinel | *Replaced:* Metal (always on supported devices); CPU in the simulator | — | — |
 
 ## 7.5 Tools
@@ -94,7 +95,7 @@ column refers to [08-milestones.md](08-milestones.md).
 |-----------------|--------------------|:-:|
 | 28 locales | Generated `Localizable.xcstrings`. Per-app language is set from iOS Settings. | M8 |
 | Light / dark | System + Liquid Glass | M3 |
-| Advanced | Context default, GPU offload toggle (debug/escape hatch), debug "crash engine" for testing the sentinel | M8 |
+| Advanced | GPU toggle (escape hatch; weights stay memory-mapped without it). Android's repack toggle only matters for CPU layers, so it isn't offered. | M8 |
 | FAQ, privacy policy | Adapted for iOS (no SAF, generation pauses in the background) | M8 |
 | Large-screen layouts | iPad split view, keyboard shortcuts (⌘↩ send, ⌘. stop) | M8 |
 | Play crash symbolication | App Store Connect / Organizer + verified dSYMs | M9 |

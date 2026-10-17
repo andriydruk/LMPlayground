@@ -158,3 +158,24 @@ struct ChatStoreTests {
         #expect(try store.createPrompt(text: "Poet")?.id == b.id)
     }
 }
+
+struct SupersededFileCleanupTests {
+
+    @Test func deletesOnlyOnceTheReplacementIsPresent() {
+        #expect(SupersededFileCleanup.deletable(present: ["Qwen_Qwen3.5-2B-Q3_K_M.gguf"]).isEmpty)
+        #expect(SupersededFileCleanup.deletable(present: ["Qwen_Qwen3.5-2B-Q3_K_M.gguf", "Qwen_Qwen3.5-2B-IQ4_XS.gguf"])
+                == ["Qwen_Qwen3.5-2B-Q3_K_M.gguf"])
+        #expect(SupersededFileCleanup.deletable(present: ["Qwen_Qwen3.5-2B-IQ4_XS.gguf"]).isEmpty)
+    }
+
+    @Test func runRemovesRetiredFiles() throws {
+        let folder = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        for name in ["mmproj-gemma-4-E2B-it-BF16.gguf", "mmproj-gemma-4-E2B-it-Q8_0.gguf", "Qwen_Qwen3.5-4B-Q3_K_M.gguf"] {
+            try Data(count: 10).write(to: folder.appending(path: name))
+        }
+        #expect(SupersededFileCleanup.run(in: folder) == 10)
+        let left = try FileManager.default.contentsOfDirectory(atPath: folder.path).sorted()
+        #expect(left == ["Qwen_Qwen3.5-4B-Q3_K_M.gguf", "mmproj-gemma-4-E2B-it-Q8_0.gguf"])
+    }
+}
