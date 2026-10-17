@@ -36,10 +36,12 @@ void engineInit(const EngineConfig &config) {
     // libggml-* libraries next to the engine. dlopen them so
     // llama_model_load_from_file (and the mtmd vision encoder) have backends
     // to bind tensors to.
-    if (!config.backendDir.empty()) {
-        ggml_backend_load_all_from_path(config.backendDir.c_str());
-    } else {
-        ggml_backend_load_all();
+    if (config.loadBackends) {
+        if (!config.backendDir.empty()) {
+            ggml_backend_load_all_from_path(config.backendDir.c_str());
+        } else {
+            ggml_backend_load_all();
+        }
     }
 
     // Pick the CLIP vision-encoder device now that the GPU backend (if any) is

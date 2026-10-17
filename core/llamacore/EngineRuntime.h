@@ -13,9 +13,12 @@
 struct EngineConfig {
     // Directory for the vision crash-sentinel markers. Empty disables them.
     std::string stateDir;
-    // GGML_BACKEND_DL builds: directory holding the libggml-* backend
-    // libraries. Empty searches ggml's default locations, and is harmless for
-    // static builds, whose backends are linked in.
+    // GGML_BACKEND_DL builds (Android, host): the backends live in separate
+    // libggml-* libraries that must be loaded at init. Static builds (Apple)
+    // link them in and set this to false.
+    bool loadBackends = true;
+    // Directory holding those libraries. Empty searches ggml's default
+    // locations.
     std::string backendDir;
     VisionPolicy visionPolicy = VisionPolicy::AnyGpu;
     // Vision device name (or "CPU") forced over the policy, e.g. from a debug

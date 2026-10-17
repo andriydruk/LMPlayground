@@ -45,3 +45,7 @@ fastlane/README.md
 
 # Paparazzi raw snapshots (organized copies live in fastlane/metadata/)
 app/src/test/snapshots/
+ios/build-apple/
+xcuserdata/
+*.xcarchive
+DerivedData/

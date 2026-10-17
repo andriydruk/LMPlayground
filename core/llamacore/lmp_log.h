@@ -3,9 +3,10 @@
 //
 // On Android these macros expand to exactly the __android_log_print calls
 // the engine sources used before this header existed, so the shipped
-// libllamacpp.so is unchanged. Off Android (the macOS host build used by
-// :model-harness) they go to stderr, where the harness captures them per
-// model and folds them into the capability report.
+// libllamacpp.so is unchanged. The iOS app (LMP_LOG_OSLOG) logs to os_log.
+// Everywhere else (the macOS host build used by :model-harness, LlamaKit's
+// macOS tests) they go to stderr, where the harness captures them per model
+// and folds them into the capability report.
 //
 // Define LMP_LOG_TAG before including to override the default tag.
 //
@@ -29,6 +30,40 @@
 #define LOGe(...) __android_log_print(ANDROID_LOG_ERROR, LMP_LOG_TAG, __VA_ARGS__)
 #define LOGw(...) __android_log_print(ANDROID_LOG_WARN,  LMP_LOG_TAG, __VA_ARGS__)
 #define LOGd(...) __android_log_print(ANDROID_LOG_DEBUG, LMP_LOG_TAG, __VA_ARGS__)
+
+#elif defined(LMP_LOG_OSLOG)
+
+// iOS: the unified log (Console.app, sysdiagnose). Defined by the LlamaKit
+// build for iOS SDKs only; macOS tests keep stderr. os_log needs a constant
+// format string, so messages are formatted first and logged as one public
+// string, prefixed with the tag.
+
+#include <cstdarg>
+#include <cstdio>
+#include <os/log.h>
+
+static inline os_log_t lmp_os_log_handle() {
+    static os_log_t handle = os_log_create("com.druk.lmplayground", "engine");
+    return handle;
+}
+
+__attribute__((format(printf, 3, 4)))
+static inline void lmp_os_log(os_log_type_t type, const char *tag, const char *fmt, ...) {
+    char buf[1024];
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(buf, sizeof(buf), fmt, args);
+    va_end(args);
+    os_log_with_type(lmp_os_log_handle(), type, "[%{public}s] %{public}s", tag, buf);
+}
+
+// The severity argument is an Android constant; everything else logs at default.
+#define LMP_LOGT(sev, tag, ...) lmp_os_log(OS_LOG_TYPE_DEFAULT, tag, __VA_ARGS__)
+
+#define LOGi(...) lmp_os_log(OS_LOG_TYPE_INFO,    LMP_LOG_TAG, __VA_ARGS__)
+#define LOGe(...) lmp_os_log(OS_LOG_TYPE_ERROR,   LMP_LOG_TAG, __VA_ARGS__)
+#define LOGw(...) lmp_os_log(OS_LOG_TYPE_DEFAULT, LMP_LOG_TAG, __VA_ARGS__)
+#define LOGd(...) lmp_os_log(OS_LOG_TYPE_DEBUG,   LMP_LOG_TAG, __VA_ARGS__)
 
 #else
 
