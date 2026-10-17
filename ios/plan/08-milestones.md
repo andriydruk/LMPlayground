@@ -11,6 +11,44 @@ M0 restructure ─► M1 engine on Apple + device spike ─► M2 models ─► 
                      M9 release ◄─ M8 settings/l10n/polish ◄─ M7 dictation ◄─ M6 RAG ◄─ M5 tools
 ```
 
+## Status, 2026-10-17
+
+The feature work for M1–M8 is in, on the branch, unpushed. What's left
+needs the owner, a device, or both. The checkboxes in the sections below
+are the original plan and aren't all ticked; this table is the current
+state.
+
+| Milestone | State | Evidence |
+|-----------|-------|----------|
+| M1 Engine | Done except the PLA-blocked entitlements re-measure | `1b49223c2`, `29d842978`; LlamaKit macOS tests 18/18; dSYM check passes on a Release archive (`verify-dsyms.sh`) |
+| M2 Models | Done; catalog not yet decided (D6) | `61e688cea`, `787223c2e` |
+| M3 Chat | Done, including Continue (`continueResponse()`) | `76b8dc971`, `f303753b6`, `98606048e`; chat self-test on the M1 iPad |
+| M4 Vision | Done (no OCR mode: Android main has none) | `d70285295` |
+| M5 Tools | Done | `bed3cb582` |
+| M6 Documents | Done | `286b49c2d`; 100-page PDF indexed next to a 2B chat model (05 §5.1) |
+| M7 Dictation | Done; live microphone not yet tried by a person | `beedea71c`; jfk.wav through the real controller (05 §5.1) |
+| M8 Settings, l10n, polish | Done | `26f8e6536`, `40abcf877`, `281803ffd`, `5365e99a5` |
+| M9 Release | Scripts, privacy manifest and English listing done | `49e213570`, `a168cfd5b` |
+
+Automated checks: app unit tests 62/62 on the M1 iPad; chat self-test
+(`-labChat <model>`) 17/17 plus the 100-page and dictation parts.
+
+Waiting on the owner:
+
+- Accept the Apple Program License Agreement, so the increased-memory and
+  extended-virtual-addressing entitlements can be signed; then re-measure
+  on the iPhone 16 Pro and decide the catalog (D6, `ios-catalog.json`).
+- Turn on Settings › Developer › Enable UI Automation on both devices, so
+  `LMPlaygroundUITests` (and screenshot automation) can run.
+- Try dictation with the real microphone, and background/Continue by hand
+  (R3).
+- After merge: push the fork commit `8011897b0` (`vm_allocate` on Apple),
+  copy the updated skills into the main checkout, update the memory notes.
+
+Still to do once D6 is decided: translate the App Store listing (the
+model list depends on the catalog), screenshots for iPhone 6.9" and iPad
+13", and TestFlight.
+
 ## M0: Repository restructure and shared core, about 1 week
 
 See [02-repo-restructure.md](02-repo-restructure.md).
