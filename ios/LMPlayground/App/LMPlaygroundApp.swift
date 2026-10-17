@@ -49,7 +49,10 @@ final class AppServices {
             database = try! AppDatabase.makeEmpty()
         }
         chatStore = ChatStore(database: database)
-        conversation = ConversationModel(store: chatStore, runtime: runtime, models: store)
+        let rag = RagStore(database: database, embedder: EmbeddingModelManager())
+        rag.cleanUp()
+        conversation = ConversationModel(store: chatStore, runtime: runtime, models: store,
+                                         downloads: downloads, rag: rag)
         downloads.onFinished = { [store] _ in store.refresh() }
     }
 }

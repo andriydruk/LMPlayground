@@ -58,6 +58,8 @@ struct CatalogModel: Sendable, Hashable, Identifiable {
 
     var id: String { filename }
     var isVision: Bool { mmprojFilename != nil }
+    /// The download size that ends the summary ("… · 278Mb").
+    var sizeLabel: String { summary.components(separatedBy: " · ").last ?? "" }
 
     func supportsLanguage(_ code: String) -> Bool {
         supportedLanguages.isEmpty || supportedLanguages.contains(code)

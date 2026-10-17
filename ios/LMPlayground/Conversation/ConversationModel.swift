@@ -21,6 +21,11 @@ final class ConversationModel {
     var params = GenerationParams()
     var systemPrompt = ""
     var errorMessage: String?
+    /// Documents attached to this conversation (indexing or ready).
+    private(set) var documents: [RagDocument] = []
+    /// A document waiting for the user to agree to download the embedding
+    /// model.
+    private(set) var documentAwaitingEmbeddingModel: RagDocument?
 
     /// The model the next message goes to.
     var selectedModel: ModelDescriptor? { runtime.loaded?.descriptor }
@@ -28,17 +33,22 @@ final class ConversationModel {
     private let store: ChatStore
     private let runtime: ModelRuntime
     private let models: ModelStore
+    private let downloads: DownloadManager
+    let rag: RagStore
     @ObservationIgnored let tools = ToolRegistry()
+    @ObservationIgnored private var documentsTask: Task<Void, Never>?
 
     /// The engine session for the current conversation, model and settings.
     @ObservationIgnored private var generation: GenerationSession?
     @ObservationIgnored private var generationKey: String?
     @ObservationIgnored private var turnTask: Task<Void, Never>?
 
-    init(store: ChatStore, runtime: ModelRuntime, models: ModelStore) {
+    init(store: ChatStore, runtime: ModelRuntime, models: ModelStore, downloads: DownloadManager, rag: RagStore) {
         self.store = store
         self.runtime = runtime
         self.models = models
+        self.downloads = downloads
+        self.rag = rag
     }
 
     var canSend: Bool {
@@ -56,6 +66,7 @@ final class ConversationModel {
         discardPendingImage()
         systemPrompt = ""
         params = GenerationParams()
+        observeDocuments()
         invalidateGeneration()
     }
 
@@ -67,6 +78,7 @@ final class ConversationModel {
         messages = ((try? store.messages(in: chat.id)) ?? []).map(ChatMessage.init(record:))
         // Search references from earlier turns keep resolving.
         tools.links.restore(ConversationMetadata(json: chat.metadata).stringMap(ConversationMetadata.webLinksKey))
+        observeDocuments()
         invalidateGeneration()
     }
 
@@ -101,6 +113,119 @@ final class ConversationModel {
         pendingImage = nil
     }
 
+    // MARK: Documents
+
+    /// Attach a picked document: checked, copied into the app, and indexed
+    /// (after the one-time embedding model download, if needed).
+    func attachDocument(_ url: URL) {
+        let accessed = url.startAccessingSecurityScopedResource()
+        defer { if accessed { url.stopAccessingSecurityScopedResource() } }
+        let values = try? url.resourceValues(forKeys: [.fileSizeKey, .contentTypeKey])
+        let displayName = url.lastPathComponent
+        let mimeType = values?.contentType?.preferredMIMEType
+        let size = Int64(values?.fileSize ?? 0)
+        guard DocumentText.format(mimeType: mimeType, displayName: displayName) != nil else {
+            errorMessage = DocumentExtractionError.unsupported.message
+            return
+        }
+        guard size <= DocumentText.maxFileBytes else {
+            errorMessage = DocumentExtractionError.tooLarge.message
+            return
+        }
+        do {
+            let sessionId = try ensureSession(title: displayName)
+            let document = try rag.attach(sessionId: sessionId, source: url, displayName: displayName,
+                                          mimeType: mimeType, sizeBytes: size)
+            if rag.embedder.isModelOnDisk() || downloads.isDownloading(rag.embedder.modelFilename) {
+                startIndexing(document)
+            } else {
+                documentAwaitingEmbeddingModel = document
+            }
+        } catch {
+            errorMessage = String(localized: "Couldn't open this document.")
+        }
+    }
+
+    /// Agreed to the embedding model download: fetch it, then index.
+    func confirmEmbeddingModelDownload() {
+        guard let document = documentAwaitingEmbeddingModel else { return }
+        documentAwaitingEmbeddingModel = nil
+        let model = ModelCatalog.embeddingModel
+        if let remote = model.remoteURL.flatMap(URL.init(string:)) {
+            downloads.start(filename: model.filename, url: remote)
+        }
+        startIndexing(document)
+    }
+
+    func dismissEmbeddingModelPrompt() {
+        guard let document = documentAwaitingEmbeddingModel else { return }
+        documentAwaitingEmbeddingModel = nil
+        rag.deleteDocument(document.id)
+    }
+
+    func removeDocument(_ document: RagDocument) {
+        rag.deleteDocument(document.id)
+    }
+
+    private func startIndexing(_ document: RagDocument) {
+        Task {
+            if !rag.embedder.isModelOnDisk() {
+                guard await waitForEmbeddingModel() else {
+                    rag.deleteDocument(document.id)
+                    errorMessage = String(localized: "Downloading the embedding model failed. Check your connection and attach the document again.")
+                    return
+                }
+            }
+            do throws(DocumentExtractionError) {
+                try await rag.index(document)
+            } catch {
+                if error != .cancelled { errorMessage = "\(document.displayName): \(error.message)" }
+            }
+        }
+    }
+
+    /// Wait for the embedding model download; false if it failed or was
+    /// cancelled.
+    private func waitForEmbeddingModel() async -> Bool {
+        let filename = rag.embedder.modelFilename
+        while true {
+            if rag.embedder.isModelOnDisk() { return true }
+            guard let progress = downloads.downloads[filename], progress.failure == nil else {
+                return rag.embedder.isModelOnDisk()
+            }
+            try? await Task.sleep(for: .milliseconds(500))
+        }
+    }
+
+    private func observeDocuments() {
+        documentsTask?.cancel()
+        documentsTask = nil
+        documentAwaitingEmbeddingModel = nil
+        guard let sessionId = session?.id else {
+            documents = []
+            return
+        }
+        documents = (try? rag.documents(sessionId: sessionId)) ?? []
+        let observation = rag.observeDocuments(sessionId: sessionId)
+        documentsTask = Task { [weak self] in
+            do {
+                for try await value in observation {
+                    guard let self, self.session?.id == sessionId else { return }
+                    self.documents = value
+                }
+            } catch {}
+        }
+    }
+
+    /// The message as the model sees it: with excerpts from the attached
+    /// documents when any are relevant. The UI and history keep `userText`.
+    private func wireContent(sessionId: String, userText: String) async -> String {
+        guard (try? rag.hasReadyDocuments(sessionId: sessionId)) == true else { return userText }
+        let retrieved = await rag.retrieve(sessionId: sessionId, query: userText)
+        return RagPromptBuilder.build(userText: userText, chunks: retrieved,
+                                      maxContextChars: RagPromptBuilder.budgetChars(contextSize: params.contextSize))
+    }
+
     // MARK: Models
 
     /// Load `model` for this conversation and remember it as the
@@ -130,16 +255,13 @@ final class ConversationModel {
         guard canSend, let loaded = runtime.loaded else { return }
         draft = ""
 
+        let sessionId: String
         do {
-            if session == nil {
-                session = try store.createSession(title: text, model: loaded.descriptor,
-                                                  params: params, systemPrompt: systemPrompt)
-            }
+            sessionId = try ensureSession(title: text)
         } catch {
             errorMessage = error.localizedDescription
             return
         }
-        guard let sessionId = session?.id else { return }
 
         // Only a model with an attached projector can see the image.
         let image = loaded.supportsVision ? pendingImage : nil
@@ -169,7 +291,8 @@ final class ConversationModel {
                 } else {
                     nil
                 }
-                _ = try await TurnRunner.run(session: generation, message: text, image: imageData,
+                let wire = await wireContent(sessionId: sessionId, userText: text)
+                _ = try await TurnRunner.run(session: generation, message: wire, image: imageData,
                                              enableThinking: thinking, supportsThinking: supportsThinking,
                                              tools: tools, observer: observer)
             } catch {
@@ -177,6 +300,18 @@ final class ConversationModel {
             }
             finishTurn(sessionId: sessionId)
         }
+    }
+
+    /// The current conversation's id, creating its row first for a new chat.
+    private func ensureSession(title: String) throws -> String {
+        if let id = session?.id { return id }
+        let created = try store.createSession(title: title, model: runtime.loaded?.descriptor,
+                                              params: params, systemPrompt: systemPrompt)
+        session = created
+        observeDocuments()
+        // The engine session's key includes the conversation id.
+        invalidateGeneration()
+        return created.id
     }
 
     /// Stop the reply in progress; what was generated so far is kept.

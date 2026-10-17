@@ -75,6 +75,15 @@ struct ConversationView: View {
         } message: {
             Text(model.errorMessage ?? "")
         }
+        .alert("Enable document Q&A", isPresented: Binding(
+            get: { model.documentAwaitingEmbeddingModel != nil },
+            set: { if !$0 { model.dismissEmbeddingModelPrompt() } })) {
+            Button("Download") { model.confirmEmbeddingModelDownload() }
+            Button("Cancel", role: .cancel) { model.dismissEmbeddingModelPrompt() }
+        } message: {
+            let embedding = ModelCatalog.embeddingModel
+            Text("Answering questions about documents needs a small embedding model, \(embedding.name) (\(embedding.sizeLabel)), downloaded once and kept on your device.")
+        }
         .onChange(of: scenePhase) { _, phase in
             if phase == .background { model.interruptForBackground() }
         }
@@ -164,12 +173,15 @@ struct InputBar: View {
     var body: some View {
         @Bindable var model = model
         VStack(spacing: 6) {
+        if !model.documents.isEmpty {
+            DocumentChipsRow()
+        }
         if let image = model.pendingImage {
             PendingImagePreview(path: image)
         }
         HStack(alignment: .bottom, spacing: 8) {
-            if runtime.loaded?.supportsVision == true {
-                AttachmentMenu()
+            if let loaded = runtime.loaded {
+                AttachmentMenu(allowsImages: loaded.supportsVision)
                     .disabled(model.isGenerating)
             }
             if runtime.loaded?.descriptor.offersThinkingToggle == true {

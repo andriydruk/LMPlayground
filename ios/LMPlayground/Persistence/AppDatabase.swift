@@ -28,7 +28,7 @@ final class AppDatabase: Sendable {
         return try AppDatabase(DatabaseQueue(configuration: config))
     }
 
-    private static var migrator: DatabaseMigrator {
+    static var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
         #if DEBUG
         migrator.eraseDatabaseOnSchemaChange = false
@@ -87,6 +87,35 @@ final class AppDatabase: Sendable {
                 t.column("modelFilename", .text).notNull().indexed()
                 t.column("lastUsedAt", .integer).notNull()
                 t.primaryKey(["promptId", "modelFilename"])
+            }
+        }
+
+        // Document Q&A (Android: RagDocumentEntity / RagChunkEntity). Only
+        // indexing and ready documents have rows; a failed one is deleted.
+        migrator.registerMigration("v2") { db in
+            try db.create(table: "rag_documents") { t in
+                t.primaryKey("id", .text)
+                t.belongsTo("session", inTable: "chat_sessions", onDelete: .cascade)
+                    .notNull()
+                t.column("displayName", .text).notNull()
+                t.column("mimeType", .text)
+                /// The app's copy, relative to RagStore.filesDirectory.
+                t.column("storedPath", .text)
+                t.column("sizeBytes", .integer).notNull()
+                t.column("status", .text).notNull()
+                t.column("chunkCount", .integer).notNull().defaults(to: 0)
+                t.column("embeddingDim", .integer).notNull().defaults(to: 0)
+                t.column("embeddingModel", .text).notNull()
+                t.column("createdAt", .integer).notNull()
+            }
+            try db.create(table: "rag_chunks") { t in
+                t.autoIncrementedPrimaryKey("id")
+                t.belongsTo("document", inTable: "rag_documents", onDelete: .cascade)
+                    .notNull()
+                t.column("ordinal", .integer).notNull()
+                t.column("text", .text).notNull()
+                /// Little-endian float32, L2-normalized (Android: EmbeddingCodec).
+                t.column("embedding", .blob).notNull()
             }
         }
 
