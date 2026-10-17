@@ -20,21 +20,46 @@ files be mmap'd where the address space is small.
 
 **Plan.**
 - Ship with both entitlements.
-- **Measure** on the iPhone 16 Pro (the 8 GB floor of the supported tier),
-  with both entitlements, full Metal offload and 4K context. Repeat the
-  rows that pass on the M1 iPad, and also the ones that fail if the iPad
-  has 16 GB. iPads get a higher limit, which may allow an iPad-only
-  `"minRam"` tier in the catalog later:
+- Gate loads on `os_proc_available_memory()` read immediately before load,
+  using the formula in [04 §4.5](04-architecture.md#45-memory-policy).
 
-| Model (Q4_K_M unless noted) | File | `os_proc_available_memory` before | Footprint after load | Decode tok/s | TTFT 1k prompt | Verdict |
-|---|---|---|---|---|---|---|
-| Qwen 3 0.6B | 484 MB | | | | | |
-| Qwen 3 1.7B | 1.28 GB | | | | | |
-| Gemma 4 E2B (+ vision) | | | | | | |
-| Qwen 3 4B / Qwen 3.5 4B | | | | | | |
-| Gemma 4 E4B (+ vision) | | | | | | |
-| 8B class (Llama 3.1 8B / Granite 4.1 8B / Ministral 8B) | | | | | | |
-| GPT-OSS 20B, Gemma 4 12B | | — expected not to fit — | | | | |
+**Measured 2026-10-17** (Engine Lab, Debug build, full Metal offload, 4K
+context, 256-token answer, iOS 27.0). *Without* the memory entitlements:
+Apple's updated Program License Agreement must be accepted before they can
+be provisioned. Re-measure once it is.
+
+| Model | Device | Load | TTFT | Decode | Footprint after load | Peak (incl. vision) | Vision encode |
+|---|---|---|---|---|---|---|---|
+| Qwen 3.5 0.8B IQ4_XS (498 MB) | iPhone 16 Pro | 0.62 s | 0.05 s | 61–63 tok/s | +35 MB | 620 MB | 0.7 s |
+| | iPad Pro M1 | 1.1 s | 0.05 s | 64 tok/s | +35 MB | 610 MB | 0.7 s |
+| MiniCPM-V 4.7 1B Q4_K_M (640 MB) | iPhone 16 Pro | 0.78 s | 0.05 s | 61 tok/s | +16 MB | 220 MB | — |
+| | iPad Pro M1 | 1.5 s | 0.05 s | 63 tok/s | +14 MB | 196 MB | — |
+| LFM2.5 VL 1.6B Q4_K_M (697 MB) + Q8 mmproj (556 MB) | iPhone 16 Pro | 0.74 s | 0.06 s | 63 tok/s | +2 MB | 984 MB | 1.3 s |
+| | iPad Pro M1 | 1.2 s | 0.05 s | 64 tok/s | +1 MB | 798 MB | 1.6 s |
+| EmbeddingGemma 300M Q4_0 (264 MB) | iPhone 16 Pro | 0.40 s | — | 73–111 passages/s | +48 MB | 153 MB | — |
+| Nemotron 3.5 ASR 0.6B q4_k (684 MB) | iPhone 16 Pro | 0.42 s | — | 4.6–5.3× realtime | +685 MB | 905 MB | — |
+| | iPad Pro M1 | 0.45 s | — | 4.8× realtime | +685 MB | 886 MB | — |
+
+`os_proc_available_memory` at launch without the entitlements: about
+3.3 GB on the iPhone 16 Pro and 5.0 GB on the iPad Pro M1.
+
+Findings:
+
+- **Model weights barely count.** llama.cpp maps the GGUF and Metal wraps
+  those pages without copying, so they are clean, file-backed memory. A
+  500–700 MB model adds 2–35 MB to the footprint. What counts is the KV
+  cache, compute buffers and the vision projector (which mtmd loads into
+  RAM). This makes much larger models feasible than the file size suggests;
+  confirm with 4B and 8B models once the downloader exists (M2).
+- **Parakeet loads its weights into RAM** (+685 MB for the 684 MB model).
+  Dictation and a loaded chat model share the budget.
+- **Unloads must return memory immediately.** On iOS, ggml's
+  `posix_memalign` fallback left freed blocks in the footprint until the
+  kernel reclaimed them lazily; `malloc_zone_pressure_relief` didn't help.
+  Fixed by a fork patch that uses `vm_allocate` on all Apple platforms, plus
+  releasing Parakeet's global backend. After the fix: ASR unload goes
+  886 → 89 MB and LFM-VL with its projector 798 → 125 MB.
+- Vision answers were correct on both devices ("A kitten…").
 
 The iPhone verdicts become `ios/catalog/ios-catalog.json` (D6). Every
 supported device has at least the 16 Pro's 8 GB, so a model verified there
