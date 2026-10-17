@@ -33,8 +33,8 @@ google-services.json
 
 # Android Profiling
 *.hprof
-app/src/main/cpp/clblast
-app/release
+android/app/src/main/cpp/clblast
+android/app/release
 android-commandlinetools.zip
 
 AGENTS.md

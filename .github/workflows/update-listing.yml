@@ -5,13 +5,16 @@ on:
     branches:
       - main
     paths:
-      - 'fastlane/metadata/android/**'
-      - '!fastlane/metadata/android/**/changelogs/**'
+      - 'android/fastlane/metadata/android/**'
+      - '!android/fastlane/metadata/android/**/changelogs/**'
   workflow_dispatch:
 
 jobs:
   update-listing:
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: android
 
     steps:
     - name: Checkout repository
@@ -22,6 +25,7 @@ jobs:
       with:
         ruby-version: '3.3'
         bundler-cache: true
+        working-directory: android
 
     - name: Write service account JSON
       run: echo '${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}' > "$RUNNER_TEMP/play-sa.json"

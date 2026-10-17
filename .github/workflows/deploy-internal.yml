@@ -9,6 +9,9 @@ jobs:
 
   deploy:
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: android
 
     steps:
     - name: Checkout repository
@@ -70,6 +73,7 @@ jobs:
       with:
         ruby-version: '3.3'
         bundler-cache: true
+        working-directory: android
 
     - name: Decode keystore
       run: |
@@ -86,7 +90,7 @@ jobs:
     - name: Write service account JSON
       run: echo '${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}' > "$RUNNER_TEMP/play-sa.json"
 
-    # Fastlane looks for fastlane/metadata/android/*/changelogs/{versionCode}.txt.
+    # Fastlane looks for android/fastlane/metadata/android/*/changelogs/{versionCode}.txt.
     # We keep one file per versionName (e.g. 10500.txt for 1.5.0) and copy it
     # to the exact versionCode filename so every deploy ships release notes.
     # If a release has no version-specific changelog, fall back to the
@@ -95,7 +99,7 @@ jobs:
     # Version is the single source of truth in version.properties (shared with gradle).
     - name: Stage changelog for build
       run: |
-        source version.properties
+        source ../version.properties
         BASE=$((major * 10000 + minor * 100 + patch))
         VERSION_CODE=$((BASE * 1000 + GITHUB_RUN_NUMBER))
         SOURCE_NAME="${BASE}.txt"

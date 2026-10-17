@@ -89,7 +89,8 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         val versionProps = Properties().apply {
-            rootProject.file("version.properties").inputStream().use { load(it) }
+            // Shared with the iOS app, so it lives at the repo root, one level up.
+            rootProject.file("../version.properties").inputStream().use { load(it) }
         }
         val major = versionProps.getProperty("major").toInt()
         val minor = versionProps.getProperty("minor").toInt()
