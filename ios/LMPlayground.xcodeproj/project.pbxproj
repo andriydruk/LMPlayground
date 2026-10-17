@@ -1,0 +1,830 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		005785B5201B0EAB448E13FC /* VisionDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = CDA85AE75C80CCA770EF23CD /* VisionDevice.h */; };
+		05FFF282396D9CAE3235F1A2 /* LMKAsrModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 35F6E176599D8950FA5066BD /* LMKAsrModel.mm */; };
+		0B8F247D07955704CE0AB9FF /* LMKModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 280ABDDA84A26A68039B2A18 /* LMKModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0D13D77B0DFACA5C9E9FFE2C /* LlamaEmbeddingSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1AA1792EDA9F49E4B8F10C4C /* LlamaEmbeddingSession.cpp */; };
+		112B6DD735CD4A93895FF9F3 /* AsrEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 44A427FC3B11C12936D37F23 /* AsrEngine.h */; };
+		175A6BF19A7A41C0A50B00BB /* LlamaGenerationSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94C4E745B0B1A1065E5C1B4A /* LlamaGenerationSession.cpp */; };
+		1957B3A77C415AB2C9AE0668 /* LMKGenerationSession.mm in Sources */ = {isa = PBXBuildFile; fileRef = ED7925841C2C7C2348FB4391 /* LMKGenerationSession.mm */; };
+		1DB33D7C00F3C05327F40A8A /* Utf8.h in Headers */ = {isa = PBXBuildFile; fileRef = 56D61FC60939CE7D4E64EFB9 /* Utf8.h */; };
+		2A90C7F23E623168DB0B7839 /* LMKModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = E93D3301E6C3A4EFCE143AC3 /* LMKModel.mm */; };
+		2CA68810DD5BDAC4C1D574BC /* LlamaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19BC15AFD6227807E4FE4EFD /* LlamaKit.framework */; };
+		30A6C04AC649E1DB92C82AEF /* LlamaModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4959FAF0A82587972EA2AB7 /* LlamaModel.cpp */; };
+		30B8B20BBA1237DAE4305AAC /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71503B34B059BFFB4D851D2 /* Model.swift */; };
+		3443DCA50C3DF9CB42428664 /* llama.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDF0D4D6E37716F87144F3DB /* llama.xcframework */; };
+		37C803B064622BC18392E046 /* LMKEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 42DE881DA04FE4569CF5E749 /* LMKEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		39892C8028FFD16EDE131768 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B67A8D0FF824D1364C8532 /* Engine.swift */; };
+		3E7845C63BE780C6699946CD /* LMKGenerationSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 8327794C5E8C3945B4CCFF3D /* LMKGenerationSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		424D308F5F0CC86958D22601 /* LMKInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D2E6CA820FF8E88A8E589CB /* LMKInternal.h */; };
+		438D7DA738D2C23F0DC1B959 /* LlamaKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 19BC15AFD6227807E4FE4EFD /* LlamaKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		46F02BF7A7A8D6914BC80124 /* ModelProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC6CF6535E03CF5D0CA0813A /* ModelProbe.cpp */; };
+		527CA7056F69F53661B573B2 /* ModelProbe.h in Headers */ = {isa = PBXBuildFile; fileRef = FDCB7D066DDFC5068251A66D /* ModelProbe.h */; };
+		66DDCF2D179B49FB50C3374A /* LlamaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 245431E88B4867596499665A /* LlamaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6DC6477313107ACC043F89EE /* LMKAsrModel.h in Headers */ = {isa = PBXBuildFile; fileRef = D74889405064048DA935D02F /* LMKAsrModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7325DC4F555D05433CF53CA9 /* LMKTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 744D85F3F25F0AF1D7AACAB6 /* LMKTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7C880C03195312C09F4C834E /* LlamaKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 19BC15AFD6227807E4FE4EFD /* LlamaKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7D6895C74B6798D02D52F298 /* AsrEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DFECE016A7B6F7DDBB34F581 /* AsrEngine.cpp */; };
+		7DDB06E87DE44185FBDD67A0 /* LMKEmbeddingSession.h in Headers */ = {isa = PBXBuildFile; fileRef = AB8B11644FC3789CD3AAC149 /* LMKEmbeddingSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8207A3F66430A0B6CE337757 /* LlamaCpp.h in Headers */ = {isa = PBXBuildFile; fileRef = AC4E49BE0F980F4D8B2D000F /* LlamaCpp.h */; };
+		954DE2D19F83DBDFD5A16019 /* lmp_log.h in Headers */ = {isa = PBXBuildFile; fileRef = 65860316C71B9B9642D43E1B /* lmp_log.h */; };
+		C6AE492EDC6C9744AB5D13D9 /* VisionDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FEEA07499D5800DFCE9FE5C2 /* VisionDevice.cpp */; };
+		C89D247D494F588208829E5D /* AsrModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164ADA1C36F0AB83FF20763 /* AsrModel.swift */; };
+		D2ECEA54FDF422187AC20D13 /* LMKEmbeddingSession.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9984E048ADAACA4E65ADACC8 /* LMKEmbeddingSession.mm */; };
+		E067F51F089776B1CFC1172C /* GenerationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C70196D559D20EC2B01434 /* GenerationSession.swift */; };
+		ECD70E3AFDB10A3A5378E642 /* LlamaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19BC15AFD6227807E4FE4EFD /* LlamaKit.framework */; };
+		F86ABE9989032C4A3621E3EA /* LMKEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CD6B8F6A2F26ED8D56B4FBF /* LMKEngine.mm */; };
+		F8D05A064AD71B33375892FC /* EngineRuntime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 26D50CF0E9AE64BD73928975 /* EngineRuntime.cpp */; };
+		FF59D43BC6A6C1EA264D9815 /* EngineRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 605761CD95C20BA183C6D7A9 /* EngineRuntime.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C7CC17A0A8FC3736CD33378B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A2D53783DAAFC93830595148 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C74F4C375DBE0187D0966D0;
+			remoteInfo = LlamaKit;
+		};
+		E28786360B82FAAF89461326 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A2D53783DAAFC93830595148 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C74F4C375DBE0187D0966D0;
+			remoteInfo = LlamaKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B6845F2AA5F84896FB19E23E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7C880C03195312C09F4C834E /* LlamaKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EAC6FE97C57A8D8ECDB53A06 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				438D7DA738D2C23F0DC1B959 /* LlamaKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		19BC15AFD6227807E4FE4EFD /* LlamaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LlamaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AA1792EDA9F49E4B8F10C4C /* LlamaEmbeddingSession.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LlamaEmbeddingSession.cpp; sourceTree = "<group>"; };
+		245431E88B4867596499665A /* LlamaKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LlamaKit.h; sourceTree = "<group>"; };
+		26D50CF0E9AE64BD73928975 /* EngineRuntime.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EngineRuntime.cpp; sourceTree = "<group>"; };
+		280ABDDA84A26A68039B2A18 /* LMKModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LMKModel.h; sourceTree = "<group>"; };
+		35F6E176599D8950FA5066BD /* LMKAsrModel.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LMKAsrModel.mm; sourceTree = "<group>"; };
+		40B67A8D0FF824D1364C8532 /* Engine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
+		42DE881DA04FE4569CF5E749 /* LMKEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LMKEngine.h; sourceTree = "<group>"; };
+		44A427FC3B11C12936D37F23 /* AsrEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AsrEngine.h; sourceTree = "<group>"; };
+		50C33CAC4C6B09600336BC4E /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		56D61FC60939CE7D4E64EFB9 /* Utf8.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utf8.h; sourceTree = "<group>"; };
+		605761CD95C20BA183C6D7A9 /* EngineRuntime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EngineRuntime.h; sourceTree = "<group>"; };
+		65860316C71B9B9642D43E1B /* lmp_log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lmp_log.h; sourceTree = "<group>"; };
+		744D85F3F25F0AF1D7AACAB6 /* LMKTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LMKTypes.h; sourceTree = "<group>"; };
+		7D2E6CA820FF8E88A8E589CB /* LMKInternal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LMKInternal.h; sourceTree = "<group>"; };
+		8327794C5E8C3945B4CCFF3D /* LMKGenerationSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LMKGenerationSession.h; sourceTree = "<group>"; };
+		94C4E745B0B1A1065E5C1B4A /* LlamaGenerationSession.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LlamaGenerationSession.cpp; sourceTree = "<group>"; };
+		9984E048ADAACA4E65ADACC8 /* LMKEmbeddingSession.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LMKEmbeddingSession.mm; sourceTree = "<group>"; };
+		9CD6B8F6A2F26ED8D56B4FBF /* LMKEngine.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LMKEngine.mm; sourceTree = "<group>"; };
+		AAEA5C7795687C95A96E7586 /* LMPlayground.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LMPlayground.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB8B11644FC3789CD3AAC149 /* LMKEmbeddingSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LMKEmbeddingSession.h; sourceTree = "<group>"; };
+		AC4E49BE0F980F4D8B2D000F /* LlamaCpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LlamaCpp.h; sourceTree = "<group>"; };
+		B20DAAA28F8885F609318B0E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		B4959FAF0A82587972EA2AB7 /* LlamaModel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LlamaModel.cpp; sourceTree = "<group>"; };
+		B71503B34B059BFFB4D851D2 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		BDF0D4D6E37716F87144F3DB /* llama.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = llama.xcframework; path = "build-apple/llama.xcframework"; sourceTree = "<group>"; };
+		C164ADA1C36F0AB83FF20763 /* AsrModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsrModel.swift; sourceTree = "<group>"; };
+		CDA85AE75C80CCA770EF23CD /* VisionDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisionDevice.h; sourceTree = "<group>"; };
+		D1C70196D559D20EC2B01434 /* GenerationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationSession.swift; sourceTree = "<group>"; };
+		D74889405064048DA935D02F /* LMKAsrModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LMKAsrModel.h; sourceTree = "<group>"; };
+		DE3815466979F741B3FFFBFB /* LlamaKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LlamaKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DFECE016A7B6F7DDBB34F581 /* AsrEngine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AsrEngine.cpp; sourceTree = "<group>"; };
+		E93D3301E6C3A4EFCE143AC3 /* LMKModel.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LMKModel.mm; sourceTree = "<group>"; };
+		EC6CF6535E03CF5D0CA0813A /* ModelProbe.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ModelProbe.cpp; sourceTree = "<group>"; };
+		ED7925841C2C7C2348FB4391 /* LMKGenerationSession.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LMKGenerationSession.mm; sourceTree = "<group>"; };
+		FC8C085B13ED5102AFDACB30 /* LlamaKit.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = LlamaKit.xcconfig; sourceTree = "<group>"; };
+		FDCB7D066DDFC5068251A66D /* ModelProbe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ModelProbe.h; sourceTree = "<group>"; };
+		FEEA07499D5800DFCE9FE5C2 /* VisionDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VisionDevice.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		973727B0BACE070D15D213D1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 49C80F8BA6C8159519440038 /* LMPlayground */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		AA879446434628A1E7D87E76 /* LMPlayground */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				973727B0BACE070D15D213D1 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = LMPlayground;
+			sourceTree = "<group>";
+		};
+		F5A4A2A7816F7E663184F603 /* LlamaKitTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = LlamaKitTests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		71FCB6B240D963CDB0A593ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3443DCA50C3DF9CB42428664 /* llama.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9F96DFF31C4F3DF8A0A175B6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ECD70E3AFDB10A3A5378E642 /* LlamaKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C2D0A469ADDC24212A1BE75C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2CA68810DD5BDAC4C1D574BC /* LlamaKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		020F66AEDD0C452C488EFC29 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				C164ADA1C36F0AB83FF20763 /* AsrModel.swift */,
+				40B67A8D0FF824D1364C8532 /* Engine.swift */,
+				D1C70196D559D20EC2B01434 /* GenerationSession.swift */,
+				B71503B34B059BFFB4D851D2 /* Model.swift */,
+			);
+			path = Swift;
+			sourceTree = "<group>";
+		};
+		13527B236BB289193EADC008 = {
+			isa = PBXGroup;
+			children = (
+				F902F469B3965744F3AE581B /* a2ui-feasibility-research-ad66fc */,
+				AEA188768001200CD3BF858B /* Config */,
+				3966B0D19320311C6FAA6F82 /* LlamaKit */,
+				F5A4A2A7816F7E663184F603 /* LlamaKitTests */,
+				AA879446434628A1E7D87E76 /* LMPlayground */,
+				5F56DB06E104A087658321C7 /* Frameworks */,
+				221B26EAC06EA3D781CBB66C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		221B26EAC06EA3D781CBB66C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				19BC15AFD6227807E4FE4EFD /* LlamaKit.framework */,
+				DE3815466979F741B3FFFBFB /* LlamaKitTests.xctest */,
+				AAEA5C7795687C95A96E7586 /* LMPlayground.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		32A56FFC16BD13458FB2D4F0 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				4700036D6B6D47D85B301B35 /* llamacore */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
+		3966B0D19320311C6FAA6F82 /* LlamaKit */ = {
+			isa = PBXGroup;
+			children = (
+				A4DE4B44D8F5B67AEA5F2F9E /* include */,
+				020F66AEDD0C452C488EFC29 /* Swift */,
+				35F6E176599D8950FA5066BD /* LMKAsrModel.mm */,
+				9984E048ADAACA4E65ADACC8 /* LMKEmbeddingSession.mm */,
+				9CD6B8F6A2F26ED8D56B4FBF /* LMKEngine.mm */,
+				ED7925841C2C7C2348FB4391 /* LMKGenerationSession.mm */,
+				7D2E6CA820FF8E88A8E589CB /* LMKInternal.h */,
+				E93D3301E6C3A4EFCE143AC3 /* LMKModel.mm */,
+			);
+			path = LlamaKit;
+			sourceTree = "<group>";
+		};
+		4700036D6B6D47D85B301B35 /* llamacore */ = {
+			isa = PBXGroup;
+			children = (
+				DFECE016A7B6F7DDBB34F581 /* AsrEngine.cpp */,
+				44A427FC3B11C12936D37F23 /* AsrEngine.h */,
+				26D50CF0E9AE64BD73928975 /* EngineRuntime.cpp */,
+				605761CD95C20BA183C6D7A9 /* EngineRuntime.h */,
+				AC4E49BE0F980F4D8B2D000F /* LlamaCpp.h */,
+				1AA1792EDA9F49E4B8F10C4C /* LlamaEmbeddingSession.cpp */,
+				94C4E745B0B1A1065E5C1B4A /* LlamaGenerationSession.cpp */,
+				B4959FAF0A82587972EA2AB7 /* LlamaModel.cpp */,
+				65860316C71B9B9642D43E1B /* lmp_log.h */,
+				EC6CF6535E03CF5D0CA0813A /* ModelProbe.cpp */,
+				FDCB7D066DDFC5068251A66D /* ModelProbe.h */,
+				56D61FC60939CE7D4E64EFB9 /* Utf8.h */,
+				FEEA07499D5800DFCE9FE5C2 /* VisionDevice.cpp */,
+				CDA85AE75C80CCA770EF23CD /* VisionDevice.h */,
+			);
+			path = llamacore;
+			sourceTree = "<group>";
+		};
+		5F56DB06E104A087658321C7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BDF0D4D6E37716F87144F3DB /* llama.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A4DE4B44D8F5B67AEA5F2F9E /* include */ = {
+			isa = PBXGroup;
+			children = (
+				245431E88B4867596499665A /* LlamaKit.h */,
+				D74889405064048DA935D02F /* LMKAsrModel.h */,
+				AB8B11644FC3789CD3AAC149 /* LMKEmbeddingSession.h */,
+				42DE881DA04FE4569CF5E749 /* LMKEngine.h */,
+				8327794C5E8C3945B4CCFF3D /* LMKGenerationSession.h */,
+				280ABDDA84A26A68039B2A18 /* LMKModel.h */,
+				744D85F3F25F0AF1D7AACAB6 /* LMKTypes.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		AEA188768001200CD3BF858B /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				50C33CAC4C6B09600336BC4E /* Debug.xcconfig */,
+				FC8C085B13ED5102AFDACB30 /* LlamaKit.xcconfig */,
+				B20DAAA28F8885F609318B0E /* Release.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		F902F469B3965744F3AE581B /* a2ui-feasibility-research-ad66fc */ = {
+			isa = PBXGroup;
+			children = (
+				32A56FFC16BD13458FB2D4F0 /* core */,
+			);
+			name = "a2ui-feasibility-research-ad66fc";
+			path = ..;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		664EB0792E94F47D63816735 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				112B6DD735CD4A93895FF9F3 /* AsrEngine.h in Headers */,
+				FF59D43BC6A6C1EA264D9815 /* EngineRuntime.h in Headers */,
+				6DC6477313107ACC043F89EE /* LMKAsrModel.h in Headers */,
+				7DDB06E87DE44185FBDD67A0 /* LMKEmbeddingSession.h in Headers */,
+				37C803B064622BC18392E046 /* LMKEngine.h in Headers */,
+				3E7845C63BE780C6699946CD /* LMKGenerationSession.h in Headers */,
+				424D308F5F0CC86958D22601 /* LMKInternal.h in Headers */,
+				0B8F247D07955704CE0AB9FF /* LMKModel.h in Headers */,
+				7325DC4F555D05433CF53CA9 /* LMKTypes.h in Headers */,
+				8207A3F66430A0B6CE337757 /* LlamaCpp.h in Headers */,
+				66DDCF2D179B49FB50C3374A /* LlamaKit.h in Headers */,
+				527CA7056F69F53661B573B2 /* ModelProbe.h in Headers */,
+				1DB33D7C00F3C05327F40A8A /* Utf8.h in Headers */,
+				005785B5201B0EAB448E13FC /* VisionDevice.h in Headers */,
+				954DE2D19F83DBDFD5A16019 /* lmp_log.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		3B2CD24CB178E49C575CFA20 /* LlamaKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0E8BF4B00AF4C3CDFE221BAA /* Build configuration list for PBXNativeTarget "LlamaKitTests" */;
+			buildPhases = (
+				D3E6880B2768977238403BD3 /* Sources */,
+				0CD5249B09088D1184A2F7BA /* Resources */,
+				C2D0A469ADDC24212A1BE75C /* Frameworks */,
+				EAC6FE97C57A8D8ECDB53A06 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A2127FA2F2D9631ED002C03A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				F5A4A2A7816F7E663184F603 /* LlamaKitTests */,
+			);
+			name = LlamaKitTests;
+			packageProductDependencies = (
+			);
+			productName = LlamaKitTests;
+			productReference = DE3815466979F741B3FFFBFB /* LlamaKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		49C80F8BA6C8159519440038 /* LMPlayground */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75485EB9A3262885A15C554A /* Build configuration list for PBXNativeTarget "LMPlayground" */;
+			buildPhases = (
+				83B211A3C743E5C8C027E9DC /* Sources */,
+				D350DE2E861BFF1850B20CA8 /* Resources */,
+				9F96DFF31C4F3DF8A0A175B6 /* Frameworks */,
+				B6845F2AA5F84896FB19E23E /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				275BFCC941DB7683095A4B7D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AA879446434628A1E7D87E76 /* LMPlayground */,
+			);
+			name = LMPlayground;
+			packageProductDependencies = (
+			);
+			productName = LMPlayground;
+			productReference = AAEA5C7795687C95A96E7586 /* LMPlayground.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6C74F4C375DBE0187D0966D0 /* LlamaKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A7B8CB70B20711E2D765759 /* Build configuration list for PBXNativeTarget "LlamaKit" */;
+			buildPhases = (
+				C5D0F815792DFB70FBB51922 /* Check llama.xcframework */,
+				664EB0792E94F47D63816735 /* Headers */,
+				12CE81D2DFA62D69B6EB1010 /* Sources */,
+				71FCB6B240D963CDB0A593ED /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LlamaKit;
+			packageProductDependencies = (
+			);
+			productName = LlamaKit;
+			productReference = 19BC15AFD6227807E4FE4EFD /* LlamaKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A2D53783DAAFC93830595148 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					3B2CD24CB178E49C575CFA20 = {
+						DevelopmentTeam = XNZDNYDZ83;
+						ProvisioningStyle = Automatic;
+					};
+					49C80F8BA6C8159519440038 = {
+						DevelopmentTeam = XNZDNYDZ83;
+						ProvisioningStyle = Automatic;
+					};
+					6C74F4C375DBE0187D0966D0 = {
+						DevelopmentTeam = XNZDNYDZ83;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 01264738EE789ACE6DC9F970 /* Build configuration list for PBXProject "LMPlayground" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 13527B236BB289193EADC008;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 221B26EAC06EA3D781CBB66C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6C74F4C375DBE0187D0966D0 /* LlamaKit */,
+				3B2CD24CB178E49C575CFA20 /* LlamaKitTests */,
+				49C80F8BA6C8159519440038 /* LMPlayground */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0CD5249B09088D1184A2F7BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D350DE2E861BFF1850B20CA8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C5D0F815792DFB70FBB51922 /* Check llama.xcframework */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Check llama.xcframework";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/scripts/check-xcframework.sh\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		12CE81D2DFA62D69B6EB1010 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7D6895C74B6798D02D52F298 /* AsrEngine.cpp in Sources */,
+				C89D247D494F588208829E5D /* AsrModel.swift in Sources */,
+				39892C8028FFD16EDE131768 /* Engine.swift in Sources */,
+				F8D05A064AD71B33375892FC /* EngineRuntime.cpp in Sources */,
+				E067F51F089776B1CFC1172C /* GenerationSession.swift in Sources */,
+				05FFF282396D9CAE3235F1A2 /* LMKAsrModel.mm in Sources */,
+				D2ECEA54FDF422187AC20D13 /* LMKEmbeddingSession.mm in Sources */,
+				F86ABE9989032C4A3621E3EA /* LMKEngine.mm in Sources */,
+				1957B3A77C415AB2C9AE0668 /* LMKGenerationSession.mm in Sources */,
+				2A90C7F23E623168DB0B7839 /* LMKModel.mm in Sources */,
+				0D13D77B0DFACA5C9E9FFE2C /* LlamaEmbeddingSession.cpp in Sources */,
+				175A6BF19A7A41C0A50B00BB /* LlamaGenerationSession.cpp in Sources */,
+				30A6C04AC649E1DB92C82AEF /* LlamaModel.cpp in Sources */,
+				30B8B20BBA1237DAE4305AAC /* Model.swift in Sources */,
+				46F02BF7A7A8D6914BC80124 /* ModelProbe.cpp in Sources */,
+				C6AE492EDC6C9744AB5D13D9 /* VisionDevice.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83B211A3C743E5C8C027E9DC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D3E6880B2768977238403BD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		275BFCC941DB7683095A4B7D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C74F4C375DBE0187D0966D0 /* LlamaKit */;
+			targetProxy = E28786360B82FAAF89461326 /* PBXContainerItemProxy */;
+		};
+		A2127FA2F2D9631ED002C03A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C74F4C375DBE0187D0966D0 /* LlamaKit */;
+			targetProxy = C7CC17A0A8FC3736CD33378B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4B272EA545734DD7E1C23F8F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FC8C085B13ED5102AFDACB30 /* LlamaKit.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"build-apple\"",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.druk.lmplayground.LlamaKit;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		55F47759C9E0AEDEFCA65C29 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.druk.lmplayground.LlamaKitTests;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		57D50D8E06ABFE8AFDDFE85E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LMPlayground/LMPlayground.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = LMPlayground/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.druk.lmplayground;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		9B6D34C433F6B3168603CD11 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 50C33CAC4C6B09600336BC4E /* Debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B15FBF94A102AAA23301FC86 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FC8C085B13ED5102AFDACB30 /* LlamaKit.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"build-apple\"",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.druk.lmplayground.LlamaKit;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		BEA7404491692B1E8BE31221 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LMPlayground/LMPlayground.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = LMPlayground/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.druk.lmplayground;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CFC2FDC88FF877E19FFFD55F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.druk.lmplayground.LlamaKitTests;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		F36B89453126CF81F5E762F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B20DAAA28F8885F609318B0E /* Release.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		01264738EE789ACE6DC9F970 /* Build configuration list for PBXProject "LMPlayground" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9B6D34C433F6B3168603CD11 /* Debug */,
+				F36B89453126CF81F5E762F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		0E8BF4B00AF4C3CDFE221BAA /* Build configuration list for PBXNativeTarget "LlamaKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CFC2FDC88FF877E19FFFD55F /* Debug */,
+				55F47759C9E0AEDEFCA65C29 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		75485EB9A3262885A15C554A /* Build configuration list for PBXNativeTarget "LMPlayground" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BEA7404491692B1E8BE31221 /* Debug */,
+				57D50D8E06ABFE8AFDDFE85E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9A7B8CB70B20711E2D765759 /* Build configuration list for PBXNativeTarget "LlamaKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B272EA545734DD7E1C23F8F /* Debug */,
+				B15FBF94A102AAA23301FC86 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A2D53783DAAFC93830595148 /* Project object */;
+}

@@ -1,0 +1,107 @@
+# XcodeGen spec for LMPlayground.xcodeproj.
+#
+# The generated project is committed so it opens without extra tools. After
+# editing this file (or adding a file to LlamaKit), regenerate it:
+#   cd ios && xcodegen generate
+# App and test sources are synchronized folders: new files there need no
+# regeneration. Build settings live in Config/*.xcconfig.
+
+name: LMPlayground
+
+options:
+  bundleIdPrefix: com.druk
+  deploymentTarget:
+    iOS: "26.0"
+    macOS: "26.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+configFiles:
+  Debug: Config/Debug.xcconfig
+  Release: Config/Release.xcconfig
+
+targets:
+
+  # The ObjC++ bridge plus the shared C++ engine (core/llamacore), built for
+  # iOS and for macOS, where its tests run on Metal without a device.
+  LlamaKit:
+    type: framework
+    supportedDestinations: [iOS, macOS]
+    configFiles:
+      Debug: Config/LlamaKit.xcconfig
+      Release: Config/LlamaKit.xcconfig
+    sources:
+      - path: LlamaKit/include
+        headerVisibility: public
+      - path: LlamaKit
+        excludes:
+          - "include/**"
+        headerVisibility: project
+      - path: ../core/llamacore
+        headerVisibility: project
+    dependencies:
+      # Static: linked into LlamaKit, never embedded on its own.
+      - framework: build-apple/llama.xcframework
+        embed: false
+    preBuildScripts:
+      - name: Check llama.xcframework
+        script: '"$SRCROOT/scripts/check-xcframework.sh"'
+        basedOnDependencyAnalysis: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.druk.lmplayground.LlamaKit
+        GENERATE_INFOPLIST_FILE: YES
+        DEFINES_MODULE: YES
+        SKIP_INSTALL: YES
+        MARKETING_VERSION: $(MARKETING_VERSION)
+
+  LlamaKitTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: LlamaKitTests
+        type: syncedFolder
+    dependencies:
+      - target: LlamaKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.druk.lmplayground.LlamaKitTests
+        GENERATE_INFOPLIST_FILE: YES
+
+  LMPlayground:
+    type: application
+    platform: iOS
+    sources:
+      - path: LMPlayground
+        type: syncedFolder
+    dependencies:
+      - target: LlamaKit
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.druk.lmplayground
+        INFOPLIST_FILE: LMPlayground/Info.plist
+        CODE_SIGN_ENTITLEMENTS: LMPlayground/LMPlayground.entitlements
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_PREVIEWS: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+
+schemes:
+  LMPlayground:
+    build:
+      targets:
+        LMPlayground: all
+    run:
+      config: Debug
+    archive:
+      config: Release
+
+  LlamaKit:
+    build:
+      targets:
+        LlamaKit: all
+    test:
+      config: Debug
+      targets:
+        - LlamaKitTests
