@@ -102,5 +102,7 @@ struct SessionsView: View {
         if conversation.session?.id == chat.id { conversation.newConversation() }
         let images = (try? chatStore?.deleteSession(chat.id)) ?? []
         ChatImageStore.delete(images)
+        // Its documents' rows went with it; drop their file copies.
+        conversation.rag.sweepOrphanFiles()
     }
 }

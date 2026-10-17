@@ -43,6 +43,11 @@ be provisioned. Re-measure once it is.
 `os_proc_available_memory` at launch without the entitlements: about
 3.3 GB on the iPhone 16 Pro and 5.0 GB on the iPad Pro M1.
 
+Document indexing (M6 exit check, `-labChatParts ragbig`): a generated
+100-page PDF, 200 chunks, indexed in 9.9 s on the iPad Pro M1 next to a
+loaded Qwen 3.5 2B. The footprint went from 830 MB to a 1183 MB peak with
+4.0 GB still available. Still to repeat on the iPhone 16 Pro.
+
 Findings:
 
 - **Model weights barely count.** llama.cpp maps the GGUF and Metal wraps

@@ -86,6 +86,60 @@ struct PromptUsage: Codable, Hashable, Sendable, FetchableRecord, PersistableRec
     var lastUsedAt: Int64
 }
 
+/// A document attached to a conversation (Android: RagDocumentEntity).
+struct RagDocument: Codable, Identifiable, Hashable, Sendable, FetchableRecord, PersistableRecord {
+    static let databaseTableName = "rag_documents"
+    static let indexing = "INDEXING"
+    static let ready = "READY"
+
+    var id: String
+    var sessionId: String
+    var displayName: String
+    var mimeType: String?
+    var storedPath: String?
+    var sizeBytes: Int64
+    var status: String
+    var chunkCount: Int
+    var embeddingDim: Int
+    var embeddingModel: String
+    var createdAt: Int64
+
+    var isReady: Bool { status == Self.ready }
+}
+
+/// One embedded piece of a document (Android: RagChunkEntity).
+struct RagChunk: Codable, Hashable, Sendable, FetchableRecord, MutablePersistableRecord {
+    static let databaseTableName = "rag_chunks"
+
+    var id: Int64?
+    var documentId: String
+    var ordinal: Int
+    var text: String
+    var embedding: Data
+
+    mutating func didInsert(_ inserted: InsertionSuccess) {
+        id = inserted.rowID
+    }
+}
+
+/// Embedding vectors as little-endian float32 bytes (Android: EmbeddingCodec).
+enum EmbeddingCodec {
+    static func encode(_ vector: [Float]) -> Data {
+        var data = Data(capacity: vector.count * 4)
+        for value in vector {
+            withUnsafeBytes(of: value.bitPattern.littleEndian) { data.append(contentsOf: $0) }
+        }
+        return data
+    }
+
+    static func decode(_ data: Data) -> [Float] {
+        let count = data.count / 4
+        return data.withUnsafeBytes { raw in
+            (0..<count).map { Float(bitPattern: UInt32(littleEndian: raw.loadUnaligned(fromByteOffset: $0 * 4, as: UInt32.self))) }
+        }
+    }
+}
+
 /// Sampling settings for a conversation (Android: GenerationParams).
 struct GenerationParams: Codable, Hashable, Sendable {
     var contextSize = 4096

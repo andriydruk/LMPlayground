@@ -1,26 +1,35 @@
 import PhotosUI
 import SwiftUI
 
-/// "+" menu for vision models: a photo from the library or the camera.
+/// "+" menu: a document for any model; a photo from the library or the
+/// camera for vision models.
 struct AttachmentMenu: View {
     @Environment(ConversationModel.self) private var model
+    let allowsImages: Bool
     @State private var pickerItem: PhotosPickerItem?
     @State private var showLibrary = false
     @State private var showCamera = false
+    @State private var showDocuments = false
 
     var body: some View {
         Menu {
-            Button("Photo Library", systemImage: "photo.on.rectangle") { showLibrary = true }
-            if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                Button("Camera", systemImage: "camera") { showCamera = true }
+            Button("Document", systemImage: "doc.text") { showDocuments = true }
+            if allowsImages {
+                Button("Photo Library", systemImage: "photo.on.rectangle") { showLibrary = true }
+                if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                    Button("Camera", systemImage: "camera") { showCamera = true }
+                }
             }
         } label: {
             Image(systemName: "plus.circle")
                 .font(.title2)
                 .frame(width: 36, height: 36)
         }
-        .accessibilityLabel("Attach image")
+        .accessibilityLabel("Attach")
         .accessibilityIdentifier("attachButton")
+        .fileImporter(isPresented: $showDocuments, allowedContentTypes: DocumentText.openableTypes) { result in
+            if case .success(let url) = result { model.attachDocument(url) }
+        }
         .photosPicker(isPresented: $showLibrary, selection: $pickerItem, matching: .images)
         .onChange(of: pickerItem) { _, item in
             guard let item else { return }
