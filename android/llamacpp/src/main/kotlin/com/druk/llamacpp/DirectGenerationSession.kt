@@ -63,6 +63,11 @@ class DirectGenerationSession(
                 System.currentTimeMillis() - started > timeoutMs
             ) {
                 native.requestAbort()
+                // One more step with the abort set ends the turn natively,
+                // committing the partial reply to the session's history.
+                native.generate(object : LlamaGenerationCallback {
+                    override fun onFullResponse(response: String) {}
+                })
                 lastResponse = text
                 lastTokenCount = tokens
                 return 0

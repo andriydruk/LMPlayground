@@ -116,6 +116,45 @@ struct EngineTests {
         #expect(!text.isEmpty)
     }
 
+    /// A reply stopped mid-way is committed to the history with its turn
+    /// closed, and the cache holds each turn exactly once: the incremental
+    /// session ends up with the same prompt context as a clean replay of the
+    /// same conversation.
+    @Test(.enabled(if: TestSupport.has(TestSupport.textModel)))
+    func stoppedReplyKeepsTheCacheConsistent() throws {
+        let model = try Engine.loadModel(at: TestSupport.model(TestSupport.textModel))
+        defer { model.unload() }
+        let question = "Reply with only the word OK."
+
+        let live = try model.makeSession(TestSupport.greedy)
+        defer { live.destroy() }
+        var hi = ""
+        _ = try live.respond(to: "Say hi.", thinking: false, maxTokens: 16) { hi = $0 }
+        var story = ""
+        _ = try live.respond(to: "Write a long story about a lighthouse keeper.", thinking: false,
+                             maxTokens: 40) { story = $0 }
+        _ = try live.respond(to: question, thinking: false, maxTokens: 8) { _ in }
+        let liveContext = Self.contextUsed(live.report)
+
+        let replayed = try model.makeSession(TestSupport.greedy)
+        defer { replayed.destroy() }
+        replayed.replay([(user: "Say hi.", assistant: hi),
+                         (user: "Write a long story about a lighthouse keeper.", assistant: story)])
+        _ = try replayed.respond(to: question, thinking: false, maxTokens: 8) { _ in }
+        let replayedContext = Self.contextUsed(replayed.report)
+
+        #expect(liveContext > 0 && replayedContext > 0)
+        // Same conversation, same greedy answer: the same cache, give or take
+        // tokenization at the turn boundaries.
+        #expect(abs(liveContext - replayedContext) <= 4,
+                "incremental \(liveContext) vs replayed \(replayedContext) tokens")
+    }
+
+    /// Tokens in the cache, from the session report.
+    private static func contextUsed(_ report: String) -> Int {
+        report.firstMatch(of: /Context: (\d+)/).flatMap { Int($0.1) } ?? 0
+    }
+
     @Test(.enabled(if: TestSupport.has(TestSupport.textModel)))
     func toolRoundTrip() throws {
         let model = try Engine.loadModel(at: TestSupport.model(TestSupport.textModel))
