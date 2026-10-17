@@ -60,7 +60,10 @@ struct ConversationView: View {
             .animation(.easeInOut(duration: 0.2), value: atBottom)
         }
         .safeAreaInset(edge: .bottom) {
-            InputBar()
+            VStack(spacing: 8) {
+                HintPills()
+                InputBar()
+            }
         }
         .navigationTitle(model.session?.title ?? String(localized: "New chat"))
         .navigationBarTitleDisplayMode(.inline)
@@ -311,5 +314,70 @@ struct InputBar: View {
         if text.isEmpty { return base }
         if base.isEmpty || base.last?.isWhitespace == true { return base + text }
         return base + " " + text
+    }
+}
+
+/// One-tap offers above the text field (Android: the model-hint pills): the
+/// model a reopened chat used, and the image module a loaded vision model is
+/// missing. Plus a note when the device is running hot.
+private struct HintPills: View {
+    @Environment(ConversationModel.self) private var model
+    @Environment(ModelRuntime.self) private var runtime
+    @Environment(ModelStore.self) private var store
+    @Environment(DownloadManager.self) private var downloads
+    @State private var thermal = ProcessInfo.processInfo.thermalState
+    @State private var dismissedVisionHint: String?
+
+    var body: some View {
+        VStack(spacing: 8) {
+            if thermal == .serious || thermal == .critical {
+                Label("Your device is hot, so replies may be slower.", systemImage: "thermometer.high")
+                    .font(.footnote)
+                    .foregroundStyle(.orange)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(.regularMaterial, in: Capsule())
+            }
+            if let hint = model.sessionModelHint {
+                pill("Previously used: \(hint.name)", systemImage: "sparkles") {
+                    Task { await model.select(model: hint) }
+                }
+                .task(id: hint.filename) {
+                    try? await Task.sleep(for: .seconds(3))
+                    if model.sessionModelHint?.filename == hint.filename { model.sessionModelHint = nil }
+                }
+            } else if let missing = missingVisionModule {
+                pill("Add image support · Download", systemImage: "arrow.down.circle") {
+                    if let catalog = missing.catalog { downloads.download(catalog, includeProjector: true) }
+                    dismissedVisionHint = missing.filename
+                }
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: model.sessionModelHint?.filename)
+        .onReceive(NotificationCenter.default.publisher(for: ProcessInfo.thermalStateDidChangeNotification)) { _ in
+            thermal = ProcessInfo.processInfo.thermalState
+        }
+    }
+
+    /// The loaded catalog model, when its image module can be downloaded.
+    private var missingVisionModule: ModelDescriptor? {
+        guard let loaded = runtime.loaded?.descriptor, loaded.needsVisionModule,
+              loaded.catalog?.mmprojURL != nil, dismissedVisionHint != loaded.filename,
+              let projector = loaded.mmprojFilename, !downloads.isDownloading(projector) else { return nil }
+        return loaded
+    }
+
+    private func pill(_ title: LocalizedStringKey, systemImage: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Label(title, systemImage: systemImage)
+                .font(.subheadline.weight(.medium))
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background(.regularMaterial, in: Capsule())
+                .overlay(Capsule().stroke(.quaternary))
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(.tint)
+        .transition(.opacity.combined(with: .move(edge: .bottom)))
     }
 }
