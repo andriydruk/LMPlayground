@@ -28,7 +28,7 @@ final class ConversationModel {
     private let store: ChatStore
     private let runtime: ModelRuntime
     private let models: ModelStore
-    @ObservationIgnored var tools: (any ToolExecutor)?
+    @ObservationIgnored let tools = ToolRegistry()
 
     /// The engine session for the current conversation, model and settings.
     @ObservationIgnored private var generation: GenerationSession?
@@ -52,6 +52,7 @@ final class ConversationModel {
         stop()
         session = nil
         messages = []
+        tools.links.restore([:])
         discardPendingImage()
         systemPrompt = ""
         params = GenerationParams()
@@ -64,6 +65,8 @@ final class ConversationModel {
         params = chat.params
         systemPrompt = chat.systemPrompt
         messages = ((try? store.messages(in: chat.id)) ?? []).map(ChatMessage.init(record:))
+        // Search references from earlier turns keep resolving.
+        tools.links.restore(ConversationMetadata(json: chat.metadata).stringMap(ConversationMetadata.webLinksKey))
         invalidateGeneration()
     }
 
@@ -153,10 +156,12 @@ final class ConversationModel {
 
         let thinking = thinkingEnabled && loaded.supportsThinking
         let supportsThinking = loaded.supportsThinking
-        let tools = loaded.supportsToolCalling ? self.tools : nil
+        let tools: ToolRegistry? = loaded.supportsToolCalling ? self.tools : nil
+        let filename = loaded.descriptor.filename
 
         turnTask = Task {
             do {
+                await self.tools.setModel(filename)
                 let generation = try await prepareGeneration(for: loaded)
                 let observer = makeObserver()
                 let imageData: Data? = if let image {
@@ -261,12 +266,22 @@ final class ConversationModel {
         }
         reply.recordId = (try? store.insert(reply.record(sessionId: sessionId)))?.id
         messages[last] = reply
+        // Snapshot search references so they still resolve after a relaunch.
+        let links = tools.links.snapshot()
+        if !links.isEmpty {
+            try? store.updateSession(sessionId) { session in
+                var metadata = ConversationMetadata(json: session.metadata)
+                metadata.setStringMap(ConversationMetadata.webLinksKey, links)
+                session.metadata = metadata.json
+            }
+        }
     }
 
     // MARK: Engine session
 
     private func currentKey(for loaded: ModelRuntime.LoadedModel) -> String {
-        "\(loaded.descriptor.filename)|\(params.hashValue)|\(systemPrompt.hashValue)|\(session?.id ?? "")"
+        let enabled = ToolRegistry.toolNames.filter { ToolSettings.isEnabled($0, model: loaded.descriptor.filename) }
+        return "\(loaded.descriptor.filename)|\(params.hashValue)|\(systemPrompt.hashValue)|\(session?.id ?? "")|\(enabled)"
     }
 
     private func invalidateGeneration() {
@@ -305,7 +320,7 @@ final class ConversationModel {
         let filename = loaded.descriptor.filename
         let modelSize = models.files[filename] ?? 0
         let prompt = systemPrompt
-        let toolsJSON = loaded.supportsToolCalling ? (await tools?.toolsJSON ?? "[]") : "[]"
+        let toolsJSON = loaded.supportsToolCalling ? (await tools.toolsJSON ?? "[]") : "[]"
 
         let created = try await Self.makeSession(model: loaded.model, sampler: sampler, history: history,
                                                  filename: filename, modelSize: modelSize,

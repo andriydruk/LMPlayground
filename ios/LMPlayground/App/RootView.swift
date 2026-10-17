@@ -14,7 +14,9 @@ struct RootView: View {
 
     var body: some View {
         Group {
-            if Self.labLaunch {
+            if UserDefaults.standard.string(forKey: "labChat") != nil {
+                NavigationStack { ChatSelfTestView() }
+            } else if Self.labLaunch {
                 NavigationStack { EngineLabView() }
             } else {
                 NavigationSplitView(preferredCompactColumn: $column) {
@@ -55,6 +57,11 @@ struct SettingsView: View {
                     SystemPromptsView()
                 } label: {
                     Label("System prompts", systemImage: "text.quote")
+                }
+                NavigationLink {
+                    ToolsSettingsView()
+                } label: {
+                    Label("Tools", systemImage: "wrench.and.screwdriver")
                 }
                 #if DEBUG
                 Section("Debug") {

@@ -27,6 +27,9 @@ packages:
   Markdown:
     url: https://github.com/swiftlang/swift-markdown
     exactVersion: 0.9.0
+  SwiftSoup:
+    url: https://github.com/scinfu/SwiftSoup
+    exactVersion: 2.14.3
 
 targets:
 
@@ -91,6 +94,7 @@ targets:
         embed: true
       - package: GRDB
       - package: Markdown
+      - package: SwiftSoup
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.druk.lmplayground
