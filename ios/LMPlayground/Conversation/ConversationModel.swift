@@ -24,6 +24,9 @@ final class ConversationModel {
     var errorMessage: String?
     /// Documents attached to this conversation (indexing or ready).
     private(set) var documents: [RagDocument] = []
+    /// The model a reopened conversation used, when another one (or none) is
+    /// loaded: offered as a one-tap switch for a few seconds.
+    var sessionModelHint: ModelDescriptor?
     /// A document waiting for the user to agree to download the embedding
     /// model.
     private(set) var documentAwaitingEmbeddingModel: RagDocument?
@@ -73,6 +76,7 @@ final class ConversationModel {
         discardPendingImage()
         systemPrompt = ""
         params = GenerationParams()
+        sessionModelHint = nil
         observeDocuments()
         invalidateGeneration()
     }
@@ -85,6 +89,8 @@ final class ConversationModel {
         messages = ((try? store.messages(in: chat.id)) ?? []).map(ChatMessage.init(record:))
         // Search references from earlier turns keep resolving.
         tools.links.restore(ConversationMetadata(json: chat.metadata).stringMap(ConversationMetadata.webLinksKey))
+        sessionModelHint = chat.modelFilename == runtime.loaded?.descriptor.filename ? nil
+            : models.downloaded.first { $0.filename == chat.modelFilename }
         observeDocuments()
         invalidateGeneration()
     }
@@ -238,6 +244,7 @@ final class ConversationModel {
     /// Load `model` for this conversation and remember it as the
     /// conversation's model.
     func select(model: ModelDescriptor, force: Bool = false) async {
+        sessionModelHint = nil
         guard runtime.loaded?.descriptor.filename != model.filename else { return }
         stop()
         await releaseGeneration()
