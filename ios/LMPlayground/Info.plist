@@ -28,6 +28,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Take a photo to ask the model about it. Photos stay on this device.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Dictate messages instead of typing. Speech is recognized on this device and never saved or sent.</string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchScreen</key>

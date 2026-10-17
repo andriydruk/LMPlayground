@@ -48,6 +48,13 @@ Document indexing (M6 exit check, `-labChatParts ragbig`): a generated
 loaded Qwen 3.5 2B. The footprint went from 830 MB to a 1183 MB peak with
 4.0 GB still available. Still to repeat on the iPhone 16 Pro.
 
+Dictation (M7, `-labChatParts dictation`, jfk.wav fed through the real
+controller at real-time pace on the iPad Pro M1): first words 2.2 s into
+the 11.5 s clip (model load included), final text 0.2 s after the audio
+ends. Footprint 827 → 1521 MB while Parakeet is loaded, 799 MB after the
+idle unload. The live microphone path (`MicrophoneCapture`) still needs a
+hands-on check, since the permission prompt needs a person.
+
 Findings:
 
 - **Model weights barely count.** llama.cpp maps the GGUF and Metal wraps

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ConversationView: View {
     @Environment(ConversationModel.self) private var model
+    @Environment(DictationController.self) private var dictation
     @Environment(ModelRuntime.self) private var runtime
     @Environment(ModelStore.self) private var store
     @Environment(\.scenePhase) private var scenePhase
@@ -84,8 +85,26 @@ struct ConversationView: View {
             let embedding = ModelCatalog.embeddingModel
             Text("Answering questions about documents needs a small embedding model, \(embedding.name) (\(embedding.sizeLabel)), downloaded once and kept on your device.")
         }
+        .alert("Enable voice dictation", isPresented: Binding(
+            get: { dictation.needsModelDownload }, set: { dictation.needsModelDownload = $0 })) {
+            Button("Download") { dictation.downloadModel() }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Speaking instead of typing needs a speech-recognition model, \(dictation.model.name) (\(dictation.model.sizeLabel)), downloaded once and kept on your device. It works offline, in 35 languages.")
+        }
+        .alert("Dictation", isPresented: Binding(
+            get: { dictation.errorMessage != nil }, set: { if !$0 { dictation.errorMessage = nil } })) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(dictation.errorMessage ?? "")
+        }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .background { model.interruptForBackground() }
+            if phase == .background {
+                model.interruptForBackground()
+                // iOS silences the microphone of a background app.
+                dictation.onMicReleased()
+                AppServices.releaseAuxiliaryModels(rag: model.rag)
+            }
         }
     }
 }
@@ -164,11 +183,17 @@ struct ModelPicker: View {
     }
 }
 
-/// Text field, thinking toggle and send / stop.
+/// Text field, thinking toggle, dictation and send / stop.
 struct InputBar: View {
     @Environment(ConversationModel.self) private var model
     @Environment(ModelRuntime.self) private var runtime
+    @Environment(DictationController.self) private var dictation
     @FocusState private var focused: Bool
+    /// The text before dictation began; recognized words are written on top
+    /// of it, so rewriting never compounds. Nil while dictation isn't writing.
+    @State private var dictationBase: String?
+    /// What dictation last wrote, to tell the user's own edits apart.
+    @State private var dictationWritten: String?
 
     var body: some View {
         @Bindable var model = model
@@ -206,6 +231,9 @@ struct InputBar: View {
                 .onTapGesture { focused = true }
                 .background(.background.secondary, in: RoundedRectangle(cornerRadius: 20))
                 .onSubmit { if model.canSend { model.send() } }
+            // Dictation runs its own engine, so it works with no chat model
+            // loaded; only a reply in progress blocks it.
+            MicButton(enabled: !model.isGenerating)
             if model.isGenerating {
                 Button("Stop", systemImage: "stop.circle.fill") { model.stop() }
                     .labelStyle(.iconOnly)
@@ -225,5 +253,38 @@ struct InputBar: View {
         }
         .padding(.vertical, 8)
         .background(.bar)
+        .onChange(of: dictation.state) { _, state in
+            guard case .listening(let text) = state else { return }
+            let base = dictationBase ?? model.draft
+            dictationBase = base
+            writeDictation(Self.join(base, text))
+        }
+        .onChange(of: dictation.transcript) { _, transcript in
+            guard let transcript else { return }
+            // The final text replaces what was written live; an empty one
+            // (nothing heard) restores the base.
+            writeDictation(Self.join(dictationBase ?? model.draft, transcript))
+            dictationBase = nil
+            dictation.consumeTranscript()
+        }
+        .onChange(of: model.draft) { _, draft in
+            // The field is the user's again the moment they change it (or
+            // send it): dictation stops rather than overwrite their edit.
+            if dictationBase != nil, draft != dictationWritten {
+                dictationBase = nil
+                dictation.abandon()
+            }
+        }
+    }
+
+    private func writeDictation(_ text: String) {
+        dictationWritten = text
+        model.draft = text
+    }
+
+    static func join(_ base: String, _ text: String) -> String {
+        if text.isEmpty { return base }
+        if base.isEmpty || base.last?.isWhitespace == true { return base + text }
+        return base + " " + text
     }
 }

@@ -20,6 +20,7 @@ struct LMPlaygroundApp: App {
                 .environment(services.downloads)
                 .environment(services.runtime)
                 .environment(services.conversation)
+                .environment(services.dictation)
                 .environment(\.chatStore, services.chatStore)
         }
     }
@@ -35,6 +36,7 @@ final class AppServices {
     let runtime: ModelRuntime
     let chatStore: ChatStore
     let conversation: ConversationModel
+    let dictation: DictationController
 
     private init() {
         store = ModelStore()
@@ -53,7 +55,22 @@ final class AppServices {
         rag.cleanUp()
         conversation = ConversationModel(store: chatStore, runtime: runtime, models: store,
                                          downloads: downloads, rag: rag)
+        dictation = DictationController(downloads: downloads)
         downloads.onFinished = { [store] _ in store.refresh() }
+        // Speech recognition and embedding models live in RAM (or close to
+        // it): give them back under pressure.
+        NotificationCenter.default.addObserver(forName: UIApplication.didReceiveMemoryWarningNotification,
+                                               object: nil, queue: .main) { [rag] _ in
+            Self.releaseAuxiliaryModels(rag: rag)
+        }
+    }
+
+    /// Unload the dictation and embedding models if they're idle.
+    nonisolated static func releaseAuxiliaryModels(rag: RagStore) {
+        Task { @AsrActor in DictationEngine.shared.unloadIfIdle() }
+        if let embedder = rag.embedder as? EmbeddingModelManager {
+            Task { @InferenceActor in embedder.unload() }
+        }
     }
 }
 
