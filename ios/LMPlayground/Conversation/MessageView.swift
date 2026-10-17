@@ -113,12 +113,14 @@ private struct AssistantMessageView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private var stats: String {
-        var parts = ["\(message.totalTokens) tokens"]
+    private var stats: AttributedString {
+        var text = AttributedString(localized: "^[\(message.totalTokens) token](inflect: true)")
         if message.responseDurationSeconds > 0 {
-            parts.append(String(format: "%.1f tok/s", Double(message.totalTokens) / message.responseDurationSeconds))
+            let rate = (Double(message.totalTokens) / message.responseDurationSeconds)
+                .formatted(.number.precision(.fractionLength(1)))
+            text += AttributedString(" · ") + AttributedString(localized: "\(rate) tok/s")
         }
-        return parts.joined(separator: " · ")
+        return text
     }
 }
 

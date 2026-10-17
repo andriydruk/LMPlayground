@@ -7,6 +7,7 @@ struct RootView: View {
     @State private var showCrash = false
     @State private var showSettings = false
     @State private var column = NavigationSplitViewColumn.detail
+    @State private var debugScreen: DebugScreen?
 
     /// Launched for an automated Engine Lab run (`-labAutorun` / `-labDownload`).
     private static let labLaunch = UserDefaults.standard.bool(forKey: "labAutorun")
@@ -29,6 +30,12 @@ struct RootView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView()
         }
+        .sheet(item: $debugScreen) { screen in
+            NavigationStack { screen.view }
+        }
+        #if DEBUG
+        .task { await openDebugRoute() }
+        #endif
         .onAppear { showCrash = runtime.crashFromLastLaunch != nil }
         .alert("A model crashed the app", isPresented: $showCrash) {
             Button("OK", role: .cancel) { runtime.crashFromLastLaunch = nil }
@@ -40,41 +47,43 @@ struct RootView: View {
     }
 }
 
-/// Settings (Android: SettingsScreen). Sections fill in over the parity
-/// milestones.
-struct SettingsView: View {
-    @Environment(\.dismiss) private var dismiss
+#if DEBUG
+extension RootView {
+    /// Screenshot and review hook, debug builds only: `-uiOpenLatest YES`
+    /// opens the newest chat, `-uiModel <filename>` loads a model and
+    /// `-uiScreen settings|faq|privacy|advanced|models` opens a screen.
+    private func openDebugRoute() async {
+        let defaults = UserDefaults.standard
+        if defaults.bool(forKey: "uiOpenLatest"),
+           let latest = await AppServices.shared.chatStore.latestSession() {
+            AppServices.shared.conversation.open(latest)
+        }
+        if let filename = defaults.string(forKey: "uiModel"),
+           let descriptor = AppServices.shared.store.downloaded.first(where: { $0.filename == filename }) {
+            await AppServices.shared.conversation.select(model: descriptor)
+        }
+        switch defaults.string(forKey: "uiScreen") {
+        case "settings": showSettings = true
+        case let name?: debugScreen = DebugScreen(rawValue: name)
+        case nil: break
+        }
+    }
+}
+#endif
 
-    var body: some View {
-        NavigationStack {
-            List {
-                NavigationLink {
-                    ModelLibraryView()
-                } label: {
-                    Label("Models", systemImage: "square.stack.3d.down.right")
-                }
-                NavigationLink {
-                    SystemPromptsView()
-                } label: {
-                    Label("System prompts", systemImage: "text.quote")
-                }
-                NavigationLink {
-                    ToolsSettingsView()
-                } label: {
-                    Label("Tools", systemImage: "wrench.and.screwdriver")
-                }
-                #if DEBUG
-                Section("Debug") {
-                    NavigationLink {
-                        EngineLabView()
-                    } label: {
-                        Label("Engine Lab", systemImage: "gauge.with.dots.needle.67percent")
-                    }
-                }
-                #endif
-            }
-            .navigationTitle("Settings")
-            .toolbar { Button("Done") { dismiss() } }
+/// Screens a debug launch argument can open on their own.
+enum DebugScreen: String, Identifiable {
+    case faq, privacy, advanced, models
+
+    var id: String { rawValue }
+
+    @MainActor @ViewBuilder
+    var view: some View {
+        switch self {
+        case .faq: FAQView()
+        case .privacy: PrivacyPolicyView()
+        case .advanced: AdvancedSettingsView()
+        case .models: ModelLibraryView()
         }
     }
 }

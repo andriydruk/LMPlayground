@@ -1,6 +1,7 @@
 import Foundation
 import LlamaKit
 import Observation
+import UIKit
 
 /// The conversation screen's state and actions (Android: ConversationViewModel
 /// + GenerationCoordinator + ChatSessionStore wiring).
@@ -37,6 +38,12 @@ final class ConversationModel {
     let rag: RagStore
     @ObservationIgnored let tools = ToolRegistry()
     @ObservationIgnored private var documentsTask: Task<Void, Never>?
+    /// The streaming tick (Android: GenerationHaptics), throttled so a fast
+    /// stream feels like typing rather than one long buzz.
+    @ObservationIgnored private let haptics = UIImpactFeedbackGenerator(style: .light)
+    @ObservationIgnored private var hapticsThisTurn = false
+    @ObservationIgnored private var lastHaptic = Date.distantPast
+    private static let hapticInterval: TimeInterval = 0.06
 
     /// The engine session for the current conversation, model and settings.
     @ObservationIgnored private var generation: GenerationSession?
@@ -275,6 +282,7 @@ final class ConversationModel {
         if thinkingEnabled && loaded.supportsThinking { reply.thinkingStartedAt = Date() }
         messages.append(reply)
         isGenerating = true
+        startHaptics()
 
         let thinking = thinkingEnabled && loaded.supportsThinking
         let supportsThinking = loaded.supportsThinking
@@ -332,6 +340,7 @@ final class ConversationModel {
         }
         messages[last] = reply
         isGenerating = true
+        startHaptics()
 
         let resume = TurnRunner.Resume(thinkingTokens: reply.thinkingTokens, responseTokens: reply.responseTokens,
                                        inThinking: inThinking)
@@ -392,8 +401,17 @@ final class ConversationModel {
             })
     }
 
+    private func startHaptics() {
+        hapticsThisTurn = AppSettings.hapticsOnGeneration
+        if hapticsThisTurn { haptics.prepare() }
+    }
+
     private func applyDelta(_ text: String, thinkingTokens: Int, responseTokens: Int, thinkingJustStarted: Bool) {
         guard isGenerating, let last = messages.indices.last else { return }
+        if hapticsThisTurn, Date().timeIntervalSince(lastHaptic) >= Self.hapticInterval {
+            haptics.impactOccurred(intensity: 0.5)
+            lastHaptic = Date()
+        }
         var message = messages[last]
         if thinkingJustStarted, message.thinkingStartedAt == nil { message.thinkingStartedAt = Date() }
         if let started = message.thinkingStartedAt {

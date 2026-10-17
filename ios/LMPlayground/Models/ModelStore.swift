@@ -47,6 +47,7 @@ final class ModelStore {
 
     init(directory: URL = AppDirectories.models) {
         self.directory = directory
+        SupersededFileCleanup.run(in: directory)
         refresh()
     }
 
