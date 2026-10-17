@@ -22,7 +22,7 @@ state.
 |-----------|-------|----------|
 | M1 Engine | Done except the PLA-blocked entitlements re-measure | `1b49223c2`, `29d842978`; LlamaKit macOS tests 18/18; dSYM check passes on a Release archive (`verify-dsyms.sh`) |
 | M2 Models | Done; catalog not yet decided (D6) | `61e688cea`, `787223c2e` |
-| M3 Chat | Done, including Continue (`continueResponse()`) | `76b8dc971`, `f303753b6`, `98606048e`; chat self-test on the M1 iPad |
+| M3 Chat | Done, including Continue (`continueResponse()`; no Android JNI binding, since Android has no interrupted replies) | `76b8dc971`, `f303753b6`, `98606048e`; chat self-test on the M1 iPad |
 | M4 Vision | Done (no OCR mode: Android main has none) | `d70285295` |
 | M5 Tools | Done | `bed3cb582` |
 | M6 Documents | Done | `286b49c2d`; 100-page PDF indexed next to a 2B chat model (05 §5.1) |
