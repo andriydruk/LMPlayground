@@ -20,8 +20,11 @@ struct ConversationView: View {
                         EmptyConversationView()
                     }
                     ForEach(model.messages) { message in
+                        let isLast = message.id == model.messages.last?.id
                         MessageView(message: message,
-                                    isStreaming: model.isGenerating && message.id == model.messages.last?.id)
+                                    isStreaming: model.isGenerating && isLast,
+                                    onContinue: isLast && !model.isGenerating && runtime.loaded != nil
+                                        ? { model.continueReply() } : nil)
                             .id(message.id)
                     }
                     Color.clear.frame(height: 1).id("bottom")

@@ -48,12 +48,34 @@ enum TurnRunner {
             modelIsThinking = thinking
         }
 
+        /// Counting on from a reply that was cut short.
+        init(resuming reply: Resume) {
+            totalTokens = reply.thinkingTokens + reply.responseTokens
+            thinkingTokenCount = reply.thinkingTokens
+            thinkingComplete = !reply.inThinking
+            modelIsThinking = reply.inThinking
+        }
+
         func reset(thinking: Bool) {
             totalTokens = 0
             thinkingTokenCount = 0
             thinkingComplete = !thinking
             modelIsThinking = thinking
         }
+    }
+
+    /// Where a reply cut short left off, so its counts carry on.
+    struct Resume: Sendable {
+        var thinkingTokens: Int
+        var responseTokens: Int
+        /// Stopped inside the thinking block.
+        var inThinking: Bool
+    }
+
+    /// How the turn begins: a new message, or more of the last reply.
+    enum Start: Sendable {
+        case message(String, image: Data?)
+        case continuation(Resume)
     }
 
     @InferenceActor
@@ -64,10 +86,24 @@ enum TurnRunner {
                     supportsThinking: Bool,
                     tools: (any ToolExecutor)?,
                     observer: TurnObserver) async throws -> Outcome {
+        try await run(session: session, start: .message(message, image: image), enableThinking: enableThinking,
+                      supportsThinking: supportsThinking, tools: tools, observer: observer)
+    }
+
+    @InferenceActor
+    static func run(session: GenerationSession,
+                    start: Start,
+                    enableThinking: Bool,
+                    supportsThinking: Bool,
+                    tools: (any ToolExecutor)?,
+                    observer: TurnObserver) async throws -> Outcome {
         let toolsJSON = await tools?.toolsJSON
         session.setTools(toolsJSON ?? "[]")
 
-        let state = StreamState(thinking: enableThinking)
+        let state: StreamState = switch start {
+        case .message: StreamState(thinking: enableThinking)
+        case .continuation(let resume): StreamState(resuming: resume)
+        }
         let onResponse: (String) -> Void = { response in
             state.totalTokens += 1
             let text = ResponseProcessor.process(response)
@@ -86,7 +122,12 @@ enum TurnRunner {
             observer.onDelta(text, thinkingTokens, state.totalTokens - thinkingTokens, justStarted)
         }
 
-        var result = try session.respond(to: message, image: image, thinking: enableThinking, onResponse: onResponse)
+        var result: RoundResult = switch start {
+        case .message(let message, let image):
+            try session.respond(to: message, image: image, thinking: enableThinking, onResponse: onResponse)
+        case .continuation:
+            try session.continueResponse(thinking: enableThinking, onResponse: onResponse)
+        }
         var rounds = 0
         var hitLimit = false
         var total = state.totalTokens

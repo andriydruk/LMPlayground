@@ -150,6 +150,70 @@ struct EngineTests {
                 "incremental \(liveContext) vs replayed \(replayedContext) tokens")
     }
 
+    /// Continue picks up a stopped reply where it left off: greedy decoding
+    /// gives the same text as an uninterrupted run, and only the token
+    /// sampled before the stop is fed (no re-prefill).
+    @Test(.enabled(if: TestSupport.has(TestSupport.textModel)))
+    func continueResumesAStoppedReply() throws {
+        let model = try Engine.loadModel(at: TestSupport.model(TestSupport.textModel))
+        defer { model.unload() }
+        let prompt = "Count from 1 to 30, numbers separated by spaces, nothing else."
+
+        let whole = try model.makeSession(TestSupport.greedy)
+        defer { whole.destroy() }
+        var uninterrupted = ""
+        _ = try whole.respond(to: prompt, thinking: false, maxTokens: 50) { uninterrupted = $0 }
+
+        let session = try model.makeSession(TestSupport.greedy)
+        defer { session.destroy() }
+        var partial = ""
+        _ = try session.respond(to: prompt, thinking: false, maxTokens: 12) { partial = $0 }
+        let promptTokensBefore = Self.promptTokens(session.report)
+        var continued = ""
+        _ = try session.continueResponse(thinking: false, maxTokens: 38) { continued = $0 }
+
+        #expect(!partial.isEmpty && continued.hasPrefix(partial))
+        #expect(continued == uninterrupted, "continued \(continued) vs uninterrupted \(uninterrupted)")
+        let fed = Self.promptTokens(session.report) - promptTokensBefore
+        #expect(fed <= 2, "continue fed \(fed) prompt tokens")
+
+        // The next turn follows the completed reply as usual.
+        var next = ""
+        _ = try session.respond(to: "Reply with only the word OK.", thinking: false, maxTokens: 8) { next = $0 }
+        #expect(next.localizedCaseInsensitiveContains("ok"))
+    }
+
+    /// After a relaunch the partial reply comes back through the replayed
+    /// history; continuing re-feeds it and keeps going.
+    @Test(.enabled(if: TestSupport.has(TestSupport.textModel)))
+    func continueAfterReplay() throws {
+        let model = try Engine.loadModel(at: TestSupport.model(TestSupport.textModel))
+        defer { model.unload() }
+        let prompt = "Count from 1 to 30, numbers separated by spaces, nothing else."
+        let session = try model.makeSession(TestSupport.greedy)
+        defer { session.destroy() }
+        session.replay([(user: prompt, assistant: "1 2 3 4 5 6 7 8")])
+        var continued = ""
+        _ = try session.continueResponse(thinking: false, maxTokens: 60) { continued = $0 }
+        #expect(continued.hasPrefix("1 2 3 4 5 6 7 8"))
+        #expect(continued.contains("9 10 11"), "\(continued)")
+    }
+
+    @Test(.enabled(if: TestSupport.has(TestSupport.textModel)))
+    func continueNeedsAReply() throws {
+        let model = try Engine.loadModel(at: TestSupport.model(TestSupport.textModel))
+        defer { model.unload() }
+        let session = try model.makeSession(TestSupport.greedy)
+        defer { session.destroy() }
+        #expect(throws: LlamaError.cannotContinue) {
+            try session.continueResponse(thinking: false) { _ in }
+        }
+    }
+
+    private static func promptTokens(_ report: String) -> Int {
+        report.firstMatch(of: /Prompt tokens: (\d+)/).flatMap { Int($0.1) } ?? 0
+    }
+
     /// Tokens in the cache, from the session report.
     private static func contextUsed(_ report: String) -> Int {
         report.firstMatch(of: /Context: (\d+)/).flatMap { Int($0.1) } ?? 0

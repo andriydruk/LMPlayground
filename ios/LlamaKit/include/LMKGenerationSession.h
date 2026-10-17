@@ -40,6 +40,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// Feed tool results back into the same turn. Returns NO on failure.
 - (BOOL)submitToolResults:(NSString *)resultsJSON enableThinking:(BOOL)enableThinking;
 
+/// Reopen the last assistant reply (stopped, interrupted, or the last turn of
+/// a replayed history) so `-generateStep:` keeps writing it. Reuses the cache
+/// when it still holds that turn. NO when there's nothing to continue, the
+/// context is full, or an image turn is no longer cached.
+- (BOOL)continueResponseWithThinking:(BOOL)enableThinking;
+
 /// The rendered static preamble (system prompt + tool descriptions), or empty.
 - (NSString *)renderPreambleWithThinking:(BOOL)enableThinking;
 /// Persistent preamble KV cache: `<path>.bin` / `<path>.json`. Empty path

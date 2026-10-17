@@ -5,6 +5,8 @@ public enum LlamaError: Error, Equatable {
     case templateRenderFailed
     /// Tool results could not be fed back into the turn.
     case toolResultsRejected
+    /// The last reply can't be continued (see `continueResponse`).
+    case cannotContinue
 }
 
 /// How a generation round ended.
@@ -59,6 +61,18 @@ public final class GenerationSession {
                                         onResponse: (String) -> Void) throws -> RoundResult {
         guard native.submitToolResults(resultsJSON, enableThinking: thinking) else {
             throw LlamaError.toolResultsRejected
+        }
+        return run(maxTokens: maxTokens, onResponse: onResponse)
+    }
+
+    /// Keep writing the last assistant reply: one stopped or interrupted in
+    /// this session, or the last turn of a replayed history. `onResponse`
+    /// receives the whole reply, partial text included.
+    public func continueResponse(thinking: Bool,
+                                 maxTokens: Int = .max,
+                                 onResponse: (String) -> Void) throws -> RoundResult {
+        guard native.continueResponse(withThinking: thinking) else {
+            throw LlamaError.cannotContinue
         }
         return run(maxTokens: maxTokens, onResponse: onResponse)
     }

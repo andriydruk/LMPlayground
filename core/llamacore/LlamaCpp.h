@@ -73,6 +73,16 @@ public:
 
     void replayHistory(const std::vector<std::pair<std::string, std::string>>& history);
 
+    // Reopen the last assistant turn (a reply cut short by Stop or
+    // backgrounding, or the last turn of a replayed history) and keep
+    // generating it. When the KV cache still holds that turn, only the token
+    // sampled before the stop is fed; otherwise the prompt and the partial
+    // reply are re-fed. Then call generate() as usual: the reply it reports
+    // includes the partial text. Returns 0 on success, 1 when there's no
+    // reply to continue, the context is full, or the turn had an image whose
+    // embeddings are no longer cached.
+    int continueResponse(bool enableThinking);
+
     // Tool calling
     void setTools(const char *toolsJson);
     std::string getToolCallsJson();

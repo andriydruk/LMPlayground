@@ -1340,6 +1340,112 @@ std::string LlamaGenerationSession::getToolCallsJson() {
     return arr.dump();
 }
 
+int LlamaGenerationSession::continueResponse(bool enableThinking) {
+    if (chat_tmpls == nullptr || ctx == nullptr) {
+        LOGe("continueResponse called on uninitialized session");
+        return 1;
+    }
+    abort_requested.store(false);
+    batch = {};
+    if (turn_open || messages.empty() || messages.back().role != "assistant" ||
+        !messages.back().tool_calls.empty()) {
+        LOGe("continueResponse: no assistant reply to continue");
+        return 1;
+    }
+
+    // What the cache holds, when it still holds this turn (finalizeResponse
+    // left it untouched): the turn's prompt and the reply tokens decoded
+    // before the stop.
+    const bool same_turn = kv_state == KvState::Prompt && !last_full_prompt.empty() &&
+                           messages.back().content == response;
+    const std::string cached = same_turn ? last_full_prompt + decoded_response : std::string();
+
+    common_chat_msg partial = messages.back();
+    messages.pop_back();
+    prev_enable_thinking = enableThinking;
+
+    common_chat_params result;
+    try {
+        result = renderTemplate(enableThinking);
+    } catch (...) {
+        LOGe("continueResponse: failed to render the chat template");
+        messages.push_back(partial);
+        return 1;
+    }
+    // The generation prompt followed by the reply so far: generating from
+    // here continues the reply rather than starting a new one.
+    const std::string full_prompt = result.prompt + partial.content;
+
+    bool reuse = !cached.empty() && full_prompt.size() > cached.size() &&
+                 full_prompt.compare(0, cached.size(), cached) == 0;
+    if (!reuse) {
+        // An image turn can't be re-fed as text: its embeddings came from mtmd.
+        for (const auto &msg : messages) {
+            if (msg.content.find(mtmd_default_marker()) != std::string::npos) {
+                LOGe("continueResponse: image turn is no longer cached");
+                messages.push_back(partial);
+                return 1;
+            }
+        }
+        clearKvCacheForFreshPrompt();
+    }
+    const size_t fed_from = reuse ? cached.size() : 0;
+    const std::string prompt = full_prompt.substr(fed_from);
+    const bool is_first = fed_from == 0;
+
+    int n_ctx = llama_n_ctx(ctx);
+    int n_ctx_used = reuse ? (int)llama_memory_seq_pos_max(llama_get_memory(ctx), 0) + 1 : 0;
+    int n_prompt_tokens = -llama_tokenize(vocab, prompt.c_str(), prompt.size(), NULL, 0, is_first, true);
+    if (n_prompt_tokens <= 0 || n_ctx_used + n_prompt_tokens >= n_ctx) {
+        LOGe("continueResponse: can't feed %d tokens with %d of %d used", n_prompt_tokens, n_ctx_used, n_ctx);
+        messages.push_back(partial);
+        if (!reuse) {
+            kv_state = KvState::Stale;
+            prev_rendered_prompt.clear();
+            prev_len = 0;
+        }
+        return 1;
+    }
+    prompt_tokens.resize(n_prompt_tokens);
+    if (llama_tokenize(vocab, prompt.c_str(), prompt.size(), prompt_tokens.data(), prompt_tokens.size(),
+                       is_first, true) < 0) {
+        LOGe("continueResponse: failed to tokenize");
+        messages.push_back(partial);
+        return 1;
+    }
+    batch = llama_batch_get_one(prompt_tokens.data(), prompt_tokens.size());
+
+    additional_stops = result.additional_stops;
+    if (!result.parser.empty()) {
+        parser_params = common_chat_parser_params(result);
+        parser_params.reasoning_format = COMMON_REASONING_FORMAT_DEEPSEEK;
+        parser_params.parse_tool_calls = tools_enabled;
+        parser_params.parser.load(result.parser);
+        parser_initialized = true;
+    } else {
+        parser_initialized = false;
+    }
+    if (tools_enabled && !result.grammar.empty()) {
+        recreateToolSampler(result);
+    } else {
+        destroyToolSampler();
+    }
+
+    // The reply keeps growing from the partial text; the cache will hold
+    // [full_prompt] once generate() decodes the batch.
+    response = partial.content;
+    last_full_prompt = full_prompt;
+    kv_state = KvState::Stale;  // until generate() decodes the batch
+    decoded_response.clear();
+    pending_piece.clear();
+    skip_first_decode = false;
+    turn_open = true;
+    maybeAddBudgetSampler(result, enableThinking);
+
+    LOGi("continueResponse: %s, feeding %d tokens", reuse ? "cache reused" : "re-fed", n_prompt_tokens);
+    return 0;
+}
+
 int LlamaGenerationSession::submitToolResults(const char *resultsJson, bool enableThinking) {
     if (chat_tmpls == nullptr || ctx == nullptr) {
         LOGe("submitToolResults called on uninitialized session");
