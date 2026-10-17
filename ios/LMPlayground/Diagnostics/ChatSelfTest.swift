@@ -197,8 +197,73 @@ struct ChatSelfTestView: View {
             check("rag 100 pages answer", text.localizedCaseInsensitiveContains(Self.depotCity(87)), text)
         }
 
+        // 9. Dictation through the real controller, with jfk.wav fed at
+        // real-time pace in place of the microphone.
+        let jfk = AppDirectories.documents.appending(path: "Fixtures/jfk.wav")
+        if wants("dictation"), DictationEngine.shared.isModelOnDisk(),
+           FileManager.default.fileExists(atPath: jfk.path) {
+            await runDictation(jfk, check)
+        }
+
         write(steps)
         note("done: \(steps.filter(\.passed).count)/\(steps.count) passed")
+    }
+
+    private func runDictation(_ audio: URL, _ check: (String, Bool, String) -> Void) async {
+        let dictation = DictationController(downloads: nil, makeSource: { FileAudioSource(url: audio) })
+        func waitForTranscript(_ limit: Duration = .seconds(60)) async -> String? {
+            let started = ContinuousClock.now
+            while dictation.transcript == nil, ContinuousClock.now - started < limit {
+                try? await Task.sleep(for: .milliseconds(50))
+            }
+            defer { dictation.consumeTranscript() }
+            return dictation.transcript
+        }
+
+        // One utterance: words arrive while "speaking", then the final text.
+        let before = ProcessMemory.footprint.megabytes
+        let started = ContinuousClock.now
+        dictation.onMicPressed()
+        dictation.startListening()
+        var firstWords: Duration?
+        var peak = before
+        while dictation.isRecording || dictation.micOn {
+            if firstWords == nil, case .listening(let text) = dictation.state, !text.isEmpty {
+                firstWords = ContinuousClock.now - started
+            }
+            peak = max(peak, ProcessMemory.footprint.megabytes)
+            try? await Task.sleep(for: .milliseconds(50))
+        }
+        let audioDone = ContinuousClock.now - started
+        let text = await waitForTranscript() ?? ""
+        check("dictation", text.localizedCaseInsensitiveContains("fellow Americans") && text.localizedCaseInsensitiveContains("your country"),
+              "\(text) | first words at \(firstWords.map { "\($0)" } ?? "never"), audio \(audioDone), final \(ContinuousClock.now - started), footprint \(before) → \(peak) MB")
+        check("dictation live", firstWords.map { $0 < audioDone } ?? false, "first words \(firstWords.map { "\($0)" } ?? "never") of \(audioDone)")
+
+        // Tap off part-way and straight back on: both utterances land, in order.
+        dictation.onMicPressed()
+        dictation.startListening()
+        try? await Task.sleep(for: .seconds(4))
+        dictation.onMicReleased()
+        dictation.onMicPressed()
+        dictation.startListening()
+        let joined = await waitForTranscript(.seconds(90)) ?? ""
+        let americans = joined.ranges(of: /(?i)americans/).count
+        check("dictation queue", joined.hasPrefix("And so") && americans == 2 && joined.localizedCaseInsensitiveContains("your country"), joined)
+
+        // Editing the text mid-dictation abandons it: nothing more arrives.
+        dictation.onMicPressed()
+        dictation.startListening()
+        try? await Task.sleep(for: .seconds(2))
+        dictation.abandon()
+        try? await Task.sleep(for: .seconds(3))
+        check("dictation abandon", dictation.transcript == nil && dictation.state == .idle && !dictation.micOn,
+              "transcript \(dictation.transcript ?? "nil"), state \(dictation.state)")
+
+        // The model goes once idle.
+        await DictationEngine.shared.unloadIfIdle()
+        let loaded = await DictationEngine.shared.isLoaded
+        check("dictation unload", !loaded, "footprint after unload \(ProcessMemory.footprint.megabytes) MB")
     }
 
     private static let cities = ["Lisbon", "Oslo", "Tallinn", "Valencia", "Krakow", "Porto", "Bergen", "Lyon",
