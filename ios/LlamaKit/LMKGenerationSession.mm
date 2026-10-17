@@ -89,6 +89,11 @@
     return s != nullptr && s->submitToolResults(resultsJSON.UTF8String, enableThinking) == 0;
 }
 
+- (BOOL)continueResponseWithThinking:(BOOL)enableThinking {
+    auto *s = _session.load();
+    return s != nullptr && s->continueResponse(enableThinking) == 0;
+}
+
 - (NSString *)renderPreambleWithThinking:(BOOL)enableThinking {
     auto *s = _session.load();
     if (s == nullptr) return @"";

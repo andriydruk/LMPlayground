@@ -5,7 +5,8 @@ import SwiftUI
 struct MessageView: View {
     let message: ChatMessage
     let isStreaming: Bool
-    var onRegenerate: (() -> Void)?
+    /// Offered on an interrupted last reply.
+    var onContinue: (() -> Void)?
     @State private var viewing: String?
 
     private struct ViewedImage: Identifiable {
@@ -41,7 +42,7 @@ struct MessageView: View {
                 ImageViewer(path: item.path)
             }
         case .assistant:
-            AssistantMessageView(message: message, isStreaming: isStreaming, onRegenerate: onRegenerate)
+            AssistantMessageView(message: message, isStreaming: isStreaming, onContinue: onContinue)
         }
     }
 }
@@ -49,7 +50,7 @@ struct MessageView: View {
 private struct AssistantMessageView: View {
     let message: ChatMessage
     let isStreaming: Bool
-    var onRegenerate: (() -> Void)?
+    var onContinue: (() -> Void)?
 
     var body: some View {
         let split = ThinkingSplit(message.content)
@@ -78,11 +79,20 @@ private struct AssistantMessageView: View {
                     .accessibilityIdentifier("assistantAnswer")
             }
 
-            if message.interrupted {
-                Label("Stopped when the app went to the background", systemImage: "pause.circle")
-                    .accessibilityIdentifier("interruptedLabel")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            if message.interrupted && !isStreaming {
+                HStack(spacing: 12) {
+                    Label("Stopped when the app went to the background", systemImage: "pause.circle")
+                        .accessibilityIdentifier("interruptedLabel")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    if let onContinue {
+                        Button("Continue", systemImage: "play.fill", action: onContinue)
+                            .font(.caption.bold())
+                            .buttonStyle(.bordered)
+                            .buttonBorderShape(.capsule)
+                            .accessibilityIdentifier("continueButton")
+                    }
+                }
             }
 
             if !isStreaming && message.totalTokens > 0 {
@@ -93,9 +103,6 @@ private struct AssistantMessageView: View {
                         UIPasteboard.general.string = split.response
                     }
                     ShareLink(item: split.response) { Image(systemName: "square.and.arrow.up") }
-                    if let onRegenerate {
-                        Button("Regenerate", systemImage: "arrow.clockwise", action: onRegenerate)
-                    }
                 }
                 .labelStyle(.iconOnly)
                 .buttonStyle(.borderless)

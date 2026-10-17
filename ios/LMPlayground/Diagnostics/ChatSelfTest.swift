@@ -99,6 +99,24 @@ struct ChatSelfTestView: View {
                 let saved = (try? chatStore?.messages(in: sessionId))?.first { $0.id == id }
                 check("interrupt saved", saved?.interrupted == true, "persisted interrupted=\(saved?.interrupted == true)")
             }
+            // Continue picks the interrupted reply up where it stopped.
+            if let stopped = interrupted?.content, let recordId = interrupted?.recordId {
+                conversation.continueReply()
+                // Let it write a little more, then stop it the way Stop does.
+                while conversation.isGenerating,
+                      (conversation.messages.last?.content.count ?? 0) < stopped.count + 200 {
+                    try? await Task.sleep(for: .milliseconds(100))
+                }
+                conversation.stop()
+                await waitForReply()
+                let continued = conversation.messages.last
+                let saved = (try? chatStore?.messages(in: conversation.session?.id ?? ""))?.first { $0.id == recordId }
+                check("continue", continued?.content.hasPrefix(stopped) == true
+                        && (continued?.content.count ?? 0) > stopped.count + 50
+                        && continued?.interrupted == false && continued?.recordId == recordId
+                        && saved?.content == continued?.content,
+                      "\(stopped.count) → \(continued?.content.count ?? 0) chars, same row \(continued?.recordId == recordId), saved \(saved?.content.count ?? -1)")
+            }
             let after = await ask("Say OK.")
             // The stopped reply is committed with its turn closed, so this gets
             // an answer rather than a continuation of the story.

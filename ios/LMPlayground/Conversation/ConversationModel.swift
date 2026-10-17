@@ -284,7 +284,8 @@ final class ConversationModel {
         turnTask = Task {
             do {
                 await self.tools.setModel(filename)
-                let generation = try await prepareGeneration(for: loaded)
+                // The history is everything before this message and its reply.
+                let generation = try await prepareGeneration(for: loaded, upTo: messages.count - 2)
                 let observer = makeObserver()
                 let imageData: Data? = if let image {
                     await Task.detached { ChatImageStore.visionData(for: image) }.value
@@ -312,6 +313,48 @@ final class ConversationModel {
         // The engine session's key includes the conversation id.
         invalidateGeneration()
         return created.id
+    }
+
+    /// Keep writing the last reply after it was interrupted by going to the
+    /// background. Reuses the engine's cache when the session is still the
+    /// same; otherwise the history is replayed and the partial reply re-fed.
+    func continueReply() {
+        guard !isGenerating, let loaded = runtime.loaded, let sessionId = session?.id,
+              let last = messages.indices.last, messages[last].role == .assistant,
+              messages[last].interrupted else { return }
+        var reply = messages[last]
+        reply.interrupted = false
+        // Timers carry on from where the reply stopped.
+        reply.responseStartedAt = Date().addingTimeInterval(-reply.responseDurationSeconds)
+        let inThinking = reply.content.hasPrefix("<think>") && !reply.content.contains("</think>")
+        if inThinking {
+            reply.thinkingStartedAt = Date().addingTimeInterval(-Double(reply.thinkingDurationSeconds))
+        }
+        messages[last] = reply
+        isGenerating = true
+
+        let resume = TurnRunner.Resume(thinkingTokens: reply.thinkingTokens, responseTokens: reply.responseTokens,
+                                       inThinking: inThinking)
+        let thinking = thinkingEnabled && loaded.supportsThinking
+        let supportsThinking = loaded.supportsThinking
+        let tools: ToolRegistry? = loaded.supportsToolCalling ? self.tools : nil
+        let filename = loaded.descriptor.filename
+
+        turnTask = Task {
+            do {
+                await self.tools.setModel(filename)
+                let generation = try await prepareGeneration(for: loaded, upTo: messages.count)
+                _ = try await TurnRunner.run(session: generation, start: .continuation(resume),
+                                             enableThinking: thinking, supportsThinking: supportsThinking,
+                                             tools: tools, observer: makeObserver())
+            } catch LlamaError.cannotContinue {
+                errorMessage = String(localized: "This reply can't be continued. Send a new message instead.")
+                if let last = messages.indices.last { messages[last].interrupted = true }
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+            finishTurn(sessionId: sessionId)
+        }
     }
 
     /// Stop the reply in progress; what was generated so far is kept.
@@ -399,7 +442,12 @@ final class ConversationModel {
             messages.removeLast()
             return
         }
-        reply.recordId = (try? store.insert(reply.record(sessionId: sessionId)))?.id
+        if reply.recordId != nil {
+            // A continued reply: its row already exists.
+            try? store.update(reply.record(sessionId: sessionId))
+        } else {
+            reply.recordId = (try? store.insert(reply.record(sessionId: sessionId)))?.id
+        }
         messages[last] = reply
         // Snapshot search references so they still resolve after a relaunch.
         let links = tools.links.snapshot()
@@ -433,7 +481,7 @@ final class ConversationModel {
 
     /// The engine session for the loaded model with this conversation's
     /// settings, recreated (and the history replayed) when anything changed.
-    private func prepareGeneration(for loaded: ModelRuntime.LoadedModel) async throws -> GenerationSession {
+    private func prepareGeneration(for loaded: ModelRuntime.LoadedModel, upTo historyEnd: Int) async throws -> GenerationSession {
         let key = currentKey(for: loaded)
         if let generation, generationKey == key { return generation }
         await releaseGeneration()
@@ -449,9 +497,8 @@ final class ConversationModel {
         sampler.thinkingBudget = Int32(params.thinkingBudget)
         sampler.systemPrompt = systemPrompt
 
-        // Complete (user, assistant) pairs before the message being sent,
-        // which is already appended along with its empty reply.
-        let history = Self.pairTurns(Array(messages.dropLast(2)))
+        // Complete (user, assistant) pairs in messages[..<historyEnd].
+        let history = Self.pairTurns(Array(messages.prefix(max(0, historyEnd))))
         let filename = loaded.descriptor.filename
         let modelSize = models.files[filename] ?? 0
         let prompt = systemPrompt

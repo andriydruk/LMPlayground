@@ -34,7 +34,7 @@ column refers to [08-milestones.md](08-milestones.md).
 | Context overflow compaction | Shared C++ | engine | M3 |
 | Generation params (temperature, top-p/k, min-p, repetition penalty, context, seed) | Sheet. A change recreates the session and replays history. | engine | M3 |
 | GFM markdown, code blocks with copy | swift-markdown + SwiftUI renderer matching `MessageFormatter` | — | M3 |
-| Copy, share, regenerate | Context menu, `ShareLink` | — | M3 |
+| Copy, share | Buttons under the reply, `ShareLink` | — | M3 |
 | Rating prompt | `requestReview` (StoreKit) at the same trigger points | — | M8 |
 | Haptics per token, completion sound | Throttled `UIImpactFeedbackGenerator` (60 ms), `AVAudioPlayer` earcon, Sound & Haptics settings | — | M8 |
 | Jump-to-bottom, auto-scroll | `scrollPosition` | — | M3 |
