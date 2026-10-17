@@ -147,6 +147,14 @@ android {
         }
     }
 
+    // Resources shared with the iOS app (chat-template overrides) live in
+    // core/resources and are packaged as regular assets.
+    sourceSets {
+        getByName("main") {
+            assets.srcDir("../../core/resources")
+        }
+    }
+
     // ggml_backend_load_all_from_path uses opendir on the JNI lib dir to
     // pick the best CPU variant, so the .so files must be extracted to a
     // real filesystem path (the modern default keeps them packed inside

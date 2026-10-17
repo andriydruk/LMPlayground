@@ -42,8 +42,10 @@ com.druk.llamacpp            AIDL proxy layer (public API of the engine)
   └── jni/Native*            thin `external fun` JNI stubs
 
 LlamaService (:llama)        binds JNI ↔ AIDL; GenerationWorker thread
-app/src/main/cpp             C++ session: prompt build, KV-cache reuse,
-                             sampling, vision (mtmd), tool-call grammar
+core/llamacore (repo root)   C++ session: prompt build, KV-cache reuse,
+                             sampling, vision (mtmd), tool-call grammar;
+                             shared with the iOS app
+app/src/main/cpp             JNI shim + Android CMake
 ```
 
 ## Document Q&A (RAG)

@@ -22,7 +22,7 @@ fun main(args: Array<String>) {
     val repo = Repo.root()
     val modelsDir = modelsDir()
     val reportDir = File(repo, "build/reports/model-capabilities").apply { mkdirs() }
-    val overrideDir = File(repo, "app/src/main/assets/chat_templates")
+    val overrideDir = File(Repo.top(), "core/resources/chat_templates")
 
     // Held for the whole run; released on exit, including a crash.
     val lock = RunGuard.lockReportDir(reportDir)
@@ -109,7 +109,7 @@ fun main(args: Array<String>) {
         "host" to "${System.getProperty("os.name")} ${System.getProperty("os.arch")}",
         "backend" to (System.getenv("LMP_HOST_N_GPU_LAYERS")
             ?.let { "CPU (ngl=$it)" } ?: "Metal (default ngl)"),
-        "llama.cpp" to submoduleSha(repo),
+        "llama.cpp" to submoduleSha(Repo.top()),
         "harness build" to buildStamp,
         "duration" to "${(System.currentTimeMillis() - started) / 1000}s",
     )
@@ -182,7 +182,7 @@ private fun runWorker(opts: Args) {
         modelsDir(),
         File(repo, "build/reports/model-capabilities"),
         Runner.probesFor(opts.probes),
-        File(repo, "app/src/main/assets/chat_templates"),
+        File(Repo.top(), "core/resources/chat_templates"),
     ) { result ->
         if (!emittedLoad) { println(WorkerCodec.loadLine(0, null, false)); emittedLoad = true }
         println(WorkerCodec.resultLine(result))
@@ -270,7 +270,7 @@ private class Args(argv: Array<String>) {
 }
 
 private fun submoduleSha(repo: File): String = runCatching {
-    ProcessBuilder("git", "-C", File(repo, "app/src/main/cpp/llama.cpp").path,
+    ProcessBuilder("git", "-C", File(repo, "core/llama.cpp").path,
         "describe", "--tags", "--always")
         .start().inputStream.bufferedReader().readText().trim()
 }.getOrDefault("unknown")
