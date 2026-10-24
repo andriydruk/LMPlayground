@@ -41,10 +41,18 @@ object ChatTemplateOverrides {
      * the model answers in prose instead. The override is the LFM2.5 350M text
      * template — the VL model's own backbone — which renders no tool calls and
      * so reaches llama.cpp's dedicated LFM2 parser, like the text models.
+     *
+     * Llama 3.1 8B: Meta's template tests `tools is not none` without first
+     * defaulting `tools` to none. Hugging Face always passes `tools=None`;
+     * llama.cpp leaves it undefined when there are no tools, which "is not
+     * none", so every chat got the ipython tool-calling preamble and the
+     * model answered plain questions with a JSON function call. The override
+     * adds the default that Llama 3.2's template already has.
      */
     private val OVERRIDES = mapOf(
         "HuggingFaceTB_SmolLM3-3B-Q4_K_M.gguf" to "HuggingFaceTB_SmolLM3-3B-Q4_K_M.jinja",
         "LFM2.5-VL-450M-Q4_K_M.gguf" to "LFM2.5-VL-450M-Q4_K_M.jinja",
+        "Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf" to "Meta-Llama-3.1-8B-Instruct-Q4_K_M.jinja",
     )
 
     /** Cached per filename; templates are a few KB and read once per load. */
