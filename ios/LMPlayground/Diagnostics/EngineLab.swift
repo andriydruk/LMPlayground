@@ -32,6 +32,7 @@ struct LabRun: Codable, Sendable {
     var startedAt: Date
     var systemInfo: String
     var results: [LabResult]
+    var finished = false
 }
 
 /// Engine Lab: loads every GGUF in Documents/Models and measures load time,
@@ -79,7 +80,15 @@ enum EngineLab {
         return "\(UIDevice.current.model) \(machine)"
     }
 
-    static func runAll(progress: @escaping @Sendable (LabResult) -> Void) async -> LabRun {
+    /// Benchmark every model in Documents/Models, or only `only` when given.
+    private static func save(_ run: LabRun) {
+        if let data = try? JSONEncoder.lab.encode(run) {
+            try? data.write(to: resultsURL)
+        }
+    }
+
+    static func runAll(only: Set<String>? = nil,
+                       progress: @escaping @Sendable (LabResult) -> Void) async -> LabRun {
         var run = LabRun(device: await deviceDescription(),
                          binaryDate: (try? Bundle.main.executableURL?.resourceValues(forKeys: [.contentModificationDateKey]))?.contentModificationDate,
                          systemVersion: await MainActor.run { UIDevice.current.systemVersion },
@@ -87,7 +96,7 @@ enum EngineLab {
                          systemInfo: Engine.systemInfo,
                          results: [])
         let allFiles = (try? FileManager.default.contentsOfDirectory(atPath: AppDirectories.models.path)) ?? []
-        for url in modelFiles() {
+        for url in modelFiles() where only?.contains(url.lastPathComponent) ?? true {
             let result: LabResult
             switch kind(of: url.lastPathComponent) {
             case .llm:
@@ -103,11 +112,24 @@ enum EngineLab {
             measured.footprintAfterUnloadMB = ProcessMemory.footprint.megabytes
             run.results.append(measured)
             progress(measured)
+            // Saved after every model: if one gets the app killed, the
+            // results so far survive and the missing one is the culprit.
+            save(run)
         }
-        if let data = try? JSONEncoder.lab.encode(run) {
-            try? data.write(to: resultsURL)
-        }
+        run.finished = true
+        save(run)
         return run
+    }
+
+    /// `-labCleanAfter YES`: delete every model except the embedding and
+    /// dictation models once a run is done, so catalog sweeps don't pile up
+    /// gigabytes on the device.
+    static func cleanUpModels() {
+        let keep: Set<String> = [ModelCatalog.embeddingModel.filename, ModelCatalog.dictationModel.filename]
+        let files = (try? FileManager.default.contentsOfDirectory(atPath: AppDirectories.models.path)) ?? []
+        for name in files where !keep.contains(name) {
+            try? FileManager.default.removeItem(at: AppDirectories.models.appending(path: name))
+        }
     }
 
     private static func baseline(_ url: URL, kind: Kind) -> LabResult {

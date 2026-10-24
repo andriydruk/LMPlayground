@@ -54,6 +54,13 @@ extension RootView {
     /// `-uiScreen settings|faq|privacy|advanced|models` opens a screen.
     private func openDebugRoute() async {
         let defaults = UserDefaults.standard
+        // `-labClean YES`: delete the test models (see EngineLab.cleanUpModels).
+        if defaults.bool(forKey: "labClean") {
+            EngineLab.cleanUpModels()
+            AppServices.shared.store.refresh()
+            try? Date().formatted(.iso8601).write(to: AppDirectories.documents.appending(path: "lab-clean.txt"),
+                                                  atomically: true, encoding: .utf8)
+        }
         if defaults.bool(forKey: "uiOpenLatest"),
            let latest = await AppServices.shared.chatStore.latestSession() {
             AppServices.shared.conversation.open(latest)
