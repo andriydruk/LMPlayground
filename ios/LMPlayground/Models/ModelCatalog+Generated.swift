@@ -152,7 +152,7 @@ extension ModelCatalog {
             thinkingMode: .unknown,
             deprecated: false,
             mmprojFilename: "gemma-3-4b-it-mmproj-f16.gguf",
-            mmprojURL: "https://huggingface.co/lmstudio-community/gemma-3-4b-it-GGUF/resolve/main/gemma-3-4b-it-mmproj-f16.gguf",
+            mmprojURL: "https://huggingface.co/lmstudio-community/gemma-3-4b-it-GGUF/resolve/main/mmproj-model-f16.gguf",
             iosStatus: .candidate,
             maxContext: nil,
             measured: nil
@@ -921,7 +921,7 @@ extension ModelCatalog {
             kind: .chat,
             name: "GPT-OSS 20B",
             filename: "gpt-oss-20b-mxfp4.gguf",
-            remoteURL: "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/main/gpt-oss-20b-mxfp4.gguf",
+            remoteURL: "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/main/gpt-oss-20b-MXFP4.gguf",
             releaseDate: "2025-08-05",
             summary: "OpenAI · Large reasoning MoE model · 12.11Gb",
             logo: "logo_openai",

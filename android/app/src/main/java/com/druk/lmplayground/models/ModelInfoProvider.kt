@@ -138,7 +138,7 @@ object ModelInfoProvider {
             logoRes = R.drawable.logo_google,
             supportedLanguages = MULTILINGUAL_BROAD,
             mmprojFilename = "gemma-3-4b-it-mmproj-f16.gguf",
-            mmprojUri = Uri.parse("https://huggingface.co/lmstudio-community/gemma-3-4b-it-GGUF/resolve/main/gemma-3-4b-it-mmproj-f16.gguf")
+            mmprojUri = Uri.parse("https://huggingface.co/lmstudio-community/gemma-3-4b-it-GGUF/resolve/main/mmproj-model-f16.gguf")
         ),
         ModelInfo(
             name = "Llama 3.2 1B",
@@ -541,7 +541,7 @@ object ModelInfoProvider {
         ModelInfo(
             name = "GPT-OSS 20B",
             filename = "gpt-oss-20b-mxfp4.gguf",
-            remoteUri = Uri.parse("https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/main/gpt-oss-20b-mxfp4.gguf"),
+            remoteUri = Uri.parse("https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/main/gpt-oss-20b-MXFP4.gguf"),
             releaseDate = LocalDate.parse("2025-08-05"),
             description = "OpenAI \u00B7 Large reasoning MoE model \u00B7 12.11Gb",
             logoRes = R.drawable.logo_openai,
