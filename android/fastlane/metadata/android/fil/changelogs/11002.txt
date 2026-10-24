@@ -1,0 +1,4 @@
+- I-edit ang mensaheng naipadala mo at makakuha ng bagong sagot — i-long-press lang ito
+- I-regenerate ang sagot, o magpatuloy mula sa anumang sagot sa bagong chat (⋮ menu)
+- Mas mabilis na sagot sa mahahabang chat gamit ang mga Qwen model
+- Mga pagpapabuti sa performance at stability

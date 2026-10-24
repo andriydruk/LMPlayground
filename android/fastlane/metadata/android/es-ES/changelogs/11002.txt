@@ -1,0 +1,4 @@
+- Edita un mensaje que enviaste y obtén una nueva respuesta: solo mantenlo pulsado
+- Regenera una respuesta o continúa desde cualquier respuesta en un chat nuevo (menú ⋮)
+- Respuestas más rápidas en chats largos con modelos Qwen
+- Mejoras de rendimiento y estabilidad

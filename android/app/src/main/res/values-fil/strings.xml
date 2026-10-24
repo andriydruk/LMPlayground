@@ -399,4 +399,10 @@
     <string name="dictation_model_dialog_title">I-enable ang voice dictation</string>
     <string name="dictation_model_dialog_message">Para magsalita sa halip na mag-type, kailangan ng speech-recognition model, %1$s (%2$s), na ida-download nang isang beses at itatabi sa device mo. Gumagana ito offline, sa 35 wika.</string>
     <string name="dictation_model_downloading">Dina-download ang dictation model…</string>
+    <string name="edit_message">I-edit</string>
+    <string name="regenerate">I-regenerate</string>
+    <string name="branch_from_here">I-branch sa bagong chat</string>
+    <string name="branch_title">%1$s (branch)</string>
+    <string name="branch_title_numbered">%1$s (branch %2$d)</string>
+    <string name="branch_created">Itinutuloy sa bagong chat</string>
 </resources>

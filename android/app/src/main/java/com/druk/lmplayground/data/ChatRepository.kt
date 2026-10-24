@@ -15,6 +15,9 @@ class ChatRepository(private val dao: ChatDao) {
     suspend fun insertMessage(message: ChatMessageEntity) =
         dao.insertMessage(message)
 
+    suspend fun deleteMessagesFrom(sessionId: String, fromTimestamp: Long) =
+        dao.deleteMessagesFrom(sessionId, fromTimestamp)
+
     suspend fun updateSessionTimestamp(sessionId: String, updatedAt: Long) =
         dao.updateSessionTimestamp(sessionId, updatedAt)
 
@@ -39,6 +42,9 @@ class ChatRepository(private val dao: ChatDao) {
 
     suspend fun updateSessionMetadata(sessionId: String, metadata: String) =
         dao.updateSessionMetadata(sessionId, metadata)
+
+    suspend fun getMetadataLike(pattern: String): List<String> =
+        dao.getMetadataLike(pattern)
 
     suspend fun getSession(sessionId: String): ChatSessionEntity? =
         dao.getSession(sessionId)

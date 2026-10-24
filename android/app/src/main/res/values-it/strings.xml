@@ -365,4 +365,10 @@
     <string name="dictation_model_dialog_title">Attiva la dettatura vocale</string>
     <string name="dictation_model_dialog_message">Per parlare invece di scrivere serve un modello di riconoscimento vocale, %1$s (%2$s), scaricato una sola volta e conservato sul tuo dispositivo. Funziona offline, in 35 lingue.</string>
     <string name="dictation_model_downloading">Download del modello di dettatura…</string>
+    <string name="edit_message">Modifica</string>
+    <string name="regenerate">Rigenera</string>
+    <string name="branch_from_here">Dirama in una nuova chat</string>
+    <string name="branch_title">%1$s (ramo)</string>
+    <string name="branch_title_numbered">%1$s (ramo %2$d)</string>
+    <string name="branch_created">Si continua in una nuova chat</string>
 </resources>

@@ -363,4 +363,10 @@
     <string name="dictation_model_dialog_title">启用语音输入</string>
     <string name="dictation_model_dialog_message">用说话代替打字需要一个语音识别模型 %1$s（%2$s），只需下载一次并保存在你的设备上。它可离线使用，支持 35 种语言。</string>
     <string name="dictation_model_downloading">正在下载语音输入模型…</string>
+    <string name="edit_message">编辑</string>
+    <string name="regenerate">重新生成</string>
+    <string name="branch_from_here">在新对话中分支</string>
+    <string name="branch_title">%1$s（分支）</string>
+    <string name="branch_title_numbered">%1$s（分支 %2$d）</string>
+    <string name="branch_created">已在新对话中继续</string>
 </resources>

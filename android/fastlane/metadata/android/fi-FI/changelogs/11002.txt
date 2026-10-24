@@ -1,0 +1,4 @@
+- Muokkaa lähettämääsi viestiä ja saat uuden vastauksen – paina sitä pitkään
+- Luo vastaus uudelleen tai jatka mistä tahansa vastauksesta uudessa keskustelussa (⋮-valikko)
+- Nopeammat vastaukset pitkissä keskusteluissa Qwen-malleilla
+- Suorituskyky- ja vakausparannuksia

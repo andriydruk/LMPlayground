@@ -359,4 +359,10 @@
     <string name="dictation_model_dialog_title">Увімкнути голосовий набір</string>
     <string name="dictation_model_dialog_message">Щоб говорити замість друкувати, потрібна модель розпізнавання мовлення, %1$s (%2$s), яка завантажується один раз і зберігається на вашому пристрої. Вона працює офлайн, 35 мовами.</string>
     <string name="dictation_model_downloading">Завантаження моделі для диктування…</string>
+    <string name="edit_message">Редагувати</string>
+    <string name="regenerate">Згенерувати знову</string>
+    <string name="branch_from_here">Відгалузити в новий чат</string>
+    <string name="branch_title">%1$s (гілка)</string>
+    <string name="branch_title_numbered">%1$s (гілка %2$d)</string>
+    <string name="branch_created">Продовження в новому чаті</string>
 </resources>

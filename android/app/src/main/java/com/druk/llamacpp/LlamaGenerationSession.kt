@@ -70,6 +70,11 @@ class LlamaGenerationSession internal constructor(
         }
     }
 
+    override fun rewindToTurn(turnIndex: Int, expectedText: String): Int {
+        InferenceLimits.requireWithinBudget(expectedText, "rewind anchor")
+        return client.withService { it.rewindToTurn(sessionId, turnIndex, expectedText) }
+    }
+
     fun printReport() {
         client.withService { it.printSessionReport(sessionId) }
     }

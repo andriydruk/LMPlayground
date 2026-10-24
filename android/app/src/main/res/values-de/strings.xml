@@ -367,4 +367,10 @@
     <string name="dictation_model_dialog_title">Sprachdiktat aktivieren</string>
     <string name="dictation_model_dialog_message">Um zu sprechen statt zu tippen, brauchst du ein Spracherkennungsmodell, %1$s (%2$s), das einmal heruntergeladen und auf deinem Gerät gespeichert wird. Es funktioniert offline in 35 Sprachen.</string>
     <string name="dictation_model_downloading">Diktiermodell wird heruntergeladen…</string>
+    <string name="edit_message">Bearbeiten</string>
+    <string name="regenerate">Neu generieren</string>
+    <string name="branch_from_here">In neuem Chat abzweigen</string>
+    <string name="branch_title">%1$s (Abzweigung)</string>
+    <string name="branch_title_numbered">%1$s (Abzweigung %2$d)</string>
+    <string name="branch_created">Weiter in einem neuen Chat</string>
 </resources>

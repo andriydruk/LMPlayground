@@ -48,6 +48,19 @@ class ConversationMetadata private constructor(private val obj: JSONObject) {
         /** Key for the web_search reference -> URL map. */
         const val KEY_WEB_LINKS = "webLinks"
 
+        /** Id of the conversation this one was branched from. */
+        const val KEY_BRANCHED_FROM = "branchedFrom"
+
+        /**
+         * The original (non-branch) conversation a branch descends from, its
+         * title at the time, and this branch's number among its branches.
+         * Branches of branches share the original, so titles read
+         * "Title (branch)", "Title (branch 2)", … instead of nesting.
+         */
+        const val KEY_BRANCH_ROOT = "branchRoot"
+        const val KEY_BRANCH_ROOT_TITLE = "branchRootTitle"
+        const val KEY_BRANCH_NUMBER = "branchNumber"
+
         fun parse(json: String?): ConversationMetadata {
             if (json.isNullOrBlank()) return ConversationMetadata(JSONObject())
             return try {

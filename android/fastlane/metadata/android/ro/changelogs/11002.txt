@@ -1,0 +1,4 @@
+- Editează un mesaj trimis și primește un răspuns nou — doar ține apăsat pe el
+- Regenerează un răspuns sau continuă de la orice răspuns într-un chat nou (meniul ⋮)
+- Răspunsuri mai rapide în conversațiile lungi cu modelele Qwen
+- Îmbunătățiri de performanță și stabilitate

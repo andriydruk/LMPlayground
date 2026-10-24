@@ -407,4 +407,10 @@
     <string name="dictation_model_dialog_title">Aktivera röstdiktering</string>
     <string name="dictation_model_dialog_message">För att prata i stället för att skriva behövs en taligenkänningsmodell, %1$s (%2$s), som laddas ned en gång och sparas på din enhet. Den fungerar offline, på 35 språk.</string>
     <string name="dictation_model_downloading">Laddar ned dikteringsmodellen…</string>
+    <string name="edit_message">Redigera</string>
+    <string name="regenerate">Generera igen</string>
+    <string name="branch_from_here">Förgrena till ny chatt</string>
+    <string name="branch_title">%1$s (förgrening)</string>
+    <string name="branch_title_numbered">%1$s (förgrening %2$d)</string>
+    <string name="branch_created">Fortsätter i en ny chatt</string>
 </resources>

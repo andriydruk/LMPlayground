@@ -368,4 +368,10 @@
     <string name="dictation_model_dialog_title">वॉइस डिक्टेशन चालू करें</string>
     <string name="dictation_model_dialog_message">टाइप करने के बजाय बोलने के लिए एक स्पीच-रिकग्निशन मॉडल, %1$s (%2$s), चाहिए, जो एक बार डाउनलोड होकर आपके डिवाइस पर रहता है। यह ऑफ़लाइन, 35 भाषाओं में काम करता है।</string>
     <string name="dictation_model_downloading">डिक्टेशन मॉडल डाउनलोड हो रहा है…</string>
+    <string name="edit_message">संपादित करें</string>
+    <string name="regenerate">फिर से बनाएँ</string>
+    <string name="branch_from_here">नई चैट में शाखा बनाएँ</string>
+    <string name="branch_title">%1$s (शाखा)</string>
+    <string name="branch_title_numbered">%1$s (शाखा %2$d)</string>
+    <string name="branch_created">नई चैट में जारी है</string>
 </resources>

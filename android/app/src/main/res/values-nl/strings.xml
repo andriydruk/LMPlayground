@@ -408,4 +408,10 @@
     <string name="dictation_model_dialog_title">Spraakdictatie inschakelen</string>
     <string name="dictation_model_dialog_message">Om te spreken in plaats van te typen is een spraakherkenningsmodel nodig, %1$s (%2$s), dat één keer wordt gedownload en op je apparaat blijft. Het werkt offline, in 35 talen.</string>
     <string name="dictation_model_downloading">Dictatiemodel downloaden…</string>
+    <string name="edit_message">Bewerken</string>
+    <string name="regenerate">Opnieuw genereren</string>
+    <string name="branch_from_here">Aftakken naar nieuwe chat</string>
+    <string name="branch_title">%1$s (aftakking)</string>
+    <string name="branch_title_numbered">%1$s (aftakking %2$d)</string>
+    <string name="branch_created">Verder in een nieuwe chat</string>
 </resources>

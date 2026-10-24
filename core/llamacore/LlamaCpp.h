@@ -26,6 +26,15 @@ constexpr int kMaxVisionThreads = 8;
 // renderPreambleString fallback: how far back from the probe position to
 // search for the opening '<' of a template's user-turn marker.
 constexpr size_t kUserMarkerSearchWindow = 80;
+// Turn snapshots kept for rewindToTurn: a KV position and a string each,
+// so the cap is generous.
+constexpr size_t kMaxTurnSnapshots = 64;
+// KV checkpoints: copies of the state llama_memory_seq_rm can't truncate
+// (recurrent / hybrid / SWA memories), taken at turn starts and right before
+// each generation prompt. Bounded by count and bytes, lowest position evicted
+// first — edits, regenerates and prefix reuse all target recent positions.
+constexpr size_t kMaxKvCheckpoints = 12;
+constexpr size_t kMaxKvCheckpointBytes = 96u * 1024u * 1024u;
 
 // Vision device choice and the Vulkan CLIP crash sentinel (clipVisionDevice,
 // clipSentinel*, clipVulkanFailed) are declared in VisionDevice.h.
@@ -73,11 +82,33 @@ public:
 
     void replayHistory(const std::vector<std::pair<std::string, std::string>>& history);
 
+    // Drop user turn [turnIndex] (0-based, counting every user turn of the
+    // conversation, replayed ones included) and everything after it, so the
+    // next addMessage continues from the end of turn [turnIndex - 1]. Used
+    // by edit (re-send a changed message) and regenerate (re-send the same
+    // one).
+    //
+    // The KV cache is rolled back to the newest snapshot taken at or before
+    // that turn, so only what follows the snapshot is evaluated again.
+    // [expectedText], when non-empty, must occur in the native copy of that
+    // user turn; it guards against the caller's numbering having drifted
+    // from ours (a turn the template rejected, a turn compaction dropped).
+    //
+    // Returns the number of tokens kept in the KV cache (0 = the next turn
+    // re-evaluates the whole prompt), or -1 when the turn can't be found or
+    // doesn't match — the session is then untouched and the caller should
+    // rebuild it with replayHistory.
+    int rewindToTurn(int turnIndex, const char *expectedText);
+
+    // Number of user turns in the conversation, including ones dropped by
+    // context compaction. The next addMessage becomes turn getTurnCount().
+    int getTurnCount() const;
+
     // Reopen the last assistant turn (a reply cut short by Stop or
     // backgrounding, or the last turn of a replayed history) and keep
-    // generating it. When the KV cache still holds that turn, only the token
-    // sampled before the stop is fed; otherwise the prompt and the partial
-    // reply are re-fed. Then call generate() as usual: the reply it reports
+    // generating it. The prompt and the partial reply are matched against
+    // the KV cache by tokens, so after a Stop only the token sampled before
+    // it is fed. Then call generate() as usual: the reply it reports
     // includes the partial text. Returns 0 on success, 1 when there's no
     // reply to continue, the context is full, or the turn had an image whose
     // embeddings are no longer cached.
@@ -153,6 +184,77 @@ private:
     // prompt is fed from scratch.
     void clearKvCacheForFreshPrompt();
 
+    // State of the session right before a user turn was fed: the KV cache
+    // holds exactly [kv_pos] positions, and when [prev_len] > 0 they
+    // correspond to [prev_rendered_prompt] (the incremental-prefix state
+    // addMessage matches against; 0 means "match by tokens"). Restoring one
+    // and re-sending a message feeds the same tokens at the same positions
+    // as the original turn.
+    struct TurnSnapshot {
+        int turn = 0;
+        size_t messages_size = 0;   // messages.size() before the user turn
+        int kv_pos = 0;
+        std::string prev_rendered_prompt;
+        int prev_len = 0;
+        bool prev_had_thinking = false;
+        bool prev_enable_thinking = false;
+    };
+
+    // State a stateful memory needs to resume from [kv_pos], read with
+    // LLAMA_STATE_SEQ_FLAGS_PARTIAL_ONLY.
+    struct KvCheckpoint {
+        int kv_pos = 0;
+        std::vector<uint8_t> state;
+    };
+
+    // Record a snapshot for the user turn just pushed onto [messages],
+    // before its tokens are decoded. [kv_pos] is the cache occupancy now.
+    void captureTurnSnapshot(int kv_pos);
+    void clearTurnSnapshots();
+    // Index in [messages] of user turn [turn], or -1 when it isn't there
+    // (dropped by compaction, or past the end).
+    int messageIndexOfTurn(int turn) const;
+    int userTurnsInMessages(size_t end) const;
+
+    // Checkpoint the current cache state (a no-op for memories that
+    // llama_memory_seq_rm can truncate). False when it couldn't be kept.
+    bool captureKvCheckpoint();
+    // Cut the cache back to exactly [kv_pos] positions. False (cache
+    // untouched) when that isn't possible.
+    bool truncateKvTo(int kv_pos);
+    // Cut the cache back to at most [kv_pos] positions — the longest
+    // restorable prefix. Returns the positions kept, or -1 when nothing
+    // could be kept (the cache is then untouched).
+    int truncateKvAtMost(int kv_pos);
+    // Drop snapshots and checkpoints past [kv_pos]: their cache is gone.
+    void forgetKvPast(int kv_pos);
+    // Text path of addMessage / submitToolResults when the string prefix
+    // doesn't match: reuse the longest token prefix of [full_prompt] the
+    // cache already holds. On success [tail] holds the tokens still to feed.
+    bool reuseKvPrefix(const std::string &full_prompt, std::vector<llama_token> &tail);
+    // Tokens of [prompt_tokens] to decode before checkpointing (the start of
+    // the generation prompt), or -1.
+    int generationPromptSplit(const common_chat_params &result, const std::string &full_prompt);
+    // Append decoded tokens to [kv_tokens].
+    void trackDecoded(const llama_token *tokens, int n);
+    void resetKvTokens();
+
+    std::vector<TurnSnapshot> turn_snapshots;
+    std::vector<KvCheckpoint> kv_checkpoints;
+    // Exactly the tokens in KV sequence 0, in position order, so a prompt
+    // can be matched against the cache token by token. Invalid after a
+    // vision turn (image embeddings have no token ids) until the next clear.
+    std::vector<llama_token> kv_tokens;
+    bool kv_tokens_valid = true;
+    // Checkpoint after this many tokens of the pending prompt batch (-1 none).
+    int checkpoint_after = -1;
+    // User turns compaction has dropped from the front of [messages]; turn
+    // numbers stay stable across compaction by adding this back.
+    int dropped_user_turns = 0;
+    // The memory has parts llama_memory_seq_rm can't truncate (recurrent,
+    // hybrid, sliding-window attention), so rollback needs checkpoints.
+    bool memory_needs_state_snapshots = false;
+
     const struct llama_vocab * vocab = nullptr;
     llama_context * ctx = nullptr;
     llama_sampler * smpl = nullptr;
@@ -179,21 +281,6 @@ private:
     // prompt prefix.
     int last_prompt_end_pos = 0;
     llama_token last_token = 0;
-    // What the KV cache holds after this turn's prompt was decoded:
-    // [last_full_prompt] plus the generated tokens that were decoded since.
-    // Never the end-of-generation token that stopped the turn, nor the token
-    // sampled just before a Stop. [decoded_response] is those decoded tokens'
-    // text and [pending_piece] the sampled token waiting for its decode, so
-    // finalizeResponse can point the next turn's prefix match at exactly what
-    // is cached, and the next turn feeds the turn's closing markers too.
-    //   Prompt — the cache holds last_full_prompt + decoded_response.
-    //   Stale  — this turn's prompt isn't (fully) in the cache: its decode
-    //            failed or the turn ended before it ran. Start over next turn.
-    //   Unknown — not tracked (vision turns cache image embeddings).
-    enum class KvState { Unknown, Prompt, Stale };
-    KvState kv_state = KvState::Unknown;
-    std::string decoded_response;
-    std::string pending_piece;
     // A turn is being generated: set when its prompt is prepared, cleared when
     // finalizeResponse commits the reply (or a tool round hands control back).
     // Keeps the stop-between-tokens path from committing a reply twice.

@@ -1,0 +1,4 @@
+- Edit mesej yang telah dihantar dan dapatkan jawapan baharu — tekan lama sahaja
+- Jana semula balasan, atau teruskan daripada mana-mana balasan dalam sembang baharu (menu ⋮)
+- Balasan lebih pantas dalam sembang panjang dengan model Qwen
+- Penambahbaikan prestasi dan kestabilan

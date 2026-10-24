@@ -486,6 +486,44 @@ class ModelRuntime(
     }
 
     /**
+     * Rewind the live session to just before user turn [turnIndex] (edit /
+     * regenerate / branch), keeping the KV cache up to there. When the engine
+     * refuses — the turn was compacted away, or its numbering drifted from
+     * the chat's — rebuild the session from [keptMessages] instead, so the
+     * result is the same conversation either way. Returns false only when no
+     * usable session is left.
+     */
+    suspend fun rewindSession(
+        turnIndex: Int,
+        anchorText: String,
+        params: GenerationParams,
+        systemPrompt: String,
+        keptMessages: List<Message>,
+    ): Boolean {
+        if (model == null) return false
+        cancelAndJoinGeneration()
+        val live = session
+        val kept = if (live == null) -1 else withContext(Dispatchers.Default) {
+            try {
+                live.rewindToTurn(turnIndex, anchorText)
+            } catch (e: InferenceUnavailableException) {
+                Log.w(TAG, "rewindToTurn failed: service unavailable", e)
+                -1
+            } catch (e: PayloadTooLargeException) {
+                -1
+            }
+        }
+        if (kept >= 0) {
+            Log.d(TAG, "Rewound to turn $turnIndex keeping $kept KV tokens")
+            return true
+        }
+        Log.d(TAG, "Rewind to turn $turnIndex refused; replaying ${keptMessages.size} messages")
+        recreateSessionWithReplay(params, systemPrompt, keptMessages)
+        // A failed rebuild keeps the old, un-rewound session: unusable here.
+        return session != null && session !== live
+    }
+
+    /**
      * Replace the session with a fresh one (no replay) after a context-size
      * change. The previous session is destroyed either way; on create
      * failure the runtime is left session-less (the old context size is

@@ -12,6 +12,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -37,7 +38,11 @@ class ChatSessionStoreTest {
         store = ChatSessionStore(
             ChatRepository(db.chatDao()),
             SystemPromptRepository(db.systemPromptDao()),
-            ChatImageStore(app),
+            // Robolectric has no FileProvider registered; plain file URIs
+            // stand in for the content URIs.
+            object : ChatImageStore(app) {
+                override fun imageContentUri(file: File): android.net.Uri = android.net.Uri.fromFile(file)
+            },
         )
     }
 
@@ -172,5 +177,92 @@ class ChatSessionStoreTest {
         // Mutations are silent no-ops.
         nullStore.persistMessage("any", Message(author = "User", content = "q"))
         nullStore.deleteSession("any")
+    }
+
+    @Test
+    fun truncateRemovesTrailingMessagesAndTheirImages() = runBlocking {
+        val id = runCreateSession()
+        val dir = File(app.filesDir, "chat_images").apply { mkdirs() }
+        val dropped = File(dir, "dropped.jpg").apply { writeText("x") }
+        val reused = File(dir, "reused.jpg").apply { writeText("y") }
+        val messages = listOf(
+            Message("User", "one", timestamp = 10),
+            Message("Assistant", "r1", timestamp = 11),
+            Message("User", "two", timestamp = 20, imagePath = reused.path),
+            Message("Assistant", "r2", timestamp = 21),
+            Message("User", "three", timestamp = 30, imagePath = dropped.path),
+        )
+        messages.forEach { store.persistMessage(id, it, it.imagePath) }
+
+        store.truncateMessages(id, messages.subList(2, 5), keepImagePaths = setOf(reused.path))
+
+        assertEquals(listOf("one", "r1"), store.loadSessionMessages(id)!!.map { it.content })
+        assertFalse(dropped.exists())
+        assertTrue("a re-sent message's image must survive", reused.exists())
+    }
+
+    @Test
+    fun branchCopiesTheChatPrefixWithItsOwnImages() = runBlocking {
+        val source = runCreateSession(systemPrompt = "terse")
+        val dir = File(app.filesDir, "chat_images").apply { mkdirs() }
+        val image = File(dir, "orig.jpg").apply { writeText("img") }
+        val kept = listOf(
+            Message("User", "look", timestamp = 10, imagePath = image.path),
+            Message("Assistant", "a cat", timestamp = 11, responseTokens = 5),
+        )
+        kept.forEach { store.persistMessage(source, it, it.imagePath) }
+        store.persistMessage(source, Message("User", "later", timestamp = 20))
+
+        val (branchId, copies) = store.branchSession(source, kept, ::branchTitle)!!
+
+        val entity = store.getSession(branchId)!!
+        assertEquals("hello world (branch 1)", entity.title)
+        assertEquals("terse", entity.systemPrompt)
+        assertEquals(
+            source,
+            ConversationMetadata.parse(entity.metadata).getString(ConversationMetadata.KEY_BRANCHED_FROM),
+        )
+        val loaded = store.loadSessionMessages(branchId)!!
+        assertEquals(listOf("look", "a cat"), loaded.map { it.content })
+        assertEquals(5, loaded[1].responseTokens)
+        val copiedPath = copies[0].imagePath!!
+        assertNotEquals(image.path, copiedPath)
+        assertEquals("img", File(copiedPath).readText())
+        // The source chat is untouched.
+        assertEquals(3, store.loadSessionMessages(source)!!.size)
+
+        // Deleting the source must not take the branch's image with it.
+        store.deleteSession(source)
+        assertTrue(File(copiedPath).exists())
+    }
+
+    private fun branchTitle(rootTitle: String, number: Int) = "$rootTitle (branch $number)"
+
+    @Test
+    fun branchesAreNumberedPerOriginalChat() = runBlocking {
+        val root = runCreateSession(firstMessage = "Root")
+        val other = runCreateSession(firstMessage = "Other")
+        val kept = listOf(Message("User", "q", timestamp = 1), Message("Assistant", "a", timestamp = 2))
+        kept.forEach { store.persistMessage(root, it) }
+        kept.forEach { store.persistMessage(other, it) }
+
+        val (first, _) = store.branchSession(root, kept, ::branchTitle)!!
+        val (second, _) = store.branchSession(root, kept, ::branchTitle)!!
+        // A branch of a branch counts with its siblings and keeps the
+        // original's title instead of nesting "(branch)".
+        val (nested, _) = store.branchSession(second, kept, ::branchTitle)!!
+        // Another chat's branches are numbered on their own.
+        val (otherFirst, _) = store.branchSession(other, kept, ::branchTitle)!!
+
+        assertEquals("Root (branch 1)", store.getSession(first)!!.title)
+        assertEquals("Root (branch 2)", store.getSession(second)!!.title)
+        assertEquals("Root (branch 3)", store.getSession(nested)!!.title)
+        assertEquals("Other (branch 1)", store.getSession(otherFirst)!!.title)
+
+        // Numbers keep growing after a deletion rather than being reused
+        // while a later branch still holds a higher one.
+        store.deleteSession(first)
+        val (fourth, _) = store.branchSession(root, kept, ::branchTitle)!!
+        assertEquals("Root (branch 4)", store.getSession(fourth)!!.title)
     }
 }

@@ -130,6 +130,9 @@ data class Message(
     val content: String,
     val image: Int? = null,
     val imageUri: Uri? = null,
+    // Absolute path of the persisted copy behind [imageUri] (filesDir/
+    // chat_images), so a re-send can reuse it and truncation can delete it.
+    val imagePath: String? = null,
     val thinkingDurationSeconds: Int = 0,
     val thinkingStartTimeMs: Long = 0,
     val thinkingTokens: Int = 0,

@@ -396,4 +396,10 @@
     <string name="dictation_model_dialog_title">Ota puhesanelu käyttöön</string>
     <string name="dictation_model_dialog_message">Puhuminen kirjoittamisen sijaan vaatii puheentunnistusmallin, %1$s (%2$s), joka ladataan kerran ja säilytetään laitteellasi. Se toimii offline-tilassa 35 kielellä.</string>
     <string name="dictation_model_downloading">Ladataan sanelumallia…</string>
+    <string name="edit_message">Muokkaa</string>
+    <string name="regenerate">Luo uudelleen</string>
+    <string name="branch_from_here">Haaroita uuteen keskusteluun</string>
+    <string name="branch_title">%1$s (haara)</string>
+    <string name="branch_title_numbered">%1$s (haara %2$d)</string>
+    <string name="branch_created">Jatketaan uudessa keskustelussa</string>
 </resources>

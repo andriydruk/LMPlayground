@@ -1,0 +1,4 @@
+- Edite uma mensagem que você enviou e receba uma nova resposta — é só tocar e segurar
+- Gere uma resposta novamente ou continue a partir de qualquer resposta em uma nova conversa (menu ⋮)
+- Respostas mais rápidas em conversas longas com modelos Qwen
+- Melhorias de desempenho e estabilidade

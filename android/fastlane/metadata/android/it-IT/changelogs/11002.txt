@@ -1,0 +1,4 @@
+- Modifica un messaggio inviato e ottieni una nuova risposta: basta tenerlo premuto
+- Rigenera una risposta o continua da qualsiasi risposta in una nuova chat (menu ⋮)
+- Risposte più rapide nelle chat lunghe con i modelli Qwen
+- Miglioramenti delle prestazioni e della stabilità

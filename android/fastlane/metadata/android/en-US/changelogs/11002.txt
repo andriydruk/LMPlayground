@@ -1,0 +1,4 @@
+- Edit a message you sent and get a new answer — just long-press it
+- Regenerate a reply, or continue from any reply in a new chat (⋮ menu)
+- Faster replies in long chats with Qwen models
+- Performance and stability improvements
