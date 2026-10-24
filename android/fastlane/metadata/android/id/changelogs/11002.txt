@@ -1,0 +1,4 @@
+- Edit pesan yang sudah dikirim dan dapatkan jawaban baru — cukup tekan lama
+- Buat ulang balasan, atau lanjutkan dari balasan mana pun di chat baru (menu ⋮)
+- Balasan lebih cepat di chat panjang dengan model Qwen
+- Peningkatan performa dan stabilitas

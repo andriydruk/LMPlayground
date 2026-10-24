@@ -65,7 +65,13 @@ fun Messages(
     // module — surfaces a one-time "Add image support" download pill.
     visionModuleHint: String? = null,
     onVisionModuleHintClick: (() -> Unit)? = null,
-    onImageClick: (Uri) -> Unit = {}
+    onImageClick: (Uri) -> Unit = {},
+    // Edit & re-send a user message (text = the new content).
+    onEditMessage: ((Message, String) -> Unit)? = null,
+    // Regenerate the latest assistant reply.
+    onRegenerate: ((Message) -> Unit)? = null,
+    // Continue up to an assistant reply in a new chat.
+    onBranch: ((Message) -> Unit)? = null,
 ) {
     val scope = rememberCoroutineScope()
 
@@ -89,12 +95,23 @@ fun Messages(
                 key = { _, msg -> msg.id }
             ) { index, content ->
                 val isLast = index == messages.lastIndex
+                val isUser = content.author == "User"
                 Message(
                     msg = content,
-                    isUserMe = content.author == "User",
+                    isUserMe = isUser,
                     showActions = !(isLast && isGenerating),
                     onTokenCountClicked = onTokenCountClicked,
-                    onImageClick = onImageClick
+                    onImageClick = onImageClick,
+                    // History can't change under a running turn.
+                    onEdit = if (isUser && !isGenerating && onEditMessage != null) {
+                        { text -> onEditMessage(content, text) }
+                    } else null,
+                    onRegenerate = if (!isUser && isLast && !isGenerating && onRegenerate != null) {
+                        { onRegenerate(content) }
+                    } else null,
+                    onBranch = if (!isUser && !isGenerating && onBranch != null) {
+                        { onBranch(content) }
+                    } else null,
                 )
             }
             item {

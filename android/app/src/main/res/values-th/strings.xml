@@ -397,4 +397,10 @@
     <string name="dictation_model_dialog_title">เปิดใช้การพิมพ์ด้วยเสียง</string>
     <string name="dictation_model_dialog_message">การพูดแทนการพิมพ์ต้องใช้โมเดลรู้จำเสียงพูด %1$s (%2$s) ซึ่งดาวน์โหลดเพียงครั้งเดียวและเก็บไว้ในอุปกรณ์ของคุณ ใช้งานแบบออฟไลน์ได้ 35 ภาษา</string>
     <string name="dictation_model_downloading">กำลังดาวน์โหลดโมเดลพิมพ์ด้วยเสียง…</string>
+    <string name="edit_message">แก้ไข</string>
+    <string name="regenerate">สร้างใหม่</string>
+    <string name="branch_from_here">แตกแขนงไปยังแชทใหม่</string>
+    <string name="branch_title">%1$s (แขนง)</string>
+    <string name="branch_title_numbered">%1$s (แขนง %2$d)</string>
+    <string name="branch_created">กำลังทำต่อในแชทใหม่</string>
 </resources>

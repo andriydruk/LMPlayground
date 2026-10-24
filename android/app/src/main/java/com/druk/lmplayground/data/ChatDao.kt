@@ -21,6 +21,10 @@ interface ChatDao {
     @Insert
     suspend fun insertMessage(message: ChatMessageEntity)
 
+    /** Delete a session's messages from [fromTimestamp] on (edit / regenerate). */
+    @Query("DELETE FROM chat_messages WHERE sessionId = :sessionId AND timestamp >= :fromTimestamp")
+    suspend fun deleteMessagesFrom(sessionId: String, fromTimestamp: Long)
+
     @Query("UPDATE chat_sessions SET updatedAt = :updatedAt WHERE id = :sessionId")
     suspend fun updateSessionTimestamp(sessionId: String, updatedAt: Long)
 
@@ -50,6 +54,10 @@ interface ChatDao {
 
     @Query("UPDATE chat_sessions SET metadata = :metadata WHERE id = :sessionId")
     suspend fun updateSessionMetadata(sessionId: String, metadata: String)
+
+    /** Metadata of every session whose metadata matches [pattern] (LIKE). */
+    @Query("SELECT metadata FROM chat_sessions WHERE metadata LIKE :pattern")
+    suspend fun getMetadataLike(pattern: String): List<String>
 
     @Query("SELECT * FROM chat_sessions WHERE id = :sessionId")
     suspend fun getSession(sessionId: String): ChatSessionEntity?

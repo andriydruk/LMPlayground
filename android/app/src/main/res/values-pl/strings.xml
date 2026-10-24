@@ -359,4 +359,10 @@
     <string name="dictation_model_dialog_title">Włącz dyktowanie głosowe</string>
     <string name="dictation_model_dialog_message">Aby mówić zamiast pisać, potrzebny jest model rozpoznawania mowy, %1$s (%2$s), pobierany raz i przechowywany na Twoim urządzeniu. Działa offline, w 35 językach.</string>
     <string name="dictation_model_downloading">Pobieranie modelu dyktowania…</string>
+    <string name="edit_message">Edytuj</string>
+    <string name="regenerate">Wygeneruj ponownie</string>
+    <string name="branch_from_here">Rozgałęź do nowego czatu</string>
+    <string name="branch_title">%1$s (gałąź)</string>
+    <string name="branch_title_numbered">%1$s (gałąź %2$d)</string>
+    <string name="branch_created">Kontynuacja w nowym czacie</string>
 </resources>

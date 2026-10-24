@@ -552,6 +552,36 @@ Java_com_druk_llamacpp_jni_NativeLlamaSession_replayHistory(JNIEnv *env,
 }
 
 extern "C"
+JNIEXPORT jint JNICALL
+Java_com_druk_llamacpp_jni_NativeLlamaSession_rewindToTurn(JNIEnv *env,
+                                                           jobject thiz,
+                                                           jint turnIndex,
+                                                           jstring expectedText) {
+    jclass clazz = env->GetObjectClass(thiz);
+    jfieldID fid = env->GetFieldID(clazz, "nativeHandle", "J");
+    auto *session = (LlamaGenerationSession*)env->GetLongField(thiz, fid);
+    if (session == nullptr) {
+        return -1;
+    }
+    const char* utfText = expectedText != nullptr ? env->GetStringUTFChars(expectedText, nullptr) : nullptr;
+    int kept = session->rewindToTurn(turnIndex, utfText);
+    if (utfText != nullptr) env->ReleaseStringUTFChars(expectedText, utfText);
+    return kept;
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_druk_llamacpp_jni_NativeLlamaSession_getTurnCount(JNIEnv *env, jobject thiz) {
+    jclass clazz = env->GetObjectClass(thiz);
+    jfieldID fid = env->GetFieldID(clazz, "nativeHandle", "J");
+    auto *session = (LlamaGenerationSession*)env->GetLongField(thiz, fid);
+    if (session == nullptr) {
+        return 0;
+    }
+    return session->getTurnCount();
+}
+
+extern "C"
 JNIEXPORT jboolean JNICALL
 Java_com_druk_llamacpp_jni_NativeLlamaModel_supportsToolCalling(JNIEnv *env, jobject thiz) {
     jclass clazz = env->GetObjectClass(thiz);

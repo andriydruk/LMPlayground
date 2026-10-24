@@ -142,9 +142,83 @@ class ChatSessionStore(
                 responseTokens = entity.responseTokens,
                 responseDurationSeconds = entity.responseDurationSeconds,
                 timestamp = entity.timestamp,
-                imageUri = imageUri
+                imageUri = imageUri,
+                imagePath = entity.imagePath?.takeIf { imageUri != null },
             )
         }
+    }
+
+    /**
+     * Remove [dropped] (a chat's trailing messages, oldest first) from
+     * storage, with their image copies — except files listed in
+     * [keepImagePaths], which a re-sent message carries over.
+     */
+    suspend fun truncateMessages(
+        sessionId: String,
+        dropped: List<Message>,
+        keepImagePaths: Set<String> = emptySet(),
+    ) {
+        val repo = chatRepository ?: return
+        val from = dropped.minOfOrNull { it.timestamp } ?: return
+        repo.deleteMessagesFrom(sessionId, from)
+        dropped.mapNotNull { it.imagePath }.filter { it !in keepImagePaths }.forEach { path ->
+            try { File(path).delete() } catch (_: Exception) {}
+        }
+    }
+
+    /**
+     * Create a new conversation from [sourceId] holding [kept]: same model,
+     * params and system prompt, metadata noting where it branched from. Image
+     * attachments are copied so each chat owns its files.
+     *
+     * Branches are numbered per original conversation — a branch of a branch
+     * counts with its siblings — and [title] builds the name from the
+     * original's title and that number (1 for the first). Returns the new id
+     * and [kept] remapped to the copies, or null without persistence.
+     */
+    suspend fun branchSession(
+        sourceId: String,
+        kept: List<Message>,
+        title: (rootTitle: String, number: Int) -> String,
+    ): Pair<String, List<Message>>? {
+        val repo = chatRepository ?: return null
+        val source = repo.getSession(sourceId) ?: return null
+        val sourceMeta = ConversationMetadata.parse(source.metadata)
+        val rootId = sourceMeta.getString(ConversationMetadata.KEY_BRANCH_ROOT) ?: sourceId
+        val rootTitle = sourceMeta.getString(ConversationMetadata.KEY_BRANCH_ROOT_TITLE) ?: source.title
+        val number = 1 + repo.getMetadataLike("%\"${ConversationMetadata.KEY_BRANCH_ROOT}\":\"$rootId\"%")
+            .mapNotNull { meta ->
+                val parsed = ConversationMetadata.parse(meta)
+                // LIKE is only a pre-filter; confirm the root after parsing.
+                if (parsed.getString(ConversationMetadata.KEY_BRANCH_ROOT) != rootId) null
+                else parsed.getString(ConversationMetadata.KEY_BRANCH_NUMBER)?.toIntOrNull()
+            }
+            .fold(0, ::maxOf)
+
+        val id = UUID.randomUUID().toString()
+        val now = System.currentTimeMillis()
+        val metadata = sourceMeta
+            .putString(ConversationMetadata.KEY_BRANCHED_FROM, sourceId)
+            .putString(ConversationMetadata.KEY_BRANCH_ROOT, rootId)
+            .putString(ConversationMetadata.KEY_BRANCH_ROOT_TITLE, rootTitle)
+            .putString(ConversationMetadata.KEY_BRANCH_NUMBER, number.toString())
+            .toJson()
+        repo.insertSession(
+            source.copy(
+                id = id, title = title(rootTitle, number), createdAt = now, updatedAt = now,
+                pinned = false, metadata = metadata,
+            )
+        )
+        val copies = kept.map { message ->
+            val copy = message.imagePath?.let { imageStore.copyPersistedImage(it) }
+            val remapped = message.copy(
+                imagePath = copy?.absolutePath,
+                imageUri = copy?.let { imageStore.imageContentUri(it) },
+            )
+            persistMessage(id, remapped, remapped.imagePath)
+            remapped
+        }
+        return id to copies
     }
 
     suspend fun getSession(sessionId: String): ChatSessionEntity? =

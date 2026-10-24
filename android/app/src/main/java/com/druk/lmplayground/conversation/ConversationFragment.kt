@@ -299,6 +299,7 @@ class ConversationFragment : Fragment() {
             val systemPromptId by viewModel.systemPromptId.observeAsState()
             val recentSystemPrompts by viewModel.recentSystemPrompts.observeAsState(emptyList())
             val userError by viewModel.userError.observeAsState()
+            val notice by viewModel.notice.observeAsState()
             val pendingRamWarning by viewModel.pendingRamWarning.observeAsState()
             val modelLoadError by viewModel.modelLoadError.observeAsState()
             val sessionDocuments by viewModel.sessionDocuments.observeAsState(emptyList())
@@ -324,6 +325,12 @@ class ConversationFragment : Fragment() {
                 val msg = userError ?: return@LaunchedEffect
                 Toast.makeText(toastContext, msg, Toast.LENGTH_LONG).show()
                 viewModel.consumeUserError()
+            }
+
+            LaunchedEffect(notice) {
+                val msg = notice ?: return@LaunchedEffect
+                Toast.makeText(toastContext, msg, Toast.LENGTH_SHORT).show()
+                viewModel.consumeNotice()
             }
 
             LaunchedEffect(dictationError) {
@@ -766,6 +773,17 @@ class ConversationFragment : Fragment() {
                                 onTokenCountClicked = {
                                     modelReport = viewModel.getReport()
                                 },
+                                // Edit / regenerate run the model; branching
+                                // only needs a saved chat to copy.
+                                onEditMessage = if (isModelReady == true) {
+                                    { msg, text -> viewModel.editMessage(msg.id, text) }
+                                } else null,
+                                onRegenerate = if (isModelReady == true) {
+                                    { msg -> viewModel.regenerate(msg.id) }
+                                } else null,
+                                onBranch = if (currentSessionId != null) {
+                                    { msg -> viewModel.branchFrom(msg.id) }
+                                } else null,
                                 onImageClick = { uri ->
                                     val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
                                         setDataAndType(uri, "image/*")

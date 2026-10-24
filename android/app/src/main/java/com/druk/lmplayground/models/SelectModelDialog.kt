@@ -1,6 +1,7 @@
 package com.druk.lmplayground.models
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -33,13 +34,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.Image
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -79,6 +82,17 @@ fun SelectModelDialog(
     // chatPaneStartOffset is no longer needed for centering. Back press and
     // taps on the scrim dismiss; taps on the card are consumed.
     BackHandler(onBack = onDismissRequest)
+
+    // The overlay sits in the chat pane, not above the IME, so an open
+    // keyboard covers the lower half of the list. Close it (and drop the
+    // input's focus so it doesn't pop back) whenever the picker appears.
+    val keyboard = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    LaunchedEffect(Unit) {
+        focusManager.clearFocus()
+        keyboard?.hide()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()

@@ -1,0 +1,4 @@
+- Bearbeite eine gesendete Nachricht und erhalte eine neue Antwort – einfach lange drücken
+- Antwort neu generieren oder ab einer beliebigen Antwort in einem neuen Chat weitermachen (⋮-Menü)
+- Schnellere Antworten in langen Chats mit Qwen-Modellen
+- Verbesserungen bei Leistung und Stabilität

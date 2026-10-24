@@ -16,7 +16,7 @@ import kotlin.math.max
  * (filesDir/chat_images) so they survive the picker URI's lifetime,
  * process death and cache eviction.
  */
-class ChatImageStore(private val app: Application) {
+open class ChatImageStore(private val app: Application) {
 
     /**
      * Copy the picked image into app-private *persistent* storage
@@ -42,10 +42,25 @@ class ChatImageStore(private val app: Application) {
     }
 
     /**
+     * Copy an already-persisted chat image, so a branched conversation owns
+     * its files (deleting either chat deletes only its own copies).
+     */
+    fun copyPersistedImage(path: String): File? {
+        return try {
+            val source = File(path)
+            if (!source.isFile) return null
+            val destFile = File(source.parentFile, "img_${System.nanoTime()}.jpg")
+            source.copyTo(destFile)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    /**
      * Content URI (via FileProvider) for a persisted chat image, used both for
      * in-app display (Coil) and for handing off to an external viewer.
      */
-    fun imageContentUri(file: File): Uri =
+    open fun imageContentUri(file: File): Uri =
         FileProvider.getUriForFile(
             app, "${app.packageName}.fileprovider", file
         )

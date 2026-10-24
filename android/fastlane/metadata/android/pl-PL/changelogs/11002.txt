@@ -1,0 +1,4 @@
+- Edytuj wysłaną wiadomość i otrzymaj nową odpowiedź — wystarczy ją przytrzymać
+- Wygeneruj odpowiedź ponownie lub kontynuuj od dowolnej odpowiedzi w nowym czacie (menu ⋮)
+- Szybsze odpowiedzi w długich czatach z modelami Qwen
+- Poprawki wydajności i stabilności

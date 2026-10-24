@@ -1,0 +1,4 @@
+- Gönderdiğin bir mesajı düzenle ve yeni bir yanıt al — üzerine uzun bas yeter
+- Bir yanıtı yeniden oluştur veya herhangi bir yanıttan yeni bir sohbette devam et (⋮ menüsü)
+- Qwen modelleriyle uzun sohbetlerde daha hızlı yanıtlar
+- Performans ve kararlılık iyileştirmeleri

@@ -1,0 +1,4 @@
+- Chỉnh sửa tin nhắn đã gửi và nhận câu trả lời mới — chỉ cần nhấn giữ
+- Tạo lại câu trả lời, hoặc tiếp tục từ bất kỳ câu trả lời nào trong cuộc trò chuyện mới (menu ⋮)
+- Trả lời nhanh hơn trong các cuộc trò chuyện dài với mô hình Qwen
+- Cải thiện hiệu suất và độ ổn định

@@ -46,6 +46,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import java.io.File
 
 
 class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
@@ -86,6 +87,12 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
      * The UI shows a Toast and resets to null via [consumeUserError].
      */
     private val _userError = MutableLiveData<String?>(null)
+    /** One-shot informational message (e.g. "Branched into a new chat"). */
+    private val _notice = MutableLiveData<String?>(null)
+    val notice: LiveData<String?> = _notice
+
+    @MainThread
+    fun consumeNotice() { _notice.value = null }
     /**
      * Set when [loadModel] hits the RAM-fit gate. The UI surfaces a
      * confirmation dialog so the user can override and load anyway.
@@ -734,10 +741,23 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
         // Persist the image so it survives the picker URI lifetime and is kept
         // with the saved conversation (path stored on the message row below).
         val persistedImageFile = imageUri?.let { imageStore.persistImageFile(it) }
+        startTurn(message, persistedImageFile)
+    }
+
+    /**
+     * Send [message] as a new user turn. [persistedImageFile] is its image
+     * attachment, already under filesDir/chat_images (a re-send reuses the
+     * original's copy).
+     */
+    @MainThread
+    private fun startTurn(message: Message, persistedImageFile: File?) {
         val userMessage = if (persistedImageFile != null) {
-            message.copy(imageUri = imageStore.imageContentUri(persistedImageFile))
+            message.copy(
+                imageUri = imageStore.imageContentUri(persistedImageFile),
+                imagePath = persistedImageFile.absolutePath,
+            )
         } else {
-            message
+            message.copy(imageUri = null, imagePath = null)
         }
 
         val enableThinking = _thinkingEnabled.value == true
@@ -804,6 +824,108 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
                 sessionId = sessionId,
                 ourJob = ourJob,
             )
+        }
+    }
+
+    /**
+     * Regenerate the assistant reply [assistantMessageId]: everything from
+     * the user message that prompted it is dropped and that message re-sent.
+     * The engine rewinds its KV cache to before that turn instead of
+     * re-evaluating the conversation.
+     */
+    @MainThread
+    fun regenerate(assistantMessageId: Long) {
+        val messages = uiState.messages.toList()
+        val index = messages.indexOfFirst { it.id == assistantMessageId }
+        ChatRewind.regenerate(messages, index)?.let { rewindAndResend(it) }
+    }
+
+    /** Replace user message [userMessageId] with [newText] and re-send it. */
+    @MainThread
+    fun editMessage(userMessageId: Long, newText: String) {
+        val messages = uiState.messages.toList()
+        val index = messages.indexOfFirst { it.id == userMessageId }
+        if (messages.getOrNull(index)?.content == newText.trim()) {
+            // Unchanged text is a regenerate of that turn's reply.
+            val reply = messages.getOrNull(index + 1)
+            if (reply?.author == "Assistant") return regenerate(reply.id)
+        }
+        ChatRewind.edit(messages, index, newText)?.let { rewindAndResend(it) }
+    }
+
+    private fun rewindAndResend(plan: ChatRewind.Plan) {
+        val rewind = plan.rewind ?: return
+        val resend = plan.resend ?: return
+        if (_isGenerating.value == true || runtime.model == null) return
+        val sizeBytes = resend.content.length * 2
+        if (sizeBytes > InferenceLimits.MAX_PAYLOAD_BYTES) {
+            _userError.postValue(
+                app.getString(
+                    com.druk.lmplayground.R.string.message_too_large,
+                    sizeBytes / 1024,
+                    InferenceLimits.MAX_PAYLOAD_BYTES / 1024,
+                )
+            )
+            return
+        }
+        val systemPrompt = _systemPrompt.value.orEmpty()
+        // The fallback replays the kept messages; vet them before touching state.
+        if (!validateReplaySize(systemPrompt, plan.kept)) return
+        val params = _generationParams.value ?: GenerationParams()
+        val sessionId = _currentSessionId.value
+        // Lock the chat's actions until the new turn takes over.
+        _isGenerating.value = true
+        viewModelScope.launch {
+            val ok = runtime.rewindSession(
+                rewind.turnIndex, rewind.anchorText, params, systemPrompt, plan.kept,
+            )
+            if (!ok) {
+                _isGenerating.value = false
+                return@launch
+            }
+            if (sessionId != null) {
+                sessionStore.truncateMessages(sessionId, plan.dropped, setOfNotNull(resend.imagePath))
+            }
+            uiState.setMessages(plan.kept)
+            startTurn(resend, resend.imagePath?.let { File(it) })
+        }
+    }
+
+    /**
+     * Continue the conversation up to assistant reply [assistantMessageId] in
+     * a new chat, leaving this one as it is. The live engine session is
+     * rewound to that point and carries on in the branch, so nothing is
+     * re-evaluated; the original chat replays when reopened, as any other.
+     */
+    @MainThread
+    fun branchFrom(assistantMessageId: Long) {
+        if (_isGenerating.value == true) return
+        val sourceId = _currentSessionId.value ?: return
+        val messages = uiState.messages.toList()
+        val index = messages.indexOfFirst { it.id == assistantMessageId }
+        val plan = ChatRewind.branch(messages, index) ?: return
+        val systemPrompt = _systemPrompt.value.orEmpty()
+        val params = _generationParams.value ?: GenerationParams()
+        _isGenerating.value = true
+        viewModelScope.launch {
+            try {
+                val (branchId, kept) = sessionStore.branchSession(sourceId, plan.kept) { rootTitle, number ->
+                    if (number == 1) {
+                        app.getString(com.druk.lmplayground.R.string.branch_title, rootTitle)
+                    } else {
+                        app.getString(com.druk.lmplayground.R.string.branch_title_numbered, rootTitle, number)
+                    }
+                } ?: return@launch
+                val rewind = plan.rewind
+                if (rewind != null && runtime.model != null) {
+                    runtime.rewindSession(rewind.turnIndex, rewind.anchorText, params, systemPrompt, kept)
+                }
+                _currentSessionId.value = branchId
+                uiState.setMessages(kept)
+                _notice.value = app.getString(com.druk.lmplayground.R.string.branch_created)
+            } finally {
+                _isGenerating.value = false
+            }
         }
     }
 

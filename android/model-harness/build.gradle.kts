@@ -9,6 +9,7 @@ kotlin {
 dependencies {
     implementation(project(":llamacpp"))
     implementation(libs.json)
+    testImplementation(libs.junit)
 }
 
 val hostNativeDir = rootProject.layout.buildDirectory.dir("host/llamacpp")
@@ -58,4 +59,26 @@ tasks.register<JavaExec>("capabilityReport") {
 tasks.register("printHarnessClasspath") {
     val cp = sourceSets["main"].runtimeClasspath
     doLast { println(cp.asPath) }
+}
+
+// Real-engine regression suites (src/test): they load GGUFs from
+// $LMP_MODELS_DIR and drive the native build directly, so a llama.cpp bump
+// that breaks KV-cache reuse fails here instead of on a phone. Run with
+// `./gradlew :model-harness:test`; -Plmp.testModels=a.gguf,b.gguf narrows
+// the model set. Suites skip when no chat model is on disk.
+tasks.test {
+    dependsOn(buildHostNative)
+    val bin = hostNativeBin.get().asFile.absolutePath
+    systemProperty("java.library.path", bin)
+    systemProperty("lmp.nativeLibDir", bin)
+    environment("DYLD_LIBRARY_PATH", bin)
+    // A native rebuild must re-run the suites; the GGUFs are read live.
+    inputs.dir(hostNativeBin)
+    outputs.upToDateWhen { false }
+    (project.findProperty("lmp.testModels") as String?)?.let { systemProperty("lmp.testModels", it) }
+    maxHeapSize = "2g"
+    testLogging {
+        events("passed", "skipped", "failed")
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
 }

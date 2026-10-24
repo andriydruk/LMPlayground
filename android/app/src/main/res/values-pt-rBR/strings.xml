@@ -365,4 +365,10 @@
     <string name="dictation_model_dialog_title">Ativar ditado por voz</string>
     <string name="dictation_model_dialog_message">Para falar em vez de digitar, é preciso um modelo de reconhecimento de fala, %1$s (%2$s), baixado uma única vez e guardado no seu dispositivo. Ele funciona offline, em 35 idiomas.</string>
     <string name="dictation_model_downloading">Baixando o modelo de ditado…</string>
+    <string name="edit_message">Editar</string>
+    <string name="regenerate">Gerar novamente</string>
+    <string name="branch_from_here">Ramificar em nova conversa</string>
+    <string name="branch_title">%1$s (ramificação)</string>
+    <string name="branch_title_numbered">%1$s (ramificação %2$d)</string>
+    <string name="branch_created">Continuando em uma nova conversa</string>
 </resources>

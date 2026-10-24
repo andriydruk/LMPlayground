@@ -1,0 +1,4 @@
+- Upravte odeslanou zprávu a získejte novou odpověď – stačí na ni dlouze podržet prst
+- Vygenerujte odpověď znovu nebo pokračujte od libovolné odpovědi v novém chatu (nabídka ⋮)
+- Rychlejší odpovědi v dlouhých chatech s modely Qwen
+- Vylepšení výkonu a stability

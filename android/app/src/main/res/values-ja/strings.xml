@@ -363,4 +363,10 @@
     <string name="dictation_model_dialog_title">音声入力を有効にする</string>
     <string name="dictation_model_dialog_message">入力の代わりに話すには、音声認識モデル %1$s（%2$s）が必要です。一度ダウンロードすれば端末に保存され、オフラインで 35 言語に対応します。</string>
     <string name="dictation_model_downloading">音声入力モデルをダウンロード中…</string>
+    <string name="edit_message">編集</string>
+    <string name="regenerate">再生成</string>
+    <string name="branch_from_here">新しいチャットに分岐</string>
+    <string name="branch_title">%1$s（分岐）</string>
+    <string name="branch_title_numbered">%1$s（分岐 %2$d）</string>
+    <string name="branch_created">新しいチャットで続けています</string>
 </resources>

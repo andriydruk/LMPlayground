@@ -372,4 +372,10 @@
     <string name="dictation_model_dialog_title">تفعيل الإملاء الصوتي</string>
     <string name="dictation_model_dialog_message">يتطلب التحدث بدلًا من الكتابة نموذجًا للتعرّف على الكلام، %1$s (%2$s)، يُنزَّل مرة واحدة ويُحفظ على جهازك. يعمل دون اتصال وبـ 35 لغة.</string>
     <string name="dictation_model_downloading">جارٍ تنزيل نموذج الإملاء…</string>
+    <string name="edit_message">تعديل</string>
+    <string name="regenerate">إعادة الإنشاء</string>
+    <string name="branch_from_here">تفريع في محادثة جديدة</string>
+    <string name="branch_title">%1$s (فرع)</string>
+    <string name="branch_title_numbered">%1$s (فرع %2$d)</string>
+    <string name="branch_created">المتابعة في محادثة جديدة</string>
 </resources>

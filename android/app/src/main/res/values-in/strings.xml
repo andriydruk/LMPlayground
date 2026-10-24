@@ -359,4 +359,10 @@
     <string name="dictation_model_dialog_title">Aktifkan dikte suara</string>
     <string name="dictation_model_dialog_message">Untuk berbicara alih-alih mengetik, diperlukan model pengenalan ucapan, %1$s (%2$s), yang diunduh sekali dan disimpan di perangkat Anda. Model ini berfungsi offline, dalam 35 bahasa.</string>
     <string name="dictation_model_downloading">Mengunduh model dikte…</string>
+    <string name="edit_message">Edit</string>
+    <string name="regenerate">Buat ulang</string>
+    <string name="branch_from_here">Cabangkan ke chat baru</string>
+    <string name="branch_title">%1$s (cabang)</string>
+    <string name="branch_title_numbered">%1$s (cabang %2$d)</string>
+    <string name="branch_created">Melanjutkan di chat baru</string>
 </resources>

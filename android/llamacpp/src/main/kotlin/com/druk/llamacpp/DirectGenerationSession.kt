@@ -82,6 +82,9 @@ class DirectGenerationSession(
         check(rc == 0) { "submitToolResults failed (rc=$rc)" }
     }
 
+    override fun rewindToTurn(turnIndex: Int, expectedText: String): Int =
+        native.rewindToTurn(turnIndex, expectedText)
+
     override fun requestAbort() {
         abortRequested = true
         native.requestAbort()

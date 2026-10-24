@@ -24,6 +24,17 @@ class NativeLlamaSession {
 
     external fun replayHistory(userMessages: Array<String>, assistantMessages: Array<String>)
 
+    /**
+     * Drop user turn [turnIndex] and everything after it, rolling the KV
+     * cache back so only what follows is evaluated again. [expectedText]
+     * (when non-empty) must occur in that turn. Returns the KV tokens kept,
+     * or -1 when the turn isn't there — the session is then unchanged.
+     */
+    external fun rewindToTurn(turnIndex: Int, expectedText: String): Int
+
+    /** User turns in the conversation; the next addMessage is this index. */
+    external fun getTurnCount(): Int
+
     external fun setTools(toolsJson: String)
 
     external fun getToolCallsJson(): String

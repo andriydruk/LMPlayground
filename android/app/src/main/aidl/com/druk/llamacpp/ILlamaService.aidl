@@ -181,6 +181,15 @@ interface ILlamaService {
     void finalizeReplayHistory(int sessionId);
 
     /**
+     * Drop user turn `turnIndex` and everything after it, rolling the KV
+     * cache back instead of rebuilding it (edit / regenerate / branch).
+     * `expectedText` must occur in that turn's native copy. Returns the KV
+     * tokens kept, or -1 when the session can't rewind there (also while a
+     * generation is running) — the session is then unchanged.
+     */
+    int rewindToTurn(int sessionId, int turnIndex, String expectedText);
+
+    /**
      * Drives the generation loop on a service-owned worker thread, streaming
      * deltas through `cb` until llama returns non-zero, cancelGeneration is
      * called, or destroySession is called. Returns immediately. Termination

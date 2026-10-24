@@ -359,4 +359,10 @@
     <string name="dictation_model_dialog_title">Bật đọc chính tả bằng giọng nói</string>
     <string name="dictation_model_dialog_message">Để nói thay vì gõ, bạn cần một mô hình nhận dạng giọng nói, %1$s (%2$s), chỉ tải về một lần và lưu trên thiết bị của bạn. Mô hình hoạt động ngoại tuyến, với 35 ngôn ngữ.</string>
     <string name="dictation_model_downloading">Đang tải mô hình đọc chính tả…</string>
+    <string name="edit_message">Chỉnh sửa</string>
+    <string name="regenerate">Tạo lại</string>
+    <string name="branch_from_here">Phân nhánh sang cuộc trò chuyện mới</string>
+    <string name="branch_title">%1$s (nhánh)</string>
+    <string name="branch_title_numbered">%1$s (nhánh %2$d)</string>
+    <string name="branch_created">Đang tiếp tục trong cuộc trò chuyện mới</string>
 </resources>

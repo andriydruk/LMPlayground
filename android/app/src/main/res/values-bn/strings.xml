@@ -407,4 +407,10 @@
     <string name="dictation_model_dialog_title">ভয়েস ডিক্টেশন চালু করুন</string>
     <string name="dictation_model_dialog_message">টাইপের বদলে কথা বলতে একটি স্পিচ-রিকগনিশন মডেল লাগবে, %1$s (%2$s), যা একবার ডাউনলোড হয়ে আপনার ডিভাইসেই থাকবে। এটি অফলাইনে, ৩৫টি ভাষায় কাজ করে।</string>
     <string name="dictation_model_downloading">ডিক্টেশন মডেল ডাউনলোড হচ্ছে…</string>
+    <string name="edit_message">সম্পাদনা</string>
+    <string name="regenerate">আবার তৈরি করুন</string>
+    <string name="branch_from_here">নতুন চ্যাটে শাখা তৈরি করুন</string>
+    <string name="branch_title">%1$s (শাখা)</string>
+    <string name="branch_title_numbered">%1$s (শাখা %2$d)</string>
+    <string name="branch_created">নতুন চ্যাটে চালিয়ে যাওয়া হচ্ছে</string>
 </resources>

@@ -9,6 +9,12 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.automirrored.outlined.CallSplit
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -52,7 +58,9 @@ import com.druk.lmplayground.R
 fun ChatItemBubble(
     message: Message,
     showActions: Boolean = true,
-    onTokenCountClicked: (() -> Unit)? = null
+    onTokenCountClicked: (() -> Unit)? = null,
+    onRegenerate: (() -> Unit)? = null,
+    onBranch: (() -> Unit)? = null,
 ) {
     var showRatingSheet by remember { mutableStateOf(false) }
     val clipboardManager = LocalClipboardManager.current
@@ -230,6 +238,43 @@ fun ChatItemBubble(
                         modifier = Modifier.size(16.dp),
                         tint = MaterialTheme.colorScheme.secondary
                     )
+                }
+                if (onRegenerate != null || onBranch != null) {
+                    var menuOpen by remember { mutableStateOf(false) }
+                    Box {
+                        IconButton(onClick = { menuOpen = true }, modifier = Modifier.size(38.dp)) {
+                            Icon(
+                                imageVector = Icons.Outlined.MoreVert,
+                                contentDescription = stringResource(id = R.string.more_options),
+                                modifier = Modifier.size(16.dp),
+                                tint = MaterialTheme.colorScheme.secondary
+                            )
+                        }
+                        DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
+                            if (onRegenerate != null) {
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(id = R.string.regenerate)) },
+                                    leadingIcon = { Icon(Icons.Outlined.Refresh, contentDescription = null) },
+                                    onClick = {
+                                        menuOpen = false
+                                        onRegenerate()
+                                    }
+                                )
+                            }
+                            if (onBranch != null) {
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(id = R.string.branch_from_here)) },
+                                    leadingIcon = {
+                                        Icon(Icons.AutoMirrored.Outlined.CallSplit, contentDescription = null)
+                                    },
+                                    onClick = {
+                                        menuOpen = false
+                                        onBranch()
+                                    }
+                                )
+                            }
+                        }
+                    }
                 }
                 if (message.responseTokens + message.thinkingTokens > 0) {
                     Text(

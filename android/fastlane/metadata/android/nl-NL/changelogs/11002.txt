@@ -1,0 +1,4 @@
+- Bewerk een verzonden bericht en krijg een nieuw antwoord — houd het gewoon ingedrukt
+- Genereer een antwoord opnieuw of ga vanaf elk antwoord verder in een nieuwe chat (⋮-menu)
+- Snellere antwoorden in lange chats met Qwen-modellen
+- Verbeteringen in prestaties en stabiliteit

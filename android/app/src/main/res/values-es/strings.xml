@@ -365,4 +365,10 @@
     <string name="dictation_model_dialog_title">Activar el dictado por voz</string>
     <string name="dictation_model_dialog_message">Para hablar en lugar de escribir se necesita un modelo de reconocimiento de voz, %1$s (%2$s), que se descarga una vez y se guarda en tu dispositivo. Funciona sin conexión, en 35 idiomas.</string>
     <string name="dictation_model_downloading">Descargando el modelo de dictado…</string>
+    <string name="edit_message">Editar</string>
+    <string name="regenerate">Regenerar</string>
+    <string name="branch_from_here">Ramificar en un chat nuevo</string>
+    <string name="branch_title">%1$s (rama)</string>
+    <string name="branch_title_numbered">%1$s (rama %2$d)</string>
+    <string name="branch_created">Continuando en un chat nuevo</string>
 </resources>

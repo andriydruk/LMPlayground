@@ -34,6 +34,19 @@ interface GenerationSession {
 
     fun submitToolResults(resultsJson: String, enableThinking: Boolean)
 
+    /**
+     * Drop user turn [turnIndex] (0-based, over every user turn the session
+     * has seen) and everything after it, so the next [addMessage] continues
+     * from the end of the turn before. The KV cache is rolled back rather
+     * than rebuilt, so only what follows the kept prefix is evaluated again.
+     * [expectedText] must occur in that turn (empty skips the check).
+     *
+     * Returns the number of KV tokens kept, or -1 when the session can't
+     * rewind there (the turn was compacted away, or the numbering doesn't
+     * match). The session is then unchanged and the caller rebuilds it.
+     */
+    fun rewindToTurn(turnIndex: Int, expectedText: String): Int
+
     fun requestAbort()
 
     fun destroy()

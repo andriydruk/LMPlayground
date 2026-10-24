@@ -365,4 +365,10 @@
     <string name="dictation_model_dialog_title">Activer la dictée vocale</string>
     <string name="dictation_model_dialog_message">Pour parler au lieu de taper, il faut un modèle de reconnaissance vocale, %1$s (%2$s), téléchargé une seule fois et conservé sur votre appareil. Il fonctionne hors ligne, dans 35 langues.</string>
     <string name="dictation_model_downloading">Téléchargement du modèle de dictée…</string>
+    <string name="edit_message">Modifier</string>
+    <string name="regenerate">Régénérer</string>
+    <string name="branch_from_here">Bifurquer dans un nouveau chat</string>
+    <string name="branch_title">%1$s (branche)</string>
+    <string name="branch_title_numbered">%1$s (branche %2$d)</string>
+    <string name="branch_created">Suite dans un nouveau chat</string>
 </resources>

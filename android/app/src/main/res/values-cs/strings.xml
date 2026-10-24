@@ -399,4 +399,10 @@
     <string name="dictation_model_dialog_title">Zapnout hlasové diktování</string>
     <string name="dictation_model_dialog_message">Mluvení místo psaní vyžaduje model pro rozpoznávání řeči, %1$s (%2$s), který se stáhne jednou a zůstane ve vašem zařízení. Funguje offline ve 35 jazycích.</string>
     <string name="dictation_model_downloading">Stahuje se model pro diktování…</string>
+    <string name="edit_message">Upravit</string>
+    <string name="regenerate">Vygenerovat znovu</string>
+    <string name="branch_from_here">Rozvětvit do nového chatu</string>
+    <string name="branch_title">%1$s (větev)</string>
+    <string name="branch_title_numbered">%1$s (větev %2$d)</string>
+    <string name="branch_created">Pokračuje se v novém chatu</string>
 </resources>

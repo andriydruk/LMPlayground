@@ -1,0 +1,4 @@
+- Redigera ett skickat meddelande och få ett nytt svar – tryck länge på det
+- Generera ett svar igen eller fortsätt från valfritt svar i en ny chatt (⋮-menyn)
+- Snabbare svar i långa chattar med Qwen-modeller
+- Förbättringar av prestanda och stabilitet

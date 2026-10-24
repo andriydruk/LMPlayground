@@ -410,4 +410,10 @@
     <string name="dictation_model_dialog_title">הפעלת הכתבה קולית</string>
     <string name="dictation_model_dialog_message">כדי לדבר במקום להקליד צריך מודל לזיהוי דיבור, %1$s (%2$s), שמורד פעם אחת ונשמר במכשיר. הוא עובד אופליין, ב-35 שפות.</string>
     <string name="dictation_model_downloading">מוריד את מודל ההכתבה…</string>
+    <string name="edit_message">עריכה</string>
+    <string name="regenerate">יצירה מחדש</string>
+    <string name="branch_from_here">פיצול לצ׳אט חדש</string>
+    <string name="branch_title">%1$s (ענף)</string>
+    <string name="branch_title_numbered">%1$s (ענף %2$d)</string>
+    <string name="branch_created">ממשיכים בצ׳אט חדש</string>
 </resources>

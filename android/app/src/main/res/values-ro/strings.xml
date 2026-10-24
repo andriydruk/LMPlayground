@@ -366,4 +366,10 @@
     <string name="dictation_model_dialog_title">Activează dictarea vocală</string>
     <string name="dictation_model_dialog_message">Ca să vorbești în loc să tastezi, ai nevoie de un model de recunoaștere a vorbirii, %1$s (%2$s), descărcat o singură dată și păstrat pe dispozitivul tău. Funcționează offline, în 35 de limbi.</string>
     <string name="dictation_model_downloading">Se descarcă modelul de dictare…</string>
+    <string name="edit_message">Editează</string>
+    <string name="regenerate">Regenerează</string>
+    <string name="branch_from_here">Ramifică într-un chat nou</string>
+    <string name="branch_title">%1$s (ramură)</string>
+    <string name="branch_title_numbered">%1$s (ramură %2$d)</string>
+    <string name="branch_created">Se continuă într-un chat nou</string>
 </resources>

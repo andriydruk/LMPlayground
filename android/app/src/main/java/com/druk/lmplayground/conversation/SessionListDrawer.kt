@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
@@ -148,6 +150,22 @@ private fun SessionListContent(
 ) {
     var contextMenuSessionId by remember { mutableStateOf<String?>(null) }
     var renameDialogSession by remember { mutableStateOf<ChatSessionEntity?>(null) }
+    val listState = rememberLazyListState()
+
+    // A new chat (sent, or branched) is inserted at the top, but the list
+    // keeps its first visible row anchored by key, so the new row lands just
+    // above the viewport. Bring the current chat into view when it changes
+    // or the list's head does.
+    LaunchedEffect(currentSessionId, sessions.firstOrNull()?.id) {
+        val index = sessions.indexOfFirst { it.id == currentSessionId }
+        if (index < 0) return@LaunchedEffect
+        val layout = listState.layoutInfo
+        val row = layout.visibleItemsInfo.firstOrNull { it.index == index }
+        val fullyVisible = row != null &&
+            row.offset >= layout.viewportStartOffset &&
+            row.offset + row.size <= layout.viewportEndOffset
+        if (!fullyVisible) listState.animateScrollToItem(index)
+    }
 
     Column(
         modifier = Modifier.fillMaxHeight()
@@ -177,6 +195,7 @@ private fun SessionListContent(
             }
 
             LazyColumn(
+                state = listState,
                 // .imePadding() so the list shrinks when the soft keyboard
                 // opens — otherwise the LazyColumn extends behind the IME and
                 // its bottom items are unreachable (you can't scroll because

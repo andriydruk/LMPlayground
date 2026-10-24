@@ -398,4 +398,10 @@
     <string name="dictation_model_dialog_title">Dayakan imlak suara</string>
     <string name="dictation_model_dialog_message">Untuk bercakap dan bukannya menaip, anda memerlukan model pengecaman pertuturan, %1$s (%2$s), yang dimuat turun sekali dan disimpan pada peranti anda. Ia berfungsi di luar talian, dalam 35 bahasa.</string>
     <string name="dictation_model_downloading">Memuat turun model imlak…</string>
+    <string name="edit_message">Edit</string>
+    <string name="regenerate">Jana semula</string>
+    <string name="branch_from_here">Cabangkan ke sembang baharu</string>
+    <string name="branch_title">%1$s (cabang)</string>
+    <string name="branch_title_numbered">%1$s (cabang %2$d)</string>
+    <string name="branch_created">Meneruskan dalam sembang baharu</string>
 </resources>

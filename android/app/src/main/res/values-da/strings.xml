@@ -407,4 +407,10 @@
     <string name="dictation_model_dialog_title">Slå stemmediktering til</string>
     <string name="dictation_model_dialog_message">For at tale i stedet for at skrive skal du bruge en talegenkendelsesmodel, %1$s (%2$s), som hentes én gang og gemmes på din enhed. Den virker offline på 35 sprog.</string>
     <string name="dictation_model_downloading">Henter dikteringsmodellen…</string>
+    <string name="edit_message">Rediger</string>
+    <string name="regenerate">Generér igen</string>
+    <string name="branch_from_here">Forgren i ny chat</string>
+    <string name="branch_title">%1$s (forgrening)</string>
+    <string name="branch_title_numbered">%1$s (forgrening %2$d)</string>
+    <string name="branch_created">Fortsætter i en ny chat</string>
 </resources>

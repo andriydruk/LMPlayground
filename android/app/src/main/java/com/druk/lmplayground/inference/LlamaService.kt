@@ -636,6 +636,17 @@ class LlamaService : Service() {
             withSession(sessionId) { it.replayHistory(u, a) }
         }
 
+        override fun rewindToTurn(sessionId: Int, turnIndex: Int, expectedText: String): Int {
+            val entry = sessions[sessionId] ?: return -1
+            // The worker drives generate() outside callLock; rewinding under
+            // it would mutate the context mid-decode.
+            if (entry.worker.get()?.isAlive() == true) {
+                Log.w(TAG, "rewindToTurn: session $sessionId is generating; refusing")
+                return -1
+            }
+            return withSession(sessionId) { it.rewindToTurn(turnIndex, expectedText) } ?: -1
+        }
+
         override fun startGeneration(sessionId: Int, cb: ILlamaGenerationCallback) {
             val entry = sessions[sessionId] ?: run {
                 try { cb.onGenerationFinished(-1) } catch (_: RemoteException) {}
