@@ -50,6 +50,8 @@ struct EngineLabView: View {
                     .disabled(running || files.isEmpty)
             }
             .onAppear {
+                // A locked screen suspends the app and stops the GPU mid-run.
+                UIApplication.shared.isIdleTimerDisabled = true
                 files = EngineLab.modelFiles()
                 if let list = UserDefaults.standard.string(forKey: "labDownload"), !running {
                     downloadThenRun(list.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespaces) })
@@ -101,16 +103,21 @@ struct EngineLabView: View {
             store.refresh()
             files = EngineLab.modelFiles()
             running = false
-            run()
+            run(only: Set(filenames))
         }
     }
 
-    private func run() {
+    private func run(only: Set<String>? = nil) {
         running = true
         results = []
         Task {
-            _ = await EngineLab.runAll { result in
+            _ = await EngineLab.runAll(only: only) { result in
                 Task { @MainActor in results.append(result) }
+            }
+            if UserDefaults.standard.bool(forKey: "labCleanAfter") {
+                EngineLab.cleanUpModels()
+                store.refresh()
+                files = EngineLab.modelFiles()
             }
             running = false
         }

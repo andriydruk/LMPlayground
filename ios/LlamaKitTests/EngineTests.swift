@@ -210,6 +210,37 @@ struct EngineTests {
         }
     }
 
+    /// Stop, Continue, stop again, then a new turn: the cache must hold the
+    /// same conversation as a clean replay of it, and the new turn must be
+    /// answered rather than taken as more of the story.
+    @Test(arguments: [TestSupport.textModel, "Qwen3-0.6B-Q4_K_M.gguf"].filter(TestSupport.has))
+    func continuedReplyKeepsTheCacheConsistent(_ file: String) throws {
+        let model = try Engine.loadModel(at: TestSupport.model(file))
+        defer { model.unload() }
+        let story = "Write a long, detailed story about a lighthouse keeper, at least 800 words."
+        let question = "Say OK."
+
+        let live = try model.makeSession(TestSupport.greedy)
+        defer { live.destroy() }
+        var reply = ""
+        _ = try live.respond(to: story, thinking: false, maxTokens: 40) { reply = $0 }
+        _ = try live.continueResponse(thinking: false, maxTokens: 40) { reply = $0 }
+        var liveAnswer = ""
+        _ = try live.respond(to: question, thinking: false, maxTokens: 12) { liveAnswer = $0 }
+        let liveContext = Self.contextUsed(live.report)
+
+        let replayed = try model.makeSession(TestSupport.greedy)
+        defer { replayed.destroy() }
+        replayed.replay([(user: story, assistant: reply)])
+        var replayedAnswer = ""
+        _ = try replayed.respond(to: question, thinking: false, maxTokens: 12) { replayedAnswer = $0 }
+        let replayedContext = Self.contextUsed(replayed.report)
+
+        #expect(abs(liveContext - replayedContext) <= 4,
+                "incremental \(liveContext) vs replayed \(replayedContext) tokens")
+        #expect(liveAnswer == replayedAnswer, "live \(liveAnswer) vs replayed \(replayedAnswer)")
+    }
+
     private static func promptTokens(_ report: String) -> Int {
         report.firstMatch(of: /Prompt tokens: (\d+)/).flatMap { Int($0.1) } ?? 0
     }
