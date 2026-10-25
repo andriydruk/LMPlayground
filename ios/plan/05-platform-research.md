@@ -61,8 +61,16 @@ Findings:
   those pages without copying, so they are clean, file-backed memory. A
   500–700 MB model adds 2–35 MB to the footprint. What counts is the KV
   cache, compute buffers and the vision projector (which mtmd loads into
-  RAM). This makes much larger models feasible than the file size suggests;
-  confirm with 4B and 8B models once the downloader exists (M2).
+  RAM). This makes much larger models feasible than the file size suggests,
+  up to the GPU limit below.
+- **The GPU working set caps model size** (catalog sweep, 2026-10-25,
+  [10](10-device-sweep-2026-10.md)). Metal's `recommendedMaxWorkingSetSize`
+  is 5461 MB on the iPhone 16 Pro, and weights do count against it. Past
+  it, a model loads and then writes one garbage token or nothing, or the
+  system runs out of pages and kills the app. Llama 3.1 8B (4685 MB of
+  weights) works with a 2K context and fails with 3K. Gemma's
+  `per_layer_token_embd` stays on the CPU, which is why Gemma 4 E4B fits.
+  The memory entitlements don't raise this limit.
 - **Parakeet loads its weights into RAM** (+685 MB for the 684 MB model).
   Dictation and a loaded chat model share the budget.
 - **Unloads must return memory immediately.** On iOS, ggml's

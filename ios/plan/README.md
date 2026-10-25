@@ -59,3 +59,4 @@ All decisions are settled. See the [decision log](09-decisions-and-risks.md#91-d
 | 7 | [07-feature-parity.md](07-feature-parity.md) | Every Android feature and its iOS implementation (all required for 1.0) |
 | 8 | [08-milestones.md](08-milestones.md) | Milestones M0–M9 with exit criteria |
 | 9 | [09-decisions-and-risks.md](09-decisions-and-risks.md) | Decision log, open decisions, risks |
+| 10 | [10-device-sweep-2026-10.md](10-device-sweep-2026-10.md) | Every catalog model on the iPhone 16 Pro: speed, memory, self-test, what does not fit |
