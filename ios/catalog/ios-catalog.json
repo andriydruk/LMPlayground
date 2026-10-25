@@ -33,8 +33,8 @@
     "gemma-3-4b-it-Q4_K_M.gguf": {
       "status": "verified",
       "measured": {
-        "footprintMB": 679,
-        "tokensPerSecond": 18.4,
+        "footprintMB": 1547,
+        "tokensPerSecond": 17.3,
         "device": "iPhone 16 Pro"
       }
     },

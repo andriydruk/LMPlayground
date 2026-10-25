@@ -155,7 +155,7 @@ extension ModelCatalog {
             mmprojURL: "https://huggingface.co/lmstudio-community/gemma-3-4b-it-GGUF/resolve/main/mmproj-model-f16.gguf",
             iosStatus: .verified,
             maxContext: nil,
-            measured: MeasuredPerformance(footprintMB: 679, tokensPerSecond: 18.4, device: "iPhone 16 Pro")
+            measured: MeasuredPerformance(footprintMB: 1547, tokensPerSecond: 17.3, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
