@@ -1,5 +1,325 @@
 {
-  "_comment": "Models verified on the reference device (iPhone 16 Pro, the 8 GB floor of the supported tier). status: verified (shown in release builds), candidate (debug builds only; the default for models not listed), excluded (never shown). measured: from the Engine Lab. See ios/plan/05-platform-research.md.",
+  "_comment": "Models verified on the reference device (iPhone 16 Pro, the 8 GB floor of the supported tier). status: verified (shown in release builds), candidate (debug builds only; the default for models not listed), excluded (never shown). measured: from the Engine Lab. note: why a model is not verified. See ios/plan/05-platform-research.md.",
   "referenceDevice": "iPhone 16 Pro (iPhone17,1)",
-  "models": {}
+  "models": {
+    "DeepSeek-R1-Distill-Qwen-1.5B-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 241,
+        "tokensPerSecond": 45.1,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 352,
+        "tokensPerSecond": 9.4,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "gemma-2-9b-it-Q4_K_M.gguf": {
+      "status": "candidate",
+      "note": "Over the GPU working set of an 8 GB iPhone: loads, then writes nothing."
+    },
+    "gemma-3-1b-it-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 222,
+        "tokensPerSecond": 51.2,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "gemma-3-4b-it-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 679,
+        "tokensPerSecond": 18.4,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "gemma-3n-E2B-it-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 295,
+        "tokensPerSecond": 23.4,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "gemma-3n-E4B-it-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 307,
+        "tokensPerSecond": 14.6,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "gemma-4-12b-it-qat-q4_0.gguf": {
+      "status": "candidate",
+      "note": "Needs more memory than an iPhone app gets without the increased-memory entitlement."
+    },
+    "gemma-4-E2B_q4_0-it.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 957,
+        "tokensPerSecond": 29.6,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "gemma-4-E4B_q4_0-it.gguf": {
+      "status": "verified"
+    },
+    "gpt-oss-20b-mxfp4.gguf": {
+      "status": "candidate",
+      "note": "Fails to load: larger than the device's memory."
+    },
+    "granite-4.0-h-tiny-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 266,
+        "tokensPerSecond": 27.4,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "granite-4.0-micro-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 433,
+        "tokensPerSecond": 22.4,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "granite-4.1-8b-Q4_K_M.gguf": {
+      "status": "candidate",
+      "note": "Over the GPU working set of an 8 GB iPhone: loads, then writes one garbage token."
+    },
+    "granite-4.2-3b-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 431,
+        "tokensPerSecond": 22.2,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "HuggingFaceTB_SmolLM3-3B-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 432,
+        "tokensPerSecond": 24.9,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "LFM2.5-1.2B-Instruct-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 144,
+        "tokensPerSecond": 63.0,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "LFM2.5-2.6B-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 185,
+        "tokensPerSecond": 28.9,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "LFM2.5-350M-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 141,
+        "tokensPerSecond": 141.3,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "LFM2.5-VL-1.6B-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 811,
+        "tokensPerSecond": 63.6,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "LFM2.5-VL-3B-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 858,
+        "tokensPerSecond": 28.8,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "LFM2.5-VL-450M-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 330,
+        "tokensPerSecond": 146.1,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Llama-3.2-1B-Instruct-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 254,
+        "tokensPerSecond": 57.4,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Llama-3.2-3B-Instruct-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 591,
+        "tokensPerSecond": 23.7,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf": {
+      "status": "candidate",
+      "note": "Over the GPU working set of an 8 GB iPhone: loads, then writes one garbage token."
+    },
+    "MiniCPM5-1B-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 202,
+        "tokensPerSecond": 70.7,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "MiniCPM5-2B-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 274,
+        "tokensPerSecond": 32.4,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Ministral-3-3B-Instruct-2512-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 1857,
+        "tokensPerSecond": 19.3,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Ministral-3-3B-Reasoning-2512-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 1843,
+        "tokensPerSecond": 20.7,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Ministral-3-8B-Instruct-2512-Q4_K_M.gguf": {
+      "status": "candidate",
+      "note": "Over the GPU working set of an 8 GB iPhone: the system killed the app (vm-pageshortage)."
+    },
+    "Ministral-3-8B-Reasoning-2512-Q4_K_M.gguf": {
+      "status": "candidate",
+      "note": "Same size as the Instruct model, which got the app killed; not run."
+    },
+    "Mistral-7B-Instruct-v0.3-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 600,
+        "tokensPerSecond": 9.3,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "NVIDIA-Nemotron3-Nano-4B-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 373,
+        "tokensPerSecond": 9.3,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Phi-3.5-mini-instruct-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 1631,
+        "tokensPerSecond": 15.4,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Phi-4-mini-instruct-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 659,
+        "tokensPerSecond": 18.7,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Qwen2.5-0.5B-Instruct-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 183,
+        "tokensPerSecond": 90.2,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Qwen2.5-1.5B-Instruct-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 269,
+        "tokensPerSecond": 44.6,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Qwen3-0.6B-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 576,
+        "tokensPerSecond": 83.7,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Qwen3-1.7B-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 556,
+        "tokensPerSecond": 40.5,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Qwen3-4B-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 721,
+        "tokensPerSecond": 15.6,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Qwen_Qwen3.5-0.8B-IQ4_XS.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 667,
+        "tokensPerSecond": 63.0,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Qwen_Qwen3.5-2B-IQ4_XS.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 1052,
+        "tokensPerSecond": 34.8,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Qwen_Qwen3.5-4B-IQ4_XS.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 1302,
+        "tokensPerSecond": 13.0,
+        "device": "iPhone 16 Pro"
+      }
+    },
+    "Spark-X2.5-4B-Q4_K_M.gguf": {
+      "status": "verified",
+      "measured": {
+        "footprintMB": 706,
+        "tokensPerSecond": 14.5,
+        "device": "iPhone 16 Pro"
+      }
+    }
+  }
 }

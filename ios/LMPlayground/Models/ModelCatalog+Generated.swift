@@ -20,9 +20,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 576, tokensPerSecond: 83.7, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -39,9 +39,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 556, tokensPerSecond: 40.5, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -58,9 +58,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 721, tokensPerSecond: 15.6, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -77,9 +77,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: "mmproj-Qwen_Qwen3.5-0.8B-f16.gguf",
             mmprojURL: "https://huggingface.co/bartowski/Qwen_Qwen3.5-0.8B-GGUF/resolve/main/mmproj-Qwen_Qwen3.5-0.8B-f16.gguf",
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 667, tokensPerSecond: 63.0, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -96,9 +96,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: "mmproj-Qwen_Qwen3.5-2B-f16.gguf",
             mmprojURL: "https://huggingface.co/bartowski/Qwen_Qwen3.5-2B-GGUF/resolve/main/mmproj-Qwen_Qwen3.5-2B-f16.gguf",
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 1052, tokensPerSecond: 34.8, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -115,9 +115,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: "mmproj-Qwen_Qwen3.5-4B-f16.gguf",
             mmprojURL: "https://huggingface.co/bartowski/Qwen_Qwen3.5-4B-GGUF/resolve/main/mmproj-Qwen_Qwen3.5-4B-f16.gguf",
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 1302, tokensPerSecond: 13.0, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -134,9 +134,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 222, tokensPerSecond: 51.2, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -153,9 +153,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: "gemma-3-4b-it-mmproj-f16.gguf",
             mmprojURL: "https://huggingface.co/lmstudio-community/gemma-3-4b-it-GGUF/resolve/main/mmproj-model-f16.gguf",
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 679, tokensPerSecond: 18.4, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -172,9 +172,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 254, tokensPerSecond: 57.4, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -191,9 +191,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 591, tokensPerSecond: 23.7, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -210,9 +210,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 659, tokensPerSecond: 18.7, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -229,9 +229,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 241, tokensPerSecond: 45.1, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -248,9 +248,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 352, tokensPerSecond: 9.4, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -267,9 +267,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 141, tokensPerSecond: 141.3, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -286,9 +286,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 144, tokensPerSecond: 63.0, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -324,9 +324,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 185, tokensPerSecond: 28.9, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -343,9 +343,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: "mmproj-Ministral-3-3B-Instruct-2512-F16.gguf",
             mmprojURL: "https://huggingface.co/lmstudio-community/Ministral-3-3B-Instruct-2512-GGUF/resolve/main/mmproj-Ministral-3-3B-Instruct-2512-F16.gguf",
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 1857, tokensPerSecond: 19.3, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -362,9 +362,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: "mmproj-Ministral-3-3B-Reasoning-2512-F16.gguf",
             mmprojURL: "https://huggingface.co/lmstudio-community/Ministral-3-3B-Reasoning-2512-GGUF/resolve/main/mmproj-Ministral-3-3B-Reasoning-2512-F16.gguf",
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 1843, tokensPerSecond: 20.7, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -419,9 +419,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 433, tokensPerSecond: 22.4, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -438,9 +438,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 266, tokensPerSecond: 27.4, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -457,9 +457,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 431, tokensPerSecond: 22.2, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -514,9 +514,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 373, tokensPerSecond: 9.3, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -533,9 +533,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 432, tokensPerSecond: 24.9, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -552,9 +552,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 202, tokensPerSecond: 70.7, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -571,9 +571,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: "mmproj-LFM2.5-VL-450m-Q8_0.gguf",
             mmprojURL: "https://huggingface.co/LiquidAI/LFM2.5-VL-450M-GGUF/resolve/main/mmproj-LFM2.5-VL-450m-Q8_0.gguf",
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 330, tokensPerSecond: 146.1, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -590,9 +590,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: "mmproj-LFM2.5-VL-1.6b-Q8_0.gguf",
             mmprojURL: "https://huggingface.co/LiquidAI/LFM2.5-VL-1.6B-GGUF/resolve/main/mmproj-LFM2.5-VL-1.6b-Q8_0.gguf",
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 811, tokensPerSecond: 63.6, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -609,9 +609,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: "mmproj-LFM2.5-VL-3B-Q8_0.gguf",
             mmprojURL: "https://huggingface.co/LiquidAI/LFM2.5-VL-3B-GGUF/resolve/main/mmproj-LFM2.5-VL-3B-Q8_0.gguf",
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 858, tokensPerSecond: 28.8, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -628,9 +628,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 274, tokensPerSecond: 32.4, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -647,9 +647,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 706, tokensPerSecond: 14.5, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -666,9 +666,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 295, tokensPerSecond: 23.4, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -685,9 +685,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 307, tokensPerSecond: 14.6, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -704,9 +704,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: "mmproj-gemma-4-E2B-it-Q8_0.gguf",
             mmprojURL: "https://huggingface.co/ggml-org/gemma-4-E2B-it-GGUF/resolve/main/mmproj-gemma-4-E2B-it-Q8_0.gguf",
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 957, tokensPerSecond: 29.6, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -723,7 +723,7 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: "mmproj-gemma-4-E4B-it-Q8_0.gguf",
             mmprojURL: "https://huggingface.co/ggml-org/gemma-4-E4B-it-GGUF/resolve/main/mmproj-gemma-4-E4B-it-Q8_0.gguf",
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
             measured: nil
         ),
@@ -818,9 +818,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 183, tokensPerSecond: 90.2, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -837,9 +837,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 269, tokensPerSecond: 44.6, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -856,9 +856,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 1631, tokensPerSecond: 15.4, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
@@ -875,9 +875,9 @@ extension ModelCatalog {
             deprecated: false,
             mmprojFilename: nil,
             mmprojURL: nil,
-            iosStatus: .candidate,
+            iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 600, tokensPerSecond: 9.3, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,
