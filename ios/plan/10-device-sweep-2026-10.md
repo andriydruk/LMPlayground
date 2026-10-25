@@ -161,10 +161,17 @@ writing garbage.
 
 ## Open items
 
-- **Accept the Program License Agreement** and re-measure with the
-  increased-memory entitlements. They raise the RAM limit (Gemma 4 12B may
-  then pass the RAM check) but not the GPU working set, so the 8B models
-  will still not run on an 8 GB iPhone. Re-test them on a 16 GB iPad.
+- **Accept the Program License Agreement**, then re-measure with the
+  increased-memory entitlements. Until then `release-check.sh` stops at the
+  Release build: the provisioning profile can't carry those entitlements.
+  The steps before it pass (xcframework, version and plists, catalog). The
+  entitlements raise the RAM limit but not the GPU working set. Gemma 4 12B
+  (6.6 GB of weights) and GPT-OSS 20B stay out of reach on an 8 GB iPhone
+  either way. Re-test the large models on a 16 GB iPad.
+- **Decide on 8B models at 2K context.** Llama 3.1 8B works at 2K (about
+  9 tok/s); Granite 4.1 8B and Ministral 3 8B might too. Shipping that means
+  wiring the catalog's `maxContext` field into the context control, which
+  nothing reads yet.
 - **Edit, regenerate and branch** (and the message menus) from Android's
   latest release are still missing on iOS.
 - `LlamaError.templateRenderFailed` is thrown for any `addMessage` failure,
@@ -176,6 +183,10 @@ writing garbage.
   dictation, and Continue after a real background switch.
 - Push the fork commit `fc57a428d` (vm_allocate on Apple) before the branch
   merges.
+- The iOS 26/27 simulator runtimes show as unavailable on this Mac (only
+  18.5 is usable), so `release-check.sh`'s default simulator destination
+  fails. The unit tests ran on the iPhone instead (64/64). Reinstall the
+  runtimes from Xcode → Settings → Components.
 
 ## Raw data
 
