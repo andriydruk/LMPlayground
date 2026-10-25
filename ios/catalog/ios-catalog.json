@@ -67,7 +67,12 @@
       }
     },
     "gemma-4-E4B_q4_0-it.gguf": {
-      "status": "verified"
+      "status": "verified",
+      "measured": {
+        "footprintMB": 1053,
+        "tokensPerSecond": 16.0,
+        "device": "iPhone 16 Pro"
+      }
     },
     "gpt-oss-20b-mxfp4.gguf": {
       "status": "candidate",

@@ -725,7 +725,7 @@ extension ModelCatalog {
             mmprojURL: "https://huggingface.co/ggml-org/gemma-4-E4B-it-GGUF/resolve/main/mmproj-gemma-4-E4B-it-Q8_0.gguf",
             iosStatus: .verified,
             maxContext: nil,
-            measured: nil
+            measured: MeasuredPerformance(footprintMB: 1053, tokensPerSecond: 16.0, device: "iPhone 16 Pro")
         ),
         CatalogModel(
             kind: .chat,

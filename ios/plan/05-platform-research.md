@@ -46,7 +46,8 @@ be provisioned. Re-measure once it is.
 Document indexing (M6 exit check, `-labChatParts ragbig`): a generated
 100-page PDF, 200 chunks, indexed in 9.9 s on the iPad Pro M1 next to a
 loaded Qwen 3.5 2B. The footprint went from 830 MB to a 1183 MB peak with
-4.0 GB still available. Still to repeat on the iPhone 16 Pro.
+4.0 GB still available. On the iPhone 16 Pro (2026-10-25): 9.7 s, 981 →
+1003 MB peak, 2.4 GB still available.
 
 Dictation (M7, `-labChatParts dictation`, jfk.wav fed through the real
 controller at real-time pace on the iPad Pro M1): first words 2.2 s into

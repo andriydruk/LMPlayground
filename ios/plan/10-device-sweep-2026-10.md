@@ -72,7 +72,7 @@ projector.
 | Gemma 3n E4B | 4040 | 4.3 | 0.27 | 14.6 | 307 | | 11/12 | tool call ³ |
 | Mistral 7B v0.3 | 4170 | 7.7 | 0.38 | 9.3 | 600 | | 11/12 | tool call ³ |
 | DeepSeek R1 Distill 7B | 4466 | 8.4 | 0.25 | 9.4 | 352 | | 11/12 | tool call ³ |
-| Gemma 4 E4B QAT | 4916 | 7.6 | 0.82 | 16.4 | — ⁴ | yes | 14/14 | |
+| Gemma 4 E4B QAT | 4916 | 7.6 | 0.82 | 16.4 | 1053 ⁴ | yes | 14/14 | |
 
 ¹ Answer quality of a small model (e.g. "Germany" for the capital of
 Germany), not a pipeline failure.
@@ -84,9 +84,22 @@ mini answers "Sure, I'm ready to assist you", and LFM2.5 2.6B (which always
 thinks) spends the turn thinking and writes no answer.
 ³ The model is declared without tool support in the catalog, so no tools are
 offered; expected.
-⁴ The lab's own vision step fails on this model with `templateRenderFailed`,
-which drops the peak. The app's vision path works (self-test vision 2/2).
-Lab-only issue.
+⁴ From a rerun. The first run's lab vision step failed because the lab
+kept its text session alive next to the vision one, and two KV caches
+overflowed the GPU. The app holds one session; the lab now does too.
+
+### Full self-test
+
+All parts with Qwen3.5 2B and its projector: **25/25**. Chat, reopen and
+replay, Stop/Continue, tools, vision, document Q&A, a 100-page PDF, and
+dictation through the real controller.
+
+- 100-page PDF: 200 chunks indexed in 9.7 s next to the loaded model.
+  Footprint 981 → 1003 MB peak, 2388 MB still available. This was the open
+  iPhone half of the M6 exit check in 05 §5.1.
+- Dictation (jfk.wav at real-time pace): first words at 1.7 s into the
+  11.6 s clip, final text 0.16 s after the audio ends. Footprint 1005 →
+  1748 MB while the ASR model is loaded, 1001 MB after the idle unload.
 
 ### Models that don't fit
 
@@ -143,6 +156,7 @@ writing garbage.
 - The Engine Lab now applies the app's template overrides, and the self-test
   records the conversation's error message on a failed step.
 - The GPU working-set check above, plus `-labContext N` in the lab.
+- The lab freed its text session only after the vision step.
 
 ## Open items
 
@@ -152,8 +166,9 @@ writing garbage.
   will still not run on an 8 GB iPhone. Re-test them on a 16 GB iPad.
 - **Edit, regenerate and branch** (and the message menus) from Android's
   latest release are still missing on iOS.
-- The lab's vision step fails on Gemma 4 E4B (`templateRenderFailed`); the
-  app path works. Fix the lab so the peak is recorded.
+- `LlamaError.templateRenderFailed` is thrown for any `addMessage` failure,
+  including an image that fails to encode, so the name misleads. Worth
+  splitting before release.
 - Deprecated variants were not swept (LFM2.5 1.2B Thinking, Granite 4.1 3B,
   Gemma 4 E2B/E4B/12B Q4_K_M). Release builds hide them anyway.
 - Hands-on checks that need a person: the microphone permission and live
