@@ -163,29 +163,33 @@ enum EngineLab {
             // `-labContext N` overrides the context size, to probe memory limits.
             let context = UserDefaults.standard.integer(forKey: "labContext")
             if context > 0 { params.contextSize = Int32(context) }
-            let session = try model.makeSession(params)
-            defer { session.destroy() }
-
             var peak = ProcessMemory.footprint
-            var first: ContinuousClock.Instant?
-            var tokens = 0
-            var text = ""
-            let start = clock.now
-            _ = try session.respond(to: prompt, thinking: false, maxTokens: maxTokens) { response in
-                if first == nil { first = clock.now }
-                tokens += 1
-                text = response
-                if tokens % 16 == 0 { peak = max(peak, ProcessMemory.footprint) }
+            // The text session is freed before the vision one: the app never
+            // holds two, and two KV caches overflow the GPU on an 8 GB iPhone.
+            do {
+                let session = try model.makeSession(params)
+                defer { session.destroy() }
+
+                var first: ContinuousClock.Instant?
+                var tokens = 0
+                var text = ""
+                let start = clock.now
+                _ = try session.respond(to: prompt, thinking: false, maxTokens: maxTokens) { response in
+                    if first == nil { first = clock.now }
+                    tokens += 1
+                    text = response
+                    if tokens % 16 == 0 { peak = max(peak, ProcessMemory.footprint) }
+                }
+                let end = clock.now
+                peak = max(peak, ProcessMemory.footprint)
+                if let first {
+                    r.ttftSeconds = (first - start).seconds
+                    if tokens > 1 { r.tokensPerSecond = Double(tokens - 1) / (end - first).seconds }
+                }
+                r.tokens = tokens
+                r.output = String(text.prefix(300))
+                r.report = session.report
             }
-            let end = clock.now
-            peak = max(peak, ProcessMemory.footprint)
-            if let first {
-                r.ttftSeconds = (first - start).seconds
-                if tokens > 1 { r.tokensPerSecond = Double(tokens - 1) / (end - first).seconds }
-            }
-            r.tokens = tokens
-            r.output = String(text.prefix(300))
-            r.report = session.report
 
             if let projector {
                 let image = fixtures.appending(path: "test_cat.jpg")
