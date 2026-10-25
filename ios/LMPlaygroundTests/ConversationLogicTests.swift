@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import LlamaKit
 @testable import LMPlayground
 
 /// Ports of the Android unit tests for the logic both apps share.
@@ -111,6 +112,43 @@ struct MemoryBudgetTests {
             Issue.record("expected tooLarge, got \(verdict)")
             return
         }
+    }
+
+    /// Weights past Metal's working set make garbage even when RAM is free.
+    /// Header numbers and the working set of an iPhone 16 Pro, where Llama
+    /// 3.1 8B failed with a 4K context and the Qwen-based 7B worked.
+    @Test func tooLargeWhenOverTheGPUWorkingSet() {
+        func model(weightsMB: UInt64, kvPerToken: UInt64) -> ModelMetadata {
+            ModelMetadata(name: "m", hasChatTemplate: true, architecture: "llama", contextLength: 32768,
+                          kvBytesPerToken: kvPerToken, gpuWeightBytes: weightsMB << 20, isProjector: false)
+        }
+        let workingSet: UInt64 = 5461 << 20
+        let llama8B = model(weightsMB: 4685, kvPerToken: 128 << 10)
+        let verdict = MemoryBudget.check(metadata: llama8B, contextSize: 4096, projectorBytes: 0,
+                                         available: 8 << 30, gpuWorkingSet: workingSet)
+        guard case .tooLarge = verdict else {
+            Issue.record("expected tooLarge, got \(verdict)")
+            return
+        }
+        // The same model works with a 2K context and fails with 3K.
+        #expect(MemoryBudget.check(metadata: llama8B, contextSize: 2048, projectorBytes: 0,
+                                   available: 8 << 30, gpuWorkingSet: workingSet) == .fits)
+        #expect(MemoryBudget.check(metadata: llama8B, contextSize: 3072, projectorBytes: 0,
+                                   available: 8 << 30, gpuWorkingSet: workingSet) != .fits)
+        let qwen7B = model(weightsMB: 4460, kvPerToken: 56 << 10)
+        #expect(MemoryBudget.check(metadata: qwen7B, contextSize: 4096, projectorBytes: 0,
+                                   available: 8 << 30, gpuWorkingSet: workingSet) == .fits)
+        // An unknown working set leaves the decision to the RAM check.
+        #expect(MemoryBudget.check(metadata: llama8B, contextSize: 4096, projectorBytes: 0,
+                                   available: 8 << 30, gpuWorkingSet: 0) == .fits)
+    }
+
+    @Test func maxContextRespectsTheGPUWorkingSet() {
+        let meta = ModelMetadata(name: "m", hasChatTemplate: true, architecture: "llama", contextLength: 0,
+                                 kvBytesPerToken: 1 << 20, gpuWeightBytes: 1 << 30, isProjector: false)
+        let limit = MemoryBudget.maxContext(metadata: meta, projectorBytes: 0, available: 64 << 30,
+                                            gpuWorkingSet: (1 << 30) + MemoryBudget.gpuComputeBytes + (100 << 20))
+        #expect(limit == 100)
     }
 }
 

@@ -53,6 +53,7 @@ NSError *LMKMakeError(LMKErrorCode code, NSString *description) {
                  architecture:(NSString *)architecture
                 contextLength:(uint32_t)contextLength
               kvBytesPerToken:(uint64_t)kvBytesPerToken
+               gpuWeightBytes:(uint64_t)gpuWeightBytes
                   isProjector:(BOOL)isProjector {
     if ((self = [super init])) {
         _name = [name copy];
@@ -60,6 +61,7 @@ NSError *LMKMakeError(LMKErrorCode code, NSString *description) {
         _architecture = [architecture copy];
         _contextLength = contextLength;
         _kvBytesPerToken = kvBytesPerToken;
+        _gpuWeightBytes = gpuWeightBytes;
         _isProjector = isProjector;
     }
     return self;
@@ -98,6 +100,7 @@ NSError *LMKMakeError(LMKErrorCode code, NSString *description) {
                                      architecture:arch
                                     contextLength:meta.contextLength
                                   kvBytesPerToken:meta.kvBytesPerToken()
+                                   gpuWeightBytes:meta.gpuWeightBytes()
                                       isProjector:meta.isProjector()];
 }
 

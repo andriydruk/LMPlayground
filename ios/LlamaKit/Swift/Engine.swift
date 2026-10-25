@@ -25,7 +25,20 @@ public struct ModelMetadata: Sendable, Equatable {
     public let contextLength: Int
     /// Upper bound on f16 KV-cache bytes per context token; 0 if unknown.
     public let kvBytesPerToken: UInt64
+    /// Weights the GPU holds with every layer offloaded.
+    public let gpuWeightBytes: UInt64
     public let isProjector: Bool
+
+    public init(name: String, hasChatTemplate: Bool, architecture: String, contextLength: Int,
+                kvBytesPerToken: UInt64, gpuWeightBytes: UInt64, isProjector: Bool) {
+        self.name = name
+        self.hasChatTemplate = hasChatTemplate
+        self.architecture = architecture
+        self.contextLength = contextLength
+        self.kvBytesPerToken = kvBytesPerToken
+        self.gpuWeightBytes = gpuWeightBytes
+        self.isProjector = isProjector
+    }
 }
 
 public struct LoadOptions: Sendable {
@@ -85,6 +98,7 @@ public enum Engine {
                              architecture: meta.architecture,
                              contextLength: Int(meta.contextLength),
                              kvBytesPerToken: meta.kvBytesPerToken,
+                             gpuWeightBytes: meta.gpuWeightBytes,
                              isProjector: meta.isProjector)
     }
 

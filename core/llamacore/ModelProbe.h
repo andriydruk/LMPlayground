@@ -24,6 +24,14 @@ struct GgufMetadata {
     uint32_t keyLength = 0;    // per head; defaults to embeddingLength / headCount
     uint32_t valueLength = 0;
 
+    // Total size of the tensors, and the part llama.cpp keeps on the CPU
+    // when the rest is offloaded (Gemma's per-layer token embeddings).
+    uint64_t tensorBytes = 0;
+    uint64_t cpuResidentBytes = 0;
+
+    // Weights the GPU has to hold when every layer is offloaded.
+    uint64_t gpuWeightBytes() const { return tensorBytes - cpuResidentBytes; }
+
     // A multimodal projector (mmproj) rather than a language model.
     bool isProjector() const { return architecture == "clip"; }
 

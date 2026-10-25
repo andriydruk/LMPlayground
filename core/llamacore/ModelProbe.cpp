@@ -70,6 +70,14 @@ bool probeGgufMetadata(const std::string &path, GgufMetadata &out) {
     out.keyLength       = readCount(gguf_ctx, a + "attention.key_length");
     out.valueLength     = readCount(gguf_ctx, a + "attention.value_length");
 
+    for (int64_t i = 0, n = gguf_get_n_tensors(gguf_ctx); i < n; i++) {
+        const size_t size = gguf_get_tensor_size(gguf_ctx, i);
+        out.tensorBytes += size;
+        if (std::string(gguf_get_tensor_name(gguf_ctx, i)).rfind("per_layer_token_embd", 0) == 0) {
+            out.cpuResidentBytes += size;
+        }
+    }
+
     gguf_free(gguf_ctx);
     return true;
 }

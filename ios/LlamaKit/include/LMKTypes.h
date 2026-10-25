@@ -61,6 +61,8 @@ typedef NS_ENUM(NSInteger, LMKVisionDevice) {
 @property (nonatomic, readonly) uint32_t contextLength;
 /// Upper bound on f16 KV-cache bytes per context token; 0 if unknown.
 @property (nonatomic, readonly) uint64_t kvBytesPerToken;
+/// Weights the GPU holds with every layer offloaded.
+@property (nonatomic, readonly) uint64_t gpuWeightBytes;
 @property (nonatomic, readonly) BOOL isProjector;
 @end
 
