@@ -172,6 +172,8 @@ extension LlamaError: @retroactive LocalizedError {
         switch self {
         case .templateRenderFailed:
             String(localized: "This model's chat template couldn't format the conversation.")
+        case .imageRejected:
+            String(localized: "This image couldn't be read.")
         case .toolResultsRejected:
             String(localized: "The model couldn't read the tool results.")
         case .cannotContinue:

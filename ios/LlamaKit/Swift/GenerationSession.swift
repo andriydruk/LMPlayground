@@ -3,6 +3,9 @@ import Foundation
 public enum LlamaError: Error, Equatable {
     /// The chat template could not render the turn; it was rolled back.
     case templateRenderFailed
+    /// A turn with an image failed: the image couldn't be decoded or
+    /// encoded. Rolled back like a template failure.
+    case imageRejected
     /// Tool results could not be fed back into the turn.
     case toolResultsRejected
     /// The last reply can't be continued (see `continueResponse`).
@@ -48,7 +51,9 @@ public final class GenerationSession {
             native.setImageData(image)
         }
         guard native.addMessage(message, enableThinking: thinking) else {
-            throw LlamaError.templateRenderFailed
+            // The native call reports every failure the same way; with an
+            // image attached, the image is the likely cause.
+            throw image == nil ? LlamaError.templateRenderFailed : LlamaError.imageRejected
         }
         return run(maxTokens: maxTokens, onResponse: onResponse)
     }
