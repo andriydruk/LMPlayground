@@ -302,6 +302,23 @@ struct EngineTests {
         #expect(text.localizedCaseInsensitiveContains("cat"))
     }
 
+    @Test(.enabled(if: TestSupport.has(TestSupport.visionModel) && TestSupport.has(TestSupport.visionProjector)))
+    func unreadableImageIsReportedAsSuch() throws {
+        let model = try Engine.loadModel(at: TestSupport.model(TestSupport.visionModel))
+        defer { model.unload() }
+        try model.attachProjector(at: TestSupport.model(TestSupport.visionProjector))
+        let session = try model.makeSession(TestSupport.greedy)
+        defer { session.destroy() }
+        #expect(throws: LlamaError.imageRejected) {
+            try session.respond(to: "What is this?", image: Data("not an image".utf8),
+                                thinking: false, maxTokens: 8) { _ in }
+        }
+        // The failed turn was rolled back: the session still answers.
+        var text = ""
+        _ = try session.respond(to: "Say OK.", thinking: false, maxTokens: 8) { text = $0 }
+        #expect(!text.isEmpty)
+    }
+
     @Test(.enabled(if: TestSupport.has(TestSupport.embeddingModel)))
     func embeddingsAreNormalizedAndMeaningful() throws {
         let model = try Engine.loadModel(at: TestSupport.model(TestSupport.embeddingModel))

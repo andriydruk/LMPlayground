@@ -159,6 +159,9 @@ writing garbage.
   records the conversation's error message on a failed step.
 - The GPU working-set check above, plus `-labContext N` in the lab.
 - The lab freed its text session only after the vision step.
+- A failed image turn was reported as a chat-template error. It's now
+  `LlamaError.imageRejected` ("This image couldn't be read.", already
+  translated). The core still returns one code for every failure.
 
 ## Open items
 
@@ -176,9 +179,6 @@ writing garbage.
   `maxContext` field into the context control, which nothing reads yet.
 - **Edit, regenerate and branch** (and the message menus) from Android's
   latest release are still missing on iOS.
-- `LlamaError.templateRenderFailed` is thrown for any `addMessage` failure,
-  including an image that fails to encode, so the name misleads. Worth
-  splitting before release.
 - Deprecated variants were not swept (LFM2.5 1.2B Thinking, Granite 4.1 3B,
   Gemma 4 E2B/E4B/12B Q4_K_M). Release builds hide them anyway.
 - Hands-on checks that need a person: the microphone permission and live
