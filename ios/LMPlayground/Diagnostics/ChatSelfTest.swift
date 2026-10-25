@@ -41,6 +41,12 @@ struct ChatSelfTestView: View {
     private func run() async {
         var steps: [Step] = []
         func check(_ name: String, _ passed: Bool, _ detail: String) {
+            var detail = detail
+            // A failed turn leaves its reason in errorMessage: keep it with the step.
+            if !passed, let error = conversation.errorMessage {
+                if !detail.contains(error) { detail += " [error: \(error)]" }
+                conversation.errorMessage = nil
+            }
             steps.append(Step(name: name, passed: passed, detail: detail))
             note("\(passed ? "PASS" : "FAIL") \(name): \(detail.prefix(160))")
         }

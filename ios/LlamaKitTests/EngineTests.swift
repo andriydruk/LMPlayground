@@ -22,6 +22,10 @@ struct EngineTests {
         #expect(!meta.isProjector)
         #expect(meta.contextLength > 0)
         #expect(meta.kvBytesPerToken > 0)
+        // The tensor table, which is most of the file.
+        let fileSize = try FileManager.default.attributesOfItem(
+            atPath: TestSupport.model(TestSupport.textModel).path)[.size] as? UInt64 ?? 0
+        #expect(meta.gpuWeightBytes > fileSize * 9 / 10 && meta.gpuWeightBytes <= fileSize)
     }
 
     @Test(.enabled(if: TestSupport.has(TestSupport.visionProjector)))
@@ -34,7 +38,7 @@ struct EngineTests {
         let files = (try? FileManager.default.contentsOfDirectory(atPath: TestSupport.modelsDir.path)) ?? []
         for file in files.sorted() where file.hasSuffix(".gguf") {
             guard let m = Engine.probe(TestSupport.model(file)) else { continue }
-            print("probe \(file): arch=\(m.architecture) ctx=\(m.contextLength) kv/token=\(m.kvBytesPerToken) projector=\(m.isProjector) template=\(m.hasChatTemplate)")
+            print("probe \(file): arch=\(m.architecture) ctx=\(m.contextLength) kv/token=\(m.kvBytesPerToken) gpu=\(m.gpuWeightBytes >> 20)MB projector=\(m.isProjector) template=\(m.hasChatTemplate)")
         }
     }
 
@@ -211,9 +215,11 @@ struct EngineTests {
     }
 
     /// Stop, Continue, stop again, then a new turn: the cache must hold the
-    /// same conversation as a clean replay of it, and the new turn must be
-    /// answered rather than taken as more of the story.
-    @Test(arguments: [TestSupport.textModel, "Qwen3-0.6B-Q4_K_M.gguf"].filter(TestSupport.has))
+    /// same conversation as a clean replay of it, so the new turn gets the
+    /// same answer. Whether that answer is "OK" or more of the story is up to
+    /// the model; most small ones carry on with a cut-off story.
+    @Test(arguments: [TestSupport.textModel, "Qwen3-0.6B-Q4_K_M.gguf", "LFM2.5-2.6B-Q4_K_M.gguf",
+                     "Phi-4-mini-instruct-Q4_K_M.gguf"].filter(TestSupport.has))
     func continuedReplyKeepsTheCacheConsistent(_ file: String) throws {
         let model = try Engine.loadModel(at: TestSupport.model(file))
         defer { model.unload() }

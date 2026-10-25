@@ -1,5 +1,6 @@
 import Foundation
 import LlamaKit
+import Metal
 import UIKit
 
 /// Measurements for one model file, from the Engine Lab benchmark.
@@ -33,6 +34,8 @@ struct LabRun: Codable, Sendable {
     var systemInfo: String
     var results: [LabResult]
     var finished = false
+    /// Metal's recommendedMaxWorkingSetSize: what the GPU can keep resident.
+    var gpuWorkingSetMB: Int?
 }
 
 /// Engine Lab: loads every GGUF in Documents/Models and measures load time,
@@ -94,7 +97,8 @@ enum EngineLab {
                          systemVersion: await MainActor.run { UIDevice.current.systemVersion },
                          startedAt: Date(),
                          systemInfo: Engine.systemInfo,
-                         results: [])
+                         results: [],
+                         gpuWorkingSetMB: MTLCreateSystemDefaultDevice().map { Int($0.recommendedMaxWorkingSetSize >> 20) })
         let allFiles = (try? FileManager.default.contentsOfDirectory(atPath: AppDirectories.models.path)) ?? []
         for url in modelFiles() where only?.contains(url.lastPathComponent) ?? true {
             let result: LabResult
@@ -146,7 +150,9 @@ enum EngineLab {
         let clock = ContinuousClock()
         do {
             let loadStart = clock.now
-            let model = try Engine.loadModel(at: url)
+            // The app's template overrides apply here too.
+            let model = try Engine.loadModel(
+                at: url, options: LoadOptions(chatTemplateOverride: ChatTemplateOverrides.template(for: url.lastPathComponent)))
             r.loadSeconds = (clock.now - loadStart).seconds
             r.footprintAfterLoadMB = ProcessMemory.footprint.megabytes
             r.availableAfterLoadMB = ProcessMemory.available.megabytes
@@ -154,6 +160,9 @@ enum EngineLab {
 
             var params = SamplerParams()
             params.seed = 42
+            // `-labContext N` overrides the context size, to probe memory limits.
+            let context = UserDefaults.standard.integer(forKey: "labContext")
+            if context > 0 { params.contextSize = Int32(context) }
             let session = try model.makeSession(params)
             defer { session.destroy() }
 
