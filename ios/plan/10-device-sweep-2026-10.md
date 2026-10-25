@@ -60,7 +60,7 @@ projector.
 | Ministral 3 3B Instruct | 2047 | 2.7 | 2.60 | 19.3 | 1857 | yes | 14/14 | |
 | Granite 4.2 3B | 2140 | 2.8 | 0.16 | 22.2 | 431 | | 12/12 | |
 | Phi-3.5 mini | 2282 | 2.9 | 0.33 | 15.4 | 1631 | | 11/12 | tool call ³ |
-| Gemma 3 4B | 2374 | 4.2 | 0.41 | 18.4 | 679 | yes | 13/14 | tool call ³ |
+| Gemma 3 4B | 2374 | 4.2 | 0.41 | 18.4 | 1547 ⁴ | yes | 13/14 | tool call ³ |
 | Phi-4 mini | 2376 | 3.0 | 0.19 | 18.7 | 659 | | 10/12 | after interrupt ², tool call ³ |
 | Qwen3 4B | 2381 | 3.2 | 0.18 | 15.6 | 721 | | 12/12 | |
 | Spark-X2.5 4B | 2479 | 3.3 | 0.50 | 14.5 | 706 | | 12/12 | |
@@ -84,7 +84,8 @@ mini answers "Sure, I'm ready to assist you", and LFM2.5 2.6B (which always
 thinks) spends the turn thinking and writes no answer.
 ³ The model is declared without tool support in the catalog, so no tools are
 offered; expected.
-⁴ From a rerun. The first run's lab vision step failed because the lab
+⁴ From a rerun (vision encode 3.0 s for Gemma 4 E4B, 9.6 s for Gemma 3
+4B). The first run's lab vision step failed or got the app killed because the lab
 kept its text session alive next to the vision one, and two KV caches
 overflowed the GPU. The app holds one session; the lab now does too.
 
