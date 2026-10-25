@@ -57,8 +57,10 @@ final class ModelRuntime {
         let projector = descriptor.isMmprojDownloaded ? (descriptor.mmprojFilename.flatMap { store.files[$0] } ?? 0) : 0
         // The current model is about to be unloaded; don't count it.
         let available = ProcessMemory.available
+        // With the GPU off, the weights stay mapped on the CPU side.
         return MemoryBudget.check(metadata: metadata, contextSize: contextSize,
-                                  projectorBytes: projector, available: available)
+                                  projectorBytes: projector, available: available,
+                                  gpuWorkingSet: AppSettings.useGPU ? MemoryBudget.gpuWorkingSet : 0)
     }
 
     /// Load `descriptor`, replacing the current model. `force` skips the

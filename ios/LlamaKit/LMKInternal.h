@@ -28,6 +28,7 @@ inline std::string LMKString(NSString *_Nullable s) {
                  architecture:(NSString *)architecture
                 contextLength:(uint32_t)contextLength
               kvBytesPerToken:(uint64_t)kvBytesPerToken
+               gpuWeightBytes:(uint64_t)gpuWeightBytes
                   isProjector:(BOOL)isProjector;
 @end
 
