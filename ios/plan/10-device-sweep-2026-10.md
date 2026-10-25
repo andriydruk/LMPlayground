@@ -129,6 +129,7 @@ reran Llama 3.1 8B at smaller contexts (`-labContext N`):
 | Llama 3.1 8B | 4685 | 2048 | 256 | 5391 | works, 8.9 tok/s |
 | Llama 3.1 8B | 4685 | 3072 | 384 | 5519 | one garbage token |
 | Llama 3.1 8B | 4685 | 4096 | 512 | 5647 | one garbage token |
+| Ministral 3 8B | 4950 | 1024 | 136 | 5536 | app killed (`vm-pageshortage`) |
 | Gemma 4 E4B | 2696 | 4096 | — | well under | works |
 
 The working set is 5461 MB. A 300 MB compute allowance didn't separate the
@@ -139,7 +140,7 @@ working set, so the existing "This model needs about N MB…" alert and its
 GPU" is off. `ModelProbe` reads `gpuWeightBytes` from the tensor table
 without loading the model.
 
-So the 8B models are not out of reach: Llama 3.1 8B runs at 2K context.
+So one 8B model is within reach: Llama 3.1 8B runs at 2K context.
 The catalog's unused `maxContext` field could ship it capped at 2K. That's
 a product call; the models stay `candidate` for now.
 
@@ -168,10 +169,11 @@ writing garbage.
   entitlements raise the RAM limit but not the GPU working set. Gemma 4 12B
   (6.6 GB of weights) and GPT-OSS 20B stay out of reach on an 8 GB iPhone
   either way. Re-test the large models on a 16 GB iPad.
-- **Decide on 8B models at 2K context.** Llama 3.1 8B works at 2K (about
-  9 tok/s); Granite 4.1 8B and Ministral 3 8B might too. Shipping that means
-  wiring the catalog's `maxContext` field into the context control, which
-  nothing reads yet.
+- **Decide on Llama 3.1 8B at 2K context.** It works at 2K (about 9 tok/s).
+  It is the only 8B that fits: Ministral 3 8B got the app killed even at 1K,
+  and Granite 4.1 8B's weights plus compute buffers (5546 MB) exceed the
+  working set before any KV cache. Shipping it means wiring the catalog's
+  `maxContext` field into the context control, which nothing reads yet.
 - **Edit, regenerate and branch** (and the message menus) from Android's
   latest release are still missing on iOS.
 - `LlamaError.templateRenderFailed` is thrown for any `addMessage` failure,
