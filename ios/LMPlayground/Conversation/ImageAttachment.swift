@@ -21,9 +21,10 @@ struct AttachmentMenu: View {
                 }
             }
         } label: {
-            Image(systemName: "plus.circle")
-                .font(.title2)
-                .frame(width: 36, height: 36)
+            Image(systemName: "plus")
+                .font(.title3)
+                .frame(width: 44, height: 44)
+                .contentShape(.rect)
         }
         .accessibilityLabel("Attach")
         .accessibilityIdentifier("attachButton")

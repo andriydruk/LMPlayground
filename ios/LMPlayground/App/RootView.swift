@@ -1,13 +1,14 @@
 import SwiftUI
 
-/// Sessions sidebar and the conversation. On iPhone the conversation is the
-/// landing screen and the sidebar is one step back; on iPad both show.
+/// Sessions sidebar and the conversation. On iPhone the sidebar is a drawer
+/// behind the menu button; on iPad both show.
 struct RootView: View {
     @Environment(ModelRuntime.self) private var runtime
     @State private var showCrash = false
     @State private var showSettings = false
-    @State private var column = NavigationSplitViewColumn.detail
+    @State private var drawerOpen = false
     @State private var debugScreen: DebugScreen?
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     /// Launched for an automated Engine Lab run (`-labAutorun` / `-labDownload`).
     private static let labLaunch = UserDefaults.standard.bool(forKey: "labAutorun")
@@ -20,10 +21,19 @@ struct RootView: View {
             } else if Self.labLaunch {
                 NavigationStack { EngineLabView() }
             } else {
-                NavigationSplitView(preferredCompactColumn: $column) {
-                    SessionsView(showSettings: $showSettings, onOpen: { column = .detail })
-                } detail: {
-                    NavigationStack { ConversationView() }
+                if sizeClass == .compact {
+                    SideDrawer(isOpen: $drawerOpen) {
+                        SessionsView(style: .drawer, showSettings: $showSettings, onOpen: { withAnimation(.snappy(duration: 0.3)) { drawerOpen = false } })
+                    } content: {
+                        ChatScreen()
+                            .environment(\.openSidebar, OpenSidebarAction { withAnimation(.snappy(duration: 0.3)) { drawerOpen = true } })
+                    }
+                } else {
+                    NavigationSplitView {
+                        SessionsView(showSettings: $showSettings)
+                    } detail: {
+                        ChatScreen()
+                    }
                 }
             }
         }
