@@ -130,6 +130,10 @@ def main():
     keys = load_keys(args.stringsdata)
     if not keys:
         sys.exit(f"no *.stringsdata in {args.stringsdata}; build the app first")
+    # A Release build compiles the debug-only code out; keep its keys so
+    # Debug and Release builds produce the same catalog.
+    for key in DEBUG_KEYS:
+        keys.setdefault(key, set())
 
     en_strings, en_plurals = load_android("values")
     # English text (positions dropped) -> Android string name.
