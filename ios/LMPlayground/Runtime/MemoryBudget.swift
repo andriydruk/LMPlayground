@@ -57,6 +57,8 @@ enum MemoryBudget {
         if gpuWorkingSet > 0, gpuNeeded > gpuWorkingSet {
             return .tooLarge(neededMB: gpuNeeded.megabytes, availableMB: gpuWorkingSet.megabytes)
         }
+        // No process limit to check against (simulator, Mac).
+        guard available > 0 else { return .fits }
         let needed = estimate(metadata: metadata, contextSize: contextSize, projectorBytes: projectorBytes)
         if needed > available {
             return .tooLarge(neededMB: needed.megabytes, availableMB: available.megabytes)
@@ -73,8 +75,11 @@ enum MemoryBudget {
                            gpuWorkingSet: UInt64 = gpuWorkingSet) -> Int? {
         guard let perToken = metadata?.kvBytesPerToken, perToken > 0 else { return nil }
         let fixed = estimate(metadata: nil, contextSize: 0, projectorBytes: projectorBytes) + tightMarginBytes
-        guard available > fixed else { return 0 }
-        var limit = Int((available - fixed) / perToken)
+        var limit = Int.max
+        if available > 0 {
+            guard available > fixed else { return 0 }
+            limit = Int((available - fixed) / perToken)
+        }
         let gpuFixed = gpuEstimate(metadata: metadata, contextSize: 0, projectorBytes: projectorBytes)
         if gpuWorkingSet > 0, gpuFixed > 0 {
             guard gpuWorkingSet > gpuFixed else { return 0 }

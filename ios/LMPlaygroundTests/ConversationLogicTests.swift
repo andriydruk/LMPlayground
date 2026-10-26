@@ -143,6 +143,13 @@ struct MemoryBudgetTests {
                                    available: 8 << 30, gpuWorkingSet: 0) == .fits)
     }
 
+    @Test func noProcessLimitMeansNoRAMVerdict() {
+        // os_proc_available_memory is 0 in the simulator and on a Mac.
+        let verdict = MemoryBudget.check(metadata: nil, contextSize: 4096, projectorBytes: 2 << 30,
+                                         available: 0, gpuWorkingSet: 0)
+        #expect(verdict == .fits)
+    }
+
     @Test func maxContextRespectsTheGPUWorkingSet() {
         let meta = ModelMetadata(name: "m", hasChatTemplate: true, architecture: "llama", contextLength: 0,
                                  kvBytesPerToken: 1 << 20, gpuWeightBytes: 1 << 30, isProjector: false)
