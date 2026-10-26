@@ -5,7 +5,8 @@ import os
 /// it may grow before the per-process limit.
 enum ProcessMemory {
 
-    /// Bytes left before this process hits its current memory limit.
+    /// Bytes left before this process hits its current memory limit; 0 where
+    /// there is no such limit (the simulator, iPad apps on a Mac).
     static var available: UInt64 {
         UInt64(os_proc_available_memory())
     }
