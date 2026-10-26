@@ -279,7 +279,7 @@ struct CapabilityBadges: View {
         HStack(spacing: 4) {
             if showVision { badge("eye", "Vision") }
             if model.supportsTools { badge("wrench.and.screwdriver", "Tools") }
-            if model.offersThinkingToggle || model.thinkingMode == .always { badge("brain", "Thinking") }
+            if model.offersThinkingToggle || model.thinkingMode == .always { badge("lightbulb", "Thinking") }
         }
         .font(.caption)
         .foregroundStyle(.secondary)

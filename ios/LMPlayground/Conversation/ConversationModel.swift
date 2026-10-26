@@ -262,6 +262,13 @@ final class ConversationModel {
         }
     }
 
+    /// Unload the model, freeing its memory (Android: Unload Model).
+    func unloadModel() async {
+        stop()
+        await releaseGeneration()
+        await runtime.unload()
+    }
+
     // MARK: Turns
 
     func send() {

@@ -139,7 +139,7 @@ struct ThinkingSection: View {
                 withAnimation(.snappy) { expanded.toggle() }
             } label: {
                 HStack(spacing: 6) {
-                    Image(systemName: "brain")
+                    Image(systemName: "lightbulb")
                         .accessibilityHidden(true)
                     Text(title)
                     Image(systemName: "chevron.right")

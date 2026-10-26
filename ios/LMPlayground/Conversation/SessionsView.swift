@@ -1,80 +1,34 @@
 import SwiftUI
 
-/// Saved conversations, pinned first (Android: SessionListDrawer).
+/// Saved conversations, pinned first, one line each (Android:
+/// SessionListDrawer). In the iPhone drawer it draws its own header; in the
+/// iPad split view the navigation bar carries the title and buttons.
 struct SessionsView: View {
+    enum Style { case drawer, sidebar }
+
     @Environment(ConversationModel.self) private var conversation
     @Environment(\.chatStore) private var chatStore
+    var style: Style = .sidebar
     @Binding var showSettings: Bool
     var onOpen: () -> Void = {}
 
     @State private var sessions: [ChatSession] = []
     @State private var renaming: ChatSession?
     @State private var newTitle = ""
-    @State private var search = ""
 
     var body: some View {
-        List(selection: Binding(
-            get: { conversation.session?.id },
-            set: { id in
-                if let id, let chat = sessions.first(where: { $0.id == id }) {
-                    conversation.open(chat)
-                    onOpen()
-                }
-            })) {
-            ForEach(filtered) { chat in
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: 4) {
-                        if chat.pinned { Image(systemName: "pin.fill").font(.caption2).foregroundStyle(.orange) }
-                        Text(chat.title).lineLimit(1)
-                    }
-                    Text("\(chat.modelName) · \(Date(milliseconds: chat.updatedAt).formatted(.relative(presentation: .named)))")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                }
-                .tag(chat.id)
-                .swipeActions(edge: .leading) {
-                    Button(chat.pinned ? "Unpin" : "Pin", systemImage: chat.pinned ? "pin.slash" : "pin") {
-                        try? chatStore?.pinSession(chat.id, pinned: !chat.pinned)
-                    }
-                    .tint(.orange)
-                }
-                .swipeActions(edge: .trailing) {
-                    Button("Delete", systemImage: "trash", role: .destructive) { delete(chat) }
-                    Button("Rename", systemImage: "pencil") {
-                        newTitle = chat.title
-                        renaming = chat
-                    }
-                }
-                .contextMenu {
-                    Button(chat.pinned ? "Unpin" : "Pin", systemImage: chat.pinned ? "pin.slash" : "pin") {
-                        try? chatStore?.pinSession(chat.id, pinned: !chat.pinned)
-                    }
-                    Button("Rename", systemImage: "pencil") {
-                        newTitle = chat.title
-                        renaming = chat
-                    }
-                    Button("Delete", systemImage: "trash", role: .destructive) { delete(chat) }
-                }
+        VStack(spacing: 0) {
+            if style == .drawer {
+                header
             }
+            list
         }
-        .overlay {
-            if sessions.isEmpty {
-                ContentUnavailableView("No conversations yet", systemImage: "bubble.left.and.bubble.right",
-                                       description: Text("Your chats are saved here."))
-            }
-        }
-        .searchable(text: $search, placement: .sidebar)
         .navigationTitle("Chats")
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button("Settings", systemImage: "gearshape") { showSettings = true }
-                    .keyboardShortcut(",", modifiers: .command)
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("New chat", systemImage: "square.and.pencil") {
-                    conversation.newConversation()
-                    onOpen()
+            if style == .sidebar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Settings", systemImage: "gearshape") { showSettings = true }
+                        .keyboardShortcut(",", modifiers: .command)
                 }
             }
         }
@@ -93,10 +47,78 @@ struct SessionsView: View {
         }
     }
 
-    private var filtered: [ChatSession] {
-        let query = search.trimmingCharacters(in: .whitespaces)
-        guard !query.isEmpty else { return sessions }
-        return sessions.filter { $0.title.localizedCaseInsensitiveContains(query) || $0.modelName.localizedCaseInsensitiveContains(query) }
+    private var header: some View {
+        HStack {
+            Text("Chats")
+                .font(.title2.weight(.semibold))
+            Spacer()
+            Button("Settings", systemImage: "gearshape") { showSettings = true }
+                .labelStyle(.iconOnly)
+                .font(.title3)
+                .frame(width: 44, height: 44)
+                .glassEffect(.regular.interactive(), in: .circle)
+                .accessibilityIdentifier("settingsButton")
+        }
+        .padding(.leading, 20)
+        .padding(.trailing, 12)
+        .padding(.vertical, 8)
+    }
+
+    private var list: some View {
+        List {
+            ForEach(sessions) { chat in
+                row(chat)
+            }
+        }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .overlay {
+            if sessions.isEmpty {
+                ContentUnavailableView("No conversations yet", systemImage: "bubble.left.and.bubble.right",
+                                       description: Text("Your chats are saved here."))
+            }
+        }
+    }
+
+    private func row(_ chat: ChatSession) -> some View {
+        let selected = conversation.session?.id == chat.id
+        return Button {
+            if !selected { conversation.open(chat) }
+            onOpen()
+        } label: {
+            HStack(spacing: 6) {
+                Text(chat.title)
+                    .lineLimit(1)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                if chat.pinned {
+                    Image(systemName: "pin.fill")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .accessibilityLabel("Pinned")
+                }
+            }
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .listRowSeparator(.hidden)
+        .listRowInsets(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 16))
+        .listRowBackground(
+            Capsule()
+                .fill(selected ? Color.secondary.opacity(0.2) : .clear)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 1)
+        )
+        // A long press, as on Android; horizontal drags close the drawer.
+        .contextMenu {
+            Button(chat.pinned ? "Unpin" : "Pin", systemImage: chat.pinned ? "pin.slash" : "pin") {
+                try? chatStore?.pinSession(chat.id, pinned: !chat.pinned)
+            }
+            Button("Rename", systemImage: "pencil") {
+                newTitle = chat.title
+                renaming = chat
+            }
+            Button("Delete", systemImage: "trash", role: .destructive) { delete(chat) }
+        }
     }
 
     private func delete(_ chat: ChatSession) {

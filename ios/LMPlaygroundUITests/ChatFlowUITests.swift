@@ -14,11 +14,11 @@ final class ChatFlowUITests: XCTestCase {
     private func launchWithModel() -> XCUIApplication {
         let app = XCUIApplication()
         app.launch()
-        let picker = app.buttons["modelPicker"]
+        let picker = app.buttons["modelPickerButton"]
         XCTAssertTrue(picker.waitForExistence(timeout: 10))
         if !picker.label.contains(modelName) {
             picker.tap()
-            let item = app.buttons[modelName]
+            let item = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", modelName)).firstMatch
             XCTAssertTrue(item.waitForExistence(timeout: 5), "\(modelName) is not downloaded")
             item.tap()
         }
@@ -27,17 +27,28 @@ final class ChatFlowUITests: XCTestCase {
         expectation(for: loaded, evaluatedWith: picker)
         waitForExpectations(timeout: 60)
 
+        // The thinking toggle is in the editor, which opens on a tap.
+        let collapsed = app.buttons["messageField"]
+        if collapsed.exists { collapsed.tap() }
         let thinking = app.buttons["thinkingToggle"]
-        if thinking.exists, thinking.label == "Thinking on" { thinking.tap() }
+        if thinking.waitForExistence(timeout: 3), thinking.label == "Thinking on" { thinking.tap() }
         return app
     }
 
     private func send(_ text: String, in app: XCUIApplication) {
+        // Idle, the input is one line that opens the editor when tapped.
+        let collapsed = app.buttons["messageField"]
+        if collapsed.exists { collapsed.tap() }
         let field = app.textFields["messageField"].exists ? app.textFields["messageField"] : app.textViews["messageField"]
         XCTAssertTrue(field.waitForExistence(timeout: 5))
-        field.tap()
+        if !field.hasFocus { field.tap() }
         field.typeText(text)
         app.buttons["sendButton"].tap()
+    }
+
+    private func waitForGone(_ element: XCUIElement, timeout: TimeInterval) -> Bool {
+        let gone = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: element)
+        return XCTWaiter().wait(for: [gone], timeout: timeout) == .completed
     }
 
     func testAnswersAQuestion() {
@@ -50,7 +61,7 @@ final class ChatFlowUITests: XCTestCase {
         let paris = NSPredicate(format: "label CONTAINS[c] 'paris'")
         expectation(for: paris, evaluatedWith: answer)
         waitForExpectations(timeout: 60)
-        XCTAssertTrue(app.buttons["sendButton"].waitForExistence(timeout: 30), "generation never finished")
+        XCTAssertTrue(waitForGone(app.buttons["stopButton"], timeout: 30), "generation never finished")
     }
 
     /// iPhone apps can't use the GPU in the background: the reply stops and
@@ -67,7 +78,7 @@ final class ChatFlowUITests: XCTestCase {
         app.activate()
 
         XCTAssertTrue(app.descendants(matching: .any)["interruptedLabel"].waitForExistence(timeout: 30))
-        XCTAssertTrue(app.buttons["sendButton"].waitForExistence(timeout: 10))
+        XCTAssertTrue(waitForGone(app.buttons["stopButton"], timeout: 10))
 
         // The engine still works after the interruption.
         send("Say OK.", in: app)

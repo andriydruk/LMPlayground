@@ -1,81 +1,25 @@
 import SwiftUI
 
-struct ConversationView: View {
+/// The chat with its navigation bar, and the model picker card over both
+/// (the card dims the bar too, so it lives outside the navigation stack).
+struct ChatScreen: View {
     @Environment(ConversationModel.self) private var model
-    @Environment(DictationController.self) private var dictation
-    @Environment(ModelRuntime.self) private var runtime
-    @Environment(ModelStore.self) private var store
-    @Environment(\.scenePhase) private var scenePhase
 
+    @State private var showPicker = false
     @State private var showParams = false
     @State private var showLibrary = false
     @State private var pendingTooLarge: (ModelDescriptor, String)?
-    /// Whether the end of the conversation is on screen: streaming keeps it
-    /// there, and scrolling up offers a way back instead.
-    @State private var atBottom = true
 
     var body: some View {
-        @Bindable var model = model
-        ScrollViewReader { proxy in
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 16) {
-                    if model.messages.isEmpty {
-                        EmptyConversationView()
-                    }
-                    ForEach(model.messages) { message in
-                        let isLast = message.id == model.messages.last?.id
-                        MessageView(message: message,
-                                    isStreaming: model.isGenerating && isLast,
-                                    onContinue: isLast && !model.isGenerating && runtime.loaded != nil
-                                        ? { model.continueReply() } : nil)
-                            .id(message.id)
-                    }
-                    // On screen exactly when the end of the conversation is.
-                    Color.clear.frame(height: 1).id("bottom")
-                        .onAppear { atBottom = true }
-                        .onDisappear { atBottom = false }
-                }
-                .padding()
-            }
-            .defaultScrollAnchor(.bottom)
-            .scrollDismissesKeyboard(.interactively)
-            .onChange(of: model.messages.last?.content) {
-                if model.isGenerating && atBottom { proxy.scrollTo("bottom", anchor: .bottom) }
-            }
-            .overlay(alignment: .bottomTrailing) {
-                if !atBottom && !model.messages.isEmpty {
-                    Button("Jump to bottom", systemImage: "arrow.down") {
-                        withAnimation { proxy.scrollTo("bottom", anchor: .bottom) }
-                    }
-                    .labelStyle(.iconOnly)
-                    .font(.headline)
-                    .padding(12)
-                    .background(.regularMaterial, in: Circle())
-                    .overlay(Circle().stroke(.quaternary))
-                    .padding()
-                    .transition(.opacity.combined(with: .scale))
-                    .accessibilityIdentifier("jumpToBottom")
-                }
-            }
-            .animation(.easeInOut(duration: 0.2), value: atBottom)
+        NavigationStack {
+            ConversationView(showPicker: $showPicker, showParams: $showParams, showLibrary: $showLibrary)
         }
-        .safeAreaInset(edge: .bottom) {
-            VStack(spacing: 8) {
-                HintPills()
-                InputBar()
-            }
-        }
-        .navigationTitle(model.session?.title ?? String(localized: "New chat"))
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                ModelPicker(onTooLarge: { descriptor, message in pendingTooLarge = (descriptor, message) },
-                            onManage: { showLibrary = true })
-            }
-            ToolbarItemGroup(placement: .topBarTrailing) {
-                Button("Settings", systemImage: "slider.horizontal.3") { showParams = true }
-                Button("New chat", systemImage: "square.and.pencil") { model.newConversation() }
-                    .keyboardShortcut("n", modifiers: .command)
+        .overlay {
+            if showPicker {
+                ModelPickerCard(isPresented: $showPicker,
+                                onTooLarge: { descriptor, message in pendingTooLarge = (descriptor, message) },
+                                onBrowse: { showLibrary = true },
+                                onParams: { showParams = true })
             }
         }
         .sheet(isPresented: $showParams) {
@@ -97,6 +41,100 @@ struct ConversationView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             Text(pendingTooLarge?.1 ?? "")
+        }
+    }
+}
+
+struct ConversationView: View {
+    @Environment(ConversationModel.self) private var model
+    @Environment(DictationController.self) private var dictation
+    @Environment(ModelRuntime.self) private var runtime
+    @Environment(ModelStore.self) private var store
+    @Environment(\.openSidebar) private var openSidebar
+    @Environment(\.scenePhase) private var scenePhase
+
+    @Binding var showPicker: Bool
+    @Binding var showParams: Bool
+    @Binding var showLibrary: Bool
+    /// Whether the end of the conversation is on screen: streaming keeps it
+    /// there, and scrolling up offers a way back instead.
+    @State private var atBottom = true
+
+    var body: some View {
+        ScrollViewReader { proxy in
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 16) {
+                    ForEach(model.messages) { message in
+                        let isLast = message.id == model.messages.last?.id
+                        MessageView(message: message,
+                                    isStreaming: model.isGenerating && isLast,
+                                    onContinue: isLast && !model.isGenerating && runtime.loaded != nil
+                                        ? { model.continueReply() } : nil)
+                            .id(message.id)
+                    }
+                    // On screen exactly when the end of the conversation is.
+                    Color.clear.frame(height: 1).id("bottom")
+                        .onAppear { atBottom = true }
+                        .onDisappear { atBottom = false }
+                }
+                .padding()
+            }
+            .defaultScrollAnchor(.bottom)
+            .scrollDismissesKeyboard(.interactively)
+            .onChange(of: model.messages.last?.content) {
+                if model.isGenerating && atBottom { proxy.scrollTo("bottom", anchor: .bottom) }
+            }
+            .overlay {
+                // Android: What's New while no model is loaded.
+                if model.messages.isEmpty && runtime.loaded == nil && !isLoading {
+                    WhatsNewView()
+                }
+            }
+            .overlay(alignment: .bottomTrailing) {
+                if !atBottom && !model.messages.isEmpty {
+                    Button("Jump to bottom", systemImage: "arrow.down") {
+                        withAnimation { proxy.scrollTo("bottom", anchor: .bottom) }
+                    }
+                    .labelStyle(.iconOnly)
+                    .font(.headline)
+                    .frame(width: 44, height: 44)
+                    .glassEffect(.regular.interactive(), in: .circle)
+                    .padding()
+                    .transition(.opacity.combined(with: .scale))
+                    .accessibilityIdentifier("jumpToBottom")
+                }
+            }
+            .animation(.easeInOut(duration: 0.2), value: atBottom)
+        }
+        // An inset, not an overlay: the scroll view reaches under the bar, so
+        // an overlay's top edge would sit under the status bar.
+        .safeAreaInset(edge: .top, spacing: 0) {
+            LoadingHairline()
+        }
+        .safeAreaInset(edge: .bottom) {
+            VStack(spacing: 8) {
+                HintPills()
+                InputBar(showParams: $showParams)
+            }
+        }
+        .navigationTitle(model.session?.title ?? String(localized: "New chat"))
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if let openSidebar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Open navigation drawer", systemImage: "line.3.horizontal") { openSidebar() }
+                        .accessibilityIdentifier("menuButton")
+                }
+            }
+            ToolbarItem(placement: .principal) {
+                ModelTitle(action: openPicker)
+                    .disabled(model.isGenerating)
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("New chat", systemImage: "square.and.pencil") { model.newConversation() }
+                    .keyboardShortcut("n", modifiers: .command)
+                    .accessibilityIdentifier("newChatButton")
+            }
         }
         .alert("Something went wrong", isPresented: Binding(
             get: { model.errorMessage != nil }, set: { if !$0 { model.errorMessage = nil } })) {
@@ -135,152 +173,158 @@ struct ConversationView: View {
             }
         }
     }
-}
 
-private struct EmptyConversationView: View {
-    @Environment(ModelRuntime.self) private var runtime
+    private var isLoading: Bool {
+        if case .loading = runtime.phase { return true }
+        return false
+    }
 
-    var body: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "bubble.left.and.text.bubble.right")
-                .font(.largeTitle)
-                .foregroundStyle(.tertiary)
-            if let loaded = runtime.loaded {
-                Text("Ask \(loaded.descriptor.name) anything").font(.headline)
-                Text("Everything runs on this device.").foregroundStyle(.secondary)
-            } else {
-                Text("Choose a model to start").font(.headline)
-                Text("Pick one from the menu at the top, or download one in Models.")
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-            }
+    private func openPicker() {
+        // The card sits over the chat, not above the keyboard.
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        if store.downloaded.isEmpty {
+            showLibrary = true
+        } else {
+            withAnimation(.snappy(duration: 0.25)) { showPicker = true }
         }
-        .frame(maxWidth: .infinity)
-        .padding(.top, 80)
     }
 }
 
-/// Model menu in the navigation bar: downloaded models, load state, and a way
-/// to the library.
-struct ModelPicker: View {
-    @Environment(ConversationModel.self) private var model
+/// The centered title: the model's name over its load progress or size, and
+/// a chevron that opens the picker (Android: ConversationBar).
+private struct ModelTitle: View {
     @Environment(ModelRuntime.self) private var runtime
     @Environment(ModelStore.self) private var store
-    var onTooLarge: (ModelDescriptor, String) -> Void
-    var onManage: () -> Void
+    var action: () -> Void
 
     var body: some View {
-        Menu {
-            ForEach(store.downloaded) { descriptor in
-                Button {
-                    select(descriptor)
-                } label: {
-                    if runtime.loaded?.descriptor.filename == descriptor.filename {
-                        Label(descriptor.name, systemImage: "checkmark")
-                    } else {
-                        Text(descriptor.name)
-                    }
-                }
-            }
-            Divider()
-            Button("Manage models…", systemImage: "square.stack.3d.down.right", action: onManage)
-        } label: {
-            HStack(spacing: 4) {
-                switch runtime.phase {
-                case .loading(_, let progress):
-                    ProgressView(value: progress).frame(width: 60)
-                    Text("Loading…")
-                default:
-                    Text(runtime.loaded?.descriptor.name ?? String(localized: "Choose a model"))
+        Button(action: action) {
+            VStack(spacing: 0) {
+                HStack(spacing: 4) {
+                    Text(title)
+                        .font(.headline)
                         .lineLimit(1)
+                    Image(systemName: "chevron.down")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
                 }
-                Image(systemName: "chevron.down").font(.caption2)
+                if let subtitle {
+                    Text(verbatim: subtitle)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                        .contentTransition(.numericText())
+                }
             }
-            .font(.headline)
+            .padding(.horizontal, 12)
+            .contentShape(.rect)
         }
-        .accessibilityIdentifier("modelPicker")
-        .disabled(model.isGenerating)
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("modelPickerButton")
     }
 
-    private func select(_ descriptor: ModelDescriptor) {
-        if case .tooLarge(let needed, let available) = runtime.memoryVerdict(for: descriptor, contextSize: model.params.contextSize) {
-            onTooLarge(descriptor, ModelRuntime.LoadError.tooLarge(neededMB: needed, availableMB: available).localizedDescription)
-            return
+    private var title: String {
+        switch runtime.phase {
+        case .loading(let filename, _):
+            return store.downloaded.first { $0.filename == filename }?.name ?? filename
+        default:
+            return runtime.loaded?.descriptor.name ?? String(localized: "Choose a model")
         }
-        Task { await model.select(model: descriptor) }
+    }
+
+    private var subtitle: String? {
+        if case .loading(_, let progress) = runtime.phase {
+            return progress > 0 ? progress.formatted(.percent.precision(.fractionLength(0)))
+                                : String(localized: "Loading…")
+        }
+        guard let loaded = runtime.loaded?.descriptor else { return nil }
+        return store.reclaimableBytes(loaded).formattedBytes
     }
 }
 
-/// Text field, thinking toggle, dictation and send / stop.
+/// Model-loading progress as a hairline along the bottom of the navigation
+/// bar (Android: the line under ConversationBar).
+private struct LoadingHairline: View {
+    @Environment(ModelRuntime.self) private var runtime
+
+    var body: some View {
+        if case .loading(_, let progress) = runtime.phase {
+            GeometryReader { geometry in
+                Rectangle()
+                    .fill(.tint)
+                    .frame(width: geometry.size.width * progress)
+                    .animation(.linear(duration: 0.2), value: progress)
+            }
+            .frame(height: 2)
+            .accessibilityHidden(true)
+        }
+    }
+}
+
+/// What's New, centered in an empty chat while no model is loaded (Android:
+/// WhatsNewText). Same strings as Android, so it reads the same everywhere.
+private struct WhatsNewView: View {
+    var body: some View {
+        VStack(spacing: 8) {
+            Text("What's New")
+                .font(.title.weight(.semibold))
+                .padding(.bottom, 8)
+            Text("Voice — tap the mic and speak")
+            Text("Your words appear as you talk")
+            Text("Works offline in 35 languages")
+        }
+        .font(.body)
+        .multilineTextAlignment(.center)
+        .foregroundStyle(.secondary)
+        .padding(.horizontal, 32)
+        .allowsHitTesting(false)
+    }
+}
+
+/// The input: one line of glass with attach and dictation while idle;
+/// focused (or holding text) it grows into a multi-line editor with the
+/// thinking toggle and send. Swiping it up opens the generation parameters,
+/// as on Android. Dictation writes into the draft whether or not the field
+/// has focus.
 struct InputBar: View {
     @Environment(ConversationModel.self) private var model
     @Environment(ModelRuntime.self) private var runtime
     @Environment(DictationController.self) private var dictation
+    @Binding var showParams: Bool
     @FocusState private var focused: Bool
+    /// Set by a tap on the collapsed bar until the editor takes focus.
+    @State private var expanding = false
     /// The text before dictation began; recognized words are written on top
     /// of it, so rewriting never compounds. Nil while dictation isn't writing.
     @State private var dictationBase: String?
     /// What dictation last wrote, to tell the user's own edits apart.
     @State private var dictationWritten: String?
 
+    private var expanded: Bool {
+        expanding || focused || !model.draft.isEmpty || model.pendingImage != nil
+    }
+
     var body: some View {
-        @Bindable var model = model
-        VStack(spacing: 6) {
-        if !model.documents.isEmpty {
-            DocumentChipsRow()
-        }
-        if let image = model.pendingImage {
-            PendingImagePreview(path: image)
-        }
-        HStack(alignment: .bottom, spacing: 8) {
-            if let loaded = runtime.loaded {
-                AttachmentMenu(allowsImages: loaded.supportsVision)
-                    .disabled(model.isGenerating)
+        VStack(spacing: 8) {
+            if !model.documents.isEmpty {
+                DocumentChipsRow()
             }
-            if runtime.loaded?.descriptor.offersThinkingToggle == true {
-                Button {
-                    model.thinkingEnabled.toggle()
-                } label: {
-                    Image(systemName: model.thinkingEnabled ? "brain.fill" : "brain")
-                        .font(.title3)
-                        .frame(width: 36, height: 36)
-                }
-                .accessibilityLabel(model.thinkingEnabled ? "Thinking on" : "Thinking off")
-                .accessibilityIdentifier("thinkingToggle")
-                .buttonStyle(.borderless)
+            Group {
+                if expanded { editor } else { collapsed }
             }
-            TextField("Message", text: $model.draft, axis: .vertical)
-                .lineLimit(1...8)
-                .focused($focused)
-                .accessibilityIdentifier("messageField")
-                .padding(.horizontal, 14)
-                .padding(.vertical, 9)
-                .contentShape(.rect)
-                .onTapGesture { focused = true }
-                .background(.background.secondary, in: RoundedRectangle(cornerRadius: 20))
-                .onSubmit { if model.canSend { model.send() } }
-            // Dictation runs its own engine, so it works with no chat model
-            // loaded; only a reply in progress blocks it.
-            MicButton(enabled: !model.isGenerating)
-            if model.isGenerating {
-                Button("Stop", systemImage: "stop.circle.fill") { model.stop() }
-                    .labelStyle(.iconOnly)
-                    .font(.title)
-                    .keyboardShortcut(".", modifiers: .command)
-                    .accessibilityIdentifier("stopButton")
-            } else {
-                Button("Send", systemImage: "arrow.up.circle.fill") { model.send() }
-                    .labelStyle(.iconOnly)
-                    .font(.title)
-                    .disabled(!model.canSend)
-                    .accessibilityIdentifier("sendButton")
-                    .keyboardShortcut(.return, modifiers: .command)
-            }
+            .simultaneousGesture(
+                DragGesture(minimumDistance: 24).onEnded { value in
+                    if value.translation.height < -40, abs(value.translation.width) < 60, runtime.loaded != nil {
+                        showParams = true
+                    }
+                })
         }
-        .padding(.horizontal)
+        .padding(.horizontal, 12)
+        .padding(.bottom, 8)
+        .animation(.snappy(duration: 0.25), value: expanded)
+        .onChange(of: focused) { _, now in
+            if now { expanding = false }
         }
-        .padding(.vertical, 8)
-        .background(.bar)
         .onChange(of: dictation.state) { _, state in
             guard case .listening(let text) = state else { return }
             let base = dictationBase ?? model.draft
@@ -303,6 +347,114 @@ struct InputBar: View {
                 dictation.abandon()
             }
         }
+    }
+
+    /// One line: attach, a tap target that opens the editor, and the mic.
+    private var collapsed: some View {
+        HStack(spacing: 2) {
+            attach
+            Button {
+                expanding = true
+            } label: {
+                Text("Message")
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    .padding(.leading, 4)
+                    .contentShape(.rect)
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("messageField")
+            // Dictation runs its own engine, so it works with no chat model
+            // loaded; only a reply in progress blocks it.
+            MicButton(enabled: !model.isGenerating)
+            if model.isGenerating { stop }
+        }
+        .padding(4)
+        .glassEffect(.regular.interactive(), in: .capsule)
+    }
+
+    /// The text on top, the controls in a row under it.
+    private var editor: some View {
+        @Bindable var model = model
+        return VStack(alignment: .leading, spacing: 6) {
+            if let image = model.pendingImage {
+                PendingImagePreview(path: image)
+                    .padding([.top, .horizontal], 10)
+            }
+            TextField("Message", text: $model.draft, axis: .vertical)
+                .lineLimit(1...8)
+                .focused($focused)
+                .accessibilityIdentifier("messageField")
+                .padding(.horizontal, 14)
+                .padding(.top, 12)
+                .onSubmit { if model.canSend { model.send() } }
+                .task { if expanding { focused = true } }
+            HStack(spacing: 2) {
+                attach
+                if runtime.loaded?.descriptor.offersThinkingToggle == true {
+                    Button {
+                        model.thinkingEnabled.toggle()
+                    } label: {
+                        Image(systemName: model.thinkingEnabled ? "lightbulb.fill" : "lightbulb")
+                            .font(.title3)
+                            .foregroundStyle(model.thinkingEnabled ? AnyShapeStyle(.tint) : AnyShapeStyle(.primary))
+                            .frame(width: 44, height: 44)
+                            .contentShape(.rect)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(model.thinkingEnabled ? "Thinking on" : "Thinking off")
+                    .accessibilityIdentifier("thinkingToggle")
+                }
+                Spacer()
+                MicButton(enabled: !model.isGenerating)
+                if model.isGenerating { stop } else { send }
+            }
+            .padding(.horizontal, 4)
+            .padding(.bottom, 4)
+        }
+        .glassEffect(.regular, in: .rect(cornerRadius: 26))
+    }
+
+    private var attach: some View {
+        AttachmentMenu(allowsImages: runtime.loaded?.supportsVision == true)
+            .disabled(runtime.loaded == nil || model.isGenerating)
+    }
+
+    private var send: some View {
+        Button {
+            model.send()
+        } label: {
+            Image(systemName: "arrow.up")
+                .font(.body.weight(.semibold))
+                .foregroundStyle(.white)
+                .frame(width: 36, height: 36)
+                .background(Circle().fill(model.canSend ? AnyShapeStyle(.tint) : AnyShapeStyle(.gray.opacity(0.4))))
+                .frame(width: 44, height: 44)
+                .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .disabled(!model.canSend)
+        .accessibilityLabel("Send")
+        .accessibilityIdentifier("sendButton")
+        .keyboardShortcut(.return, modifiers: .command)
+    }
+
+    private var stop: some View {
+        Button {
+            model.stop()
+        } label: {
+            Image(systemName: "stop.fill")
+                .font(.footnote)
+                .foregroundStyle(Color(.systemBackground))
+                .frame(width: 36, height: 36)
+                .background(Circle().fill(.primary))
+                .frame(width: 44, height: 44)
+                .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Stop")
+        .accessibilityIdentifier("stopButton")
+        .keyboardShortcut(".", modifiers: .command)
     }
 
     private func writeDictation(_ text: String) {
