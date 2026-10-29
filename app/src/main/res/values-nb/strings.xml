@@ -328,6 +328,9 @@
     <string name="tool_web_fetch_title">Hent nettside</string>
     <string name="tool_web_fetch_desc">Åpner en lenke og leser hovedinnholdet som tekst slik at modellen kan oppsummere eller sitere en side.</string>
     <string name="tool_web_fetch_example">“Oppsummer artikkelen på denne lenken.”</string>
+    <string name="tool_agent_title">Agent</string>
+    <string name="tool_agent_desc">Lar modellen planlegge en oppgave med flere trinn, utføre den med de andre verktøyene dine og krysse av hvert trinn. Tillater langt flere verktøykall per svar og hopper over gjentatte kall.</string>
+    <string name="tool_agent_example">“Sammenlign de tre nyeste Pixel-telefonene og fortell meg hvilken jeg bør kjøpe.”</string>
     <string name="cd_supports_tools">Støtter verktøy</string>
     <string name="cd_supports_thinking">Støtter tenkning</string>
 

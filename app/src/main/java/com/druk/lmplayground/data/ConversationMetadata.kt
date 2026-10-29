@@ -5,7 +5,7 @@ import org.json.JSONObject
 /**
  * Generic per-conversation metadata: a small string-keyed store persisted as a
  * JSON object in [ChatSessionEntity.metadata]. Lets features attach data to a
- * conversation (first use: the web_search link map) without adding a column per
+ * conversation (the web_search link map, the agent plan) without adding a column per
  * feature. Parse from the stored string, read/modify, then write [toJson] back.
  */
 class ConversationMetadata private constructor(private val obj: JSONObject) {
@@ -47,6 +47,9 @@ class ConversationMetadata private constructor(private val obj: JSONObject) {
     companion object {
         /** Key for the web_search reference -> URL map. */
         const val KEY_WEB_LINKS = "webLinks"
+
+        /** Key for the `agent` tool's plan and notes (a JSON string, see AgentState). */
+        const val KEY_AGENT_STATE = "agentState"
 
         /** Id of the conversation this one was branched from. */
         const val KEY_BRANCHED_FROM = "branchedFrom"

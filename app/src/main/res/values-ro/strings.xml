@@ -301,6 +301,9 @@
     <string name="tool_web_fetch_title">Încarcă pagină web</string>
     <string name="tool_web_fetch_desc">Deschide un link și îi citește conținutul principal ca text pentru ca modelul să poată rezuma sau cita o pagină.</string>
     <string name="tool_web_fetch_example">\"Rezumă articolul de la acest link.\"</string>
+    <string name="tool_agent_title">Agent</string>
+    <string name="tool_agent_desc">Permite modelului să planifice o sarcină cu mai mulți pași, să o ducă la capăt cu celelalte instrumente ale tale și să bifeze fiecare pas. Permite mult mai multe apeluri de instrumente per răspuns și ignoră apelurile repetate.</string>
+    <string name="tool_agent_example">\"Compară cele mai noi trei telefoane Pixel și spune-mi pe care să-l cumpăr.\"</string>
     <string name="tool_run_javascript_title">Rulează JavaScript</string>
     <string name="tool_run_javascript_desc">Rulează JavaScript într-un mediu izolat securizat pentru calcule, date și procesarea textului. Fără acces la internet sau la fișiere.</string>
     <string name="tool_run_javascript_example">\"Cât este (2 + 3) × 4 și în ce zi a săptămânii cade 1 ianuarie 2027?\"</string>

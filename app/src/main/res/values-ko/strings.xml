@@ -298,6 +298,9 @@
     <string name="tool_web_fetch_title">웹 페이지 가져오기</string>
     <string name="tool_web_fetch_desc">링크를 열어 주요 내용을 텍스트로 읽어 모델이 페이지를 요약하거나 인용할 수 있게 합니다.</string>
     <string name="tool_web_fetch_example">\"이 링크의 기사를 요약해줘.\"</string>
+    <string name="tool_agent_title">에이전트</string>
+    <string name="tool_agent_desc">모델이 여러 단계로 이루어진 작업을 계획하고, 다른 도구를 사용해 진행하며 각 단계를 체크할 수 있게 합니다. 답변당 허용되는 도구 호출 수가 크게 늘어나고 반복된 호출은 건너뜁니다.</string>
+    <string name="tool_agent_example">\"최신 Pixel 폰 세 대를 비교하고 어떤 걸 사야 할지 알려줘.\"</string>
 
     <!-- Inference engine notifications (1.7.0) -->
     <string name="inference_notification_generating_title">응답 생성 중…</string>

@@ -6,6 +6,8 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import org.json.JSONObject
 
 /**
  * One generation turn, including any tool rounds.
@@ -21,6 +23,14 @@ class ToolCallLoop(
     private val tools: ToolExecutor,
     private val observer: Observer = Observer.NONE,
     private val maxToolRounds: Int = DEFAULT_MAX_TOOL_ROUNDS,
+    /**
+     * When the round budget runs out with calls still pending, don't run them:
+     * answer each with a "budget spent" error and let the model write one last
+     * reply from what it has. Without this the turn just stops, leaving the user
+     * with whatever text preceded the last tool call (often nothing). Agent mode
+     * turns this on, since its long runs are the ones likely to hit the limit.
+     */
+    private val wrapUpOnLimit: Boolean = false,
 ) {
 
     /** The tool side of the loop; [com.druk.llamacpp.tools.ToolRegistry] implements it. */
@@ -47,7 +57,7 @@ class ToolCallLoop(
         /** Final return code from the last generateAll. */
         val rc: Int,
         val toolRounds: Int,
-        /** True if the loop stopped because it hit [maxToolRounds]. */
+        /** True if the model still wanted tools after [maxToolRounds] rounds. */
         val hitRoundLimit: Boolean,
         val records: List<ToolCallRecord>,
     )
@@ -68,11 +78,21 @@ class ToolCallLoop(
         val allRecords = mutableListOf<ToolCallRecord>()
         var rc: Int
         var hitLimit = false
+        var wrappedUp = false
+        // Same rule as after real tool results (see below).
+        val responseThinking = supportsThinking || enableThinking
 
         while (true) {
             rc = session.generateAll(callback)
             if (rc != RC_TOOL_CALLS || !isActive()) break
-            if (toolRounds >= maxToolRounds) { hitLimit = true; break }
+            if (toolRounds >= maxToolRounds) {
+                hitLimit = true
+                if (!wrapUpOnLimit || wrappedUp) break
+                wrappedUp = true
+                session.submitToolResults(budgetSpentResults(session.getToolCallsJson()), responseThinking)
+                observer.onRoundStarted(toolRounds, responseThinking)
+                continue
+            }
             toolRounds++
 
             val toolCallsJson = session.getToolCallsJson()
@@ -103,12 +123,29 @@ class ToolCallLoop(
             // collapsed thinking section via the always-on DEEPSEEK
             // extraction in the parser. A no-op for models without a
             // thinking mode (the flag is ignored).
-            val responseThinking = supportsThinking || enableThinking
             session.submitToolResults(toolResults, responseThinking)
             observer.onRoundStarted(toolRounds, responseThinking)
         }
 
         return Result(rc = rc, toolRounds = toolRounds, hitRoundLimit = hitLimit, records = allRecords)
+    }
+
+    /** One error result per pending call, telling the model to stop calling tools and answer. */
+    private fun budgetSpentResults(toolCallsJson: String): String {
+        val message = "Tool call limit reached for this turn, so this call was not run. " +
+            "Do not call more tools. Answer the user now using what you have already found."
+        val calls = JSONArray(toolCallsJson)
+        val results = JSONArray()
+        for (i in 0 until calls.length()) {
+            val call = calls.getJSONObject(i)
+            results.put(
+                JSONObject()
+                    .put("id", call.getString("id"))
+                    .put("name", call.getString("name"))
+                    .put("content", JSONObject().put("error", message).toString())
+            )
+        }
+        return results.toString()
     }
 
     companion object {

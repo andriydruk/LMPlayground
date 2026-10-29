@@ -350,6 +350,9 @@
     <string name="tool_web_fetch_title">שלוף דף אינטרנט</string>
     <string name="tool_web_fetch_desc">פותח קישור וקורא את התוכן המרכזי שלו כטקסט כדי שהמודל יוכל לסכם או לצטט דף.</string>
     <string name="tool_web_fetch_example">\"סכם את המאמר בקישור הזה.\"</string>
+    <string name="tool_agent_title">סוכן</string>
+    <string name="tool_agent_desc">מאפשר למודל לתכנן משימה מרובת שלבים, לבצע אותה בעזרת הכלים האחרים שלך ולסמן כל שלב. מאפשר הרבה יותר קריאות לכלים בכל תשובה ומדלג על קריאות חוזרות.</string>
+    <string name="tool_agent_example">\"השווה בין שלושת טלפוני ה-Pixel החדשים ביותר וספר לי איזה לקנות.\"</string>
     <string name="tool_run_javascript_title">הרץ JavaScript</string>
     <string name="tool_run_javascript_desc">מריץ JavaScript בארגז חול מאובטח לחישובים, תאריכים ועיבוד טקסט. ללא גישה לאינטרנט או לקבצים.</string>
     <string name="tool_run_javascript_example">\"כמה זה (2 + 3) × 4, ובאיזה יום בשבוע חל 1 בינואר 2027?\"</string>

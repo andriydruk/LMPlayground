@@ -300,6 +300,9 @@
     <string name="tool_web_fetch_title">Web sayfas\u0131 getir</string>
     <string name="tool_web_fetch_desc">Bir ba\u011Flant\u0131y\u0131 a\u00E7ar ve ana i\u00E7eri\u011Fini metin olarak okur, b\u00F6ylece model bir sayfay\u0131 \u00F6zetleyebilir veya al\u0131nt\u0131layabilir.</string>
     <string name="tool_web_fetch_example">\"Bu ba\u011Flant\u0131daki makaleyi \u00F6zetle.\"</string>
+    <string name="tool_agent_title">Ajan</string>
+    <string name="tool_agent_desc">Modelin çok adımlı bir görevi planlamasına, diğer araçlarınızla yürütmesine ve her adımı işaretlemesine olanak tanır. Yanıt başına çok daha fazla araç çağrısına izin verir ve tekrarlanan çağrıları atlar.</string>
+    <string name="tool_agent_example">\"En yeni üç Pixel telefonu karşılaştır ve hangisini almam gerektiğini söyle.\"</string>
 
     <!-- Inference engine notifications (1.7.0) -->
     <string name="inference_notification_generating_title">Yan\u0131t \u00FCretiliyor…</string>

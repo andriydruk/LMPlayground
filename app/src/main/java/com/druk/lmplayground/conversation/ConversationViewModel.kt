@@ -986,6 +986,7 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
 
     private suspend fun persistConversationMetadata(sessionId: String) {
         sessionStore.persistWebLinks(sessionId, toolRegistry.webLinkStore.snapshot())
+        sessionStore.persistAgentState(sessionId, toolRegistry.agentState.toJson())
     }
 
     @MainThread
@@ -1011,6 +1012,7 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
             // Drop the previous conversation's web_search references; the loaded
             // session's own references (if any) are restored just below.
             toolRegistry.webLinkStore.clear()
+            toolRegistry.agentState.clear()
 
             // Restore generation params from session
             if (sessionEntity != null) {
@@ -1039,9 +1041,13 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
 
                 // Restore web_search link references saved with this conversation
                 // so the model can still web_fetch a previously-returned ref.
+                val metadata = ConversationMetadata.parse(sessionEntity.metadata)
                 toolRegistry.webLinkStore.restore(
-                    ConversationMetadata.parse(sessionEntity.metadata)
-                        .getStringMap(ConversationMetadata.KEY_WEB_LINKS)
+                    metadata.getStringMap(ConversationMetadata.KEY_WEB_LINKS)
+                )
+                // Pick an unfinished agent plan back up where it left off.
+                toolRegistry.agentState.restore(
+                    metadata.getString(ConversationMetadata.KEY_AGENT_STATE)
                 )
             }
 
@@ -1076,8 +1082,9 @@ class ConversationViewModel(val app: Application) : AndroidViewModel(app) {
             _currentSessionId.value = null
             _sessionModelHint.value = null
             uiState.resetMessages()
-            // Fresh conversation starts with no web_search references.
+            // Fresh conversation starts with no web_search references or agent plan.
             toolRegistry.webLinkStore.clear()
+            toolRegistry.agentState.clear()
 
             // Recreate native session with clean KV cache
             runtime.resetSessionDestroyFirst(

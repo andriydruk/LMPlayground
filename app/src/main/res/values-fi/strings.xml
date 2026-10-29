@@ -332,6 +332,9 @@
     <string name="tool_run_javascript_title">Suorita JavaScript</string>
     <string name="tool_web_fetch_desc">Avaa linkin ja lukee sen pääsisällön tekstinä, jotta malli voi tiivistää tai lainata sivun.</string>
     <string name="tool_web_fetch_example">\"Tiivistä tämän linkin artikkeli.\"</string>
+    <string name="tool_agent_title">Agentti</string>
+    <string name="tool_agent_desc">Antaa mallin suunnitella monivaiheisen tehtävän, suorittaa sen muilla työkaluillasi ja merkitä jokaisen vaiheen tehdyksi. Sallii huomattavasti enemmän työkalukutsuja vastausta kohden ja ohittaa toistuvat kutsut.</string>
+    <string name="tool_agent_example">\"Vertaa kolmea uusinta Pixel-puhelinta ja kerro, mikä niistä kannattaa ostaa.\"</string>
     <string name="tool_web_fetch_title">Nouda verkkosivu</string>
     <string name="tool_web_search_desc">Hakee verkosta ja palauttaa tulosten otsikot, linkit ja katkelmat, jotta malli voi löytää ajantasaista tietoa.</string>
     <string name="tool_web_search_example">\"Etsi tuoreita arvioita uusimmasta Pixel-puhelimesta.\"</string>

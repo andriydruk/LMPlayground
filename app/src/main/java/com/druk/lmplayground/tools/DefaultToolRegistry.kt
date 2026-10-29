@@ -1,6 +1,7 @@
 package com.druk.lmplayground.tools
 
 import android.content.Context
+import com.druk.llamacpp.tools.AgentTool
 import com.druk.llamacpp.tools.ToolRegistry
 
 /**
@@ -19,4 +20,7 @@ fun ToolRegistry.Companion.createDefault(context: Context): ToolRegistry =
         register(WebSearchTool(webLinkStore))
         register(WebFetchTool(webLinkStore))
         register(JavaScriptTool(context))
+        // Last on purpose: enabling it switches turns into agent mode (bigger
+        // tool budget, duplicate-call suppression). See AgentTool.
+        register(AgentTool(agentState))
     }
