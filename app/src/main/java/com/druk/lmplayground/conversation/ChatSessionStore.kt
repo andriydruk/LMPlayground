@@ -122,6 +122,23 @@ class ChatSessionStore(
     }
 
     /**
+     * Snapshot the `agent` tool's plan and notes into the conversation's
+     * metadata so an unfinished workflow survives reopening the chat. A null
+     * [agentJson] (nothing to remember) removes any stored copy. Skips the
+     * write when nothing changed, since this runs after every turn.
+     */
+    suspend fun persistAgentState(sessionId: String, agentJson: String?) {
+        val repo = chatRepository ?: return
+        val existing = repo.getSession(sessionId)?.metadata
+        val metadata = ConversationMetadata.parse(existing)
+        if (metadata.getString(ConversationMetadata.KEY_AGENT_STATE) == agentJson) return
+        repo.updateSessionMetadata(
+            sessionId,
+            metadata.putString(ConversationMetadata.KEY_AGENT_STATE, agentJson).toJson(),
+        )
+    }
+
+    /**
      * Load a session's messages mapped to UI models. The display URI is
      * re-derived from the persisted image file; dropped if the file is gone
      * so the bubble just shows text. Returns null when persistence is

@@ -336,6 +336,9 @@
     <string name="tool_web_fetch_title">ดึงหน้าเว็บ</string>
     <string name="tool_web_fetch_desc">เปิดลิงก์และอ่านเนื้อหาหลักเป็นข้อความ เพื่อให้โมเดลสรุปหรืออ้างอิงหน้าเว็บได้</string>
     <string name="tool_web_fetch_example">\"Summarize the article at this link.\"</string>
+    <string name="tool_agent_title">เอเจนต์</string>
+    <string name="tool_agent_desc">ให้โมเดลวางแผนงานหลายขั้นตอน ทำงานตามแผนด้วยเครื่องมืออื่นของคุณ และติ๊กทีละขั้นตอน อนุญาตให้เรียกใช้เครื่องมือต่อหนึ่งคำตอบได้มากขึ้นมาก และข้ามการเรียกซ้ำ</string>
+    <string name="tool_agent_example">\"เปรียบเทียบ Pixel รุ่นใหม่ล่าสุดสามรุ่น แล้วบอกว่าควรซื้อรุ่นไหน\"</string>
     <string name="tool_run_javascript_title">รัน JavaScript</string>
     <string name="tool_run_javascript_desc">รัน JavaScript ในแซนด์บ็อกซ์ที่ปลอดภัยสำหรับคณิตศาสตร์ วันที่ และการประมวลผลข้อความ ไม่มีการเข้าถึงอินเทอร์เน็ตหรือไฟล์</string>
     <string name="tool_run_javascript_example">\"What is (2 + 3) × 4, and what weekday is Jan 1 2027?\"</string>

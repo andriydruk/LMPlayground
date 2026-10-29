@@ -329,6 +329,9 @@
     <string name="tool_web_fetch_title">Webpagina ophalen</string>
     <string name="tool_web_fetch_desc">Opent een link en leest de belangrijkste inhoud als tekst, zodat het model een pagina kan samenvatten of citeren.</string>
     <string name="tool_web_fetch_example">“Vat het artikel achter deze link samen.”</string>
+    <string name="tool_agent_title">Agent</string>
+    <string name="tool_agent_desc">Laat het model een taak met meerdere stappen plannen, deze uitvoeren met je andere tools en elke stap afvinken. Staat veel meer tool-aanroepen per antwoord toe en slaat herhaalde aanroepen over.</string>
+    <string name="tool_agent_example">“Vergelijk de drie nieuwste Pixel-telefoons en vertel me welke ik moet kopen.”</string>
     <string name="cd_supports_tools">Ondersteunt tools</string>
     <string name="cd_supports_thinking">Ondersteunt denken</string>
 

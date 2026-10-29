@@ -149,6 +149,12 @@ class GenerationCoordinator(
 
         // Tools are active when model supports it and user has tools enabled
         val toolsActive = supportsToolCalling && toolRegistry.hasEnabledTools()
+        // Agent mode (the `agent` tool is on): a larger tool budget for this
+        // turn, repeated identical calls suppressed, and a forced final answer
+        // if the budget runs out. beginTurn resets the per-turn call memory and
+        // retires a workflow the previous request already finished.
+        toolRegistry.beginTurn()
+        val agentMode = toolsActive && toolRegistry.isAgentMode()
         try {
             val toolsJson = if (toolsActive) toolRegistry.toOpenAIToolsJson() else "[]"
             llamaSession.setTools(toolsJson)
@@ -278,6 +284,8 @@ class GenerationCoordinator(
                     }
                     override fun cancelInFlight() = toolRegistry.cancelInFlight()
                 },
+                maxToolRounds = if (agentMode) toolRegistry.toolRoundBudget() else ToolCallLoop.DEFAULT_MAX_TOOL_ROUNDS,
+                wrapUpOnLimit = agentMode,
                 observer = object : ToolCallLoop.Observer {
                     override fun onToolCalls(calls: List<ToolCallRecord>) {
                         listener.onToolCalls(

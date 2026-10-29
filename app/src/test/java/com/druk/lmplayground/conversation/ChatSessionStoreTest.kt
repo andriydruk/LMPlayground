@@ -153,6 +153,32 @@ class ChatSessionStoreTest {
     }
 
     @Test
+    fun persistAgentStateRoundTripsKeepsOtherKeysAndClears() = runBlocking {
+        val id = runCreateSession()
+        store.persistWebLinks(id, mapOf("1" to "https://a"))
+
+        // Nothing stored yet and nothing to store: metadata stays as it was.
+        store.persistAgentState(id, null)
+        assertNull(
+            ConversationMetadata.parse(store.getSession(id)!!.metadata)
+                .getString(ConversationMetadata.KEY_AGENT_STATE)
+        )
+
+        val json = """{"steps":[{"t":"a","s":"done"}],"notes":[],"finished":false}"""
+        store.persistAgentState(id, json)
+        var meta = ConversationMetadata.parse(store.getSession(id)!!.metadata)
+        assertEquals(json, meta.getString(ConversationMetadata.KEY_AGENT_STATE))
+        // The web link map written earlier survives the read-modify-write.
+        assertEquals(mapOf("1" to "https://a"), meta.getStringMap(ConversationMetadata.KEY_WEB_LINKS))
+
+        // A finished/cleared workflow removes the stored copy.
+        store.persistAgentState(id, null)
+        meta = ConversationMetadata.parse(store.getSession(id)!!.metadata)
+        assertNull(meta.getString(ConversationMetadata.KEY_AGENT_STATE))
+        assertEquals(mapOf("1" to "https://a"), meta.getStringMap(ConversationMetadata.KEY_WEB_LINKS))
+    }
+
+    @Test
     fun systemPromptCreateFindUpdate() = runBlocking {
         val created = store.createSystemPrompt("You are terse.")
         assertNotNull(created)
