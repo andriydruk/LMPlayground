@@ -1,5 +1,9 @@
 
-<h1 align="center">LM Playground</h1>
+<h1 align="center">LM Playground — HTML Live Preview</h1>
+
+> **This is a fork of [andriydruk/LMPlayground](https://github.com/andriydruk/LMPlayground)** that adds an
+> **HTML live preview** tool: when a model writes a web page, it calls `html_preview` and the page appears
+> right in the chat as a live, interactive WebView. See [HTML live preview](#html-live-preview) below.
 
 <p align="center">
 <img src="logo.png"/>
@@ -16,7 +20,8 @@ LM Playground is an Android application for running Large Language Models locall
 - **Vision/image input** - attach a photo from your gallery or camera and ask vision-capable models about it (Gemma 4, Gemma 3, Qwen 3.5, Ministral 3)
 - **Rich markdown** in chat responses - headers, code blocks, lists, and more
 - **Reasoning model support** - thinking steps from models like GPT-OSS, DeepSeek R1, and Nemotron are displayed in a styled section
-- **Tools** - capable models can search the web, fetch a page, and run JavaScript mid-reply; each tool is off by default and enabled per model
+- **Tools** - capable models can search the web, fetch a page, run JavaScript, and show an **HTML live preview** mid-reply; each tool is off by default and enabled per model
+- **HTML live preview** - pages the model writes run live in the chat: tap, type and play, view or copy the source, go fullscreen, share the .html file or open it in your browser
 - **Reusable system prompts** - save a persona, tone, or output format once and apply it to any model
 - **Edit, regenerate & branch** - long-press a message to edit and resend it, regenerate a reply, or continue from any reply in a new chat; the model's KV cache is rolled back to that point instead of re-reading the conversation
 - **Voice dictation** - tap the mic and speak; on-device speech recognition in 35 languages, fully offline
@@ -26,6 +31,31 @@ LM Playground is an Android application for running Large Language Models locall
 - **Storage management** - choose where to keep multi-GB model files with Android's Storage Access Framework
 - **ARM optimized** - KleidiAI kernels and OpenMP for faster generation on arm64 devices
 - **Large-screen ready** - tablets, foldables, and Chromebooks get a permanent sessions sidebar, list-detail Settings, and freeform window resize support
+
+## HTML live preview
+
+Turn it on in **Settings → Tools → HTML live preview** (or per model), load a model with tool support
+(look for the hammer icon), and ask for something visual — *"build a tip calculator as a web page"*,
+*"make a snake game"*, *"chart these numbers"*.
+
+- **For the model:** a tool named `html_preview` taking `html` (one complete self-contained document) and an
+  optional `title`. Before replying, the app runs the page in an off-screen WebView and returns what really
+  happened: JavaScript console errors, the visible text, a blank-page check, sideways overflow on a phone
+  screen, and static checks (truncated document, unbalanced `<script>`/`<style>`, local file references that
+  can't load). With errors in hand, the model fixes its page and calls the tool again.
+- **For you:** the page appears inline in the reply, sized to its content. Header actions: reload, view
+  source, fullscreen, and a menu to copy the HTML, share it as an `.html` file, or open it in your browser.
+  Page `alert` / `confirm` / `prompt` show real dialogs; console errors are listed under the preview.
+  Previews are rebuilt from saved chat history, so they come back when you reopen a conversation.
+- **Sandbox:** JavaScript runs, and `https://` CDN scripts, fonts and images load; there is no file or
+  `content://` access, no bridge into the app, no popups or geolocation, and links that leave the page open
+  in your browser instead.
+- **Forgiving input:** a bare fragment gets a document shell, a missing mobile viewport tag is added, and a
+  page wrapped in a markdown code fence or double-escaped by a small model is cleaned up.
+
+Code: `tools/HtmlPreview*.kt`, `tools/WebViewHtmlRenderer.kt`, `conversation/HtmlPreviewCard.kt`
+(see ARCHITECTURE.md). Every push builds a debug APK in GitHub Actions (**Actions → Build debug APK →
+Artifacts**); it installs alongside the Play Store app as `com.druk.lmplayground.debug`.
 
 ## Supported Models
 

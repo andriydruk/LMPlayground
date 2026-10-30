@@ -335,6 +335,17 @@
     <string name="tool_run_javascript_title">Spustit JavaScript</string>
     <string name="tool_web_fetch_desc">Otevře odkaz a načte jeho hlavní obsah jako text, aby model mohl stránku shrnout nebo citovat.</string>
     <string name="tool_web_fetch_example">\"Shrň článek na tomto odkazu.\"</string>
+    <string name="tool_html_preview_title">Živý náhled HTML</string>
+    <string name="tool_html_preview_desc">Zobrazí webové stránky, které model napíše, jako živý interaktivní náhled přímo v chatu. Klepejte, pište a hrajte jako na běžné stránce. Stránky běží v izolovaném prostředí bez přístupu k vašim souborům nebo k aplikaci.</string>
+    <string name="tool_html_preview_example">\"Vytvoř kalkulačku spropitného jako webovou stránku.\"</string>
+    <string name="html_preview_default_title">Webová stránka</string>
+    <string name="html_preview_reload">Znovu načíst</string>
+    <string name="html_preview_show_source">Zobrazit zdroj</string>
+    <string name="html_preview_show_page">Zobrazit stránku</string>
+    <string name="html_preview_fullscreen">Celá obrazovka</string>
+    <string name="html_preview_open_in_browser">Otevřít v prohlížeči</string>
+    <string name="html_preview_console_errors">Chyby konzole: %1$d</string>
+    <string name="html_preview_no_browser">Nebyl nalezen žádný prohlížeč</string>
     <string name="tool_web_fetch_title">Načíst webovou stránku</string>
     <string name="tool_web_search_desc">Prohledá web a vrátí názvy výsledků, odkazy a úryvky, aby model mohl najít aktuální informace.</string>
     <string name="tool_web_search_example">\"Najdi nedávné recenze nejnovějšího telefonu Pixel.\"</string>

@@ -328,6 +328,17 @@
     <string name="tool_web_fetch_title">Hämta webbsida</string>
     <string name="tool_web_fetch_desc">Öppnar en länk och läser dess huvudinnehåll som text så att modellen kan sammanfatta eller citera en sida.</string>
     <string name="tool_web_fetch_example">“Sammanfatta artikeln på den här länken.”</string>
+    <string name="tool_html_preview_title">Live-förhandsvisning av HTML</string>
+    <string name="tool_html_preview_desc">Visar webbsidor som modellen skriver som en interaktiv live-förhandsvisning direkt i chatten. Tryck, skriv och spela som på en vanlig sida. Sidorna körs i en sandlåda utan åtkomst till dina filer eller appen.</string>
+    <string name="tool_html_preview_example">\"Gör en dricksräknare som en webbsida.\"</string>
+    <string name="html_preview_default_title">Webbsida</string>
+    <string name="html_preview_reload">Ladda om</string>
+    <string name="html_preview_show_source">Visa källkod</string>
+    <string name="html_preview_show_page">Visa sida</string>
+    <string name="html_preview_fullscreen">Helskärm</string>
+    <string name="html_preview_open_in_browser">Öppna i webbläsare</string>
+    <string name="html_preview_console_errors">Konsolfel: %1$d</string>
+    <string name="html_preview_no_browser">Ingen webbläsarapp hittades</string>
     <string name="cd_supports_tools">Stöder verktyg</string>
     <string name="cd_supports_thinking">Stöder tänkande</string>
 

@@ -301,6 +301,17 @@
     <string name="tool_web_fetch_title">Încarcă pagină web</string>
     <string name="tool_web_fetch_desc">Deschide un link și îi citește conținutul principal ca text pentru ca modelul să poată rezuma sau cita o pagină.</string>
     <string name="tool_web_fetch_example">\"Rezumă articolul de la acest link.\"</string>
+    <string name="tool_html_preview_title">Previzualizare HTML live</string>
+    <string name="tool_html_preview_desc">Afișează paginile web scrise de model ca previzualizare interactivă live direct în chat. Atinge, tastează și joacă exact ca pe o pagină obișnuită. Paginile rulează izolat, fără acces la fișierele tale sau la aplicație.</string>
+    <string name="tool_html_preview_example">\"Creează un calculator de bacșiș ca pagină web.\"</string>
+    <string name="html_preview_default_title">Pagină web</string>
+    <string name="html_preview_reload">Reîncarcă</string>
+    <string name="html_preview_show_source">Vezi sursa</string>
+    <string name="html_preview_show_page">Vezi pagina</string>
+    <string name="html_preview_fullscreen">Ecran complet</string>
+    <string name="html_preview_open_in_browser">Deschide în browser</string>
+    <string name="html_preview_console_errors">Erori în consolă: %1$d</string>
+    <string name="html_preview_no_browser">Nu s-a găsit nicio aplicație de browser</string>
     <string name="tool_run_javascript_title">Rulează JavaScript</string>
     <string name="tool_run_javascript_desc">Rulează JavaScript într-un mediu izolat securizat pentru calcule, date și procesarea textului. Fără acces la internet sau la fișiere.</string>
     <string name="tool_run_javascript_example">\"Cât este (2 + 3) × 4 și în ce zi a săptămânii cade 1 ianuarie 2027?\"</string>

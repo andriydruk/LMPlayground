@@ -11,6 +11,8 @@ on:
 
 jobs:
   update-listing:
+    # Play Store publishing needs upstream's secrets; skip it in forks.
+    if: github.repository == 'andriydruk/LMPlayground'
     runs-on: ubuntu-24.04
 
     steps:

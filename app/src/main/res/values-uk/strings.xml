@@ -295,6 +295,17 @@
     <string name="tool_run_javascript_title">Виконати JavaScript</string>
     <string name="tool_web_fetch_desc">Відкриває посилання й читає його основний вміст як текст, щоб модель могла підсумувати або процитувати сторінку.</string>
     <string name="tool_web_fetch_example">\"Підсумуй статтю за цим посиланням.\"</string>
+    <string name="tool_html_preview_title">Живий перегляд HTML</string>
+    <string name="tool_html_preview_desc">Показує вебсторінки, які пише модель, як живий інтерактивний перегляд прямо в чаті. Торкайтеся, вводьте текст і грайте як на звичайній сторінці. Сторінки працюють в ізольованому середовищі без доступу до ваших файлів чи застосунку.</string>
+    <string name="tool_html_preview_example">\"Зроби калькулятор чайових як вебсторінку.\"</string>
+    <string name="html_preview_default_title">Вебсторінка</string>
+    <string name="html_preview_reload">Перезавантажити</string>
+    <string name="html_preview_show_source">Показати код</string>
+    <string name="html_preview_show_page">Показати сторінку</string>
+    <string name="html_preview_fullscreen">На весь екран</string>
+    <string name="html_preview_open_in_browser">Відкрити в браузері</string>
+    <string name="html_preview_console_errors">Помилки консолі: %1$d</string>
+    <string name="html_preview_no_browser">Не знайдено браузера</string>
     <string name="tool_web_fetch_title">Завантажити вебсторінку</string>
     <string name="tool_web_search_desc">Шукає в інтернеті й повертає заголовки результатів, посилання та фрагменти, щоб модель могла знайти актуальну інформацію.</string>
     <string name="tool_web_search_example">\"Знайди свіжі огляди найновішого телефона Pixel.\"</string>

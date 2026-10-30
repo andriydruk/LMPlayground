@@ -352,6 +352,17 @@
     <string name="tool_web_fetch_title">Fetch web page</string>
     <string name="tool_web_fetch_desc">Opens a link and reads its main content as text so the model can summarize or quote a page.</string>
     <string name="tool_web_fetch_example">\"Summarize the article at this link.\"</string>
+    <string name="tool_html_preview_title">HTML live preview</string>
+    <string name="tool_html_preview_desc">Shows web pages the model writes as a live, interactive preview right in the chat. Tap, type and play as on a normal page. Pages run sandboxed with no access to your files or the app.</string>
+    <string name="tool_html_preview_example">\"Build a tip calculator as a web page.\"</string>
+    <string name="html_preview_default_title">Web page</string>
+    <string name="html_preview_reload">Reload</string>
+    <string name="html_preview_show_source">View source</string>
+    <string name="html_preview_show_page">View page</string>
+    <string name="html_preview_fullscreen">Fullscreen</string>
+    <string name="html_preview_open_in_browser">Open in browser</string>
+    <string name="html_preview_console_errors">Console errors: %1$d</string>
+    <string name="html_preview_no_browser">No browser app found</string>
 
     <!-- Inference engine service notification (foreground service while a
          model is loaded so the OS does not evict the :llama process). -->

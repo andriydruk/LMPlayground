@@ -300,6 +300,17 @@
     <string name="tool_web_fetch_title">Carica pagina web</string>
     <string name="tool_web_fetch_desc">Apre un link e ne legge il contenuto principale come testo affinché il modello possa riassumere o citare una pagina.</string>
     <string name="tool_web_fetch_example">\"Riassumi l\'articolo a questo link.\"</string>
+    <string name="tool_html_preview_title">Anteprima HTML dal vivo</string>
+    <string name="tool_html_preview_desc">Mostra le pagine web scritte dal modello come anteprima interattiva dal vivo direttamente nella chat. Tocca, scrivi e gioca come su una pagina normale. Le pagine vengono eseguite in una sandbox senza accesso ai tuoi file o all\'app.</string>
+    <string name="tool_html_preview_example">\"Crea un calcolatore di mance come pagina web.\"</string>
+    <string name="html_preview_default_title">Pagina web</string>
+    <string name="html_preview_reload">Ricarica</string>
+    <string name="html_preview_show_source">Visualizza sorgente</string>
+    <string name="html_preview_show_page">Visualizza pagina</string>
+    <string name="html_preview_fullscreen">Schermo intero</string>
+    <string name="html_preview_open_in_browser">Apri nel browser</string>
+    <string name="html_preview_console_errors">Errori della console: %1$d</string>
+    <string name="html_preview_no_browser">Nessuna app browser trovata</string>
     <string name="tool_run_javascript_title">Esegui JavaScript</string>
     <string name="tool_run_javascript_desc">Esegue JavaScript in un ambiente isolato sicuro per calcoli, date ed elaborazione del testo. Nessun accesso a internet o ai file.</string>
     <string name="tool_run_javascript_example">\"Quanto fa (2 + 3) × 4 e che giorno della settimana è il 1° gennaio 2027?\"</string>

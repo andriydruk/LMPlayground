@@ -289,6 +289,17 @@
     <string name="tool_web_fetch_title">Webseite abrufen</string>
     <string name="tool_web_fetch_desc">Öffnet einen Link und liest dessen Hauptinhalt als Text, damit das Modell eine Seite zusammenfassen oder zitieren kann.</string>
     <string name="tool_web_fetch_example">“Fasse den Artikel unter diesem Link zusammen.”</string>
+    <string name="tool_html_preview_title">HTML-Livevorschau</string>
+    <string name="tool_html_preview_desc">Zeigt Webseiten, die das Modell schreibt, als interaktive Livevorschau direkt im Chat. Tippe, schreibe und spiele wie auf einer normalen Seite. Seiten laufen in einer Sandbox ohne Zugriff auf deine Dateien oder die App.</string>
+    <string name="tool_html_preview_example">\"Erstelle einen Trinkgeldrechner als Webseite.\"</string>
+    <string name="html_preview_default_title">Webseite</string>
+    <string name="html_preview_reload">Neu laden</string>
+    <string name="html_preview_show_source">Quelltext anzeigen</string>
+    <string name="html_preview_show_page">Seite anzeigen</string>
+    <string name="html_preview_fullscreen">Vollbild</string>
+    <string name="html_preview_open_in_browser">Im Browser öffnen</string>
+    <string name="html_preview_console_errors">Konsolenfehler: %1$d</string>
+    <string name="html_preview_no_browser">Keine Browser-App gefunden</string>
     <string name="cd_supports_tools">Unterstützt Tools</string>
     <string name="cd_supports_thinking">Unterstützt Thinking</string>
 

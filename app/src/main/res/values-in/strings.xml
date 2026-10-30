@@ -298,6 +298,17 @@
     <string name="tool_web_fetch_title">Ambil halaman web</string>
     <string name="tool_web_fetch_desc">Membuka tautan dan membaca konten utamanya sebagai teks agar model dapat meringkas atau mengutip sebuah halaman.</string>
     <string name="tool_web_fetch_example">\"Summarize the article at this link.\"</string>
+    <string name="tool_html_preview_title">Pratinjau HTML langsung</string>
+    <string name="tool_html_preview_desc">Menampilkan halaman web yang ditulis model sebagai pratinjau interaktif langsung di dalam chat. Ketuk, ketik, dan mainkan seperti di halaman biasa. Halaman berjalan di sandbox tanpa akses ke file Anda atau aplikasi.</string>
+    <string name="tool_html_preview_example">\"Buat kalkulator tip sebagai halaman web.\"</string>
+    <string name="html_preview_default_title">Halaman web</string>
+    <string name="html_preview_reload">Muat ulang</string>
+    <string name="html_preview_show_source">Lihat sumber</string>
+    <string name="html_preview_show_page">Lihat halaman</string>
+    <string name="html_preview_fullscreen">Layar penuh</string>
+    <string name="html_preview_open_in_browser">Buka di browser</string>
+    <string name="html_preview_console_errors">Error konsol: %1$d</string>
+    <string name="html_preview_no_browser">Tidak ada aplikasi browser</string>
     <string name="tool_run_javascript_title">Jalankan JavaScript</string>
     <string name="tool_run_javascript_desc">Menjalankan JavaScript dalam sandbox aman untuk matematika, tanggal, dan pemrosesan teks. Tanpa akses internet atau file.</string>
     <string name="tool_run_javascript_example">\"What is (2 + 3) × 4, and what weekday is Jan 1 2027?\"</string>

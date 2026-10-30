@@ -336,6 +336,17 @@
     <string name="tool_web_fetch_title">ดึงหน้าเว็บ</string>
     <string name="tool_web_fetch_desc">เปิดลิงก์และอ่านเนื้อหาหลักเป็นข้อความ เพื่อให้โมเดลสรุปหรืออ้างอิงหน้าเว็บได้</string>
     <string name="tool_web_fetch_example">\"Summarize the article at this link.\"</string>
+    <string name="tool_html_preview_title">พรีวิว HTML แบบสด</string>
+    <string name="tool_html_preview_desc">แสดงหน้าเว็บที่โมเดลเขียนเป็นพรีวิวแบบโต้ตอบได้แบบสดในแชท แตะ พิมพ์ และเล่นได้เหมือนหน้าเว็บปกติ หน้าเว็บทำงานในแซนด์บ็อกซ์โดยไม่มีสิทธิ์เข้าถึงไฟล์ของคุณหรือแอป</string>
+    <string name="tool_html_preview_example">\"สร้างเครื่องคำนวณทิปเป็นหน้าเว็บ\"</string>
+    <string name="html_preview_default_title">หน้าเว็บ</string>
+    <string name="html_preview_reload">โหลดซ้ำ</string>
+    <string name="html_preview_show_source">ดูซอร์ส</string>
+    <string name="html_preview_show_page">ดูหน้าเว็บ</string>
+    <string name="html_preview_fullscreen">เต็มหน้าจอ</string>
+    <string name="html_preview_open_in_browser">เปิดในเบราว์เซอร์</string>
+    <string name="html_preview_console_errors">ข้อผิดพลาดในคอนโซล: %1$d</string>
+    <string name="html_preview_no_browser">ไม่พบแอปเบราว์เซอร์</string>
     <string name="tool_run_javascript_title">รัน JavaScript</string>
     <string name="tool_run_javascript_desc">รัน JavaScript ในแซนด์บ็อกซ์ที่ปลอดภัยสำหรับคณิตศาสตร์ วันที่ และการประมวลผลข้อความ ไม่มีการเข้าถึงอินเทอร์เน็ตหรือไฟล์</string>
     <string name="tool_run_javascript_example">\"What is (2 + 3) × 4, and what weekday is Jan 1 2027?\"</string>

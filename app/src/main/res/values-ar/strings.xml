@@ -312,6 +312,17 @@
     <string name="tool_web_fetch_title">جلب صفحة ويب</string>
     <string name="tool_web_fetch_desc">يفتح رابطاً ويقرأ محتواه الرئيسي كنص حتى يتمكن النموذج من تلخيص صفحة أو الاقتباس منها.</string>
     <string name="tool_web_fetch_example">\"لخّص المقالة الموجودة في هذا الرابط.\"</string>
+    <string name="tool_html_preview_title">معاينة HTML مباشرة</string>
+    <string name="tool_html_preview_desc">يعرض صفحات الويب التي يكتبها النموذج كمعاينة تفاعلية مباشرة داخل المحادثة. يمكنك النقر والكتابة واللعب كما في أي صفحة عادية. تعمل الصفحات في بيئة معزولة دون أي وصول إلى ملفاتك أو إلى التطبيق.</string>
+    <string name="tool_html_preview_example">\"أنشئ حاسبة إكرامية كصفحة ويب.\"</string>
+    <string name="html_preview_default_title">صفحة ويب</string>
+    <string name="html_preview_reload">إعادة التحميل</string>
+    <string name="html_preview_show_source">عرض المصدر</string>
+    <string name="html_preview_show_page">عرض الصفحة</string>
+    <string name="html_preview_fullscreen">ملء الشاشة</string>
+    <string name="html_preview_open_in_browser">فتح في المتصفح</string>
+    <string name="html_preview_console_errors">أخطاء وحدة التحكم: %1$d</string>
+    <string name="html_preview_no_browser">لم يتم العثور على تطبيق متصفح</string>
     <string name="tool_run_javascript_title">تشغيل JavaScript</string>
     <string name="tool_run_javascript_desc">يشغّل JavaScript في بيئة معزولة آمنة للحسابات والتواريخ ومعالجة النصوص. لا وصول للإنترنت أو الملفات.</string>
     <string name="tool_run_javascript_example">\"كم يساوي (2 + 3) × 4، وما يوم الأسبوع الموافق 1 يناير 2027؟\"</string>

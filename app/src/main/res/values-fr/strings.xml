@@ -300,6 +300,17 @@
     <string name="tool_web_fetch_title">Charger une page web</string>
     <string name="tool_web_fetch_desc">Ouvre un lien et lit son contenu principal sous forme de texte pour que le modèle puisse résumer ou citer une page.</string>
     <string name="tool_web_fetch_example">\"Résume l\'article de ce lien.\"</string>
+    <string name="tool_html_preview_title">Aperçu HTML en direct</string>
+    <string name="tool_html_preview_desc">Affiche les pages web écrites par le modèle sous forme d\'aperçu interactif en direct dans la conversation. Touchez, saisissez et jouez comme sur une page normale. Les pages s\'exécutent en bac à sable, sans accès à vos fichiers ni à l\'application.</string>
+    <string name="tool_html_preview_example">\"Crée un calculateur de pourboire sous forme de page web.\"</string>
+    <string name="html_preview_default_title">Page web</string>
+    <string name="html_preview_reload">Recharger</string>
+    <string name="html_preview_show_source">Voir la source</string>
+    <string name="html_preview_show_page">Voir la page</string>
+    <string name="html_preview_fullscreen">Plein écran</string>
+    <string name="html_preview_open_in_browser">Ouvrir dans le navigateur</string>
+    <string name="html_preview_console_errors">Erreurs de console : %1$d</string>
+    <string name="html_preview_no_browser">Aucune application de navigateur trouvée</string>
     <string name="tool_run_javascript_title">Exécuter JavaScript</string>
     <string name="tool_run_javascript_desc">Exécute du JavaScript dans un bac à sable sécurisé pour les calculs, les dates et le traitement de texte. Aucun accès à Internet ni aux fichiers.</string>
     <string name="tool_run_javascript_example">\"Combien font (2 + 3) × 4, et quel jour de la semaine est le 1er janvier 2027 ?\"</string>

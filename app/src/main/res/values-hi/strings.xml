@@ -308,6 +308,17 @@
     <string name="tool_web_fetch_title">वेब पेज फ़ेच करें</string>
     <string name="tool_web_fetch_desc">एक लिंक खोलता है और उसकी मुख्य सामग्री को टेक्स्ट के रूप में पढ़ता है ताकि मॉडल किसी पेज का सारांश दे सके या उद्धृत कर सके।</string>
     <string name="tool_web_fetch_example">\"इस लिंक पर मौजूद लेख का सारांश दें।\"</string>
+    <string name="tool_html_preview_title">HTML लाइव प्रीव्यू</string>
+    <string name="tool_html_preview_desc">मॉडल जो वेब पेज लिखता है, उन्हें चैट में ही लाइव, इंटरैक्टिव प्रीव्यू के रूप में दिखाता है। सामान्य पेज की तरह टैप करें, टाइप करें और खेलें। पेज सैंडबॉक्स में चलते हैं और आपकी फ़ाइलों या ऐप तक उनकी कोई पहुँच नहीं होती।</string>
+    <string name="tool_html_preview_example">\"एक टिप कैलकुलेटर वेब पेज के रूप में बनाओ।\"</string>
+    <string name="html_preview_default_title">वेब पेज</string>
+    <string name="html_preview_reload">फिर से लोड करें</string>
+    <string name="html_preview_show_source">सोर्स देखें</string>
+    <string name="html_preview_show_page">पेज देखें</string>
+    <string name="html_preview_fullscreen">फ़ुलस्क्रीन</string>
+    <string name="html_preview_open_in_browser">ब्राउज़र में खोलें</string>
+    <string name="html_preview_console_errors">कंसोल त्रुटियाँ: %1$d</string>
+    <string name="html_preview_no_browser">कोई ब्राउज़र ऐप नहीं मिला</string>
     <string name="tool_run_javascript_title">JavaScript चलाएँ</string>
     <string name="tool_run_javascript_desc">गणित, तारीखों और टेक्स्ट प्रोसेसिंग के लिए एक सुरक्षित सैंडबॉक्स में JavaScript चलाता है। इंटरनेट या फ़ाइल एक्सेस नहीं।</string>
     <string name="tool_run_javascript_example">\"(2 + 3) × 4 कितना है, और 1 जनवरी 2027 को सप्ताह का कौन सा दिन है?\"</string>

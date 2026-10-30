@@ -1,0 +1,81 @@
+name: Build debug APK
+
+# Builds an installable debug APK on every push so changes can be tried on a
+# phone without a local Android toolchain. Download it from the run's
+# "Artifacts" section.
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+      with:
+        submodules: recursive
+
+    - name: Setup Java
+      uses: actions/setup-java@v6
+      with:
+        distribution: 'zulu'
+        java-version: '21'
+        cache: 'gradle'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v4
+      with:
+        packages: 'platform-tools'
+
+    # The Vulkan backend (GGML_VULKAN=ON) needs three host build-time deps that
+    # build.gradle probes for at configure time but the runner lacks by default:
+    #   - glslc: bundled in the pinned NDK, but AGP only auto-downloads the NDK
+    #     during task execution (after the path is probed), so pre-install it.
+    #   - Vulkan C++ headers (vulkan.hpp) and SPIRV-Headers (CONFIG package +
+    #     include dir), needed by ggml-vulkan's find_package / includes.
+    # We install them and export the override env vars build.gradle reads, so
+    # the exact paths reach CMake regardless of where apt places them.
+    - name: Set up Vulkan toolchain for the native build
+      run: |
+        set -eu
+        SDKMANAGER="$(command -v sdkmanager || echo "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager")"
+        printf 'y\n' | "$SDKMANAGER" --install "ndk;27.2.12479018" >/dev/null
+        GLSLC="$ANDROID_HOME/ndk/27.2.12479018/shader-tools/linux-x86_64/glslc"
+        test -x "$GLSLC"
+        echo "VULKAN_GLSLC=$GLSLC" >> "$GITHUB_ENV"
+        sudo apt-get update
+        sudo apt-get install -y libvulkan-dev spirv-headers
+        # apt installs these under /usr/include, which CMake omits from -I for
+        # the NDK cross-compiler (it treats /usr/include as a standard dir the
+        # host compiler already searches; the cross clang does not). Stage them
+        # under a non-standard prefix so the -I is actually emitted.
+        VKINC="$RUNNER_TEMP/vk-headers/include"
+        mkdir -p "$VKINC"
+        for d in vulkan vk_video spirv; do
+          [ -d "/usr/include/$d" ] && cp -r "/usr/include/$d" "$VKINC/"
+        done
+        test -f "$VKINC/vulkan/vulkan.hpp"
+        test -f "$VKINC/spirv/unified1/spirv.hpp"
+        SPIRV_CFG="$(find /usr -name SPIRV-HeadersConfig.cmake 2>/dev/null | head -1)"
+        test -n "$SPIRV_CFG"
+        echo "VULKAN_HEADERS_DIR=$VKINC" >> "$GITHUB_ENV"
+        echo "SPIRV_HEADERS_INCLUDE_DIR=$VKINC" >> "$GITHUB_ENV"
+        echo "SPIRV_HEADERS_DIR=$(dirname "$SPIRV_CFG")" >> "$GITHUB_ENV"
+
+    - name: Run HTML preview unit tests
+      run: ./gradlew app:testDebugUnitTest --tests 'com.druk.lmplayground.tools.*' -PskipScreenshots
+
+    - name: Build debug APK
+      run: ./gradlew app:assembleDebug -PskipScreenshots
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: LMPlayground-HTML-Live-Preview-debug
+        path: app/build/outputs/apk/debug/*.apk
+        if-no-files-found: error
+
+    - name: Run lint
+      run: ./gradlew app:lintDebug -PskipScreenshots

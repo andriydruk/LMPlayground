@@ -328,6 +328,17 @@
     <string name="tool_web_fetch_title">Hent nettside</string>
     <string name="tool_web_fetch_desc">Åpner en lenke og leser hovedinnholdet som tekst slik at modellen kan oppsummere eller sitere en side.</string>
     <string name="tool_web_fetch_example">“Oppsummer artikkelen på denne lenken.”</string>
+    <string name="tool_html_preview_title">Direkte HTML-forhåndsvisning</string>
+    <string name="tool_html_preview_desc">Viser nettsider som modellen skriver, som en direkte, interaktiv forhåndsvisning rett i chatten. Trykk, skriv og spill som på en vanlig side. Sidene kjører i en sandkasse uten tilgang til filene dine eller appen.</string>
+    <string name="tool_html_preview_example">\"Lag en tipskalkulator som en nettside.\"</string>
+    <string name="html_preview_default_title">Nettside</string>
+    <string name="html_preview_reload">Last inn på nytt</string>
+    <string name="html_preview_show_source">Vis kilde</string>
+    <string name="html_preview_show_page">Vis side</string>
+    <string name="html_preview_fullscreen">Fullskjerm</string>
+    <string name="html_preview_open_in_browser">Åpne i nettleser</string>
+    <string name="html_preview_console_errors">Konsollfeil: %1$d</string>
+    <string name="html_preview_no_browser">Fant ingen nettleserapp</string>
     <string name="cd_supports_tools">Støtter verktøy</string>
     <string name="cd_supports_thinking">Støtter tenkning</string>
 

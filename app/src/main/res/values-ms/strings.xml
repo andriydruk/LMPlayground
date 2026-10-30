@@ -337,6 +337,17 @@
     <string name="tool_web_fetch_title">Ambil halaman web</string>
     <string name="tool_web_fetch_desc">Membuka pautan dan membaca kandungan utamanya sebagai teks supaya model dapat meringkaskan atau memetik sesuatu halaman.</string>
     <string name="tool_web_fetch_example">\"Summarize the article at this link.\"</string>
+    <string name="tool_html_preview_title">Pratonton langsung HTML</string>
+    <string name="tool_html_preview_desc">Memaparkan halaman web yang ditulis oleh model sebagai pratonton interaktif secara langsung dalam sembang. Ketik, taip dan main seperti pada halaman biasa. Halaman berjalan dalam kotak pasir tanpa akses kepada fail anda atau apl.</string>
+    <string name="tool_html_preview_example">\"Bina kalkulator tip sebagai halaman web.\"</string>
+    <string name="html_preview_default_title">Halaman web</string>
+    <string name="html_preview_reload">Muat semula</string>
+    <string name="html_preview_show_source">Lihat sumber</string>
+    <string name="html_preview_show_page">Lihat halaman</string>
+    <string name="html_preview_fullscreen">Skrin penuh</string>
+    <string name="html_preview_open_in_browser">Buka dalam pelayar</string>
+    <string name="html_preview_console_errors">Ralat konsol: %1$d</string>
+    <string name="html_preview_no_browser">Tiada apl pelayar ditemui</string>
     <string name="tool_run_javascript_title">Jalankan JavaScript</string>
     <string name="tool_run_javascript_desc">Menjalankan JavaScript dalam kotak pasir selamat untuk matematik, tarikh dan pemprosesan teks. Tiada akses internet atau fail.</string>
     <string name="tool_run_javascript_example">\"What is (2 + 3) × 4, and what weekday is Jan 1 2027?\"</string>

@@ -347,6 +347,17 @@
     <string name="tool_web_fetch_title">ওয়েব পেজ ফেচ করুন</string>
     <string name="tool_web_fetch_desc">একটি লিঙ্ক খোলে এবং এর মূল বিষয়বস্তু টেক্সট হিসেবে পড়ে যাতে মডেল কোনো পেজের সারসংক্ষেপ বা উদ্ধৃতি দিতে পারে।</string>
     <string name="tool_web_fetch_example">\"এই লিঙ্কের নিবন্ধটির সারসংক্ষেপ দিন।\"</string>
+    <string name="tool_html_preview_title">HTML লাইভ প্রিভিউ</string>
+    <string name="tool_html_preview_desc">মডেল যে ওয়েব পেজ লেখে তা চ্যাটের মধ্যেই লাইভ, ইন্টারঅ্যাকটিভ প্রিভিউ হিসেবে দেখায়। সাধারণ পেজের মতোই ট্যাপ করুন, টাইপ করুন ও খেলুন। পেজগুলো স্যান্ডবক্সে চলে, আপনার ফাইল বা অ্যাপে কোনো অ্যাক্সেস থাকে না।</string>
+    <string name="tool_html_preview_example">\"একটি টিপ ক্যালকুলেটর ওয়েব পেজ হিসেবে বানাও।\"</string>
+    <string name="html_preview_default_title">ওয়েব পেজ</string>
+    <string name="html_preview_reload">রিলোড</string>
+    <string name="html_preview_show_source">সোর্স দেখুন</string>
+    <string name="html_preview_show_page">পেজ দেখুন</string>
+    <string name="html_preview_fullscreen">ফুলস্ক্রিন</string>
+    <string name="html_preview_open_in_browser">ব্রাউজারে খুলুন</string>
+    <string name="html_preview_console_errors">কনসোল ত্রুটি: %1$d</string>
+    <string name="html_preview_no_browser">কোনো ব্রাউজার অ্যাপ পাওয়া যায়নি</string>
     <string name="tool_run_javascript_title">JavaScript চালান</string>
     <string name="tool_run_javascript_desc">গণিত, তারিখ ও টেক্সট প্রক্রিয়াকরণের জন্য একটি নিরাপদ স্যান্ডবক্সে JavaScript চালায়। ইন্টারনেট বা ফাইল অ্যাক্সেস নেই।</string>
     <string name="tool_run_javascript_example">\"(2 + 3) × 4 কত, এবং ১ জানুয়ারি ২০২৭ সপ্তাহের কোন দিন?\"</string>

@@ -19,4 +19,7 @@ fun ToolRegistry.Companion.createDefault(context: Context): ToolRegistry =
         register(WebSearchTool(webLinkStore))
         register(WebFetchTool(webLinkStore))
         register(JavaScriptTool(context))
+        // The page itself is shown by the chat bubble (HtmlPreviewCard); the
+        // renderer runs it off-screen so the model hears about script errors.
+        register(HtmlPreviewTool(WebViewHtmlRenderer(context)))
     }

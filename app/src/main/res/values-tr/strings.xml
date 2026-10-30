@@ -300,6 +300,17 @@
     <string name="tool_web_fetch_title">Web sayfas\u0131 getir</string>
     <string name="tool_web_fetch_desc">Bir ba\u011Flant\u0131y\u0131 a\u00E7ar ve ana i\u00E7eri\u011Fini metin olarak okur, b\u00F6ylece model bir sayfay\u0131 \u00F6zetleyebilir veya al\u0131nt\u0131layabilir.</string>
     <string name="tool_web_fetch_example">\"Bu ba\u011Flant\u0131daki makaleyi \u00F6zetle.\"</string>
+    <string name="tool_html_preview_title">Canlı HTML önizleme</string>
+    <string name="tool_html_preview_desc">Modelin yazdığı web sayfalarını sohbetin içinde canlı ve etkileşimli bir önizleme olarak gösterir. Normal bir sayfadaki gibi dokunun, yazın ve oynayın. Sayfalar korumalı alanda çalışır; dosyalarınıza veya uygulamaya erişemez.</string>
+    <string name="tool_html_preview_example">\"Web sayfası olarak bir bahşiş hesaplayıcı yap.\"</string>
+    <string name="html_preview_default_title">Web sayfası</string>
+    <string name="html_preview_reload">Yeniden yükle</string>
+    <string name="html_preview_show_source">Kaynağı göster</string>
+    <string name="html_preview_show_page">Sayfayı göster</string>
+    <string name="html_preview_fullscreen">Tam ekran</string>
+    <string name="html_preview_open_in_browser">Tarayıcıda aç</string>
+    <string name="html_preview_console_errors">Konsol hataları: %1$d</string>
+    <string name="html_preview_no_browser">Tarayıcı uygulaması bulunamadı</string>
 
     <!-- Inference engine notifications (1.7.0) -->
     <string name="inference_notification_generating_title">Yan\u0131t \u00FCretiliyor…</string>

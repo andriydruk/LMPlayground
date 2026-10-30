@@ -4,4 +4,6 @@
     <!-- Persistent copy of attached images, referenced by ChatMessageEntity.imagePath
          so saved conversations keep their images across restarts / cache clears. -->
     <files-path name="chat_images_files" path="chat_images/" />
+    <!-- Pages from the html_preview tool, written on demand for Share / Open in browser. -->
+    <cache-path name="html_preview" path="html_preview/" />
 </paths>

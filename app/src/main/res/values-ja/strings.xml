@@ -298,6 +298,17 @@
     <string name="tool_web_fetch_title">ウェブページを取得</string>
     <string name="tool_web_fetch_desc">リンクを開いてその主要なコンテンツをテキストとして読み取り、モデルがページを要約したり引用したりできるようにします。</string>
     <string name="tool_web_fetch_example">\"このリンクの記事を要約して。\"</string>
+    <string name="tool_html_preview_title">HTML ライブプレビュー</string>
+    <string name="tool_html_preview_desc">モデルが書いたウェブページを、チャット内でライブのインタラクティブなプレビューとして表示します。通常のページと同じようにタップ、入力、プレイできます。ページはサンドボックスで実行され、ファイルやアプリにはアクセスできません。</string>
+    <string name="tool_html_preview_example">\"チップ計算機をウェブページとして作って。\"</string>
+    <string name="html_preview_default_title">ウェブページ</string>
+    <string name="html_preview_reload">再読み込み</string>
+    <string name="html_preview_show_source">ソースを表示</string>
+    <string name="html_preview_show_page">ページを表示</string>
+    <string name="html_preview_fullscreen">全画面</string>
+    <string name="html_preview_open_in_browser">ブラウザで開く</string>
+    <string name="html_preview_console_errors">コンソールエラー: %1$d</string>
+    <string name="html_preview_no_browser">ブラウザアプリが見つかりません</string>
 
     <!-- Inference engine notifications (1.7.0) -->
     <string name="inference_notification_generating_title">応答を生成中…</string>

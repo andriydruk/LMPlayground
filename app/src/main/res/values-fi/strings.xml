@@ -332,6 +332,17 @@
     <string name="tool_run_javascript_title">Suorita JavaScript</string>
     <string name="tool_web_fetch_desc">Avaa linkin ja lukee sen pääsisällön tekstinä, jotta malli voi tiivistää tai lainata sivun.</string>
     <string name="tool_web_fetch_example">\"Tiivistä tämän linkin artikkeli.\"</string>
+    <string name="tool_html_preview_title">HTML-reaaliaikainen esikatselu</string>
+    <string name="tool_html_preview_desc">Näyttää mallin kirjoittamat verkkosivut interaktiivisena esikatseluna suoraan keskustelussa. Napauta, kirjoita ja pelaa kuten tavallisella sivulla. Sivut toimivat eristetyssä hiekkalaatikossa ilman pääsyä tiedostoihisi tai sovellukseen.</string>
+    <string name="tool_html_preview_example">\"Tee tippilaskuri verkkosivuna.\"</string>
+    <string name="html_preview_default_title">Verkkosivu</string>
+    <string name="html_preview_reload">Lataa uudelleen</string>
+    <string name="html_preview_show_source">Näytä lähdekoodi</string>
+    <string name="html_preview_show_page">Näytä sivu</string>
+    <string name="html_preview_fullscreen">Koko näyttö</string>
+    <string name="html_preview_open_in_browser">Avaa selaimessa</string>
+    <string name="html_preview_console_errors">Konsolivirheet: %1$d</string>
+    <string name="html_preview_no_browser">Selainsovellusta ei löytynyt</string>
     <string name="tool_web_fetch_title">Nouda verkkosivu</string>
     <string name="tool_web_search_desc">Hakee verkosta ja palauttaa tulosten otsikot, linkit ja katkelmat, jotta malli voi löytää ajantasaista tietoa.</string>
     <string name="tool_web_search_example">\"Etsi tuoreita arvioita uusimmasta Pixel-puhelimesta.\"</string>

@@ -53,6 +53,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import com.druk.lmplayground.R
+import com.druk.lmplayground.tools.HtmlPreview
 
 @Composable
 fun ChatItemBubble(
@@ -105,10 +106,18 @@ fun ChatItemBubble(
                     val durationSec = (toolCall.durationMs / 1000).toInt().coerceAtLeast(
                         if (toolCall.durationMs > 0) 1 else 0
                     )
+                    val htmlPreview = if (toolCall.name == HtmlPreview.TOOL_NAME) {
+                        remember(toolCall.arguments) { HtmlPreview.parse(toolCall.arguments) }
+                    } else {
+                        null
+                    }
                     CollapsibleSection(
                         label = "${toolDisplayName(toolCall.name)} \u00B7 ${formatDuration(durationSec)}",
                         content = buildString {
-                            if (toolCall.arguments.isNotBlank()) {
+                            // The preview card below already shows the page and
+                            // its source; repeating a long HTML argument here
+                            // would only bloat the bubble.
+                            if (toolCall.arguments.isNotBlank() && htmlPreview == null) {
                                 append(inputLabel).append('\n')
                                 append(prettyJson(toolCall.arguments))
                                 append("\n\n")
@@ -117,6 +126,10 @@ fun ChatItemBubble(
                             append(prettyJson(toolCall.result))
                         }
                     )
+                    if (htmlPreview != null) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        HtmlPreviewCard(request = htmlPreview)
+                    }
                     Spacer(modifier = Modifier.height(6.dp))
                 }
             }
@@ -375,6 +388,7 @@ private fun toolDisplayName(name: String): String = when (name) {
     "run_javascript" -> stringResource(R.string.tool_run_javascript_title)
     "web_search" -> stringResource(R.string.tool_web_search_title)
     "web_fetch" -> stringResource(R.string.tool_web_fetch_title)
+    HtmlPreview.TOOL_NAME -> stringResource(R.string.tool_html_preview_title)
     else -> name
 }
 

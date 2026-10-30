@@ -337,6 +337,17 @@
     <string name="tool_web_fetch_title">Kunin ang web page</string>
     <string name="tool_web_fetch_desc">Nagbubukas ng link at binabasa ang pangunahing nilalaman nito bilang teksto para mabuod o ma-quote ng model ang isang page.</string>
     <string name="tool_web_fetch_example">\"Summarize the article at this link.\"</string>
+    <string name="tool_html_preview_title">HTML live preview</string>
+    <string name="tool_html_preview_desc">Ipinapakita ang mga web page na isinusulat ng model bilang live at interactive na preview mismo sa chat. Mag-tap, mag-type at maglaro gaya ng sa karaniwang page. Tumatakbo ang mga page sa sandbox nang walang access sa iyong mga file o sa app.</string>
+    <string name="tool_html_preview_example">\"Gumawa ng tip calculator bilang web page.\"</string>
+    <string name="html_preview_default_title">Web page</string>
+    <string name="html_preview_reload">I-reload</string>
+    <string name="html_preview_show_source">Tingnan ang source</string>
+    <string name="html_preview_show_page">Tingnan ang page</string>
+    <string name="html_preview_fullscreen">Full screen</string>
+    <string name="html_preview_open_in_browser">Buksan sa browser</string>
+    <string name="html_preview_console_errors">Mga error sa console: %1$d</string>
+    <string name="html_preview_no_browser">Walang nakitang browser app</string>
     <string name="tool_run_javascript_title">Patakbuhin ang JavaScript</string>
     <string name="tool_run_javascript_desc">Nagpapatakbo ng JavaScript sa isang secure na sandbox para sa math, mga petsa, at pagproseso ng teksto. Walang access sa internet o file.</string>
     <string name="tool_run_javascript_example">\"What is (2 + 3) × 4, and what weekday is Jan 1 2027?\"</string>

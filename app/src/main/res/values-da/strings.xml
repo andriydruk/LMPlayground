@@ -328,6 +328,17 @@
     <string name="tool_web_fetch_title">Hent webside</string>
     <string name="tool_web_fetch_desc">Åbner et link og læser hovedindholdet som tekst, så modellen kan opsummere eller citere en side.</string>
     <string name="tool_web_fetch_example">“Opsummer artiklen på dette link.”</string>
+    <string name="tool_html_preview_title">HTML-liveeksempel</string>
+    <string name="tool_html_preview_desc">Viser websider, som modellen skriver, som et live, interaktivt eksempel direkte i chatten. Tryk, skriv og spil som på en almindelig side. Siderne kører i en sandkasse uden adgang til dine filer eller appen.</string>
+    <string name="tool_html_preview_example">\"Lav en drikkepengeberegner som en webside.\"</string>
+    <string name="html_preview_default_title">Webside</string>
+    <string name="html_preview_reload">Genindlæs</string>
+    <string name="html_preview_show_source">Vis kilde</string>
+    <string name="html_preview_show_page">Vis side</string>
+    <string name="html_preview_fullscreen">Fuld skærm</string>
+    <string name="html_preview_open_in_browser">Åbn i browser</string>
+    <string name="html_preview_console_errors">Konsolfejl: %1$d</string>
+    <string name="html_preview_no_browser">Ingen browserapp fundet</string>
     <string name="cd_supports_tools">Understøtter værktøjer</string>
     <string name="cd_supports_thinking">Understøtter tænkning</string>
 

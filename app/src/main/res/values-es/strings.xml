@@ -300,6 +300,17 @@
     <string name="tool_web_fetch_title">Obtener página web</string>
     <string name="tool_web_fetch_desc">Abre un enlace y lee su contenido principal como texto para que el modelo pueda resumir o citar una página.</string>
     <string name="tool_web_fetch_example">\"Resume el artículo de este enlace.\"</string>
+    <string name="tool_html_preview_title">Vista previa HTML en vivo</string>
+    <string name="tool_html_preview_desc">Muestra las páginas web que escribe el modelo como una vista previa interactiva en vivo dentro del chat. Toca, escribe y juega como en una página normal. Las páginas se ejecutan aisladas, sin acceso a tus archivos ni a la app.</string>
+    <string name="tool_html_preview_example">\"Crea una calculadora de propinas como página web.\"</string>
+    <string name="html_preview_default_title">Página web</string>
+    <string name="html_preview_reload">Recargar</string>
+    <string name="html_preview_show_source">Ver código fuente</string>
+    <string name="html_preview_show_page">Ver página</string>
+    <string name="html_preview_fullscreen">Pantalla completa</string>
+    <string name="html_preview_open_in_browser">Abrir en el navegador</string>
+    <string name="html_preview_console_errors">Errores de consola: %1$d</string>
+    <string name="html_preview_no_browser">No se encontró ninguna app de navegador</string>
     <string name="tool_run_javascript_title">Ejecutar JavaScript</string>
     <string name="tool_run_javascript_desc">Ejecuta JavaScript en un entorno aislado seguro para matemáticas, fechas y procesamiento de texto. Sin acceso a internet ni a archivos.</string>
     <string name="tool_run_javascript_example">\"¿Cuánto es (2 + 3) × 4 y qué día de la semana es el 1 de enero de 2027?\"</string>

@@ -295,6 +295,17 @@
     <string name="tool_run_javascript_title">Uruchom JavaScript</string>
     <string name="tool_web_fetch_desc">Otwiera link i odczytuje jego główną treść jako tekst, aby model mógł podsumować lub zacytować stronę.</string>
     <string name="tool_web_fetch_example">\"Podsumuj artykuł pod tym linkiem.\"</string>
+    <string name="tool_html_preview_title">Podgląd HTML na żywo</string>
+    <string name="tool_html_preview_desc">Wyświetla strony internetowe napisane przez model jako interaktywny podgląd na żywo bezpośrednio w czacie. Dotykaj, pisz i graj jak na zwykłej stronie. Strony działają w piaskownicy bez dostępu do Twoich plików ani aplikacji.</string>
+    <string name="tool_html_preview_example">\"Zrób kalkulator napiwków jako stronę internetową.\"</string>
+    <string name="html_preview_default_title">Strona internetowa</string>
+    <string name="html_preview_reload">Odśwież</string>
+    <string name="html_preview_show_source">Pokaż źródło</string>
+    <string name="html_preview_show_page">Pokaż stronę</string>
+    <string name="html_preview_fullscreen">Pełny ekran</string>
+    <string name="html_preview_open_in_browser">Otwórz w przeglądarce</string>
+    <string name="html_preview_console_errors">Błędy konsoli: %1$d</string>
+    <string name="html_preview_no_browser">Nie znaleziono przeglądarki</string>
     <string name="tool_web_fetch_title">Pobierz stronę internetową</string>
     <string name="tool_web_search_desc">Przeszukuje sieć i zwraca tytuły wyników, linki oraz fragmenty, aby model mógł znaleźć aktualne informacje.</string>
     <string name="tool_web_search_example">\"Znajdź najnowsze recenzje najnowszego telefonu Pixel.\"</string>

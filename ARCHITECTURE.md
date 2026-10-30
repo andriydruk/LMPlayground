@@ -74,6 +74,29 @@ turn — see `ConversationViewModel.buildWireContent`).
   call, then unloads (`EmbeddingModelManager`) so ~300 MB doesn't sit
   next to a multi-GB chat model.
 
+## HTML live preview tool
+
+`html_preview` is a normal `Tool`, but its real output is UI. The page source travels in the tool
+call's `arguments`, which `ToolCallPairing` already persists with the message, so the chat card
+(`conversation/HtmlPreviewCard.kt`) renders straight from history — no extra storage, and previews
+survive reopening a conversation.
+
+- `tools/HtmlPreview` — pure logic, unit-tested on the JVM: argument parsing (with repairs for
+  fenced or double-escaped HTML), `buildDocument` (fragment shell + mobile viewport) and `lint`.
+- `tools/HtmlPreviewWebView` — the single WebView sandbox shared by the inline card, fullscreen and
+  the headless check. Pages load from `https://appassets.androidplatform.net/html-preview/index.html`
+  and `HtmlPreviewWebViewClient` serves the document by request interception (reload and self-posting
+  forms work; other paths on that host 404). No JS interface, file/content access, popups or
+  geolocation; leaving links go to the system browser on a user gesture only.
+- `tools/WebViewHtmlRenderer` — the tool loop runs on `Dispatchers.Default`, so `execute` posts a
+  detached, phone-sized WebView to the main thread and blocks (≤ 6 s) for console errors, dialogs and a
+  DOM probe. `HtmlPreviewTool` turns that into the result the model sees, so it can fix its own page.
+  Stop during the call releases the wait via `Tool.cancelInFlight`.
+- Inline, the WebView calls `requestDisallowInterceptTouchEvent` on touch-down so canvas games and
+  sliders keep their gestures; the chat scrolls from the card header or around the card. Card height
+  follows the page's drawn content (bounding boxes, not `scrollHeight`, which never shrinks below the
+  viewport), clamped to 140 dp … 60% of the screen.
+
 ## KV-cache reuse and rewind
 
 A generation session keeps its KV cache between turns and feeds only
