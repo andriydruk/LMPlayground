@@ -106,29 +106,32 @@ fun ChatItemBubble(
                     // html_preview renders the page the model wrote as a live,
                     // interactive card. Malformed or rejected calls fall through
                     // to the generic input/output section below.
-                    val preview = if (toolCall.name == HtmlPreview.TOOL_NAME && HtmlPreview.wasRendered(toolCall.result)) {
-                        remember(toolCall.arguments) { HtmlPreview.parse(toolCall.arguments) }
-                    } else null
+                    val preview = remember(toolCall.name, toolCall.arguments, toolCall.result) {
+                        if (toolCall.name == HtmlPreview.TOOL_NAME && HtmlPreview.wasRendered(toolCall.result)) {
+                            HtmlPreview.parse(toolCall.arguments)
+                        } else {
+                            null
+                        }
+                    }
                     if (preview != null) {
                         HtmlPreviewCard(preview)
-                        Spacer(modifier = Modifier.height(6.dp))
-                        continue
-                    }
-                    val durationSec = (toolCall.durationMs / 1000).toInt().coerceAtLeast(
-                        if (toolCall.durationMs > 0) 1 else 0
-                    )
-                    CollapsibleSection(
-                        label = "${toolDisplayName(toolCall.name)} \u00B7 ${formatDuration(durationSec)}",
-                        content = buildString {
-                            if (toolCall.arguments.isNotBlank()) {
-                                append(inputLabel).append('\n')
-                                append(prettyJson(toolCall.arguments))
-                                append("\n\n")
+                    } else {
+                        val durationSec = (toolCall.durationMs / 1000).toInt().coerceAtLeast(
+                            if (toolCall.durationMs > 0) 1 else 0
+                        )
+                        CollapsibleSection(
+                            label = "${toolDisplayName(toolCall.name)} \u00B7 ${formatDuration(durationSec)}",
+                            content = buildString {
+                                if (toolCall.arguments.isNotBlank()) {
+                                    append(inputLabel).append('\n')
+                                    append(prettyJson(toolCall.arguments))
+                                    append("\n\n")
+                                }
+                                append(outputLabel).append('\n')
+                                append(prettyJson(toolCall.result))
                             }
-                            append(outputLabel).append('\n')
-                            append(prettyJson(toolCall.result))
-                        }
-                    )
+                        )
+                    }
                     Spacer(modifier = Modifier.height(6.dp))
                 }
             }

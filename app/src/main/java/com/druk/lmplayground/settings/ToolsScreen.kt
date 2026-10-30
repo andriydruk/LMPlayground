@@ -17,7 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Code
-import androidx.compose.material.icons.outlined.Html
+import androidx.compose.material.icons.outlined.Web
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -74,7 +74,7 @@ private val TOOL_UI: Map<String, ToolUiInfo> = mapOf(
         R.string.tool_html_preview_title,
         R.string.tool_html_preview_desc,
         R.string.tool_html_preview_example,
-        Icons.Outlined.Html,
+        Icons.Outlined.Web,
     ),
 )
 

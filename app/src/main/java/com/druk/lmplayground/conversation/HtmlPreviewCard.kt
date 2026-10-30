@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color as AndroidColor
-import android.net.Uri
 import android.view.MotionEvent
 import androidx.annotation.StringRes
 import android.webkit.ConsoleMessage
@@ -301,14 +300,22 @@ private fun PreviewWebView(
                         request: WebResourceRequest,
                     ): Boolean {
                         val url = request.url
+                        // Embedded iframes (maps, videos, demos) load in place.
+                        if (!request.isForMainFrame) return false
                         // Same-document anchors (#section) stay in the preview.
                         if (url.buildUpon().fragment(null).build().toString() == HtmlPreview.BASE_URL) {
                             return false
                         }
+                        // Anything else on the fake preview origin (a GET form,
+                        // a relative link) has nowhere to go: swallow it rather
+                        // than send the user's browser to an unresolvable host.
+                        if (url.host == PREVIEW_HOST) return true
+                        // Real links leave the sandbox for the user's browser,
+                        // but only on a tap: scripts can't pop external apps.
                         if (request.hasGesture() && url.scheme in EXTERNAL_SCHEMES) {
                             try {
                                 view.context.startActivity(
-                                    Intent(Intent.ACTION_VIEW, Uri.parse(url.toString()))
+                                    Intent(Intent.ACTION_VIEW, url)
                                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 )
                             } catch (_: Exception) {
@@ -353,6 +360,7 @@ private fun PreviewWebView(
 }
 
 private val EXTERNAL_SCHEMES = setOf("http", "https", "mailto", "tel")
+private val PREVIEW_HOST = android.net.Uri.parse(HtmlPreview.BASE_URL).host
 
 /** Native stand-in for the page's alert()/confirm(); the page blocks until [result] is answered. */
 private fun showDialog(view: WebView, message: String?, result: JsResult, withCancel: Boolean): Boolean {
