@@ -295,9 +295,6 @@
     <string name="tool_run_javascript_title">Виконати JavaScript</string>
     <string name="tool_web_fetch_desc">Відкриває посилання й читає його основний вміст як текст, щоб модель могла підсумувати або процитувати сторінку.</string>
     <string name="tool_web_fetch_example">\"Підсумуй статтю за цим посиланням.\"</string>
-    <string name="tool_agent_title">Агент</string>
-    <string name="tool_agent_desc">Дає змогу моделі спланувати багатоетапне завдання, виконати його за допомогою ваших інших інструментів і позначати кожен крок. Дозволяє значно більше викликів інструментів за відповідь і пропускає повторні виклики.</string>
-    <string name="tool_agent_example">\"Порівняй три найновіші телефони Pixel і скажи, який купити.\"</string>
     <string name="tool_web_fetch_title">Завантажити вебсторінку</string>
     <string name="tool_web_search_desc">Шукає в інтернеті й повертає заголовки результатів, посилання та фрагменти, щоб модель могла знайти актуальну інформацію.</string>
     <string name="tool_web_search_example">\"Знайди свіжі огляди найновішого телефона Pixel.\"</string>

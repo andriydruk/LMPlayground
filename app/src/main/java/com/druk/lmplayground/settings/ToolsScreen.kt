@@ -19,7 +19,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.SmartToy
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -69,12 +68,6 @@ private val TOOL_UI: Map<String, ToolUiInfo> = mapOf(
         R.string.tool_web_fetch_desc,
         R.string.tool_web_fetch_example,
         Icons.Outlined.Public,
-    ),
-    "agent" to ToolUiInfo(
-        R.string.tool_agent_title,
-        R.string.tool_agent_desc,
-        R.string.tool_agent_example,
-        Icons.Outlined.SmartToy,
     ),
 )
 

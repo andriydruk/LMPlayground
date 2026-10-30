@@ -289,9 +289,6 @@
     <string name="tool_web_fetch_title">Webseite abrufen</string>
     <string name="tool_web_fetch_desc">Öffnet einen Link und liest dessen Hauptinhalt als Text, damit das Modell eine Seite zusammenfassen oder zitieren kann.</string>
     <string name="tool_web_fetch_example">“Fasse den Artikel unter diesem Link zusammen.”</string>
-    <string name="tool_agent_title">Agent</string>
-    <string name="tool_agent_desc">Lässt das Modell eine mehrstufige Aufgabe planen, sie mit den übrigen Tools abarbeiten und jeden Schritt abhaken. Erlaubt deutlich mehr Tool-Aufrufe pro Antwort und überspringt wiederholte Aufrufe.</string>
-    <string name="tool_agent_example">“Vergleiche die drei neuesten Pixel-Smartphones und sag mir, welches ich kaufen soll.”</string>
     <string name="cd_supports_tools">Unterstützt Tools</string>
     <string name="cd_supports_thinking">Unterstützt Thinking</string>
 

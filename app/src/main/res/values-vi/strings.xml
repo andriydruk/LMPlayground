@@ -298,9 +298,6 @@
     <string name="tool_web_fetch_title">T\u1EA3i trang web</string>
     <string name="tool_web_fetch_desc">M\u1EDF m\u1ED9t li\u00EAn k\u1EBFt v\u00E0 \u0111\u1ECDc n\u1ED9i dung ch\u00EDnh d\u01B0\u1EDBi d\u1EA1ng v\u0103n b\u1EA3n \u0111\u1EC3 m\u00F4 h\u00ECnh c\u00F3 th\u1EC3 t\u00F3m t\u1EAFt ho\u1EB7c tr\u00EDch d\u1EABn m\u1ED9t trang.</string>
     <string name="tool_web_fetch_example">\"Summarize the article at this link.\"</string>
-    <string name="tool_agent_title">Tác nhân</string>
-    <string name="tool_agent_desc">Cho phép mô hình lập kế hoạch cho tác vụ nhiều bước, thực hiện bằng các công cụ khác của bạn và đánh dấu từng bước. Cho phép gọi công cụ nhiều hơn hẳn trong mỗi phản hồi và bỏ qua các lệnh gọi lặp lại.</string>
-    <string name="tool_agent_example">\"So sánh ba chiếc Pixel mới nhất và cho tôi biết nên mua chiếc nào.\"</string>
     <string name="tool_run_javascript_title">Ch\u1EA1y JavaScript</string>
     <string name="tool_run_javascript_desc">Ch\u1EA1y JavaScript trong m\u00F4i tr\u01B0\u1EDDng th\u1EED nghi\u1EC7m an to\u00E0n \u0111\u1EC3 t\u00EDnh to\u00E1n, x\u1EED l\u00FD ng\u00E0y th\u00E1ng v\u00E0 v\u0103n b\u1EA3n. Kh\u00F4ng truy c\u1EADp internet ho\u1EB7c t\u1EC7p.</string>
     <string name="tool_run_javascript_example">\"What is (2 + 3) \u00D7 4, and what weekday is Jan 1 2027?\"</string>

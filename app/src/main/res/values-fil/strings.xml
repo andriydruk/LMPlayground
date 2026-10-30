@@ -337,9 +337,6 @@
     <string name="tool_web_fetch_title">Kunin ang web page</string>
     <string name="tool_web_fetch_desc">Nagbubukas ng link at binabasa ang pangunahing nilalaman nito bilang teksto para mabuod o ma-quote ng model ang isang page.</string>
     <string name="tool_web_fetch_example">\"Summarize the article at this link.\"</string>
-    <string name="tool_agent_title">Agent</string>
-    <string name="tool_agent_desc">Pinapayagan ang model na magplano ng gawaing maraming hakbang, tapusin ito gamit ang iba mo pang tool, at lagyan ng check ang bawat hakbang. Mas maraming tawag sa tool ang pinapayagan sa bawat sagot at nilalaktawan ang paulit-ulit na tawag.</string>
-    <string name="tool_agent_example">\"Ihambing ang tatlong pinakabagong Pixel phone at sabihin kung alin ang bibilhin.\"</string>
     <string name="tool_run_javascript_title">Patakbuhin ang JavaScript</string>
     <string name="tool_run_javascript_desc">Nagpapatakbo ng JavaScript sa isang secure na sandbox para sa math, mga petsa, at pagproseso ng teksto. Walang access sa internet o file.</string>
     <string name="tool_run_javascript_example">\"What is (2 + 3) × 4, and what weekday is Jan 1 2027?\"</string>

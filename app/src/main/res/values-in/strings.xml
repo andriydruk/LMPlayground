@@ -298,9 +298,6 @@
     <string name="tool_web_fetch_title">Ambil halaman web</string>
     <string name="tool_web_fetch_desc">Membuka tautan dan membaca konten utamanya sebagai teks agar model dapat meringkas atau mengutip sebuah halaman.</string>
     <string name="tool_web_fetch_example">\"Summarize the article at this link.\"</string>
-    <string name="tool_agent_title">Agen</string>
-    <string name="tool_agent_desc">Memungkinkan model merencanakan tugas multilangkah, menyelesaikannya dengan alat Anda yang lain, dan mencentang setiap langkah. Mengizinkan jauh lebih banyak panggilan alat per balasan dan melewati panggilan yang berulang.</string>
-    <string name="tool_agent_example">\"Bandingkan tiga ponsel Pixel terbaru dan beri tahu saya mana yang sebaiknya dibeli.\"</string>
     <string name="tool_run_javascript_title">Jalankan JavaScript</string>
     <string name="tool_run_javascript_desc">Menjalankan JavaScript dalam sandbox aman untuk matematika, tanggal, dan pemrosesan teks. Tanpa akses internet atau file.</string>
     <string name="tool_run_javascript_example">\"What is (2 + 3) × 4, and what weekday is Jan 1 2027?\"</string>
