@@ -347,9 +347,6 @@
     <string name="tool_web_fetch_title">ওয়েব পেজ ফেচ করুন</string>
     <string name="tool_web_fetch_desc">একটি লিঙ্ক খোলে এবং এর মূল বিষয়বস্তু টেক্সট হিসেবে পড়ে যাতে মডেল কোনো পেজের সারসংক্ষেপ বা উদ্ধৃতি দিতে পারে।</string>
     <string name="tool_web_fetch_example">\"এই লিঙ্কের নিবন্ধটির সারসংক্ষেপ দিন।\"</string>
-    <string name="tool_agent_title">এজেন্ট</string>
-    <string name="tool_agent_desc">মডেলকে একটি বহু-ধাপের কাজের পরিকল্পনা করতে, আপনার অন্যান্য টুল ব্যবহার করে তা সম্পন্ন করতে এবং প্রতিটি ধাপ চিহ্নিত করতে দেয়। প্রতিটি উত্তরে অনেক বেশি টুল কলের অনুমতি দেয় এবং পুনরাবৃত্ত কল এড়িয়ে যায়।</string>
-    <string name="tool_agent_example">\"সবচেয়ে নতুন তিনটি Pixel ফোনের তুলনা করুন এবং বলুন কোনটি কেনা উচিত।\"</string>
     <string name="tool_run_javascript_title">JavaScript চালান</string>
     <string name="tool_run_javascript_desc">গণিত, তারিখ ও টেক্সট প্রক্রিয়াকরণের জন্য একটি নিরাপদ স্যান্ডবক্সে JavaScript চালায়। ইন্টারনেট বা ফাইল অ্যাক্সেস নেই।</string>
     <string name="tool_run_javascript_example">\"(2 + 3) × 4 কত, এবং ১ জানুয়ারি ২০২৭ সপ্তাহের কোন দিন?\"</string>

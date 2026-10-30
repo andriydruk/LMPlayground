@@ -335,9 +335,6 @@
     <string name="tool_run_javascript_title">Spustit JavaScript</string>
     <string name="tool_web_fetch_desc">Otevře odkaz a načte jeho hlavní obsah jako text, aby model mohl stránku shrnout nebo citovat.</string>
     <string name="tool_web_fetch_example">\"Shrň článek na tomto odkazu.\"</string>
-    <string name="tool_agent_title">Agent</string>
-    <string name="tool_agent_desc">Umožní modelu naplánovat vícekrokový úkol, splnit ho pomocí vašich dalších nástrojů a odškrtávat jednotlivé kroky. Povoluje mnohem více volání nástrojů na jednu odpověď a přeskakuje opakovaná volání.</string>
-    <string name="tool_agent_example">\"Porovnej tři nejnovější telefony Pixel a řekni mi, který koupit.\"</string>
     <string name="tool_web_fetch_title">Načíst webovou stránku</string>
     <string name="tool_web_search_desc">Prohledá web a vrátí názvy výsledků, odkazy a úryvky, aby model mohl najít aktuální informace.</string>
     <string name="tool_web_search_example">\"Najdi nedávné recenze nejnovějšího telefonu Pixel.\"</string>

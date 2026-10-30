@@ -74,45 +74,6 @@ turn — see `ConversationViewModel.buildWireContent`).
   call, then unloads (`EmbeddingModelManager`) so ~300 MB doesn't sit
   next to a multi-GB chat model.
 
-## Agent mode
-
-The `agent` tool (Settings → Tools, or per model) turns a turn into an agent
-workflow, the same shape as Unsloth Studio's: a much larger tool budget, calls
-that heal instead of failing, and no spinning on repeats. All of it lives in
-`:llamacpp` (plain JVM, unit-tested without a device).
-
-- **The tool** (`AgentTool` + `AgentState`) is the model's checklist and
-  scratchpad: `plan` a few steps, work each one with the other tools,
-  `update` it, `note` a finding, `finish`. It does no work itself, but every
-  result echoes the plan and says what to do next, which is what keeps a
-  small model on track across many rounds. The schema is deliberately flat
-  (strings + one integer); the tool accepts lists as arrays, numbered text or
-  bullets, and infers a missing `action`.
-- **Budget** — `ToolRegistry.toolRoundBudget()` is 25 rounds with the tool on
-  (`AgentTool.MAX_TOOL_ROUNDS`), 5 otherwise. If the model still wants tools
-  at the limit, `ToolCallLoop(wrapUpOnLimit = true)` answers the pending
-  calls with a "budget spent" error and runs one last generation so the
-  user gets an answer instead of a silent stop.
-- **Self-healing** — `ToolRegistry.executeToolCalls` repairs arguments
-  (`ToolArgumentRepair`: code fences, surrounding prose, truncated JSON,
-  double-encoding, `{"arguments":{…}}` wrappers, a bare value for a
-  one-parameter tool), resolves near-miss tool names among *enabled* tools
-  (`Web_Fetch`, `functions.web_fetch`, `fetch`), and turns every failure
-  (unknown tool, bad arguments, a throwing tool) into an `{"error": …}` the
-  model can act on rather than aborting the round. This applies with or
-  without the agent tool.
-- **Dedup** — in agent mode an identical call (same tool, same arguments up
-  to key order) that already succeeded this turn is refused with a pointer to
-  the earlier result. Failed calls can be retried. `GenerationCoordinator`
-  calls `ToolRegistry.beginTurn()` to reset this each turn.
-- **Persistence** — the plan lives in `ToolRegistry.agentState` and is
-  snapshotted into conversation metadata (`KEY_AGENT_STATE`) after each turn,
-  like the web-link map. A finished workflow is dropped at the next turn; an
-  unfinished one is kept so the model can resume it.
-
-Not included: Unsloth's Python/Bash sandbox. There is no equivalent safe
-sandbox on Android, so code execution stays the existing JavaScript isolate.
-
 ## KV-cache reuse and rewind
 
 A generation session keeps its KV cache between turns and feeds only

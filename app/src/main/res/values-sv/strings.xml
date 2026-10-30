@@ -328,9 +328,6 @@
     <string name="tool_web_fetch_title">Hämta webbsida</string>
     <string name="tool_web_fetch_desc">Öppnar en länk och läser dess huvudinnehåll som text så att modellen kan sammanfatta eller citera en sida.</string>
     <string name="tool_web_fetch_example">“Sammanfatta artikeln på den här länken.”</string>
-    <string name="tool_agent_title">Agent</string>
-    <string name="tool_agent_desc">Låter modellen planera en uppgift i flera steg, utföra den med dina andra verktyg och bocka av varje steg. Tillåter betydligt fler verktygsanrop per svar och hoppar över upprepade anrop.</string>
-    <string name="tool_agent_example">“Jämför de tre senaste Pixel-telefonerna och berätta vilken jag ska köpa.”</string>
     <string name="cd_supports_tools">Stöder verktyg</string>
     <string name="cd_supports_thinking">Stöder tänkande</string>
 

@@ -352,9 +352,6 @@
     <string name="tool_web_fetch_title">Fetch web page</string>
     <string name="tool_web_fetch_desc">Opens a link and reads its main content as text so the model can summarize or quote a page.</string>
     <string name="tool_web_fetch_example">\"Summarize the article at this link.\"</string>
-    <string name="tool_agent_title">Agent</string>
-    <string name="tool_agent_desc">Lets the model plan a multi-step task, work through it with your other tools, and check off each step. Allows many more tool calls per reply and skips repeated calls.</string>
-    <string name="tool_agent_example">\"Compare the three newest Pixel phones and tell me which to buy.\"</string>
 
     <!-- Inference engine service notification (foreground service while a
          model is loaded so the OS does not evict the :llama process). -->

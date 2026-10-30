@@ -300,9 +300,6 @@
     <string name="tool_web_fetch_title">Obtener página web</string>
     <string name="tool_web_fetch_desc">Abre un enlace y lee su contenido principal como texto para que el modelo pueda resumir o citar una página.</string>
     <string name="tool_web_fetch_example">\"Resume el artículo de este enlace.\"</string>
-    <string name="tool_agent_title">Agente</string>
-    <string name="tool_agent_desc">Permite que el modelo planifique una tarea de varios pasos, la resuelva con tus otras herramientas y marque cada paso completado. Permite muchas más llamadas a herramientas por respuesta y omite las llamadas repetidas.</string>
-    <string name="tool_agent_example">\"Compara los tres Pixel más recientes y dime cuál comprar.\"</string>
     <string name="tool_run_javascript_title">Ejecutar JavaScript</string>
     <string name="tool_run_javascript_desc">Ejecuta JavaScript en un entorno aislado seguro para matemáticas, fechas y procesamiento de texto. Sin acceso a internet ni a archivos.</string>
     <string name="tool_run_javascript_example">\"¿Cuánto es (2 + 3) × 4 y qué día de la semana es el 1 de enero de 2027?\"</string>

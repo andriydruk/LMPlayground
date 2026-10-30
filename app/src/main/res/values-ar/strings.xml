@@ -312,9 +312,6 @@
     <string name="tool_web_fetch_title">جلب صفحة ويب</string>
     <string name="tool_web_fetch_desc">يفتح رابطاً ويقرأ محتواه الرئيسي كنص حتى يتمكن النموذج من تلخيص صفحة أو الاقتباس منها.</string>
     <string name="tool_web_fetch_example">\"لخّص المقالة الموجودة في هذا الرابط.\"</string>
-    <string name="tool_agent_title">الوكيل</string>
-    <string name="tool_agent_desc">يتيح للنموذج التخطيط لمهمة متعددة الخطوات وتنفيذها باستخدام أدواتك الأخرى مع وضع علامة على كل خطوة منجزة. يسمح بعدد أكبر بكثير من استدعاءات الأدوات في كل رد ويتجاهل الاستدعاءات المكررة.</string>
-    <string name="tool_agent_example">\"قارن بين أحدث ثلاثة هواتف Pixel وأخبرني أيها أشتري.\"</string>
     <string name="tool_run_javascript_title">تشغيل JavaScript</string>
     <string name="tool_run_javascript_desc">يشغّل JavaScript في بيئة معزولة آمنة للحسابات والتواريخ ومعالجة النصوص. لا وصول للإنترنت أو الملفات.</string>
     <string name="tool_run_javascript_example">\"كم يساوي (2 + 3) × 4، وما يوم الأسبوع الموافق 1 يناير 2027؟\"</string>

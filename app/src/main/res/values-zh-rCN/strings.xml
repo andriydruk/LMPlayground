@@ -298,9 +298,6 @@
     <string name="tool_web_fetch_title">抓取网页</string>
     <string name="tool_web_fetch_desc">打开链接并以文本形式读取其主要内容，让模型能够总结或引用页面。</string>
     <string name="tool_web_fetch_example">\"总结此链接中的文章。\"</string>
-    <string name="tool_agent_title">智能体</string>
-    <string name="tool_agent_desc">让模型规划多步骤任务，借助您的其他工具逐步完成，并勾选每个步骤。每次回复允许更多的工具调用，并跳过重复调用。</string>
-    <string name="tool_agent_example">\"比较最新的三款 Pixel 手机，告诉我该买哪一款。\"</string>
 
     <!-- Inference engine notifications (1.7.0) -->
     <string name="inference_notification_generating_title">正在生成回复…</string>

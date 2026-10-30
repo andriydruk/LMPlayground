@@ -308,9 +308,6 @@
     <string name="tool_web_fetch_title">वेब पेज फ़ेच करें</string>
     <string name="tool_web_fetch_desc">एक लिंक खोलता है और उसकी मुख्य सामग्री को टेक्स्ट के रूप में पढ़ता है ताकि मॉडल किसी पेज का सारांश दे सके या उद्धृत कर सके।</string>
     <string name="tool_web_fetch_example">\"इस लिंक पर मौजूद लेख का सारांश दें।\"</string>
-    <string name="tool_agent_title">एजेंट</string>
-    <string name="tool_agent_desc">मॉडल को कई चरणों वाले कार्य की योजना बनाने, आपके अन्य टूल से उसे पूरा करने और हर चरण पर निशान लगाने देता है। हर उत्तर में कहीं अधिक टूल कॉल की अनुमति देता है और दोहराए गए कॉल छोड़ देता है।</string>
-    <string name="tool_agent_example">\"सबसे नए तीन Pixel फ़ोन की तुलना करो और बताओ कौन-सा खरीदूँ।\"</string>
     <string name="tool_run_javascript_title">JavaScript चलाएँ</string>
     <string name="tool_run_javascript_desc">गणित, तारीखों और टेक्स्ट प्रोसेसिंग के लिए एक सुरक्षित सैंडबॉक्स में JavaScript चलाता है। इंटरनेट या फ़ाइल एक्सेस नहीं।</string>
     <string name="tool_run_javascript_example">\"(2 + 3) × 4 कितना है, और 1 जनवरी 2027 को सप्ताह का कौन सा दिन है?\"</string>
