@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">LM Playground</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -352,6 +352,17 @@
     <string name="tool_web_fetch_title">Fetch web page</string>
     <string name="tool_web_fetch_desc">Opens a link and reads its main content as text so the model can summarize or quote a page.</string>
     <string name="tool_web_fetch_example">\"Summarize the article at this link.\"</string>
+    <string name="tool_html_preview_title" tools:ignore="MissingTranslation">HTML live preview</string>
+    <string name="tool_html_preview_desc" tools:ignore="MissingTranslation">Lets the model show a web page it wrote right in the chat, where you can use it like a normal page. It can run scripts and load files from the internet.</string>
+    <string name="tool_html_preview_example" tools:ignore="MissingTranslation">\"Build a working tip calculator and show it to me.\"</string>
+    <string name="html_preview_title" tools:ignore="MissingTranslation">HTML preview</string>
+    <string name="html_preview_reload" tools:ignore="MissingTranslation">Reload</string>
+    <string name="html_preview_show_code" tools:ignore="MissingTranslation">View source</string>
+    <string name="html_preview_show_preview" tools:ignore="MissingTranslation">View preview</string>
+    <string name="html_preview_copy" tools:ignore="MissingTranslation">Copy HTML</string>
+    <string name="html_preview_fullscreen" tools:ignore="MissingTranslation">Fullscreen</string>
+    <string name="html_preview_close" tools:ignore="MissingTranslation">Close</string>
+    <string name="html_preview_console" tools:ignore="MissingTranslation">Console (%1$d)</string>
 
     <!-- Inference engine service notification (foreground service while a
          model is loaded so the OS does not evict the :llama process). -->

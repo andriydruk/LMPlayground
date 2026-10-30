@@ -19,4 +19,6 @@ fun ToolRegistry.Companion.createDefault(context: Context): ToolRegistry =
         register(WebSearchTool(webLinkStore))
         register(WebFetchTool(webLinkStore))
         register(JavaScriptTool(context))
+        // Rendered inline by the chat bubble, not executed here; see HtmlPreviewTool.
+        register(HtmlPreviewTool())
     }
