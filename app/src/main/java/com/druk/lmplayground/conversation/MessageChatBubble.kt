@@ -53,6 +53,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import com.druk.lmplayground.R
+import com.druk.lmplayground.tools.HtmlPreview
 
 @Composable
 fun ChatItemBubble(
@@ -102,21 +103,35 @@ fun ChatItemBubble(
                             Spacer(modifier = Modifier.height(6.dp))
                         }
                     }
-                    val durationSec = (toolCall.durationMs / 1000).toInt().coerceAtLeast(
-                        if (toolCall.durationMs > 0) 1 else 0
-                    )
-                    CollapsibleSection(
-                        label = "${toolDisplayName(toolCall.name)} \u00B7 ${formatDuration(durationSec)}",
-                        content = buildString {
-                            if (toolCall.arguments.isNotBlank()) {
-                                append(inputLabel).append('\n')
-                                append(prettyJson(toolCall.arguments))
-                                append("\n\n")
-                            }
-                            append(outputLabel).append('\n')
-                            append(prettyJson(toolCall.result))
+                    // html_preview renders the page the model wrote as a live,
+                    // interactive card. Malformed or rejected calls fall through
+                    // to the generic input/output section below.
+                    val preview = remember(toolCall.name, toolCall.arguments, toolCall.result) {
+                        if (toolCall.name == HtmlPreview.TOOL_NAME && HtmlPreview.wasRendered(toolCall.result)) {
+                            HtmlPreview.parse(toolCall.arguments)
+                        } else {
+                            null
                         }
-                    )
+                    }
+                    if (preview != null) {
+                        HtmlPreviewCard(preview)
+                    } else {
+                        val durationSec = (toolCall.durationMs / 1000).toInt().coerceAtLeast(
+                            if (toolCall.durationMs > 0) 1 else 0
+                        )
+                        CollapsibleSection(
+                            label = "${toolDisplayName(toolCall.name)} \u00B7 ${formatDuration(durationSec)}",
+                            content = buildString {
+                                if (toolCall.arguments.isNotBlank()) {
+                                    append(inputLabel).append('\n')
+                                    append(prettyJson(toolCall.arguments))
+                                    append("\n\n")
+                                }
+                                append(outputLabel).append('\n')
+                                append(prettyJson(toolCall.result))
+                            }
+                        )
+                    }
                     Spacer(modifier = Modifier.height(6.dp))
                 }
             }
@@ -375,6 +390,7 @@ private fun toolDisplayName(name: String): String = when (name) {
     "run_javascript" -> stringResource(R.string.tool_run_javascript_title)
     "web_search" -> stringResource(R.string.tool_web_search_title)
     "web_fetch" -> stringResource(R.string.tool_web_fetch_title)
+    HtmlPreview.TOOL_NAME -> stringResource(R.string.tool_html_preview_title)
     else -> name
 }
 
