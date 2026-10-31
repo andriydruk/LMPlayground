@@ -59,9 +59,12 @@ struct SessionsView: View {
                 .glassEffect(.regular.interactive(), in: .circle)
                 .accessibilityIdentifier("settingsButton")
         }
+        // The navigation bar's height, so the title and gear line up with
+        // the chat's menu button beside them.
+        .frame(height: 44)
         .padding(.leading, 20)
         .padding(.trailing, 12)
-        .padding(.vertical, 8)
+        .padding(.bottom, 8)
     }
 
     private var list: some View {
