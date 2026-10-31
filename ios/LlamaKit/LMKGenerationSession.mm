@@ -94,6 +94,11 @@
     return s != nullptr && s->continueResponse(enableThinking) == 0;
 }
 
+- (int32_t)rewindToTurn:(int32_t)turnIndex expectedText:(NSString *)expectedText {
+    auto *s = _session.load();
+    return s == nullptr ? -1 : s->rewindToTurn(turnIndex, expectedText.UTF8String);
+}
+
 - (NSString *)renderPreambleWithThinking:(BOOL)enableThinking {
     auto *s = _session.load();
     if (s == nullptr) return @"";

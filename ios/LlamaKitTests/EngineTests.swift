@@ -247,6 +247,37 @@ struct EngineTests {
         #expect(liveAnswer == replayedAnswer, "live \(liveAnswer) vs replayed \(replayedAnswer)")
     }
 
+    /// A rewound session answers exactly as a clean replay of the same
+    /// history, and a turn whose text doesn't match leaves it untouched.
+    @Test(.enabled(if: TestSupport.has(TestSupport.textModel)))
+    func rewindMatchesACleanReplay() throws {
+        let model = try Engine.loadModel(at: TestSupport.model(TestSupport.textModel))
+        defer { model.unload() }
+        let first = "What is the capital of France? One word."
+        let second = "And of Germany? One word."
+        let third = "And of Italy? One word."
+
+        let live = try model.makeSession(TestSupport.greedy)
+        defer { live.destroy() }
+        var reply = ""
+        _ = try live.respond(to: first, thinking: false, maxTokens: 8) { reply = $0 }
+        _ = try live.respond(to: second, thinking: false, maxTokens: 8) { _ in }
+        #expect(!live.rewind(toTurn: 1, expectedText: "something else"))
+        #expect(!live.rewind(toTurn: 7, expectedText: second))
+        #expect(live.rewind(toTurn: 1, expectedText: second))
+        var liveAnswer = ""
+        _ = try live.respond(to: third, thinking: false, maxTokens: 8) { liveAnswer = $0 }
+
+        let replayed = try model.makeSession(TestSupport.greedy)
+        defer { replayed.destroy() }
+        replayed.replay([(user: first, assistant: reply)])
+        var replayedAnswer = ""
+        _ = try replayed.respond(to: third, thinking: false, maxTokens: 8) { replayedAnswer = $0 }
+
+        #expect(!liveAnswer.isEmpty)
+        #expect(liveAnswer == replayedAnswer, "rewound \(liveAnswer) vs replayed \(replayedAnswer)")
+    }
+
     private static func promptTokens(_ report: String) -> Int {
         report.firstMatch(of: /Prompt tokens: (\d+)/).flatMap { Int($0.1) } ?? 0
     }

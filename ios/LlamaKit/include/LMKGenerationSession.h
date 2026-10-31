@@ -46,6 +46,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// context is full, or an image turn is no longer cached.
 - (BOOL)continueResponseWithThinking:(BOOL)enableThinking;
 
+/// Drop user turn `turnIndex` and everything after it, keeping the cache up to
+/// there. `expectedText`, when not empty, must occur in that turn. Returns the
+/// tokens kept, or -1 when the session is untouched and needs a replay.
+- (int32_t)rewindToTurn:(int32_t)turnIndex expectedText:(NSString *)expectedText;
+
 /// The rendered static preamble (system prompt + tool descriptions), or empty.
 - (NSString *)renderPreambleWithThinking:(BOOL)enableThinking;
 /// Persistent preamble KV cache: `<path>.bin` / `<path>.json`. Empty path

@@ -106,6 +106,14 @@ public final class GenerationSession {
         }
     }
 
+    /// Drop user turn `turn` (counted from 0) and everything after it, keeping
+    /// the cache up to there. `expectedText` must occur in that turn, guarding
+    /// against numbering that drifted. False leaves the session untouched:
+    /// rebuild it with `replay`.
+    public func rewind(toTurn turn: Int, expectedText: String) -> Bool {
+        native.rewind(toTurn: Int32(turn), expectedText: expectedText) >= 0
+    }
+
     /// Rebuild the conversation from persisted turns.
     public func replay(_ turns: [(user: String, assistant: String)]) {
         native.replayHistory(withUserMessages: turns.map(\.user),
