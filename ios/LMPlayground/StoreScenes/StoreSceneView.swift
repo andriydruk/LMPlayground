@@ -12,12 +12,7 @@ struct StoreSceneRoot: View {
             StoreCanvas.background
             if let fixtures {
                 StoreSceneView(scene: scene)
-                    .environment(fixtures.store)
-                    .environment(fixtures.downloads)
-                    .environment(fixtures.runtime)
-                    .environment(fixtures.conversation)
-                    .environment(fixtures.dictation)
-                    .environment(\.chatStore, fixtures.chatStore)
+                    .storeServices(fixtures)
             }
         }
         .ignoresSafeArea()
@@ -79,11 +74,11 @@ struct StoreSceneView: View {
             }
         case .systemPrompts:
             MarketingFrame(icon: "text.quote", title: "screenshot_prompts", subtitle: "screenshot_prompts_sub") {
-                AppScreen { SheetOverChat { NavigationStack { SystemPromptsView().navigationBarTitleDisplayMode(.inline) } } }
+                AppScreen { SheetOverChat { NavigationStack { SystemPromptsView().sheetChrome() } } }
             }
         case .tools:
             MarketingFrame(icon: "wrench.and.screwdriver", title: "screenshot_tools", subtitle: "screenshot_tools_sub") {
-                AppScreen { SheetOverChat { NavigationStack { ToolsSettingsView().navigationBarTitleDisplayMode(.inline) } } }
+                AppScreen { SheetOverChat { NavigationStack { ToolsSettingsView().sheetChrome() } } }
             }
         case .generationParams:
             MarketingFrame(icon: "slider.horizontal.3", title: "screenshot_fine_tune", subtitle: "screenshot_fine_tune_sub") {
@@ -172,25 +167,31 @@ private struct Device<Screen: View>: View {
     }
 }
 
-/// The app's screen inside the device: a fake status bar, the app, and a
-/// plain strip under it. The system home indicator can't be hidden for sure
-/// in time, so it lands on the strip, where the capture script paints it out.
+/// The app's screen inside the device: the app under a fake status bar, and
+/// a plain strip below. The status bar's height is the app's top safe area
+/// (set in UIKit, where navigation bars read it), so backgrounds such as the
+/// iPad sidebar run up under it. The system home indicator can't be hidden
+/// for sure in time, so it lands on the strip, where the capture script
+/// paints it out.
 private struct AppScreen<Content: View>: View {
     @ViewBuilder var content: Content
 
     var body: some View {
         VStack(spacing: 0) {
-            FakeStatusBar()
-            content
+            ZStack(alignment: .top) {
+                UIKitHost(topInset: FakeStatusBar.height) { content }
+                FakeStatusBar()
+            }
             Color.black.frame(height: 24)
         }
         .background(Color(.systemBackground))
-        .environment(\.horizontalSizeClass, StoreCanvas.isPad ? .regular : .compact)
     }
 }
 
 /// 9:41, full signal and battery; a Dynamic Island on the phone.
 private struct FakeStatusBar: View {
+    @MainActor static var height: CGFloat { StoreCanvas.isPad ? 32 : 54 }
+
     var body: some View {
         let pad = StoreCanvas.isPad
         HStack {
@@ -208,7 +209,8 @@ private struct FakeStatusBar: View {
         .foregroundStyle(.white)
         .padding(.horizontal, pad ? 24 : 34)
         .padding(.top, pad ? 6 : 16)
-        .frame(height: pad ? 32 : 54, alignment: .top)
+        .frame(height: Self.height, alignment: .top)
+        .allowsHitTesting(false)
         .overlay(alignment: .top) {
             if !pad {
                 Capsule().fill(.black)
@@ -258,12 +260,6 @@ private struct ChatStack: View {
 /// centered form sheet on the iPad.
 private struct SheetOverChat<Sheet: View>: View {
     @ViewBuilder var sheet: Sheet
-    @Environment(ConversationModel.self) private var conversation
-    @Environment(ModelRuntime.self) private var runtime
-    @Environment(ModelStore.self) private var store
-    @Environment(DownloadManager.self) private var downloads
-    @Environment(DictationController.self) private var dictation
-    @Environment(\.chatStore) private var chatStore
 
     var body: some View {
         ZStack {
@@ -283,10 +279,9 @@ private struct SheetOverChat<Sheet: View>: View {
     }
 
     /// The sheet at the elevated interface level, as a presented sheet is,
-    /// so the system backgrounds take their lighter sheet shades. The hosted
-    /// view starts a new environment, so the services are passed on.
+    /// so the system backgrounds take their lighter sheet shades.
     private var panel: some View {
-        ElevatedLevel {
+        UIKitHost(elevated: true) {
             VStack(spacing: 0) {
                 if !StoreCanvas.isPad {
                     Capsule().fill(.secondary).frame(width: 36, height: 5).padding(.vertical, 6)
@@ -294,30 +289,72 @@ private struct SheetOverChat<Sheet: View>: View {
                 sheet
             }
             .background(Color(.systemGroupedBackground))
-            .environment(conversation)
-            .environment(runtime)
-            .environment(store)
-            .environment(downloads)
-            .environment(dictation)
-            .environment(\.chatStore, chatStore)
         }
     }
 }
 
-/// Hosts its content with the elevated user interface level trait, which
-/// SwiftUI has no environment value for.
-private struct ElevatedLevel<Content: View>: UIViewControllerRepresentable {
-    @ViewBuilder var content: Content
+private extension View {
+    /// A screen shown as a sheet: an inline title and a close button on the
+    /// leading side. The button has no text, so no string reaches the catalog.
+    func sheetChrome() -> some View {
+        navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button {} label: { Image(systemName: "xmark") }
+                }
+            }
+    }
+}
 
-    func makeUIViewController(context: Context) -> UIHostingController<Content> {
-        let controller = UIHostingController(rootView: content)
-        controller.traitOverrides.userInterfaceLevel = .elevated
-        controller.view.backgroundColor = .clear
-        return controller
+/// Hosts its content in a UIKit controller, for what SwiftUI can't set: the
+/// elevated user interface level and an extra top safe area that navigation
+/// bars respect. The hosted view starts a new environment, so the services
+/// are passed on.
+private struct UIKitHost<Content: View>: View {
+    var elevated = false
+    var topInset: CGFloat = 0
+    @ViewBuilder var content: Content
+    @Environment(\.storeFixtures) private var fixtures
+
+    var body: some View {
+        if let fixtures {
+            Controller(elevated: elevated, topInset: topInset, content: content.storeServices(fixtures))
+        }
     }
 
-    func updateUIViewController(_ controller: UIHostingController<Content>, context: Context) {
-        controller.rootView = content
+    private struct Controller<Root: View>: UIViewControllerRepresentable {
+        let elevated: Bool
+        let topInset: CGFloat
+        let content: Root
+
+        func makeUIViewController(context: Context) -> UIHostingController<Root> {
+            let controller = UIHostingController(rootView: content)
+            if elevated { controller.traitOverrides.userInterfaceLevel = .elevated }
+            controller.additionalSafeAreaInsets.top = topInset
+            controller.view.backgroundColor = .clear
+            return controller
+        }
+
+        func updateUIViewController(_ controller: UIHostingController<Root>, context: Context) {
+            controller.rootView = content
+        }
+    }
+}
+
+extension EnvironmentValues {
+    @Entry var storeFixtures: StoreFixtures?
+}
+
+private extension View {
+    /// The fixtures' services, as the app injects its own.
+    func storeServices(_ fixtures: StoreFixtures) -> some View {
+        environment(fixtures.store)
+            .environment(fixtures.downloads)
+            .environment(fixtures.runtime)
+            .environment(fixtures.conversation)
+            .environment(fixtures.dictation)
+            .environment(\.chatStore, fixtures.chatStore)
+            .environment(\.storeFixtures, fixtures)
     }
 }
 
