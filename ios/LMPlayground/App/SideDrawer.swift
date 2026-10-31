@@ -22,6 +22,11 @@ struct SideDrawer<Sidebar: View, Content: View>: View {
             let progress = offset / width
 
             ZStack(alignment: .leading) {
+                // A shade apart from the chat, so the pushed-aside chat's edge
+                // shows in dark mode too, where its shadow and dimming vanish.
+                Color(.secondarySystemBackground)
+                    .allowsHitTesting(false)
+
                 // The stack ignores the safe area so the chat's rounded corners
                 // reach the screen's; the sidebar keeps clear of the status bar
                 // and home indicator itself.
@@ -31,17 +36,15 @@ struct SideDrawer<Sidebar: View, Content: View>: View {
                     .frame(width: width)
                     .offset(x: (offset - width) / 3)
                     .opacity(0.4 + 0.6 * progress)
-                    .simultaneousGesture(dragGesture(width: width))
 
                 content
                     .frame(width: geometry.size.width)
                     .overlay {
-                        // Takes taps and drags on the pushed-aside chat.
+                        // Takes taps on the pushed-aside chat.
                         if isOpen || progress > 0 {
                             Color.black.opacity(0.25 * progress)
                                 .contentShape(.rect)
                                 .onTapGesture { setOpen(false) }
-                                .gesture(dragGesture(width: width))
                                 .accessibilityLabel("Close")
                                 .accessibilityAddTraits(.isButton)
                         }
@@ -49,19 +52,10 @@ struct SideDrawer<Sidebar: View, Content: View>: View {
                     .clipShape(.rect(cornerRadius: 40 * progress))
                     .shadow(color: .black.opacity(0.3 * progress), radius: 16)
                     .offset(x: offset)
-                    .overlay(alignment: .leading) {
-                        // The edge the drawer is pulled out from; narrow, and
-                        // clear of the menu button, so it never takes a tap.
-                        if !isOpen {
-                            Color.clear
-                                .frame(width: 20)
-                                .padding(.top, 120)
-                                .padding(.bottom, 100)
-                                .contentShape(.rect)
-                                .gesture(dragGesture(width: width))
-                        }
-                    }
             }
+            // One drag for the whole drawer: separate ones on the sidebar and
+            // the chat could both track a single swipe and fight over it.
+            .simultaneousGesture(dragGesture(width: width))
             .ignoresSafeArea(.container, edges: .vertical)
         }
         .onChange(of: isOpen) { _, open in
@@ -73,6 +67,9 @@ struct SideDrawer<Sidebar: View, Content: View>: View {
         DragGesture(minimumDistance: 10)
             .onChanged { value in
                 if !dragging {
+                    // Closed, it is pulled out from the left edge only, so
+                    // the chat keeps its own drags.
+                    guard isOpen || value.startLocation.x < 20 else { return }
                     // Decide once, at the start: a drag that wobbles later
                     // keeps following the finger.
                     guard abs(value.translation.width) > abs(value.translation.height) else { return }
