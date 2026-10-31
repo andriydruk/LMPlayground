@@ -64,6 +64,53 @@ final class ChatFlowUITests: XCTestCase {
         XCTAssertTrue(waitForGone(app.buttons["stopButton"], timeout: 30), "generation never finished")
     }
 
+    private func waitForAnswer(containing text: String, in app: XCUIApplication) {
+        let answer = app.descendants(matching: .any)["assistantAnswer"].firstMatch
+        XCTAssertTrue(answer.waitForExistence(timeout: 60))
+        expectation(for: NSPredicate(format: "label CONTAINS[c] %@", text), evaluatedWith: answer)
+        waitForExpectations(timeout: 60)
+        XCTAssertTrue(waitForGone(app.buttons["stopButton"], timeout: 30), "generation never finished")
+    }
+
+    /// Editing replaces the turn and what followed it; regenerate and branch
+    /// keep working on the result.
+    func testMessageActions() {
+        let app = launchWithModel()
+        app.buttons["New chat"].firstMatch.tap()
+        send("What is the capital of France? Answer with one word.", in: app)
+        waitForAnswer(containing: "paris", in: app)
+
+        let bubble = app.descendants(matching: .any)["userMessage"].firstMatch
+        bubble.press(forDuration: 1)
+        app.buttons["Edit"].tap()
+        let editor = app.textFields["messageEditor"].exists ? app.textFields["messageEditor"] : app.textViews["messageEditor"]
+        XCTAssertTrue(editor.waitForExistence(timeout: 5))
+        editor.press(forDuration: 1.2)
+        app.menuItems["Select All"].tap()
+        editor.typeText("What is the capital of Japan? Answer with one word.")
+        app.buttons["editorSendButton"].tap()
+        waitForAnswer(containing: "tokyo", in: app)
+        XCTAssertEqual(app.descendants(matching: .any).matching(identifier: "userMessage").count, 1)
+
+        app.buttons["moreOptionsButton"].tap()
+        app.buttons["Regenerate"].tap()
+        waitForAnswer(containing: "tokyo", in: app)
+        XCTAssertEqual(app.descendants(matching: .any).matching(identifier: "assistantAnswer").count, 1)
+
+        app.buttons["moreOptionsButton"].tap()
+        app.buttons["Branch in new chat"].tap()
+        XCTAssertTrue(app.staticTexts["Continuing in a new chat"].waitForExistence(timeout: 10))
+        app.buttons["sessionInfoButton"].tap()
+        XCTAssertTrue(app.alerts["Session Info"].waitForExistence(timeout: 5))
+        app.alerts.buttons["Close"].tap()
+
+        // The branch keeps its context.
+        send("Which country was that about? Answer with one word.", in: app)
+        let answers = app.descendants(matching: .any).matching(identifier: "assistantAnswer")
+        expectation(for: NSPredicate(format: "count >= 2"), evaluatedWith: answers)
+        waitForExpectations(timeout: 60)
+    }
+
     /// iPhone apps can't use the GPU in the background: the reply stops and
     /// is marked interrupted, and the app keeps working.
     func testBackgroundingInterruptsTheReply() {

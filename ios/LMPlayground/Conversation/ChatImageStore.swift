@@ -57,6 +57,18 @@ enum ChatImageStore {
         return CGImageDestinationFinalize(destination)
     }
 
+    /// A copy of a stored image, so a branched chat owns its files. Returns
+    /// the copy's saved name.
+    static func copy(_ path: String) -> String? {
+        let name = "img_\(UUID().uuidString).jpg"
+        do {
+            try FileManager.default.copyItem(at: url(for: path), to: url(for: name))
+            return name
+        } catch {
+            return nil
+        }
+    }
+
     /// Delete stored images by their saved names.
     static func delete(_ paths: [String]) {
         for path in paths {

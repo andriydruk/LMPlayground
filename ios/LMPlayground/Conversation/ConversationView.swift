@@ -59,6 +59,9 @@ struct ConversationView: View {
     /// Whether the end of the conversation is on screen: streaming keeps it
     /// there, and scrolling up offers a way back instead.
     @State private var atBottom = true
+    /// The user message open in the in-place editor.
+    @State private var editing: ChatMessage.ID?
+    @State private var sessionReport: String?
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -68,8 +71,12 @@ struct ConversationView: View {
                         let isLast = message.id == model.messages.last?.id
                         MessageView(message: message,
                                     isStreaming: model.isGenerating && isLast,
-                                    onContinue: isLast && !model.isGenerating && runtime.loaded != nil
-                                        ? { model.continueReply() } : nil)
+                                    actions: actions(for: message, isLast: isLast),
+                                    isEditing: editing == message.id,
+                                    onEditEnded: { text in
+                                        editing = nil
+                                        if let text { model.edit(message, text: text) }
+                                    })
                             .id(message.id)
                     }
                     // On screen exactly when the end of the conversation is.
@@ -83,6 +90,9 @@ struct ConversationView: View {
             .scrollDismissesKeyboard(.interactively)
             .onChange(of: model.messages.last?.content) {
                 if model.isGenerating && atBottom { proxy.scrollTo("bottom", anchor: .bottom) }
+            }
+            .onChange(of: editing) { _, id in
+                if let id { withAnimation { proxy.scrollTo(id, anchor: .center) } }
             }
             .overlay {
                 // Android: What's New while no model is loaded.
@@ -136,6 +146,16 @@ struct ConversationView: View {
                     .accessibilityIdentifier("newChatButton")
             }
         }
+        .onChange(of: model.isGenerating) { _, generating in
+            if generating { editing = nil }
+        }
+        .onChange(of: model.session?.id) { editing = nil }
+        .alert("Session Info", isPresented: Binding(
+            get: { sessionReport != nil }, set: { if !$0 { sessionReport = nil } })) {
+            Button("Close", role: .cancel) {}
+        } message: {
+            Text(sessionReport ?? "")
+        }
         .alert("Something went wrong", isPresented: Binding(
             get: { model.errorMessage != nil }, set: { if !$0 { model.errorMessage = nil } })) {
             Button("OK", role: .cancel) {}
@@ -172,6 +192,30 @@ struct ConversationView: View {
                 AppServices.releaseAuxiliaryModels(rag: model.rag)
             }
         }
+    }
+
+    /// Edit and regenerate run the model; branching only needs a saved chat
+    /// to copy. Nothing changes a chat while a reply is being written.
+    private func actions(for message: ChatMessage, isLast: Bool) -> MessageActions {
+        let idle = !model.isGenerating
+        let ready = idle && runtime.loaded != nil
+        var actions = MessageActions()
+        switch message.role {
+        case .user:
+            if ready { actions.onEdit = { editing = message.id } }
+        case .assistant:
+            if ready && isLast {
+                actions.onContinue = { model.continueReply() }
+                actions.onRegenerate = { model.regenerate(message) }
+            }
+            if idle && model.session != nil {
+                actions.onBranch = { model.branch(from: message) }
+            }
+            if model.hasEngineSession {
+                actions.onSessionInfo = { Task { sessionReport = await model.sessionReport() } }
+            }
+        }
+        return actions
     }
 
     private var isLoading: Bool {
@@ -482,6 +526,18 @@ private struct HintPills: View {
 
     var body: some View {
         VStack(spacing: 8) {
+            if let notice = model.notice {
+                Text(verbatim: notice)
+                    .font(.subheadline.weight(.medium))
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .background(.regularMaterial, in: Capsule())
+                    .transition(.opacity.combined(with: .move(edge: .bottom)))
+                    .task(id: notice) {
+                        try? await Task.sleep(for: .seconds(3))
+                        if !Task.isCancelled { model.notice = nil }
+                    }
+            }
             if thermal == .serious || thermal == .critical {
                 Label("Your device is hot, so replies may be slower.", systemImage: "thermometer.high")
                     .font(.footnote)
@@ -506,6 +562,7 @@ private struct HintPills: View {
             }
         }
         .animation(.easeInOut(duration: 0.2), value: model.sessionModelHint?.filename)
+        .animation(.easeInOut(duration: 0.2), value: model.notice)
         .onReceive(NotificationCenter.default.publisher(for: ProcessInfo.thermalStateDidChangeNotification)) { _ in
             thermal = ProcessInfo.processInfo.thermalState
         }

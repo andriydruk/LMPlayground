@@ -81,6 +81,50 @@ final class ChatStore: Sendable {
         }
     }
 
+    /// A new conversation from `sourceId` holding `kept`: same model, settings
+    /// and system prompt, with metadata noting where it branched from. Branches
+    /// number per original chat; `title` builds the name from the original's
+    /// title and that number (1 for the first). Nil if the source is gone.
+    func branchSession(sourceId: String, kept: [ChatMessageRecord],
+                       title: @escaping @Sendable (_ rootTitle: String, _ number: Int) -> String) throws
+        -> (session: ChatSession, messages: [ChatMessageRecord])? {
+        try writer.write { db in
+            guard var branch = try ChatSession.fetchOne(db, key: sourceId) else { return nil }
+            var metadata = ConversationMetadata(json: branch.metadata)
+            let rootId = metadata.string(ConversationMetadata.branchRootKey) ?? sourceId
+            let rootTitle = metadata.string(ConversationMetadata.branchRootTitleKey) ?? branch.title
+            let highest = try String.fetchAll(db, sql: "SELECT metadata FROM chat_sessions")
+                .map(ConversationMetadata.init(json:))
+                .filter { $0.string(ConversationMetadata.branchRootKey) == rootId }
+                .compactMap { $0.string(ConversationMetadata.branchNumberKey).flatMap(Int.init) }
+                .max() ?? 0
+            let number = highest + 1
+
+            metadata.setString(ConversationMetadata.branchedFromKey, sourceId)
+            metadata.setString(ConversationMetadata.branchRootKey, rootId)
+            metadata.setString(ConversationMetadata.branchRootTitleKey, rootTitle)
+            metadata.setString(ConversationMetadata.branchNumberKey, String(number))
+            let now = Date().millisecondsSince1970
+            branch.id = UUID().uuidString
+            branch.title = title(rootTitle, number)
+            branch.createdAt = now
+            branch.updatedAt = now
+            branch.pinned = false
+            branch.metadata = metadata.json
+            try branch.insert(db)
+
+            let id = branch.id
+            let copies = try kept.map { message in
+                var copy = message
+                copy.id = nil
+                copy.sessionId = id
+                try copy.insert(db)
+                return copy
+            }
+            return (branch, copies)
+        }
+    }
+
     // MARK: - Messages
 
     func messages(in sessionId: String) throws -> [ChatMessageRecord] {
@@ -109,6 +153,10 @@ final class ChatStore: Sendable {
 
     func deleteMessage(_ id: Int64) throws {
         try writer.write { _ = try ChatMessageRecord.deleteOne($0, key: id) }
+    }
+
+    func deleteMessages(_ ids: [Int64]) throws {
+        try writer.write { _ = try ChatMessageRecord.deleteAll($0, keys: ids) }
     }
 
     // MARK: - System prompts

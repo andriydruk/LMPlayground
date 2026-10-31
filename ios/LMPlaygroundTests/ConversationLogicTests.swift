@@ -161,6 +161,39 @@ struct MemoryBudgetTests {
 
 struct ChatStoreTests {
 
+    @Test func branchesCopyTheChatAndNumberPerOriginal() throws {
+        let store = ChatStore(database: try AppDatabase.makeEmpty())
+        let source = try store.createSession(title: "Trip", model: nil, params: GenerationParams(), systemPrompt: "Be brief")
+        try store.pinSession(source.id, pinned: true)
+        let question = try store.insert(ChatMessage(role: .user, content: "hi").record(sessionId: source.id))
+        let title: @Sendable (String, Int) -> String = { "\($0) #\($1)" }
+
+        let first = try #require(try store.branchSession(sourceId: source.id, kept: [question], title: title))
+        #expect(first.session.title == "Trip #1")
+        #expect(first.session.systemPrompt == "Be brief")
+        #expect(!first.session.pinned)
+        #expect(first.messages.map(\.sessionId) == [first.session.id])
+        #expect(first.messages[0].id != question.id)
+        #expect(try store.messages(in: source.id).count == 1)
+
+        // A branch of a branch counts with its siblings, under the original's name.
+        let second = try #require(try store.branchSession(sourceId: first.session.id, kept: [], title: title))
+        #expect(second.session.title == "Trip #2")
+        let third = try #require(try store.branchSession(sourceId: source.id, kept: [], title: title))
+        #expect(third.session.title == "Trip #3")
+
+        #expect(try store.branchSession(sourceId: "gone", kept: [], title: title) == nil)
+    }
+
+    @Test func deletingMessagesKeepsTheRest() throws {
+        let store = ChatStore(database: try AppDatabase.makeEmpty())
+        let session = try store.createSession(title: "t", model: nil, params: GenerationParams(), systemPrompt: "")
+        let kept = try store.insert(ChatMessage(role: .user, content: "a").record(sessionId: session.id))
+        let gone = try store.insert(ChatMessage(role: .assistant, content: "b").record(sessionId: session.id))
+        try store.deleteMessages([try #require(gone.id)])
+        #expect(try store.messages(in: session.id).map(\.id) == [kept.id])
+    }
+
     @Test func deletingASessionCascadesToItsMessages() throws {
         let store = ChatStore(database: try AppDatabase.makeEmpty())
         let session = try store.createSession(title: "Hello", model: nil, params: GenerationParams(), systemPrompt: "")

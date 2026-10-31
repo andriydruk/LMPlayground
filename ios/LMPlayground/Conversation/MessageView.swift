@@ -1,12 +1,27 @@
 import SwiftUI
 
-/// One message. User messages are right-aligned bubbles; assistant replies
-/// show their thinking (collapsed), tool rounds, the Markdown answer and stats.
+/// What can be done with a message; nil hides the action (Android: the
+/// callbacks of Message and ChatItemBubble).
+struct MessageActions {
+    /// Offered on an interrupted last reply.
+    var onContinue: (() -> Void)?
+    /// Open the in-place editor on a user message.
+    var onEdit: (() -> Void)?
+    var onRegenerate: (() -> Void)?
+    var onBranch: (() -> Void)?
+    var onSessionInfo: (() -> Void)?
+}
+
+/// One message. User messages are right-aligned bubbles, with Copy and Edit
+/// on a long press; assistant replies show their thinking (collapsed), tool
+/// rounds, the Markdown answer and a row of actions.
 struct MessageView: View {
     let message: ChatMessage
     let isStreaming: Bool
-    /// Offered on an interrupted last reply.
-    var onContinue: (() -> Void)?
+    var actions = MessageActions()
+    var isEditing = false
+    /// Ends editing, with the new text or nil for Cancel.
+    var onEditEnded: (String?) -> Void = { _ in }
     @State private var viewing: String?
 
     private struct ViewedImage: Identifiable {
@@ -14,11 +29,15 @@ struct MessageView: View {
         var id: String { path }
     }
 
+    private var bubbleShape: UnevenRoundedRectangle {
+        UnevenRoundedRectangle(topLeadingRadius: 20, bottomLeadingRadius: 20, bottomTrailingRadius: 4, topTrailingRadius: 20)
+    }
+
     var body: some View {
         switch message.role {
         case .user:
             HStack {
-                Spacer(minLength: 48)
+                Spacer(minLength: isEditing ? 0 : 48)
                 VStack(alignment: .trailing, spacing: 6) {
                 if let path = message.imagePath {
                     Button { viewing = path } label: {
@@ -29,20 +48,73 @@ struct MessageView: View {
                     .buttonStyle(.plain)
                     .accessibilityLabel("Attached image")
                 }
-                Text(message.content)
-                    .textSelection(.enabled)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 10)
-                    .background(Color.accentColor, in: UnevenRoundedRectangle(
-                        topLeadingRadius: 20, bottomLeadingRadius: 20, bottomTrailingRadius: 4, topTrailingRadius: 20))
-                    .foregroundStyle(.white)
+                if isEditing {
+                    UserMessageEditor(initialText: message.content, allowsEmpty: message.imagePath != nil,
+                                      onCancel: { onEditEnded(nil) }, onSend: { onEditEnded($0) })
+                } else {
+                    Text(message.content)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(Color.accentColor, in: bubbleShape)
+                        .foregroundStyle(.white)
+                        .contentShape(.contextMenuPreview, bubbleShape)
+                        .contextMenu {
+                            Button("Copy", systemImage: "doc.on.doc") {
+                                UIPasteboard.general.string = message.content
+                            }
+                            if let onEdit = actions.onEdit {
+                                Button("Edit", systemImage: "pencil", action: onEdit)
+                            }
+                        }
+                        .accessibilityIdentifier("userMessage")
+                }
                 }
             }
             .fullScreenCover(item: Binding(get: { viewing.map(ViewedImage.init) }, set: { viewing = $0?.path })) { item in
                 ImageViewer(path: item.path)
             }
         case .assistant:
-            AssistantMessageView(message: message, isStreaming: isStreaming, onContinue: onContinue)
+            AssistantMessageView(message: message, isStreaming: isStreaming, actions: actions)
+        }
+    }
+}
+
+/// Replaces a user bubble: Send re-sends the edited text from this point of
+/// the chat, replacing what followed it.
+private struct UserMessageEditor: View {
+    let initialText: String
+    let allowsEmpty: Bool
+    var onCancel: () -> Void
+    var onSend: (String) -> Void
+
+    @State private var text = ""
+    @FocusState private var focused: Bool
+
+    private var canSend: Bool {
+        allowsEmpty || !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    var body: some View {
+        VStack(alignment: .trailing, spacing: 8) {
+            TextField("Message", text: $text, axis: .vertical)
+                .lineLimit(1...10)
+                .focused($focused)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
+                .overlay(RoundedRectangle(cornerRadius: 20).stroke(.tint))
+                .accessibilityIdentifier("messageEditor")
+            HStack(spacing: 8) {
+                Button("Cancel", action: onCancel)
+                    .buttonStyle(.bordered)
+                Button("Send") { onSend(text) }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(!canSend)
+                    .accessibilityIdentifier("editorSendButton")
+            }
+        }
+        .onAppear {
+            text = initialText
+            focused = true
         }
     }
 }
@@ -50,7 +122,7 @@ struct MessageView: View {
 private struct AssistantMessageView: View {
     let message: ChatMessage
     let isStreaming: Bool
-    var onContinue: (() -> Void)?
+    var actions = MessageActions()
 
     var body: some View {
         let split = ThinkingSplit(message.content)
@@ -85,7 +157,7 @@ private struct AssistantMessageView: View {
                         .accessibilityIdentifier("interruptedLabel")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    if let onContinue {
+                    if let onContinue = actions.onContinue {
                         Button("Continue", systemImage: "play.fill", action: onContinue)
                             .font(.caption.bold())
                             .buttonStyle(.bordered)
@@ -95,19 +167,8 @@ private struct AssistantMessageView: View {
                 }
             }
 
-            if !isStreaming && message.totalTokens > 0 {
-                HStack(spacing: 12) {
-                    Text(stats).font(.caption.monospacedDigit()).foregroundStyle(.tertiary)
-                    Spacer()
-                    Button("Copy", systemImage: "doc.on.doc") {
-                        UIPasteboard.general.string = split.response
-                    }
-                    ShareLink(item: split.response) { Image(systemName: "square.and.arrow.up") }
-                }
-                .labelStyle(.iconOnly)
-                .buttonStyle(.borderless)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+            if !isStreaming {
+                ReplyActions(text: split.response, stats: message.totalTokens > 0 ? stats : nil, actions: actions)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -122,6 +183,118 @@ private struct AssistantMessageView: View {
             text += AttributedString(" · ") + AttributedString(localized: "\(rate) tok/s")
         }
         return text
+    }
+}
+
+/// The row under a reply: share, copy, rating, a menu with Regenerate and
+/// Branch, and the stats, which open Session Info (Android: ChatItemBubble).
+private struct ReplyActions: View {
+    let text: String
+    let stats: AttributedString?
+    let actions: MessageActions
+
+    private enum Rating { case up, down }
+
+    @State private var rating: Rating?
+    @State private var showRatingSheet = false
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ShareLink(item: text) { icon("Share", "square.and.arrow.up") }
+            Button { UIPasteboard.general.string = text } label: { icon("Copy", "doc.on.doc") }
+            Button {
+                rating = rating == .up ? nil : .up
+            } label: {
+                icon("Upvote", rating == .up ? "hand.thumbsup.fill" : "hand.thumbsup")
+            }
+            Button {
+                rating = .down
+                showRatingSheet = true
+            } label: {
+                icon("Downvote", rating == .down ? "hand.thumbsdown.fill" : "hand.thumbsdown")
+            }
+            if actions.onRegenerate != nil || actions.onBranch != nil {
+                Menu {
+                    if let onRegenerate = actions.onRegenerate {
+                        Button("Regenerate", systemImage: "arrow.clockwise", action: onRegenerate)
+                    }
+                    if let onBranch = actions.onBranch {
+                        Button("Branch in new chat", systemImage: "arrow.triangle.branch", action: onBranch)
+                    }
+                } label: {
+                    icon("More options", "ellipsis")
+                }
+                .accessibilityIdentifier("moreOptionsButton")
+            }
+            if let stats {
+                Group {
+                    if let onSessionInfo = actions.onSessionInfo {
+                        Button(action: onSessionInfo) { Text(stats) }
+                            .accessibilityIdentifier("sessionInfoButton")
+                    } else {
+                        Text(stats)
+                    }
+                }
+                .font(.caption.monospacedDigit())
+                .foregroundStyle(.tertiary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .padding(.leading, 6)
+            }
+        }
+        .buttonStyle(.borderless)
+        .foregroundStyle(.secondary)
+        .sheet(isPresented: $showRatingSheet) {
+            RatingSheet()
+        }
+    }
+
+    private func icon(_ title: LocalizedStringKey, _ systemImage: String) -> some View {
+        Label(title, systemImage: systemImage)
+            .labelStyle(.iconOnly)
+            .font(.footnote)
+            .frame(width: 36, height: 36)
+            .contentShape(.rect)
+    }
+}
+
+/// Why a reply was rated down (Android: RatingBottomSheet).
+private struct RatingSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var selected: Set<String> = []
+
+    private let reasons: [LocalizedStringResource] = [
+        "Offensive/Unsafe", "Not correct", "Didn't follow instructions", "Wrong language", "Other",
+    ]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Why did you choose this rating?")
+                .font(.headline)
+            ForEach(reasons, id: \.key) { reason in
+                Toggle(isOn: Binding(
+                    get: { selected.contains(reason.key) },
+                    set: { isOn in
+                        if isOn { selected.insert(reason.key) } else { selected.remove(reason.key) }
+                    })) {
+                    Text(reason)
+                }
+                .toggleStyle(.button)
+                .buttonStyle(.bordered)
+                .buttonBorderShape(.capsule)
+            }
+            Button {
+                dismiss()
+            } label: {
+                Text("Send").frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .padding(.top, 4)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(20)
+        .presentationDetents([.medium])
     }
 }
 

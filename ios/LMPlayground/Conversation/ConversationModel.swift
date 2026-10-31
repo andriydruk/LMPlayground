@@ -30,9 +30,14 @@ final class ConversationModel {
     /// A document waiting for the user to agree to download the embedding
     /// model.
     private(set) var documentAwaitingEmbeddingModel: RagDocument?
+    /// A brief confirmation, shown for a few seconds.
+    var notice: String?
 
     /// The model the next message goes to.
     var selectedModel: ModelDescriptor? { runtime.loaded?.descriptor }
+
+    /// Whether an engine session is alive to report on.
+    var hasEngineSession: Bool { generation != nil }
 
     private let store: ChatStore
     private let runtime: ModelRuntime
@@ -49,7 +54,7 @@ final class ConversationModel {
     private static let hapticInterval: TimeInterval = 0.06
 
     /// The engine session for the current conversation, model and settings.
-    @ObservationIgnored private var generation: GenerationSession?
+    private var generation: GenerationSession?
     @ObservationIgnored private var generationKey: String?
     @ObservationIgnored private var turnTask: Task<Void, Never>?
 
@@ -287,6 +292,12 @@ final class ConversationModel {
         // Only a model with an attached projector can see the image.
         let image = loaded.supportsVision ? pendingImage : nil
         pendingImage = nil
+        beginTurn(text: text, imagePath: image, sessionId: sessionId, loaded: loaded)
+    }
+
+    /// Add the user message and its reply, and generate the reply.
+    private func beginTurn(text: String, imagePath image: String?, sessionId: String,
+                           loaded: ModelRuntime.LoadedModel) {
         var user = ChatMessage(role: .user, content: text, imagePath: image)
         user.recordId = (try? store.insert(user.record(sessionId: sessionId)))?.id
         messages.append(user)
@@ -302,6 +313,9 @@ final class ConversationModel {
         let supportsThinking = loaded.supportsThinking
         let tools: ToolRegistry? = loaded.supportsToolCalling ? self.tools : nil
         let filename = loaded.descriptor.filename
+        // An edited or regenerated turn keeps its image, but a model without
+        // a projector can't see it.
+        let visionImage = loaded.supportsVision ? image : nil
 
         turnTask = Task {
             do {
@@ -309,8 +323,8 @@ final class ConversationModel {
                 // The history is everything before this message and its reply.
                 let generation = try await prepareGeneration(for: loaded, upTo: messages.count - 2)
                 let observer = makeObserver()
-                let imageData: Data? = if let image {
-                    await Task.detached { ChatImageStore.visionData(for: image) }.value
+                let imageData: Data? = if let visionImage {
+                    await Task.detached { ChatImageStore.visionData(for: visionImage) }.value
                 } else {
                     nil
                 }
@@ -323,6 +337,96 @@ final class ConversationModel {
             }
             finishTurn(sessionId: sessionId)
         }
+    }
+
+    /// Regenerate a reply: everything from the user message that prompted it
+    /// is dropped and that message re-sent. The engine rewinds its cache
+    /// rather than evaluating the conversation again.
+    func regenerate(_ reply: ChatMessage) {
+        guard let index = messages.firstIndex(where: { $0.id == reply.id }) else { return }
+        ChatRewind.regenerate(messages, assistantIndex: index).map(rewindAndResend)
+    }
+
+    /// Replace a user message with `text` and re-send it; what followed it is
+    /// dropped.
+    func edit(_ message: ChatMessage, text: String) {
+        guard let index = messages.firstIndex(where: { $0.id == message.id }) else { return }
+        ChatRewind.edit(messages, userIndex: index, newText: text).map(rewindAndResend)
+    }
+
+    private func rewindAndResend(_ plan: ChatRewind.Plan) {
+        guard !isGenerating, let resend = plan.resend, let loaded = runtime.loaded,
+              let sessionId = session?.id else { return }
+        // Lock the chat's actions until the new turn takes over.
+        isGenerating = true
+        Task {
+            await rewindEngine(plan.rewind, for: loaded)
+            // The chat may have changed while the engine was busy.
+            guard session?.id == sessionId, runtime.loaded != nil else {
+                isGenerating = false
+                return
+            }
+            try? store.deleteMessages(plan.dropped.compactMap(\.recordId))
+            ChatImageStore.delete(plan.dropped.compactMap(\.imagePath).filter { $0 != resend.imagePath })
+            messages = plan.kept
+            beginTurn(text: resend.text, imagePath: resend.imagePath, sessionId: sessionId, loaded: loaded)
+        }
+    }
+
+    /// Continue the conversation up to `reply` in a new chat, leaving this one
+    /// as it is. The engine session carries on in the branch, so nothing is
+    /// evaluated again; the original replays when reopened, as any other.
+    func branch(from reply: ChatMessage) {
+        guard !isGenerating, let sourceId = session?.id,
+              let index = messages.firstIndex(where: { $0.id == reply.id }),
+              let plan = ChatRewind.branch(messages, at: index) else { return }
+        let keepsEngine = runtime.loaded.map { generation != nil && generationKey == currentKey(for: $0) } ?? false
+        // Each chat owns its image files.
+        let kept = plan.kept.map { message in
+            var copy = message
+            copy.recordId = nil
+            copy.imagePath = message.imagePath.flatMap(ChatImageStore.copy)
+            return copy.record(sessionId: sourceId)
+        }
+        isGenerating = true
+        Task {
+            defer { isGenerating = false }
+            let result: (session: ChatSession, messages: [ChatMessageRecord])?
+            do {
+                result = try store.branchSession(sourceId: sourceId, kept: kept) { title, number in
+                    number == 1 ? String(localized: "\(title) (branch)")
+                                : String(localized: "\(title) (branch \(number))")
+                }
+            } catch {
+                errorMessage = error.localizedDescription
+                return
+            }
+            guard let result else { return }
+            if let loaded = runtime.loaded { await rewindEngine(plan.rewind, for: loaded) }
+            guard session?.id == sourceId else { return }
+            let refused = generationKey == nil
+            session = result.session
+            messages = result.messages.map(ChatMessage.init(record:))
+            observeDocuments()
+            // The key includes the conversation id: move the live session over.
+            if keepsEngine, !refused, let loaded = runtime.loaded { generationKey = currentKey(for: loaded) }
+            notice = String(localized: "Continuing in a new chat")
+        }
+    }
+
+    /// Drop the engine's turns from `rewind` on. A session that isn't this
+    /// conversation's, or that refuses, is rebuilt from the messages on the
+    /// next turn.
+    private func rewindEngine(_ rewind: ChatRewind.EngineRewind?, for loaded: ModelRuntime.LoadedModel) async {
+        guard let rewind, let generation, generationKey == currentKey(for: loaded) else { return }
+        if !(await generation.rewind(toTurn: rewind.turnIndex, expectedText: rewind.anchorText)) {
+            invalidateGeneration()
+        }
+    }
+
+    /// The engine's report on the current session (Android: Session Info).
+    func sessionReport() async -> String? {
+        await generation?.report
     }
 
     /// The current conversation's id, creating its row first for a new chat.

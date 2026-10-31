@@ -157,6 +157,13 @@ struct GenerationParams: Codable, Hashable, Sendable {
 /// (Android: ConversationMetadata).
 struct ConversationMetadata {
     static let webLinksKey = "webLinks"
+    /// The chat a branch was made from.
+    static let branchedFromKey = "branchedFrom"
+    /// Branches number per original chat, so a branch of a branch counts with
+    /// its siblings.
+    static let branchRootKey = "branchRoot"
+    static let branchRootTitleKey = "branchRootTitle"
+    static let branchNumberKey = "branchNumber"
 
     private var object: [String: Any]
 
@@ -167,6 +174,14 @@ struct ConversationMetadata {
         } else {
             object = [:]
         }
+    }
+
+    func string(_ key: String) -> String? {
+        object[key] as? String
+    }
+
+    mutating func setString(_ key: String, _ value: String) {
+        object[key] = value
     }
 
     func stringMap(_ key: String) -> [String: String] {
