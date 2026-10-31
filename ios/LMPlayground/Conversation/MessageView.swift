@@ -52,21 +52,27 @@ struct MessageView: View {
                     UserMessageEditor(initialText: message.content, allowsEmpty: message.imagePath != nil,
                                       onCancel: { onEditEnded(nil) }, onSend: { onEditEnded($0) })
                 } else {
-                    Text(message.content)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 10)
-                        .background(Color.accentColor, in: bubbleShape)
-                        .foregroundStyle(.white)
-                        .contentShape(.contextMenuPreview, bubbleShape)
-                        .contextMenu {
-                            Button("Copy", systemImage: "doc.on.doc") {
-                                UIPasteboard.general.string = message.content
-                            }
-                            if let onEdit = actions.onEdit {
-                                Button("Edit", systemImage: "pencil", action: onEdit)
-                            }
+                    // A menu anchored to the bubble, opened by a long press
+                    // (Android: a dropdown). A context menu would preview the
+                    // text, and iOS adds its own items, Ask Siri among them.
+                    Menu {
+                        Button("Copy", systemImage: "doc.on.doc") {
+                            UIPasteboard.general.string = message.content
                         }
-                        .accessibilityIdentifier("userMessage")
+                        if let onEdit = actions.onEdit {
+                            Button("Edit", systemImage: "pencil", action: onEdit)
+                        }
+                    } label: {
+                        Text(message.content)
+                            .multilineTextAlignment(.leading)
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 10)
+                            .background(Color.accentColor, in: bubbleShape)
+                            .foregroundStyle(.white)
+                    } primaryAction: {}
+                    .menuIndicator(.hidden)
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("userMessage")
                 }
                 }
             }
