@@ -22,7 +22,7 @@ struct ModelLibraryView: View {
 
         List {
             Section {
-                StorageSummary(info: store.storageInfo)
+                StorageCard(info: store.storageInfo, onImport: { importing = true })
             }
 
             Section("Downloaded") {
@@ -66,9 +66,6 @@ struct ModelLibraryView: View {
             }
         }
         .navigationTitle("Models")
-        .toolbar {
-            Button("Import", systemImage: "square.and.arrow.down") { importing = true }
-        }
         .refreshable { store.refresh() }
         .onAppear { store.refresh() }
         .fileImporter(isPresented: $importing, allowedContentTypes: [.data]) { result in
@@ -290,13 +287,57 @@ struct CapabilityBadges: View {
     }
 }
 
-struct StorageSummary: View {
+/// Where models live and how much room is left, with Import (Android: the
+/// storage card on the Models screen). The folder opens in Files.
+struct StorageCard: View {
     let info: ModelStore.StorageInfo
+    var onImport: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            LabeledContent("Models", value: info.modelsBytes.formattedBytes)
-            LabeledContent("Free space", value: info.freeBytes.formattedBytes)
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 12) {
+                Button(action: openFolder) {
+                    HStack(spacing: 12) {
+                        Image(systemName: "folder")
+                            .font(.title3)
+                            .foregroundStyle(.tint)
+                        // The app's and the folder's own names, as Files shows them.
+                        Text(verbatim: "LM Playground › Models")
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                    }
+                }
+                .buttonStyle(.plain)
+                Spacer(minLength: 8)
+                Button(action: onImport) {
+                    Label("Import", systemImage: "square.and.arrow.down")
+                        .labelStyle(.titleAndIcon)
+                        .font(.subheadline.weight(.medium))
+                }
+                .buttonStyle(.bordered)
+                .buttonBorderShape(.capsule)
+                .fixedSize(horizontal: true, vertical: false)
+                    .accessibilityIdentifier("importButton")
+            }
+            if info.totalBytes > 0 {
+                ProgressView(value: Double(info.modelsBytes), total: Double(info.totalBytes))
+            }
+            HStack {
+                Text("Models: \(info.modelsBytes.formattedBytes)")
+                Spacer()
+                Text("\(info.freeBytes.formattedBytes) available")
+            }
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+        }
+        .padding(.vertical, 4)
+    }
+
+    /// The Models folder in the Files app.
+    private func openFolder() {
+        let path = AppDirectories.models.path(percentEncoded: true)
+        if let url = URL(string: "shareddocuments://\(path)") {
+            UIApplication.shared.open(url)
         }
     }
 }

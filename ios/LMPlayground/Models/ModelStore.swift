@@ -16,6 +16,8 @@ final class ModelStore {
     struct StorageInfo: Sendable {
         let modelsBytes: UInt64
         let freeBytes: UInt64
+        /// The volume's size; 0 if unknown.
+        var totalBytes: UInt64 = 0
     }
 
     enum ImportError: LocalizedError {
@@ -146,9 +148,10 @@ final class ModelStore {
     // MARK: - Storage
 
     var storageInfo: StorageInfo {
-        let free = (try? directory.resourceValues(forKeys: [.volumeAvailableCapacityForImportantUsageKey])
-            .volumeAvailableCapacityForImportantUsage).map { UInt64(max(0, $0)) } ?? 0
-        return StorageInfo(modelsBytes: files.values.reduce(0, +), freeBytes: free)
+        let values = try? directory.resourceValues(forKeys: [.volumeAvailableCapacityForImportantUsageKey, .volumeTotalCapacityKey])
+        let free = values?.volumeAvailableCapacityForImportantUsage.map { UInt64(max(0, $0)) } ?? 0
+        let total = values?.volumeTotalCapacity.map { UInt64(max(0, $0)) } ?? 0
+        return StorageInfo(modelsBytes: files.values.reduce(0, +), freeBytes: free, totalBytes: total)
     }
 
     /// Delete a model and its projector, unless another downloaded model
