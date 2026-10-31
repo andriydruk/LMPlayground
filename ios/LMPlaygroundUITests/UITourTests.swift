@@ -32,6 +32,23 @@ final class UITourTests: XCTestCase {
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
         sleep(1)
         shot("drawer-closed")
+        // A swipe from the left edge opens it, a swipe back closes it.
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.01, dy: 0.5))
+            .press(forDuration: 0.05, thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.7, dy: 0.5)))
+        sleep(1)
+        shot("drawer-swiped-open")
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5))
+            .press(forDuration: 0.05, thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.2, dy: 0.5)))
+        sleep(1)
+        shot("drawer-swiped-closed")
+
+        title.tap()
+        sleep(1)
+        app.buttons["Browse Models"].tap()
+        sleep(2)
+        shot("models")
+        app.buttons["Done"].tap()
+        sleep(1)
 
         title.tap()
         sleep(1)

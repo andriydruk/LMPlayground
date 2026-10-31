@@ -88,6 +88,12 @@ struct ConversationView: View {
             }
             .defaultScrollAnchor(.bottom)
             .scrollDismissesKeyboard(.interactively)
+            // A tap on the chat closes the keyboard; buttons and links in the
+            // messages take their taps first. Not while a message is being
+            // edited: its field is in the chat.
+            .onTapGesture {
+                if editing == nil { UIApplication.shared.dismissKeyboard() }
+            }
             .onChange(of: model.messages.last?.content) {
                 if model.isGenerating && atBottom { proxy.scrollTo("bottom", anchor: .bottom) }
             }
@@ -225,7 +231,7 @@ struct ConversationView: View {
 
     private func openPicker() {
         // The card sits over the chat, not above the keyboard.
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        UIApplication.shared.dismissKeyboard()
         if store.downloaded.isEmpty {
             showLibrary = true
         } else {

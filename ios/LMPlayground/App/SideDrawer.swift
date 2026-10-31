@@ -9,7 +9,10 @@ struct SideDrawer<Sidebar: View, Content: View>: View {
     @ViewBuilder var sidebar: Sidebar
     @ViewBuilder var content: Content
 
-    @GestureState private var drag: CGFloat = 0
+    /// The finger's travel while a drag is under way.
+    @State private var drag: CGFloat = 0
+    /// Set once a drag is known to be horizontal; vertical ones scroll.
+    @State private var dragging = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -51,7 +54,7 @@ struct SideDrawer<Sidebar: View, Content: View>: View {
                         // clear of the menu button, so it never takes a tap.
                         if !isOpen {
                             Color.clear
-                                .frame(width: 12)
+                                .frame(width: 20)
                                 .padding(.top, 120)
                                 .padding(.bottom, 100)
                                 .contentShape(.rect)
@@ -62,28 +65,40 @@ struct SideDrawer<Sidebar: View, Content: View>: View {
             .ignoresSafeArea(.container, edges: .vertical)
         }
         .onChange(of: isOpen) { _, open in
-            if open {
-                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-            }
+            if open { UIApplication.shared.dismissKeyboard() }
         }
     }
 
     private func dragGesture(width: CGFloat) -> some Gesture {
         DragGesture(minimumDistance: 10)
-            .updating($drag) { value, state, _ in
-                // Horizontal drags only: vertical ones scroll the list.
-                guard abs(value.translation.width) > abs(value.translation.height) else { return }
-                state = value.translation.width
+            .onChanged { value in
+                if !dragging {
+                    // Decide once, at the start: a drag that wobbles later
+                    // keeps following the finger.
+                    guard abs(value.translation.width) > abs(value.translation.height) else { return }
+                    dragging = true
+                }
+                drag = value.translation.width
             }
             .onEnded { value in
-                guard abs(value.translation.width) > abs(value.translation.height) else { return }
+                guard dragging else { return }
+                dragging = false
                 let projected = (isOpen ? width : 0) + value.predictedEndTranslation.width
-                setOpen(projected > width / 2)
+                // The travel is let go in the same animation, so the drawer
+                // carries on from under the finger rather than jumping back.
+                withAnimation(animation) {
+                    isOpen = projected > width / 2
+                    drag = 0
+                }
             }
     }
 
+    private var animation: Animation {
+        reduceMotion ? .easeInOut(duration: 0.2) : .snappy(duration: 0.3)
+    }
+
     private func setOpen(_ open: Bool) {
-        withAnimation(reduceMotion ? .easeInOut(duration: 0.2) : .snappy(duration: 0.3)) { isOpen = open }
+        withAnimation(animation) { isOpen = open }
     }
 }
 

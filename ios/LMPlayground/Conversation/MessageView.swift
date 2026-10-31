@@ -29,10 +29,6 @@ struct MessageView: View {
         var id: String { path }
     }
 
-    private var bubbleShape: UnevenRoundedRectangle {
-        UnevenRoundedRectangle(topLeadingRadius: 20, bottomLeadingRadius: 20, bottomTrailingRadius: 4, topTrailingRadius: 20)
-    }
-
     var body: some View {
         switch message.role {
         case .user:
@@ -43,7 +39,7 @@ struct MessageView: View {
                     Button { viewing = path } label: {
                         StoredImage(path: path)
                             .frame(width: 180, height: 180)
-                            .clipShape(RoundedRectangle(cornerRadius: 14))
+                            .clipShape(RoundedRectangle(cornerRadius: 18))
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel("Attached image")
@@ -65,9 +61,10 @@ struct MessageView: View {
                     } label: {
                         Text(message.content)
                             .multilineTextAlignment(.leading)
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 10)
-                            .background(Color.accentColor, in: bubbleShape)
+                            .padding(.leading, 13)
+                            .padding(.trailing, 13 + MessageBubble.tail)
+                            .padding(.vertical, 8)
+                            .background(Color(.systemBlue).gradient, in: MessageBubble())
                             .foregroundStyle(.white)
                     } primaryAction: {}
                     .menuIndicator(.hidden)
@@ -82,6 +79,34 @@ struct MessageView: View {
         case .assistant:
             AssistantMessageView(message: message, isStreaming: isStreaming, actions: actions)
         }
+    }
+}
+
+/// An iMessage bubble: round corners and a tail curling out of the bottom
+/// right corner.
+struct MessageBubble: Shape {
+    /// How far the tail reaches past the body.
+    static let tail: CGFloat = 5
+
+    func path(in rect: CGRect) -> Path {
+        let w = rect.width, h = rect.height
+        let r = min(17, h / 2)
+        let right = w - Self.tail
+        var p = Path()
+        p.move(to: CGPoint(x: right - r, y: h))
+        p.addLine(to: CGPoint(x: r, y: h))
+        p.addCurve(to: CGPoint(x: 0, y: h - r), control1: CGPoint(x: r * 0.45, y: h), control2: CGPoint(x: 0, y: h - r * 0.45))
+        p.addLine(to: CGPoint(x: 0, y: r))
+        p.addCurve(to: CGPoint(x: r, y: 0), control1: CGPoint(x: 0, y: r * 0.45), control2: CGPoint(x: r * 0.45, y: 0))
+        p.addLine(to: CGPoint(x: right - r, y: 0))
+        p.addCurve(to: CGPoint(x: right, y: r), control1: CGPoint(x: right - r * 0.45, y: 0), control2: CGPoint(x: right, y: r * 0.45))
+        p.addLine(to: CGPoint(x: right, y: h - r * 0.7))
+        // The tail: down and out to the corner, then curling back under.
+        p.addCurve(to: CGPoint(x: w, y: h), control1: CGPoint(x: right, y: h - 1), control2: CGPoint(x: w - 1, y: h))
+        p.addCurve(to: CGPoint(x: right - 7, y: h - 3.5), control1: CGPoint(x: w - 3.5, y: h + 0.5), control2: CGPoint(x: right - 4, y: h - 1))
+        p.addCurve(to: CGPoint(x: right - r, y: h), control1: CGPoint(x: right - 9.5, y: h - 0.5), control2: CGPoint(x: right - r * 0.6, y: h))
+        p.closeSubpath()
+        return p
     }
 }
 
