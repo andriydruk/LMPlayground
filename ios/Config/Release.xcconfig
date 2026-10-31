@@ -3,3 +3,7 @@
 // Every archive must carry complete symbols, including the C++ engine.
 DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
 STRIP_INSTALLED_PRODUCT = YES
+
+// The store screenshot scenes, their strings and sample photo are debug-only
+// (ios/plan/11-store-screenshots.md).
+EXCLUDED_SOURCE_FILE_NAMES = $(inherited) */StoreScenes/*
