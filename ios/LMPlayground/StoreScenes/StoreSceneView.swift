@@ -79,11 +79,11 @@ struct StoreSceneView: View {
             }
         case .systemPrompts:
             MarketingFrame(icon: "text.quote", title: "screenshot_prompts", subtitle: "screenshot_prompts_sub") {
-                AppScreen { SheetOverChat { NavigationStack { SystemPromptsView().navigationBarTitleDisplayMode(SheetOverChat<EmptyView>.titleMode) } } }
+                AppScreen { SheetOverChat { NavigationStack { SystemPromptsView().navigationBarTitleDisplayMode(.inline) } } }
             }
         case .tools:
             MarketingFrame(icon: "wrench.and.screwdriver", title: "screenshot_tools", subtitle: "screenshot_tools_sub") {
-                AppScreen { SheetOverChat { NavigationStack { ToolsSettingsView().navigationBarTitleDisplayMode(SheetOverChat<EmptyView>.titleMode) } } }
+                AppScreen { SheetOverChat { NavigationStack { ToolsSettingsView().navigationBarTitleDisplayMode(.inline) } } }
             }
         case .generationParams:
             MarketingFrame(icon: "slider.horizontal.3", title: "screenshot_fine_tune", subtitle: "screenshot_fine_tune_sub") {
@@ -258,31 +258,66 @@ private struct ChatStack: View {
 /// centered form sheet on the iPad.
 private struct SheetOverChat<Sheet: View>: View {
     @ViewBuilder var sheet: Sheet
-
-    /// Form sheets on the iPad carry an inline title.
-    @MainActor static var titleMode: NavigationBarItem.TitleDisplayMode {
-        StoreCanvas.isPad ? .inline : .automatic
-    }
+    @Environment(ConversationModel.self) private var conversation
+    @Environment(ModelRuntime.self) private var runtime
+    @Environment(ModelStore.self) private var store
+    @Environment(DownloadManager.self) private var downloads
+    @Environment(DictationController.self) private var dictation
+    @Environment(\.chatStore) private var chatStore
 
     var body: some View {
         ZStack {
             ChatStack()
             Color.black.opacity(0.45)
             if StoreCanvas.isPad {
-                sheet
+                panel
                     .frame(width: 540, height: 700)
                     .clipShape(RoundedRectangle(cornerRadius: 38))
                     .overlay(RoundedRectangle(cornerRadius: 38).strokeBorder(Color(white: 0.24)))
             } else {
-                VStack(spacing: 0) {
-                    Capsule().fill(.secondary).frame(width: 36, height: 5).padding(.vertical, 6)
-                    sheet
-                }
-                .background(Color(.secondarySystemBackground))
-                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 38, topTrailingRadius: 38))
-                .padding(.top, 52)
+                panel
+                    .clipShape(UnevenRoundedRectangle(topLeadingRadius: 38, topTrailingRadius: 38))
+                    .padding(.top, 52)
             }
         }
+    }
+
+    /// The sheet at the elevated interface level, as a presented sheet is,
+    /// so the system backgrounds take their lighter sheet shades. The hosted
+    /// view starts a new environment, so the services are passed on.
+    private var panel: some View {
+        ElevatedLevel {
+            VStack(spacing: 0) {
+                if !StoreCanvas.isPad {
+                    Capsule().fill(.secondary).frame(width: 36, height: 5).padding(.vertical, 6)
+                }
+                sheet
+            }
+            .background(Color(.systemGroupedBackground))
+            .environment(conversation)
+            .environment(runtime)
+            .environment(store)
+            .environment(downloads)
+            .environment(dictation)
+            .environment(\.chatStore, chatStore)
+        }
+    }
+}
+
+/// Hosts its content with the elevated user interface level trait, which
+/// SwiftUI has no environment value for.
+private struct ElevatedLevel<Content: View>: UIViewControllerRepresentable {
+    @ViewBuilder var content: Content
+
+    func makeUIViewController(context: Context) -> UIHostingController<Content> {
+        let controller = UIHostingController(rootView: content)
+        controller.traitOverrides.userInterfaceLevel = .elevated
+        controller.view.backgroundColor = .clear
+        return controller
+    }
+
+    func updateUIViewController(_ controller: UIHostingController<Content>, context: Context) {
+        controller.rootView = content
     }
 }
 
