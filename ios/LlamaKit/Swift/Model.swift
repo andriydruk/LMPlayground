@@ -64,6 +64,14 @@ public final class Model {
     public func unload() {
         native.unload()
     }
+
+    #if DEBUG
+    /// A model with no weights, for store screenshots: it reports no
+    /// capabilities and can't start a session.
+    public static func placeholder() -> Model {
+        Model(native: LMKModel.placeholder())
+    }
+    #endif
 }
 
 /// Mean-pooled, L2-normalized text embeddings.

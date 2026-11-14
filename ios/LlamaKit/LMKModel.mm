@@ -14,6 +14,12 @@
     return self;
 }
 
+#if DEBUG
++ (instancetype)placeholder {
+    return [[self alloc] initWithModel:nullptr];
+}
+#endif
+
 - (void)dealloc {
     [self unload];
 }

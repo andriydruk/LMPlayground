@@ -146,6 +146,19 @@ final class ModelRuntime {
     }
 }
 
+#if DEBUG
+extension ModelRuntime {
+    /// Store screenshots: show `descriptor` as loaded, with a placeholder
+    /// engine model behind it.
+    func stage(_ descriptor: ModelDescriptor, contextTrainSize: Int, thinking: Bool, tools: Bool, vision: Bool) async {
+        let model = await Model.placeholder()
+        loaded = LoadedModel(descriptor: descriptor, model: model, contextTrainSize: contextTrainSize,
+                             supportsThinking: thinking, supportsToolCalling: tools, supportsVision: vision)
+        phase = .ready
+    }
+}
+#endif
+
 /// Replacement chat templates for models whose published template is broken
 /// (shared with Android in core/resources/chat_templates).
 enum ChatTemplateOverrides {
