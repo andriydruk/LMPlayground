@@ -3,9 +3,8 @@ import Foundation
 
 /// An App Store screenshot, drawn by the app so the system compositor renders
 /// it (Liquid Glass included) and `simctl io screenshot` captures it. Debug
-/// builds only: `-storeScene <id>` opens one (ios/scripts/store-screenshots.sh,
-/// ios/plan/11-store-screenshots.md). Ids and order match Android's
-/// StoreScreenshots.kt.
+/// builds only: `-storeScene <id>` opens one (ios/scripts/store-screenshots.sh).
+/// Ids and order match Android's StoreScreenshots.kt.
 enum StoreScene: String, CaseIterable, Sendable {
     case hero = "0_hero"
     case chooseModel = "1_choose_model"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # App Store screenshots: the iOS counterpart of Android's Paparazzi
-# StoreScreenshots (ios/plan/11-store-screenshots.md).
+# StoreScreenshots.
 #
 # Builds the Debug app for the simulator, then for every device, locale and
 # scene launches the app with `-storeScene <id>` (LMPlayground/StoreScenes),
