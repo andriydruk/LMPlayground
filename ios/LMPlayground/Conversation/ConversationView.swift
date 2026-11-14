@@ -302,14 +302,21 @@ private struct MessageList<Row: View>: View {
         .overlay(alignment: .bottomTrailing) {
             Group {
                 if !atBottom && !model.messages.isEmpty {
-                    Button("Jump to bottom", systemImage: "arrow.down", action: scrollToEnd)
-                        .labelStyle(.iconOnly)
-                        .font(.headline)
-                        .frame(width: 44, height: 44)
-                        .glassEffect(.regular.interactive(), in: .circle)
-                        .padding()
-                        .transition(.opacity.combined(with: .scale))
-                        .accessibilityIdentifier("jumpToBottom")
+                    Button(action: scrollToEnd) {
+                        Label("Jump to bottom", systemImage: "arrow.down")
+                            .labelStyle(.iconOnly)
+                            .font(.headline)
+                            .foregroundStyle(.tint)
+                            // 44 points with the style's padding.
+                            .frame(width: 30, height: 30)
+                    }
+                    // The glass button style, not an interactive glass effect:
+                    // with that, on iOS 26 a tap here never reached the button.
+                    .buttonStyle(.glass)
+                    .buttonBorderShape(.circle)
+                    .padding()
+                    .transition(.opacity.combined(with: .scale))
+                    .accessibilityIdentifier("jumpToBottom")
                 }
             }
             // On the button alone: around the list, it would animate whatever
