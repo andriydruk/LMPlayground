@@ -14,6 +14,8 @@ if len(sys.argv) > 1:
 else:
     REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BASE = os.path.join(REPO, 'app', 'src', 'main', 'res')
+if not os.path.isdir(BASE):  # Gradle project moved under android/
+    BASE = os.path.join(REPO, 'android', 'app', 'src', 'main', 'res')
 
 # Map android resource folder -> our website lang code.
 # values         -> en (default)

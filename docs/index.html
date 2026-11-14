@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#0A0B10" />
-  <title>LM Playground — Run LLMs locally on Android</title>
-  <meta name="description" content="Free, open-source Android app for running large language models on-device with llama.cpp. Chat with your documents offline — private, no API keys." />
+  <title>LM Playground — Run LLMs locally on Android and iOS</title>
+  <meta name="description" content="Free, open-source app for running large language models on-device with llama.cpp, on Android and soon on iPhone and iPad. Chat with your documents offline — private, no API keys." />
   <link rel="canonical" href="https://lmplayground.app/" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
-  <meta property="og:title" content="LM Playground — Run LLMs locally on Android" />
-  <meta property="og:description" content="Free, open-source Android app for running LLMs on-device with llama.cpp. Offline and private." />
+  <meta property="og:title" content="LM Playground — Run LLMs locally on Android and iOS" />
+  <meta property="og:description" content="Free, open-source app for running LLMs on-device with llama.cpp, on Android and soon on iPhone and iPad. Offline and private." />
   <meta property="og:image" content="https://lmplayground.app/banner.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -20,8 +20,8 @@
   <meta property="og:site_name" content="LM Playground" />
   <meta property="og:locale" content="en_US" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="LM Playground — Run LLMs locally on Android" />
-  <meta name="twitter:description" content="Free, open-source Android app for running LLMs on-device with llama.cpp. Offline, private, no API keys." />
+  <meta name="twitter:title" content="LM Playground — Run LLMs locally on Android and iOS" />
+  <meta name="twitter:description" content="Free, open-source app for running LLMs on-device with llama.cpp, on Android and soon on iPhone and iPad. Offline, private, no API keys." />
   <meta name="twitter:image" content="https://lmplayground.app/banner.png" />
   <meta name="twitter:image:alt" content="LM Playground — model picker and on-device chat shown on two Android phones" />
   <meta name="twitter:site" content="@AndriyDruk" />
@@ -125,6 +125,10 @@
       transition: transform 0.1s, background 0.15s;
     }
     .nav-cta:hover { background: white; transform: translateY(-1px); }
+    .nav-cta { white-space: nowrap; flex-shrink: 0; }
+    .nav-cta-icons { display: inline-flex; gap: 5px; }
+    @media (max-width: 420px) { .nav-cta-icons { display: none; } .nav-cta { padding: 8px 14px; font-size: 13px; } }
+    @media (max-width: 360px) { nav.top .brand span { display: none; } }
     /* Nine links: tighten, never wrap a label, and drop the row once it no
        longer fits (it wrapped into two-line labels below ~1000px). */
     .nav-links a { white-space: nowrap; }
@@ -215,6 +219,7 @@
     .btn-primary:hover { background: var(--accent-bright); transform: translateY(-1px); }
     .btn-ghost { background: var(--bg-elev); color: var(--fg); border-color: var(--line-strong); }
     .btn-ghost:hover { background: var(--bg-elev-2); }
+    .btn-soon { background: var(--bg-elev); color: var(--fg-mute); border-color: var(--line); font-family: inherit; cursor: not-allowed; }
     .btn svg { width: 18px; height: 18px; }
 
     .hero-meta { margin-top: 40px; display: flex; gap: 28px; flex-wrap: wrap; color: var(--fg-mute); font-size: 13px; }
@@ -318,6 +323,59 @@
     .lmp-input-field { flex: 1; color: #5C6180; font-size: 12.5px; }
     .lmp-send-btn { padding: 6px 18px; border: 1px solid #2A2F45; border-radius: 999px; color: #5C6180; font-size: 11.5px; font-weight: 500; flex-shrink: 0; }
     .lmp-home-indicator { width: 110px; height: 4px; background: #E8EAF2; border-radius: 2px; margin: 0 auto 6px; }
+
+    /* Device queue: the front phone plays a scene, swipes out, and the next one
+       moves up. Every phone shares one grid cell, so the stack keeps its height. */
+    .device-stack { display: grid; position: relative; z-index: 1; --q: 1; }
+    [dir="rtl"] .device-stack { --q: -1; }
+    .device-stack > .device {
+      grid-area: 1 / 1;
+      transition: transform 0.7s cubic-bezier(0.2, 0.75, 0.25, 1), opacity 0.55s ease, filter 0.7s ease;
+    }
+    .device-stack > .device[data-slot="0"] { z-index: 3; }
+    .device-stack > .device[data-slot="1"] { z-index: 2; transform: translateX(calc(var(--q) * 42px)) scale(0.92); opacity: 0.9; filter: brightness(0.7); }
+    .device-stack > .device[data-slot="2"] { z-index: 1; transform: translateX(calc(var(--q) * 78px)) scale(0.84); opacity: 0.55; filter: brightness(0.55); }
+    .device-stack > .device[data-slot="3"] { z-index: 0; transform: translateX(calc(var(--q) * 108px)) scale(0.76); opacity: 0; }
+    .device-stack > .device:not([data-slot="0"]) { pointer-events: none; }
+    .device-stack > .device.leaving { z-index: 4; transform: translateX(calc(var(--q) * -55%)) rotate(calc(var(--q) * -8deg)) scale(0.96); opacity: 0; pointer-events: none; }
+    @media (min-width: 1021px) { .device-stack { transform: translateX(-40px); } }
+
+    /* Android: Pixel-style punch-hole camera and squarer corners. */
+    .device-android { border-radius: 38px; }
+    .device-android .device-screen { border-radius: 29px; }
+    .device-android .notch { width: 12px; height: 12px; top: 13px; }
+    .device-android .lmp-home-indicator { width: 92px; height: 3px; opacity: 0.8; }
+
+    /* iPhone: Dynamic Island, rounder corners, and the iOS app's chat chrome —
+       blue bubbles, glass toolbar buttons, a glass capsule input. */
+    .device-ios { border-radius: 52px; padding: 11px; }
+    .device-ios .device-screen { border-radius: 42px; background: #050507; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist', sans-serif; }
+    .device-ios .notch { width: 92px; height: 27px; top: 10px; box-shadow: 0 0 0 1px rgba(255,255,255,0.07); }
+    .device-ios .lmp-status { padding: 17px 30px 6px; font-size: 13px; }
+    .device-ios .lmp-status-icons { gap: 6px; }
+    .device-ios .lmp-status-icons svg { width: auto; height: 11px; }
+    .device-ios .lmp-appbar-btn { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.09); box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.18); }
+    .device-ios .lmp-appbar-btn svg { width: 17px; height: 17px; }
+    .device-ios .lmp-appbar { grid-template-columns: 30px 1fr 30px; }
+    .device-ios .lmp-user-msg { position: relative; background: linear-gradient(180deg, #2E96FF, #0A7AFF); color: #fff; border-radius: 17px; padding: 8px 13px; margin-inline-end: 5px; }
+    .device-ios .lmp-user-msg::before, .device-ios .lmp-user-msg::after { content: ''; position: absolute; bottom: 0; height: 18px; }
+    .device-ios .lmp-user-msg::before { right: -6px; width: 18px; background: #0A7AFF; border-bottom-left-radius: 15px 13px; }
+    .device-ios .lmp-user-msg::after { right: -11px; width: 11px; background: #050507; border-bottom-left-radius: 9px; }
+    [dir="rtl"] .device-ios .lmp-user-msg::before { right: auto; left: -6px; border-bottom-left-radius: 0; border-bottom-right-radius: 15px 13px; }
+    [dir="rtl"] .device-ios .lmp-user-msg::after { right: auto; left: -11px; border-bottom-left-radius: 0; border-bottom-right-radius: 9px; }
+    .device-ios .lmp-asst { color: #E5E5EA; }
+    .device-ios .lmp-step-head { gap: 5px; }
+    .device-ios .lmp-step-head .lmp-step-icon { width: 12px; height: 12px; }
+    .device-ios .lmp-step-head svg:not(.lmp-step-icon) { order: 2; width: 11px; height: 11px; transform: rotate(-90deg); }
+    .device-ios .lmp-step.open .lmp-step-head svg:not(.lmp-step-icon) { transform: rotate(0deg); }
+    .device-ios .lmp-msg-actions { gap: 11px; }
+    .device-ios .lmp-msg-stats { margin-left: 0; color: #6B6B73; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+    .device-ios .lmp-msg-actions svg { width: 14px; height: 14px; flex-shrink: 0; color: #8E8E93; }
+    .lmp-input-ios { display: flex; align-items: center; gap: 2px; margin: 4px 12px 10px; padding: 3px; border-radius: 999px; background: rgba(255,255,255,0.08); box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.2), inset 0 1px 0 rgba(255,255,255,0.08); }
+    .lmp-input-ios .ios-in-btn { width: 30px; height: 30px; display: grid; place-items: center; color: #E5E5EA; flex-shrink: 0; }
+    .lmp-input-ios .ios-in-btn svg { width: 17px; height: 17px; }
+    .lmp-input-ios .lmp-input-field { color: #8E8E93; padding-inline-start: 2px; }
+    .device-ios .lmp-home-indicator { width: 120px; height: 5px; border-radius: 3px; margin-bottom: 7px; }
 
     /* ============== LMP intro animation (once per load) ============== */
     @keyframes lmpFadeUp {
@@ -627,6 +685,7 @@
       color: var(--fg-dim);
       font-size: 14.5px;
       line-height: 1.6;
+      white-space: pre-line;
       transition: max-height 0.3s, margin 0.3s;
     }
     .faq-item.open .faq-a { max-height: 600px; margin-top: 12px; }
@@ -741,6 +800,7 @@
     .footer-col h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--fg-mute); margin: 0 0 16px; font-family: 'JetBrains Mono', monospace; font-weight: 400; }
     .footer-col a { display: block; font-size: 14px; color: var(--fg-dim); margin-bottom: 10px; transition: color 0.15s; }
     .footer-col a:hover { color: var(--fg); }
+    .footer-soon { display: block; font-size: 14px; color: var(--fg-mute); margin-bottom: 10px; }
     .footer-bot { display: flex; justify-content: center; align-items: center; font-size: 12.5px; color: var(--fg-mute); flex-wrap: wrap; gap: 12px; }
     .footer-bot .mono { font-size: 11.5px; }
 
@@ -777,7 +837,7 @@
     "installUrl": "https://play.google.com/store/apps/details?id=com.druk.lmplayground",
     "url": "https://lmplayground.app/",
     "softwareVersion": "1.9.0",
-    "description": "Free, open-source Android app for running large language models on-device with llama.cpp. Chat with your documents offline — private, no API keys.",
+    "description": "Free, open-source app for running large language models on-device with llama.cpp, on Android and soon on iPhone and iPad. Chat with your documents offline — private, no API keys.",
     "image": "https://lmplayground.app/banner.png",
     "author": {
       "@type": "Person",
@@ -814,7 +874,15 @@
         "name": "What is LM Playground?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "LM Playground lets you run large language models directly on your Android device. All processing happens locally – no cloud servers needed."
+          "text": "LM Playground lets you run large language models directly on your Android device, iPhone or iPad. All processing happens locally – no cloud servers needed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is LM Playground available on iPhone and iPad?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Coming soon to the App Store. LM Playground for iOS will need iOS 26 or later and an iPhone 15 Pro or newer, or an iPad with an M1 chip or newer. Chat, vision, documents, dictation and tools all run on your device, just as they do on Android."
         }
       },
       {
@@ -870,7 +938,7 @@
         "name": "Can I load a custom GGUF model?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. Place your .gguf file in the storage folder selected in Settings → Models (the same folder used for downloads). The app will pick it up automatically and show it in the model selector alongside the built-in catalog. Chat template and tokenizer settings are read from the GGUF metadata. If a specific model doesn't work, please open an issue on GitHub."
+          "text": "Yes. Place your .gguf file in the storage folder selected in Settings → Models (the same folder used for downloads). The app will pick it up automatically and show it in the model selector alongside the built-in catalog. Chat template and tokenizer settings are read from the GGUF metadata. If a specific model doesn't work, please open an issue on GitHub. On iPhone and iPad, tap Import in Settings → Models and choose a .gguf file, or copy it into the Models folder of LM Playground in the Files app."
         }
       },
       {
@@ -878,7 +946,7 @@
         "name": "Can I change where models are stored?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. Go to Settings, then Models, and use the “Change Folder” option to select a different storage location."
+          "text": "On Android, yes: go to Settings, then Models, and use the “Change Folder” option to select a different storage location. On iPhone and iPad, models stay in the Models folder of LM Playground, which you can see in the Files app and in Finder when your device is connected to a Mac."
         }
       },
       {
@@ -886,7 +954,7 @@
         "name": "How do I delete a model?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Go to Settings, then Models. In the “Downloaded” section, tap the delete icon next to the model you want to remove."
+          "text": "Go to Settings, then Models. On Android, tap the delete icon next to the model you want to remove in the “Downloaded” section. On iPhone and iPad, swipe left on a downloaded model and tap Delete."
         }
       },
       {
@@ -918,7 +986,7 @@
         "name": "Will the app notify me when a response is ready?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. While the app is in the background, a notification tracks the model's status — loaded, generating, then response ready — and lets you copy or share the reply. You can also enable a short completion chime in Settings → Sound and Haptic. Model downloads show their own progress notification with speed and ETA."
+          "text": "Yes. While the app is in the background, a notification tracks the model's status — loaded, generating, then response ready — and lets you copy or share the reply. You can also enable a short completion chime in Settings → Sound and Haptic. Model downloads show their own progress notification with speed and ETA. On iPhone and iPad, a reply stops when you switch away, because iOS doesn't let apps use the GPU in the background; a Continue button finishes it when you come back."
         }
       },
       {
@@ -956,9 +1024,12 @@
           GitHub
         </a>
       </div>
-      <a href="https://play.google.com/store/apps/details?id=com.druk.lmplayground" class="nav-cta">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></svg>
-        <span data-i18n="nav.cta">Get on Play Store</span>
+      <a href="#download" class="nav-cta" id="navCta">
+        <span class="nav-cta-icons">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+        </span>
+        <span data-i18n="nav.cta">Get the app</span>
       </a>
     </div>
   </nav>
@@ -981,10 +1052,10 @@
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></svg>
             <span data-i18n="hero.cta.primary">Download for Android</span>
           </a>
-          <a href="https://github.com/andriydruk/LMPlayground" class="btn btn-ghost">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-1.97c-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.67 0-1.25.45-2.28 1.19-3.08-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18.92-.26 1.91-.38 2.9-.39.98.01 1.97.13 2.9.39 2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.08 0 4.4-2.69 5.38-5.25 5.66.41.36.78 1.05.78 2.12v3.14c0 .31.21.67.8.55C20.22 21.38 23.5 17.07 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
-            <span data-i18n="hero.cta.ghost">Star on GitHub</span>
-          </a>
+          <button type="button" class="btn btn-soon" disabled>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+            <span data-i18n="store.ios">App Store (Soon)</span>
+          </button>
         </div>
         <div class="hero-meta">
           <span data-i18n-html="hero.meta.mit"><span class="mono">MIT</span> — free &amp; open source</span>
@@ -995,7 +1066,10 @@
 
       <div class="device-wrap">
         <div class="device-glow"></div>
-        <div class="device">
+        <!-- Hero phones: a queue that alternates iPhone and Android. This static
+             Android phone is the no-JS fallback and the template JS clones. -->
+        <div class="device-stack">
+        <div class="device device-android">
           <div class="device-screen">
             <div class="notch"></div>
             <div class="lmp-status">
@@ -1046,6 +1120,7 @@
             </div>
             <div class="lmp-home-indicator"></div>
           </div>
+        </div>
         </div>
       </div>
     </div>
@@ -1527,14 +1602,14 @@
           <h2 class="section-title" style="font-size:44px;" data-i18n-html="faq.title">What you actually<br/>wanted to know.</h2>
           <p class="section-sub" data-i18n="faq.sub">Still stuck? Open an issue on GitHub or reach out directly.</p>
         </div>
-        <!-- FAQ list rendered by JS from translations (faq.q1-q15 / faq.a1-a15) -->
+        <!-- FAQ list rendered by JS from translations (faq.q1-q15 / faq.a1-a15 + faq.ios.q / faq.ios.a) -->
         <div id="faqList"></div>
       </div>
     </div>
   </section>
 
   <!-- FINAL CTA -->
-  <section class="final-cta">
+  <section class="final-cta" id="download">
     <div class="container">
       <h2 data-i18n-html="cta.title"><em>Any</em> model in your pocket.</h2>
       <p data-i18n="cta.body">Seconds to install. Minutes to download a model. Then you're done with the cloud.</p>
@@ -1543,6 +1618,10 @@
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></svg>
           <span data-i18n="cta.primary">Get on Google Play</span>
         </a>
+        <button type="button" class="btn btn-soon" disabled>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+          <span data-i18n="store.ios">App Store (Soon)</span>
+        </button>
         <a href="https://github.com/andriydruk/LMPlayground" class="btn btn-ghost" data-i18n="cta.ghost">Read the source →</a>
       </div>
     </div>
@@ -1559,7 +1638,7 @@
             <img class="brand-logo" src="assets/logo.png" alt="LM Playground" width="28" height="28" />
             <span>LM Playground</span>
           </div>
-          <p data-i18n-html="footer.about">Open-source Android app for running large language models locally. Built on <a href="https://github.com/ggerganov/llama.cpp">llama.cpp</a>. <a href="https://github.com/andriydruk/LMPlayground/blob/main/LICENSE">MIT</a> licensed.</p>
+          <p data-i18n-html="footer.about">Open-source app for running large language models locally on Android, and soon on iPhone and iPad. Built on <a href="https://github.com/ggerganov/llama.cpp">llama.cpp</a>. <a href="https://github.com/andriydruk/LMPlayground/blob/main/LICENSE">MIT</a> licensed.</p>
         </div>
         <div class="footer-col">
           <h4 data-i18n="footer.product">Product</h4>
@@ -1583,6 +1662,7 @@
           <a href="https://x.com/AndriyDruk">X (@AndriyDruk)</a>
           <a href="https://mastodon.social/@andriydruk" rel="me">Mastodon</a>
           <a href="https://play.google.com/store/apps/details?id=com.druk.lmplayground&showAllReviews=true" data-i18n="footer.contact.play">Google Play</a>
+          <span class="footer-soon" data-i18n="store.ios">App Store (Soon)</span>
         </div>
       </div>
       <div class="footer-bot">
@@ -1893,9 +1973,10 @@
       if (!list) return;
       const ICON = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
       const html = [];
-      for (let i = 1; i <= 15; i++) {
-        const q = getTranslation(lang, 'faq.q' + i);
-        const a = getTranslation(lang, 'faq.a' + i);
+      const ids = [1, 'ios', 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+      for (const i of ids) {
+        const q = getTranslation(lang, i === 'ios' ? 'faq.ios.q' : 'faq.q' + i);
+        const a = getTranslation(lang, i === 'ios' ? 'faq.ios.a' : 'faq.a' + i);
         if (!q || !a) continue;
         const open = i === 1 ? ' open' : '';
         html.push('<div class="faq-item' + open + '">'
@@ -1950,12 +2031,14 @@
     // is present from the start so the row can be expanded even while it ticks.
     // Returns the row plus its label node so the caller can update it in place
     // (keeping the DOM stable preserves the expand state across ticks).
-    function makeStepRow(label, content) {
+    let _stepPlatform = 'android';
+    function makeStepRow(label, content, isTool) {
       const row = document.createElement('div');
       row.className = 'lmp-step';
       const head = document.createElement('div');
       head.className = 'lmp-step-head';
       head.innerHTML = CHEVRON;
+      if (_stepPlatform === 'ios') head.insertAdjacentHTML('afterbegin', isTool ? IOS.wrench : IOS.bulb);
       const lab = document.createElement('span');
       lab.className = 'lmp-step-label';
       lab.textContent = label;
@@ -2007,20 +2090,101 @@
           think: { secs: 3, content: t('phone.r1', 'Future value with compound interest: FV = P(1 + r)^n, with P = 5000, r = 0.04, n = 10. 1.04^10 is about 1.4802, so FV is about 7401.22. Interest = FV − P, about 2401.') },
           a: t('phone.a1', 'At 4% compounded annually, $5,000 grows to **$7,401.22** in 10 years — that is 5,000 × 1.04^10. So you would earn about **$2,401** in interest on top of your $5,000 principal.'),
           resp: 80 },
-        { q: t('phone.q2', 'What are reviewers saying about the latest Pixel?'),
-          tool: { name: t('tools.t2.title', 'Web search'), secs: 2, input: 'latest Pixel phone reviews', output: '5 results: theverge.com, dxomark.com, gsmarena.com …' },
-          think: { secs: 4, content: t('phone.r2', 'The results agree on display, battery, and camera gains, plus faster on-device AI. The recurring negative is the higher price. Summarize as praise versus the main drawback.') },
-          a: t('phone.a2', 'Reviewers are largely positive. The wins: a much brighter **3000-nit display**, about **20% better battery life**, and a sharper telephoto camera, plus faster on-device AI. The main gripe is the **higher starting price** — but most still call it the best Pixel yet.'),
-          resp: 120 },
+        // Scenes alternate iPhone / Android; fetch comes before search so the
+        // Pixel question lands on an Android phone.
         { q: t('phone.q3', 'Summarize this article: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f'),
           tool: { name: t('tools.t3.title', 'Fetch web page'), secs: 1, input: 'https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f', output: '6,480 chars → markdown' },
           think: { secs: 3, content: t('phone.r3', 'Karpathy proposes an LLM-maintained personal wiki. Three layers: immutable raw sources, an LLM-generated wiki, and a schema file. The model updates pages and cross-links as new sources arrive, so knowledge compounds. Summarize the idea and the layering.') },
           a: t('phone.a3', 'Karpathy proposes an **LLM-maintained wiki** — a persistent, cross-linked markdown layer the model builds between you and your raw sources. Rather than re-reading everything per query, it updates pages and links as new material arrives, so your knowledge base **compounds** instead of being re-derived each time.'),
-          resp: 130 }
+          resp: 130 },
+        { q: t('phone.q2', 'What are reviewers saying about the latest Pixel?'),
+          tool: { name: t('tools.t2.title', 'Web search'), secs: 2, input: 'latest Pixel phone reviews', output: '5 results: theverge.com, dxomark.com, gsmarena.com …' },
+          think: { secs: 4, content: t('phone.r2', 'The results agree on display, battery, and camera gains, plus faster on-device AI. The recurring negative is the higher price. Summarize as praise versus the main drawback.') },
+          a: t('phone.a2', 'Reviewers are largely positive. The wins: a much brighter **3000-nit display**, about **20% better battery life**, and a sharper telephoto camera, plus faster on-device AI. The main gripe is the **higher starting price** — but most still call it the best Pixel yet.'),
+          resp: 120 }
       ];
     }
 
-    function buildSceneHTML(s) {
+    // Hero phone queue: iPhone first, then alternating. heroStep counts shown
+    // phones; the device at slot 0 plays the scene, slots 1-2 peek behind it.
+    const DEVICE_TEMPLATE = (function () {
+      const d = document.querySelector('.device-stack .device');
+      return d ? d.cloneNode(true) : null;
+    })();
+    const PLATFORMS = ['ios', 'android'];
+    let heroStep = 0;
+    const svg = (vb, body, extra) => '<svg viewBox="' + vb + '" ' + (extra || 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"') + ' aria-hidden="true">' + body + '</svg>';
+    const IOS = {
+      status: svg('0 0 18 12', '<rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/>', 'fill="currentColor"')
+        + svg('0 0 16 12', '<path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.2-1.3A10.4 10.4 0 0 0 8 .4C5.2.4 2.7 1.5.8 3.3L2 4.6a8.6 8.6 0 0 1 6-2.4z"/><path d="M8 5.6c1.4 0 2.6.5 3.6 1.4l1.2-1.3A7 7 0 0 0 8 3.8a7 7 0 0 0-4.8 1.9L4.4 7A5.2 5.2 0 0 1 8 5.6z"/><path d="M8 9.1c.5 0 1 .2 1.3.5L8 11 6.7 9.6c.3-.3.8-.5 1.3-.5z"/>', 'fill="currentColor"')
+        + svg('0 0 27 13', '<rect x=".5" y=".5" width="22" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="17" height="9" rx="2" fill="currentColor"/><path d="M24 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2z" fill="currentColor" opacity=".45"/>', ''),
+      menu: svg('0 0 24 24', '<line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/>'),
+      compose: svg('0 0 24 24', '<path d="M11 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/><path d="M17.6 3.4a2 2 0 0 1 2.9 2.9L12 14.8l-3.6.9.9-3.6z"/>'),
+      plus: svg('0 0 24 24', '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>', 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"'),
+      mic: svg('0 0 24 24', '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/><line x1="12" y1="18" x2="12" y2="22"/>'),
+      // Under a reply: share, copy, thumbs up/down and a More (ellipsis) menu.
+      actions: svg('0 0 24 24', '<path d="M8 9H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-2"/><polyline points="8 6 12 2 16 6"/><line x1="12" y1="2" x2="12" y2="15"/>')
+        + svg('0 0 24 24', '<rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h2"/>')
+        + svg('0 0 24 24', '<path d="M7 10v11H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h3z"/><path d="M7 10l4-8a3 3 0 0 1 3 3v4h5.5a2 2 0 0 1 2 2.3l-1.4 8a2 2 0 0 1-2 1.7H7"/>')
+        + svg('0 0 24 24', '<path d="M17 14V3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-3z"/><path d="M17 14l-4 8a3 3 0 0 1-3-3v-4H4.5a2 2 0 0 1-2-2.3l1.4-8a2 2 0 0 1 2-1.7H17"/>')
+        + svg('0 0 24 24', '<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>', 'fill="currentColor"'),
+      // Leading icons on step rows: lightbulb for thinking, wrench for tools.
+      bulb: '<svg class="lmp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2z"/></svg>',
+      wrench: '<svg class="lmp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg>'
+    };
+
+    function makeDevice(platform, lang) {
+      const d = DEVICE_TEMPLATE.cloneNode(true);
+      d.classList.replace('device-android', 'device-' + platform);
+      d.querySelector('.lmp-chat').innerHTML = '';
+      const input = getTranslation(lang, 'phone.input') || 'Message';
+      d.querySelector('.lmp-input-field').textContent = input;
+      d.querySelector('.lmp-send-btn').textContent = getTranslation(lang, 'phone.send') || 'Send';
+      if (platform === 'ios') {
+        d.querySelector('.lmp-status > span').textContent = '9:41';
+        d.querySelector('.lmp-status-icons').innerHTML = IOS.status;
+        const btns = d.querySelectorAll('.lmp-appbar-btn');
+        btns[0].innerHTML = IOS.menu;
+        btns[1].innerHTML = IOS.compose;
+        const bar = document.createElement('div');
+        bar.className = 'lmp-input-ios';
+        bar.innerHTML = '<span class="ios-in-btn">' + IOS.plus + '</span>'
+          + '<span class="lmp-input-field" style="flex:1">' + escHtml(input) + '</span>'
+          + '<span class="ios-in-btn">' + IOS.mic + '</span>';
+        d.querySelector('.lmp-input-bar').replaceWith(bar);
+      }
+      return d;
+    }
+
+    function setSlot(d, k) {
+      d.dataset.slot = k;
+      if (k === 0) d.removeAttribute('aria-hidden'); else d.setAttribute('aria-hidden', 'true');
+    }
+
+    function frontDevice() {
+      return document.querySelector('.device-stack .device[data-slot="0"]');
+    }
+
+    // Swipe the finished phone out, move the queue up, add a new phone at the back.
+    function advanceDevice(nextScene) {
+      const stack = document.querySelector('.device-stack');
+      const front = frontDevice();
+      if (!stack || !front) return;
+      stack.querySelectorAll('.device.leaving').forEach(d => d.remove());
+      front.classList.add('leaving');
+      front.removeAttribute('data-slot');
+      stack.querySelectorAll('.device[data-slot]').forEach(d => setSlot(d, Number(d.dataset.slot) - 1));
+      heroStep++;
+      const fresh = makeDevice(PLATFORMS[(heroStep + 2) % 2], currentHeroLang);
+      setSlot(fresh, 3);
+      stack.appendChild(fresh);
+      void fresh.offsetWidth; // start the new phone from slot 3 so it slides in
+      setSlot(fresh, 2);
+      playScene(nextScene, currentHeroLang);
+      _animTimers.push(setTimeout(() => front.remove(), 800));
+    }
+
+    function buildSceneHTML(s, platform) {
       const blocks = (s.a || '').split(/\n{2,}/).map(x => x.trim()).filter(Boolean);
       const p1 = blocks[0] || '';
       const p2 = blocks.slice(1).join('\n');
@@ -2033,8 +2197,9 @@
         +   '<p class="lmp-anim-p1">' + renderInline(p1).replace(/\n/g, '<br/>') + '</p>'
         +   (p2 ? '<p class="lmp-anim-p2">' + renderInline(p2).replace(/\n/g, '<br/>') + '</p>' : '')
         + '</div>'
-        + '<div class="lmp-msg-actions lmp-anim-actions">' + ACTION_ICONS
-        +   '<span class="lmp-msg-stats"></span></div>'
+        + (platform === 'ios'
+            ? '<div class="lmp-msg-actions lmp-anim-actions">' + IOS.actions + '<span class="lmp-msg-stats"></span></div>'
+            : '<div class="lmp-msg-actions lmp-anim-actions">' + ACTION_ICONS + '<span class="lmp-msg-stats"></span></div>')
         + '<div class="lmp-spacer"></div>';
     }
 
@@ -2065,15 +2230,18 @@
     function playScene(idx, lang) {
       _animTimers.forEach(t => clearTimeout(t));
       _animTimers = [];
-      const chat = document.querySelector('.lmp-chat');
+      const device = frontDevice();
+      const chat = device && device.querySelector('.lmp-chat');
       if (!chat) return;
+      const platform = device.classList.contains('device-ios') ? 'ios' : 'android';
       const scenes = heroScenes(lang);
       const n = scenes.length;
       const i = ((idx % n) + n) % n;
       const s = scenes[i];
-      chat.innerHTML = buildSceneHTML(s);
+      chat.innerHTML = buildSceneHTML(s, platform);
 
       const steps = chat.querySelector('.lmp-steps');
+      _stepPlatform = platform;
       const actions = chat.querySelector('.lmp-anim-actions');
       const base = getTranslation(lang, 'phone.thinking') || 'Thinking';
       // Localized token-count unit ("%d tokens"), reused from the app strings.
@@ -2109,7 +2277,7 @@
 
       if (reduced) {
         // Respect reduced motion: show finished rows + answer, no ticking, no loop.
-        if (s.tool) steps.appendChild(makeStepRow(toolLabel, toolContent).row);
+        if (s.tool) steps.appendChild(makeStepRow(toolLabel, toolContent, true).row);
         steps.appendChild(makeStepRow(finalThink, s.think.content).row);
         if (actions) actions.classList.add('lmp-show');
         return;
@@ -2123,7 +2291,7 @@
       // then the thinking phase ticks — that is the part that takes the time.
       const thinkStart = s.tool ? 500 : 0;
       if (s.tool) {
-        const toolRow = makeStepRow(toolLabel, toolContent).row;
+        const toolRow = makeStepRow(toolLabel, toolContent, true).row;
         _animTimers.push(setTimeout(() => { steps.insertBefore(toolRow, think.row); }, thinkStart));
       }
       for (let t = 1; t <= totalTicks; t++) {
@@ -2140,12 +2308,24 @@
       const p2End = typeEl(chat, '.lmp-anim-p2', p1End, 5);
       if (actions) _animTimers.push(setTimeout(() => actions.classList.add('lmp-show'), p2End));
 
-      // Hold the finished answer for 5s, then advance to the next scene.
-      _animTimers.push(setTimeout(() => playScene(i + 1, currentHeroLang), p2End + 5000));
+      // Hold the finished answer for 5s, then hand over to the next phone.
+      _animTimers.push(setTimeout(() => advanceDevice(i + 1), p2End + 5000));
     }
 
     function renderHeroChat(lang) {
       currentHeroLang = lang;
+      const stack = document.querySelector('.device-stack');
+      if (stack && DEVICE_TEMPLATE) {
+        _animTimers.forEach(t => clearTimeout(t));
+        _animTimers = [];
+        heroStep = 0;
+        stack.innerHTML = '';
+        for (let k = 0; k < 3; k++) {
+          const d = makeDevice(PLATFORMS[k % 2], lang);
+          setSlot(d, k);
+          stack.appendChild(d);
+        }
+      }
       playScene(0, lang);
     }
 
@@ -2158,6 +2338,11 @@
       const qs = usp.toString();
       history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
       applyTranslations(lang);
+    }
+
+    const navCta = document.getElementById('navCta');
+    if (navCta && /android/i.test(navigator.userAgent)) {
+      navCta.href = 'https://play.google.com/store/apps/details?id=com.druk.lmplayground';
     }
 
     // Initial application
