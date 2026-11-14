@@ -60,6 +60,7 @@ object ToolProbe {
         expectedTool: String = "web_search",
         seeds: List<Int> = listOf(1, 2, 3),
         enableThinking: Boolean = false,
+        supportsThinking: Boolean = model.supportsThinking(),
         maxTokens: Int = 1024,
         timeoutMs: Long = 180_000,
     ): List<Attempt> = seeds.map { seed ->
@@ -79,7 +80,7 @@ object ToolProbe {
             val result = runBlocking {
                 ToolCallLoop(session, HarnessTools.executor(registry)).run(
                     callback = callback,
-                    supportsThinking = model.supportsThinking(),
+                    supportsThinking = supportsThinking,
                     enableThinking = enableThinking,
                 )
             }

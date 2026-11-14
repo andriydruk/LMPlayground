@@ -34,6 +34,19 @@ class ProbeContext(
 ) {
     fun expect(cap: Cap) = Expectations.expect(expectation, cap)
 
+    /**
+     * The supportsThinking the app hands ToolCallLoop: measured behaviour
+     * (THINKING_MODE) wins over the template flag, as in
+     * ConversationViewModel. A NONE model never has thinking forced on after
+     * a tool round, so the probe must not force it either.
+     */
+    val appSupportsThinking: Boolean
+        get() = when (catalog.catalogThinkingMode) {
+            "NONE" -> false
+            "OPTIONAL", "ALWAYS" -> true
+            else -> model.supportsThinking()
+        }
+
     /** Apply expectation severity: OPTIONAL failures warn instead of failing. */
     fun grade(cap: Cap, failed: Boolean): Status = when {
         !failed -> Status.PASS

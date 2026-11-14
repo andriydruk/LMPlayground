@@ -22,6 +22,8 @@ data class CatalogEntry(
     /** Badge flags from ModelInfoProvider's TOOL_CAPABLE / THINKING_CAPABLE. */
     val catalogSupportsTools: Boolean,
     val catalogSupportsThinking: Boolean,
+    /** Measured mode from ModelInfoProvider's THINKING_MODE (NONE, OPTIONAL, ALWAYS), or null. */
+    val catalogThinkingMode: String? = null,
 ) {
     val isVision: Boolean get() = mmprojFilename != null
 }
@@ -36,6 +38,7 @@ object Catalog {
 
         val toolCapable = namedSet(src, "TOOL_CAPABLE")
         val thinkingCapable = namedSet(src, "THINKING_CAPABLE")
+        val thinkingModes = thinkingModeMap(src)
 
         val entries = ENTRY.findAll(src).mapNotNull { m ->
             val b = m.groupValues[1]
@@ -49,6 +52,7 @@ object Catalog {
                 deprecated = Regex("""deprecated\s*=\s*true""").containsMatchIn(b),
                 catalogSupportsTools = filename in toolCapable,
                 catalogSupportsThinking = filename in thinkingCapable,
+                catalogThinkingMode = thinkingModes[filename],
             )
         }.toList()
 
@@ -83,6 +87,13 @@ object Catalog {
         val body = Regex("""$name = setOf\((.*?)\n    \)""", RegexOption.DOT_MATCHES_ALL)
             .find(src)?.groupValues?.get(1) ?: return emptySet()
         return Regex(""""([^"]+\.gguf)"""").findAll(body).map { it.groupValues[1] }.toSet()
+    }
+
+    private fun thinkingModeMap(src: String): Map<String, String> {
+        val body = Regex("""THINKING_MODE = mapOf\((.*?)\n    \)""", RegexOption.DOT_MATCHES_ALL)
+            .find(src)?.groupValues?.get(1) ?: return emptyMap()
+        return Regex(""""([^"]+\.gguf)"\s+to\s+ThinkingMode\.(\w+)""").findAll(body)
+            .associate { it.groupValues[1] to it.groupValues[2] }
     }
 
     private const val CANARY = "HuggingFaceTB_SmolLM3-3B-Q4_K_M.gguf"
