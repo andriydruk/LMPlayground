@@ -1,0 +1,14 @@
+LM Playground runs open language models entirely on the device. The app ships without a model, because models are hundreds of megabytes to several gigabytes; you download one from Hugging Face inside the app. There is no account or sign-in.
+
+To try it:
+1. Open the app and tap "Choose a model" at the top of the chat, then Browse Models (also in Settings > Models).
+2. Tap Download next to Gemma 3 1B, the smallest model (806 MB). Wi-Fi is recommended.
+3. When the download finishes, choose Gemma 3 1B in the model picker and send a message.
+
+To try photos, download Gemma 3 4B (2.5 GB) with "With image understanding", choose it, and attach a photo with the + button.
+
+Models are data files (GGUF weights), not executable code. They run in the llama.cpp engine built into the app.
+
+Nothing is collected or sent anywhere: chats, photos, documents and dictated audio stay on the device. The network is used only to download model files from huggingface.co and, if you turn them on in Settings > Tools (off by default), for the optional web search (DuckDuckGo) and web page fetch tools.
+
+The app needs an iPhone 15 Pro or later, or an iPad with an M1 chip or later.
