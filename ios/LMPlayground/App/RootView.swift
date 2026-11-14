@@ -59,11 +59,15 @@ struct RootView: View {
 
 #if DEBUG
 extension RootView {
-    /// Screenshot and review hook, debug builds only: `-uiOpenLatest YES`
-    /// opens the newest chat, `-uiModel <filename>` loads a model and
+    /// Screenshot and review hook, debug builds only: `-uiSeedChats YES` adds
+    /// the scroll test chats, `-uiOpenLatest YES` opens the newest chat,
+    /// `-uiModel <filename>` loads a model and
     /// `-uiScreen settings|faq|privacy|advanced|models` opens a screen.
     private func openDebugRoute() async {
         let defaults = UserDefaults.standard
+        if defaults.bool(forKey: "uiSeedChats") {
+            await SeedChats.seed(AppServices.shared.chatStore)
+        }
         // `-labClean YES`: delete the test models (see EngineLab.cleanUpModels).
         if defaults.bool(forKey: "labClean") {
             EngineLab.cleanUpModels()
