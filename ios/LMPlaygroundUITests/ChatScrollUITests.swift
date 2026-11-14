@@ -131,10 +131,13 @@ final class ChatScrollUITests: XCTestCase {
         app.buttons["menuButton"].tap()
         let row = app.buttons[title]
         XCTAssertTrue(row.waitForExistence(timeout: 5))
-        row.tap()
-        // The drawer closes.
-        let gone = XCTNSPredicateExpectation(predicate: NSPredicate(format: "isHittable == false"), object: row)
-        _ = XCTWaiter().wait(for: [gone], timeout: 3)
+        // By its middle: on iOS 26 XCUITest sometimes can't find the row's
+        // activation point although it's on screen.
+        row.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        // The drawer closes: the button over the pushed-aside chat goes.
+        let closed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"),
+                                               object: app.buttons["Close"])
+        XCTAssertEqual(XCTWaiter().wait(for: [closed], timeout: 5), .completed, "the drawer stayed open")
     }
 
     private func assertEndShown(_ text: String, in app: XCUIApplication, file: StaticString = #filePath,
