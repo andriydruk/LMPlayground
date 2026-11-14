@@ -38,3 +38,63 @@ jobs:
       run: ./gradlew app:lintDebug
     - name: Run connected android tests
       run: ./gradlew app:mvdApi35Check
+
+  iOSTest:
+    defaults:
+      run:
+        working-directory: ios
+    runs-on: macos-26
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v7
+      with:
+        submodules: recursive
+    - name: Show Xcode
+      run: xcodebuild -version
+    # The engine takes long to build; it only changes with llama.cpp or its
+    # build scripts, which is what check-xcframework.sh compares.
+    - name: Find llama.cpp revision
+      id: llama
+      run: echo "sha=$(git -C ../core/llama.cpp rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+    - name: Cache llama.xcframework
+      id: xcframework
+      uses: actions/cache@v6
+      with:
+        path: |
+          ios/build-apple/llama.xcframework
+          ios/build-apple/llama.xcframework.stamp
+        key: xcframework-${{ steps.llama.outputs.sha }}-${{ hashFiles('ios/scripts/build-xcframework.sh', 'ios/native/CMakeLists.txt', 'core/CMakeLists.txt') }}
+    - name: Build llama.xcframework
+      if: steps.xcframework.outputs.cache-hit != 'true'
+      run: scripts/build-xcframework.sh
+    - name: Pick a simulator
+      run: |
+        udid=$(xcrun simctl list devices available -j | python3 -c '
+        import json, sys
+        devices = json.load(sys.stdin)["devices"]
+        phones = [d for runtime, ds in sorted(devices.items(), reverse=True) if ".iOS-" in runtime
+                  for d in ds if d["name"].startswith("iPhone")]
+        print(next((d for d in phones if "Pro" in d["name"]), phones[0])["udid"])')
+        echo "SIMULATOR=$udid" >> "$GITHUB_ENV"
+    # The macOS LlamaKit tests need downloaded models, so CI leaves them out.
+    - name: Run unit tests
+      run: |
+        xcodebuild test -project LMPlayground.xcodeproj -scheme LMPlayground \
+          -destination "id=$SIMULATOR" -only-testing:LMPlaygroundTests
+    # As release-check.sh does, without signing.
+    - name: Run lint
+      run: |
+        scripts/check-xcframework.sh
+        scripts/bump-version.sh --check
+        python3 -I scripts/generate-catalog.py --check
+        xcodebuild build -project LMPlayground.xcodeproj -scheme LMPlayground -configuration Release \
+          -destination 'generic/platform=iOS' -derivedDataPath build-release CODE_SIGNING_ALLOWED=NO -quiet
+        stringsdata="$(find build-release/Build/Intermediates.noindex -path '*LMPlayground.build/Objects-normal/arm64' -type d | head -1)"
+        python3 -I scripts/generate-strings.py --stringsdata "$stringsdata" --check
+    # The other UI tests need a downloaded model; the scroll tests seed their
+    # own chats.
+    - name: Run UI tests
+      run: |
+        xcodebuild test -project LMPlayground.xcodeproj -scheme LMPlayground \
+          -destination "id=$SIMULATOR" -only-testing:LMPlaygroundUITests/ChatScrollUITests
