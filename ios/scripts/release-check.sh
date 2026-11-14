@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 #
-# Run before every archive (ios/plan/06-build-and-release.md, "Release from
-# Xcode"). Fails on any problem:
+# Run before every archive. Fails on any problem:
 #
 #   1. the llama.xcframework matches the submodule and build scripts;
 #   2. the catalog and the string catalogs match Android;
@@ -32,7 +31,7 @@ step "Version and plists"
 plist="$IOS_DIR/LMPlayground/Info.plist"
 capabilities="$(/usr/libexec/PlistBuddy -c 'Print :UIRequiredDeviceCapabilities' "$plist")"
 [[ "$capabilities" == *"iphone-performance-gaming-tier"* ]] || {
-    echo "error: Info.plist lacks iphone-performance-gaming-tier (D11)" >&2; exit 1; }
+    echo "error: Info.plist lacks iphone-performance-gaming-tier" >&2; exit 1; }
 plutil -lint "$IOS_DIR/LMPlayground/PrivacyInfo.xcprivacy" >/dev/null
 echo "gaming tier and privacy manifest present"
 

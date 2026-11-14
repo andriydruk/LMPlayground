@@ -493,7 +493,7 @@ final class ConversationModel {
 
     /// The app went to the background mid-reply: iPhone apps can't use the
     /// GPU in the background, so the reply stops here and is marked
-    /// interrupted (ios/plan/05-platform-research.md, "Background").
+    /// interrupted.
     func interruptForBackground() {
         guard isGenerating, let last = messages.indices.last else { return }
         messages[last].interrupted = true

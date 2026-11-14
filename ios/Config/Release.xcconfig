@@ -1,6 +1,5 @@
 #include "Base.xcconfig"
 
-// Every archive must carry complete symbols, including the C++ engine
-// (see ios/plan/06-build-and-release.md, "dSYMs").
+// Every archive must carry complete symbols, including the C++ engine.
 DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
 STRIP_INSTALLED_PRODUCT = YES

@@ -3,7 +3,7 @@ import LlamaKit
 import Metal
 
 /// Whether a model fits before loading it. Two limits apply (measured on
-/// device, ios/plan/05-platform-research.md):
+/// device):
 ///
 /// - The process footprint. llama.cpp maps the GGUF and Metal wraps those
 ///   pages without copying, so weights are clean, file-backed memory that
@@ -28,7 +28,7 @@ enum MemoryBudget {
     static let tightMarginBytes: UInt64 = 500 << 20
     /// Metal compute buffers next to the weights and the KV cache. Calibrated
     /// on an iPhone 16 Pro: Llama 3.1 8B works with a 2K context and fails
-    /// with 3K (ios/plan/10-device-sweep-2026-10.md).
+    /// with 3K.
     static let gpuComputeBytes: UInt64 = 450 << 20
 
     /// What the GPU can keep resident on this device; 0 if unknown.

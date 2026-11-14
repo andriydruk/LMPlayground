@@ -75,7 +75,7 @@ If you're just looking to install LM Playground, you can find it on [Google Play
 | Folder | Contents |
 |--------|----------|
 | [`android/`](android/) | The Android app (Gradle project). See [`android/ARCHITECTURE.md`](android/ARCHITECTURE.md). |
-| [`ios/`](ios/) | The iOS app, in development. See the [plan](ios/plan/README.md). |
+| [`ios/`](ios/) | The iOS app, in development. |
 | [`docs/`](docs/) | The website. |
 
 ## Build Instructions

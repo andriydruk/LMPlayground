@@ -1,6 +1,6 @@
 import Foundation
 
-/// Where the app keeps its files. See ios/plan/04-architecture.md, "Storage".
+/// Where the app keeps its files.
 enum AppDirectories {
 
     /// User-visible in Files and Finder (UIFileSharingEnabled).

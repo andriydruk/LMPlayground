@@ -2,8 +2,7 @@ import Foundation
 import GRDB
 
 /// The app's SQLite database. Tables mirror Android's Room schema (v8) so the
-/// two apps store conversations the same way; see
-/// ios/plan/04-architecture.md, "Persistence".
+/// two apps store conversations the same way.
 final class AppDatabase: Sendable {
 
     let writer: any DatabaseWriter
