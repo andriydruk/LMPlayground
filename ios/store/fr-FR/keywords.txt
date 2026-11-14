@@ -1,0 +1,1 @@
+ia,chatbot,hors ligne,local,privé,modèle de langage,llm,gguf,llama,qwen,gemma,assistant

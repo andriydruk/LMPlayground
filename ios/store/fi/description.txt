@@ -1,0 +1,37 @@
+LM Playground ajaa suuria kielimalleja suoraan iPhonellasi ja iPadillasi. Lataa malli, avaa se yhdellä napautuksella ja keskustele – yksityisesti, omalla laitteellasi. Ei pilvipalvelimia, ei API-avaimia, ei tiliä eikä mikään data poistu laitteeltasi.
+
+TÄRKEIMMÄT OMINAISUUDET
+
+Päättely laitteella – jokainen vastaus luodaan paikallisesti Metalilla iPhonellasi tai iPadillasi. Keskustelusi pysyvät yksityisinä.
+
+Keskusteluhistoria – keskustelut tallennetaan ja järjestetään. Kiinnitä, nimeä uudelleen tai poista niitä, ja jatka mitä tahansa keskustelua juuri siitä, mihin jäit. iPadilla keskustelusi ovat sivupalkissa keskustelun vieressä.
+
+Monipuoliset vastaukset – vastaukset näytetään täydellä Markdownilla: otsikot, koodilohkot kopiointipainikkeella, luettelot, taulukot, lihavointi ja kursivointi.
+
+Asiakirjat – liitä tiedosto keskusteluun ja kysy siitä. Laitteella tehtävä haku löytää merkitykseltään osuvimmat kohdat ja antaa ne mallille, joten vastaukset tulevat suoraan asiakirjastasi, joka ei koskaan poistu laitteeltasi. Tukee PDF-, Word-, EPUB-, HTML-, Markdown- ja tekstitiedostoja; pieni upotusmalli ladataan kerran ensimmäisellä käyttökerralla.
+
+Näkö – lähetä kuva ja keskustele siitä. Valitse kuva kirjastostasi tai ota se kameralla ja kysy mallilta, mitä se näkee: kuvaile näkymä, tunnista esineitä tai lue tekstiä. Kuva tulkitaan suoraan laitteellasi.
+
+Sanelu – napauta mikrofonia ja puhu; sanasi ilmestyvät puhuessasi, 35 kielellä. Puhe tunnistetaan laitteellasi, eikä sitä koskaan tallenneta tai lähetetä.
+
+Päättelymallit – seuraa päättelymallien ajattelua kokoontaitettavassa osiossa, säädettävällä ajattelubudjetilla.
+
+Työkalut – kyvykkäät mallit voivat vastauksen aikana hakea verkosta, lukea sivun ja ajaa JavaScriptiä hiekkalaatikossa. Kaikki työkalut ovat oletuksena pois päältä; ota käyttöön vain haluamasi, mallikohtaisesti. Verkkohaku ja sivun lukeminen käyttävät internetiä vain, kun kytket ne päälle.
+
+Nopeus yhdellä silmäyksellä – näe tokenien määrä ja tokenit sekunnissa jokaisesta vastauksesta.
+
+Asetuksesi, keskustelukohtaisesti – kontekstin koko, ajattelubudjetti, lämpötila, Top-P, Top-K, Min-P, toistorangaistus ja siemen.
+
+Järjestelmäkehotteet – tallenna uudelleenkäytettävät ohjeet kerran ja käytä niitä minkä tahansa mallin kanssa, jotta sävy, rooli tai tulosteen muoto pysyy samana.
+
+Omat mallit – tuo omia GGUF-mallejasi Tiedostot-apista sisäänrakennetun luettelon rinnalle.
+
+Luotettavat lataukset – mallit latautuvat taustalla, ja näet edistymisen, nopeuden ja jäljellä olevan ajan. Lataus jatkuu verkkokatkon jälkeen.
+
+MALLIT
+
+Luettelo iPhonella ja iPadilla testattuja malleja, mm. Qwen, Gemma, Llama, LFM ja Granite, alkaen muutamasta sadasta megatavusta. Sovellus tarkistaa vapaan muistin ennen mallin lataamista ja kertoo, jos malli on liian suuri laitteellesi.
+
+AVOIN LÄHDEKOODI
+
+LM Playground on avointa lähdekoodia MIT-lisenssillä. Taustalla toimii llama.cpp, ja mallit tulevat Hugging Facesta.

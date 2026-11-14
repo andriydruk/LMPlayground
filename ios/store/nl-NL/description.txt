@@ -1,0 +1,37 @@
+LM Playground draait grote taalmodellen rechtstreeks op je iPhone en iPad. Download een model, laad het met één tik en chat – privé, op je toestel. Geen cloudservers, geen API-sleutels, geen account en geen data die je toestel verlaat.
+
+BELANGRIJKSTE FUNCTIES
+
+Verwerking op het toestel – elk antwoord wordt lokaal met Metal op je iPhone of iPad gegenereerd. Je gesprekken blijven privé.
+
+Chatgeschiedenis – gesprekken worden bewaard en geordend. Zet ze vast, wijzig de naam of verwijder ze, en ga verder met elke chat precies waar je gebleven was. Op de iPad staan je chats in een navigatiekolom naast het gesprek.
+
+Rijke antwoorden – antwoorden worden weergegeven met volledige Markdown: koppen, codeblokken met kopieerknop, lijsten, tabellen, vet en cursief.
+
+Documenten – voeg een bestand toe aan een chat en stel er vragen over. Zoeken op het toestel vindt de meest relevante passages op betekenis en geeft ze aan het model, zodat antwoorden rechtstreeks uit je document komen, dat je toestel nooit verlaat. Ondersteunt PDF, Word, EPUB, HTML, Markdown en platte tekst; een klein embeddingmodel wordt eenmalig gedownload bij het eerste gebruik.
+
+Vision – stuur een foto en chat erover. Kies een afbeelding uit je bibliotheek of maak er een met de camera, en vraag het model wat het ziet: een scène beschrijven, objecten herkennen of tekst lezen. De afbeelding wordt op je toestel zelf begrepen.
+
+Dicteren – tik op de microfoon en spreek; je woorden verschijnen terwijl je praat, in 35 talen. Spraak wordt op je toestel herkend en nooit bewaard of verstuurd.
+
+Redeneermodellen – volg het denkproces van redeneermodellen in een inklapbaar gedeelte, met een instelbaar denkbudget.
+
+Tools – geschikte modellen kunnen tijdens een antwoord op het web zoeken, een pagina lezen en JavaScript in een sandbox uitvoeren. Elke tool staat standaard uit; zet per model alleen aan wat je wilt. Zoeken op het web en pagina's lezen gaan alleen online als je ze aanzet.
+
+Snelheid in één oogopslag – zie het aantal tokens en de tokens per seconde voor elk antwoord.
+
+Je instellingen, per chat – contextgrootte, denkbudget, temperatuur, Top-P, Top-K, Min-P, herhalingsstraf en seed.
+
+Systeemprompts – bewaar herbruikbare instructies één keer en gebruik ze met elk model om toon, rol of uitvoerformaat gelijk te houden.
+
+Eigen modellen – importeer je eigen GGUF-modellen vanuit de Bestanden-app, naast de ingebouwde catalogus.
+
+Betrouwbare downloads – modellen downloaden op de achtergrond met voortgang, snelheid en resterende tijd, en gaan verder na een netwerkonderbreking.
+
+MODELLEN
+
+Een catalogus van modellen getest op iPhone en iPad, van Qwen, Gemma, Llama, LFM, Granite en meer, vanaf een paar honderd megabyte. De app controleert het vrije geheugen voordat een model wordt geladen en laat het weten als een model te groot is voor je toestel.
+
+OPEN SOURCE
+
+LM Playground is open source onder de MIT-licentie. Gebouwd op llama.cpp, met modellen van Hugging Face.

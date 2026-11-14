@@ -1,0 +1,1 @@
+ai,inteligență artificială,chatbot,offline,local,model lingvistic,llm,gguf,llama,qwen,gemma,asistent

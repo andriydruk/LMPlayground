@@ -1,0 +1,37 @@
+LM Playground führt große Sprachmodelle direkt auf deinem iPhone und iPad aus. Lade ein Modell herunter, starte es mit einem Fingertipp und chatte – privat, auf deinem Gerät. Keine Cloud-Server, keine API-Schlüssel, kein Konto und keine Daten, die dein Gerät verlassen.
+
+HAUPTFUNKTIONEN
+
+Inferenz auf dem Gerät – jede Antwort wird lokal mit Metal auf deinem iPhone oder iPad erzeugt. Deine Unterhaltungen bleiben privat.
+
+Chatverlauf – Unterhaltungen werden gespeichert und geordnet. Pinne, benenne oder lösche sie und setze jeden Chat genau dort fort, wo du aufgehört hast. Auf dem iPad stehen deine Chats in einer Seitenleiste neben der Unterhaltung.
+
+Ausführliche Antworten – Antworten werden mit vollem Markdown dargestellt: Überschriften, Codeblöcke mit Kopieren-Taste, Listen, Tabellen, fett und kursiv.
+
+Dokumente – hänge eine Datei an einen Chat an und stelle Fragen dazu. Die Suche auf dem Gerät findet die passendsten Abschnitte nach ihrer Bedeutung und gibt sie an das Modell weiter. So stammen die Antworten direkt aus deinem Dokument, das dein Gerät nie verlässt. Unterstützt PDF, Word, EPUB, HTML, Markdown und reinen Text; ein kleines Embedding-Modell wird bei der ersten Nutzung einmalig geladen.
+
+Vision – sende ein Foto und chatte darüber. Wähle ein Bild aus deiner Mediathek oder nimm eines mit der Kamera auf und frag das Modell, was es sieht: eine Szene beschreiben, Objekte erkennen oder Text lesen. Das Bild wird direkt auf deinem Gerät erfasst.
+
+Diktieren – tippe auf das Mikrofon und sprich; deine Worte erscheinen schon beim Sprechen, in 35 Sprachen. Die Sprache wird auf deinem Gerät erkannt und nie gespeichert oder gesendet.
+
+Reasoning-Modelle – verfolge das Denken von Reasoning-Modellen in einem ausklappbaren Bereich, mit einstellbarem Denkbudget.
+
+Werkzeuge – leistungsfähige Modelle können während einer Antwort im Web suchen, eine Seite lesen und JavaScript in einer Sandbox ausführen. Jedes Werkzeug ist standardmäßig aus; schalte pro Modell nur die ein, die du möchtest. Websuche und Seitenabruf greifen nur dann aufs Internet zu, wenn du sie aktivierst.
+
+Tempo auf einen Blick – sieh für jede Antwort die Anzahl der Tokens und die Tokens pro Sekunde.
+
+Deine Einstellungen, pro Chat – Kontextgröße, Denkbudget, Temperatur, Top-P, Top-K, Min-P, Wiederholungsstrafe und Seed.
+
+System-Prompts – speichere wiederverwendbare Anweisungen einmal und nutze sie mit jedem Modell, damit Ton, Rolle oder Ausgabeformat gleich bleiben.
+
+Eigene Modelle – importiere deine eigenen GGUF-Modelle aus der Dateien-App, zusätzlich zum integrierten Katalog.
+
+Zuverlässige Downloads – Modelle werden im Hintergrund geladen, mit Fortschritt, Geschwindigkeit und Restzeit, und setzen nach einer Netzwerkunterbrechung fort.
+
+MODELLE
+
+Ein Katalog von Modellen, getestet auf iPhone und iPad, von Qwen, Gemma, Llama, LFM, Granite und weiteren, ab wenigen hundert Megabyte. Die App prüft vor dem Laden den freien Arbeitsspeicher und sagt dir, wenn ein Modell für dein Gerät zu groß ist.
+
+OPEN SOURCE
+
+LM Playground ist Open Source unter der MIT-Lizenz. Basiert auf llama.cpp, mit Modellen von Hugging Face.

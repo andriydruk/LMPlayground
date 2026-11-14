@@ -1,0 +1,1 @@
+ai,kecerdasan buatan,chatbot,sembang,luar talian,offline,model bahasa,llm,gguf,llama,qwen,gemma

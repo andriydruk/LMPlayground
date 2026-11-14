@@ -1,0 +1,37 @@
+LM Playground menjalankan model bahasa besar terus pada iPhone dan iPad anda. Muat turun model, muatkannya dengan satu ketikan, dan bersembang – secara peribadi, pada peranti anda. Tiada pelayan awan, tiada kunci API, tiada akaun dan tiada data yang meninggalkan peranti anda.
+
+CIRI UTAMA
+
+Inferens pada peranti – setiap balasan dijana secara tempatan dengan Metal pada iPhone atau iPad anda. Perbualan anda kekal peribadi.
+
+Sejarah sembang – perbualan disimpan dan disusun. Semat, namakan semula atau padam, dan sambung mana-mana sembang tepat di tempat anda berhenti. Pada iPad, sembang anda terletak dalam bar sisi di sebelah perbualan.
+
+Balasan yang kaya – jawapan dipaparkan dengan Markdown penuh: tajuk, blok kod dengan butang salin, senarai, jadual, huruf tebal dan condong.
+
+Dokumen – lampirkan fail pada sembang dan tanya soalan tentangnya. Carian pada peranti mencari petikan paling berkaitan mengikut makna dan menyerahkannya kepada model, jadi jawapan datang terus daripada dokumen anda, yang tidak pernah meninggalkan peranti anda. Menyokong PDF, Word, EPUB, HTML, Markdown dan teks biasa; model embedding kecil dimuat turun sekali semasa penggunaan pertama.
+
+Penglihatan – hantar foto dan bersembang tentangnya. Pilih imej daripada pustaka anda atau ambil dengan kamera, kemudian tanya model apa yang dilihatnya: terangkan suasana, kenal pasti objek atau baca teks. Imej difahami terus pada peranti anda.
+
+Imlak suara – ketik mikrofon dan bercakap; kata-kata anda muncul semasa anda bercakap, dalam 35 bahasa. Pertuturan dikenal pasti pada peranti anda dan tidak pernah disimpan atau dihantar.
+
+Model penaakulan – ikuti pemikiran model penaakulan dalam bahagian yang boleh dilipat, dengan bajet pemikiran yang boleh dilaraskan.
+
+Alat – model yang berkebolehan boleh mencari di web, membaca halaman dan menjalankan JavaScript dalam kotak pasir semasa membalas. Setiap alat dimatikan secara lalai; hidupkan hanya yang anda mahu, bagi setiap model. Carian web dan bacaan halaman hanya mencapai internet apabila anda menghidupkannya.
+
+Kelajuan sepintas lalu – lihat bilangan token dan token sesaat bagi setiap balasan.
+
+Tetapan anda, bagi setiap sembang – saiz konteks, bajet pemikiran, suhu, Top-P, Top-K, Min-P, penalti ulangan dan seed.
+
+Gesaan sistem – simpan arahan boleh guna semula sekali dan gunakannya dengan mana-mana model untuk mengekalkan nada, peranan atau format output.
+
+Model tersuai – import model GGUF anda sendiri daripada app Fail, di samping katalog terbina dalam.
+
+Muat turun yang boleh dipercayai – model dimuat turun di latar belakang dengan kemajuan, kelajuan dan baki masa, dan disambung semula selepas gangguan rangkaian.
+
+MODEL
+
+Katalog model yang diuji pada iPhone dan iPad, daripada Qwen, Gemma, Llama, LFM, Granite dan banyak lagi, bermula dari beberapa ratus megabait. App menyemak memori kosong sebelum memuatkan model dan memberitahu anda apabila model terlalu besar untuk peranti anda.
+
+SUMBER TERBUKA
+
+LM Playground ialah sumber terbuka di bawah Lesen MIT. Dikuasakan oleh llama.cpp, dengan model daripada Hugging Face.

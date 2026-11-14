@@ -1,0 +1,1 @@
+yapay zeka,ai,sohbet,chatbot,çevrimdışı,yerel,dil modeli,llm,gguf,llama,qwen,gemma,asistan,gizlilik

@@ -1,0 +1,37 @@
+LM Playground uruchamia duże modele językowe bezpośrednio na Twoim iPhonie i iPadzie. Pobierz model, załaduj go jednym dotknięciem i rozmawiaj – prywatnie, na swoim urządzeniu. Bez serwerów w chmurze, bez kluczy API, bez konta i bez danych opuszczających urządzenie.
+
+GŁÓWNE FUNKCJE
+
+Inferencja na urządzeniu – każda odpowiedź powstaje lokalnie dzięki Metal na Twoim iPhonie lub iPadzie. Twoje rozmowy pozostają prywatne.
+
+Historia czatu – rozmowy są zapisywane i porządkowane. Przypinaj je, zmieniaj ich nazwy lub usuwaj i wznawiaj każdy czat dokładnie w miejscu, w którym się zatrzymał. Na iPadzie czaty są na pasku bocznym obok rozmowy.
+
+Bogate odpowiedzi – odpowiedzi są wyświetlane z pełnym Markdownem: nagłówki, bloki kodu z przyciskiem kopiowania, listy, tabele, pogrubienie i kursywa.
+
+Dokumenty – załącz plik do czatu i zadawaj pytania na jego temat. Wyszukiwanie na urządzeniu znajduje najtrafniejsze fragmenty według znaczenia i przekazuje je modelowi, więc odpowiedzi pochodzą prosto z Twojego dokumentu, który nigdy nie opuszcza urządzenia. Obsługuje PDF, Word, EPUB, HTML, Markdown i zwykły tekst; mały model embeddingów pobiera się jednorazowo przy pierwszym użyciu.
+
+Vision – wyślij zdjęcie i porozmawiaj o nim. Wybierz obraz z biblioteki lub zrób zdjęcie aparatem i zapytaj model, co widzi: opisz scenę, rozpoznaj obiekty albo odczytaj tekst. Obraz jest analizowany bezpośrednio na urządzeniu.
+
+Dyktowanie głosowe – dotknij mikrofonu i mów; słowa pojawiają się w trakcie mówienia, w 35 językach. Mowa jest rozpoznawana na urządzeniu i nigdy nie jest zapisywana ani wysyłana.
+
+Modele rozumowania – śledź tok myślenia modeli rozumowania w zwijanej sekcji, z regulowanym budżetem myślenia.
+
+Narzędzia – zaawansowane modele mogą podczas odpowiedzi szukać w internecie, czytać stronę i uruchamiać JavaScript w piaskownicy. Każde narzędzie jest domyślnie wyłączone; włącz tylko te, których chcesz, osobno dla każdego modelu. Wyszukiwanie w sieci i czytanie stron łączą się z internetem tylko wtedy, gdy je włączysz.
+
+Szybkość w skrócie – zobacz liczbę tokenów i tokeny na sekundę dla każdej odpowiedzi.
+
+Twoje ustawienia, dla każdego czatu – rozmiar kontekstu, budżet myślenia, temperatura, Top-P, Top-K, Min-P, kara za powtórzenia i seed.
+
+Prompty systemowe – zapisz raz instrukcje wielokrotnego użytku i używaj ich z dowolnym modelem, by zachować spójny ton, rolę lub format odpowiedzi.
+
+Własne modele – importuj własne modele GGUF z aplikacji Pliki, obok wbudowanego katalogu.
+
+Niezawodne pobieranie – modele pobierają się w tle z postępem, prędkością i pozostałym czasem, a po przerwie w połączeniu wznawiają pobieranie.
+
+MODELE
+
+Katalog modeli przetestowanych na iPhonie i iPadzie, od Qwen, Gemma, Llama, LFM, Granite i innych, od kilkuset megabajtów. Aplikacja sprawdza wolną pamięć przed załadowaniem modelu i informuje, gdy model jest za duży dla Twojego urządzenia.
+
+OPEN SOURCE
+
+LM Playground jest open source na licencji MIT. Działa na llama.cpp, z modelami z Hugging Face.
