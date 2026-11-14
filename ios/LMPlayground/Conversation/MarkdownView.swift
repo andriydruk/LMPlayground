@@ -8,13 +8,32 @@ struct MarkdownView: View {
     let text: String
 
     var body: some View {
-        let document = Document(parsing: text)
         VStack(alignment: .leading, spacing: 10) {
-            ForEach(Array(document.blockChildren.enumerated()), id: \.offset) { _, block in
+            ForEach(Array(Self.blocks(text).enumerated()), id: \.offset) { _, block in
                 BlockView(block: block)
             }
         }
         .textSelection(.enabled)
+    }
+
+    private final class Parsed {
+        let blocks: [any BlockMarkup]
+        init(_ blocks: [any BlockMarkup]) { self.blocks = blocks }
+    }
+
+    /// Parsed once per text: replies scrolled back into view are laid out
+    /// again without parsing.
+    @MainActor private static let cache: NSCache<NSString, Parsed> = {
+        let cache = NSCache<NSString, Parsed>()
+        cache.countLimit = 200
+        return cache
+    }()
+
+    private static func blocks(_ text: String) -> [any BlockMarkup] {
+        if let parsed = cache.object(forKey: text as NSString) { return parsed.blocks }
+        let blocks = Array(Document(parsing: text).blockChildren)
+        cache.setObject(Parsed(blocks), forKey: text as NSString)
+        return blocks
     }
 }
 

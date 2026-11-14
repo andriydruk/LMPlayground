@@ -56,72 +56,12 @@ struct ConversationView: View {
     @Binding var showPicker: Bool
     @Binding var showParams: Bool
     @Binding var showLibrary: Bool
-    /// Whether the end of the conversation is on screen: streaming keeps it
-    /// there, and scrolling up offers a way back instead.
-    @State private var atBottom = true
     /// The user message open in the in-place editor.
     @State private var editing: ChatMessage.ID?
     @State private var sessionReport: String?
 
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 16) {
-                    ForEach(model.messages) { message in
-                        let isLast = message.id == model.messages.last?.id
-                        MessageView(message: message,
-                                    isStreaming: model.isGenerating && isLast,
-                                    actions: actions(for: message, isLast: isLast),
-                                    isEditing: editing == message.id,
-                                    onEditEnded: { text in
-                                        editing = nil
-                                        if let text { model.edit(message, text: text) }
-                                    })
-                            .id(message.id)
-                    }
-                    // On screen exactly when the end of the conversation is.
-                    Color.clear.frame(height: 1).id("bottom")
-                        .onAppear { atBottom = true }
-                        .onDisappear { atBottom = false }
-                }
-                .padding()
-            }
-            .defaultScrollAnchor(.bottom)
-            .scrollDismissesKeyboard(.interactively)
-            // A tap on the chat closes the keyboard; buttons and links in the
-            // messages take their taps first. Not while a message is being
-            // edited: its field is in the chat.
-            .onTapGesture {
-                if editing == nil { UIApplication.shared.dismissKeyboard() }
-            }
-            .onChange(of: model.messages.last?.content) {
-                if model.isGenerating && atBottom { proxy.scrollTo("bottom", anchor: .bottom) }
-            }
-            .onChange(of: editing) { _, id in
-                if let id { withAnimation { proxy.scrollTo(id, anchor: .center) } }
-            }
-            .overlay {
-                // Android: What's New while no model is loaded.
-                if model.messages.isEmpty && runtime.loaded == nil && !isLoading {
-                    WhatsNewView()
-                }
-            }
-            .overlay(alignment: .bottomTrailing) {
-                if !atBottom && !model.messages.isEmpty {
-                    Button("Jump to bottom", systemImage: "arrow.down") {
-                        withAnimation { proxy.scrollTo("bottom", anchor: .bottom) }
-                    }
-                    .labelStyle(.iconOnly)
-                    .font(.headline)
-                    .frame(width: 44, height: 44)
-                    .glassEffect(.regular.interactive(), in: .circle)
-                    .padding()
-                    .transition(.opacity.combined(with: .scale))
-                    .accessibilityIdentifier("jumpToBottom")
-                }
-            }
-            .animation(.easeInOut(duration: 0.2), value: atBottom)
-        }
+        messageList
         // An inset, not an overlay: the scroll view reaches under the bar, so
         // an overlay's top edge would sit under the status bar.
         .safeAreaInset(edge: .top, spacing: 0) {
@@ -200,6 +140,38 @@ struct ConversationView: View {
         }
     }
 
+    private var messageList: some View {
+        MessageList(editing: editing) { message in
+            let isLast = message.id == model.messages.last?.id
+            MessageView(message: message,
+                        isStreaming: model.isGenerating && isLast,
+                        actions: actions(for: message, isLast: isLast),
+                        isEditing: editing == message.id,
+                        onEditEnded: { text in
+                            editing = nil
+                            if let text { model.edit(message, text: text) }
+                        })
+                .equatable()
+        }
+        // A list of its own per chat, which opens at its end: one opened in
+        // the last chat's took over where that was scrolled to, which could
+        // point where nothing was drawn.
+        .id(model.session?.id)
+        .scrollDismissesKeyboard(.interactively)
+        // A tap on the chat closes the keyboard; buttons and links in the
+        // messages take their taps first. Not while a message is being
+        // edited: its field is in the chat.
+        .onTapGesture {
+            if editing == nil { UIApplication.shared.dismissKeyboard() }
+        }
+        .overlay {
+            // Android: What's New while no model is loaded.
+            if model.messages.isEmpty && runtime.loaded == nil && !isLoading {
+                WhatsNewView()
+            }
+        }
+    }
+
     /// Edit and regenerate run the model; branching only needs a saved chat
     /// to copy. Nothing changes a chat while a reply is being written.
     private func actions(for message: ChatMessage, isLast: Bool) -> MessageActions {
@@ -238,6 +210,164 @@ struct ConversationView: View {
             withAnimation(.snappy(duration: 0.25)) { showPicker = true }
         }
     }
+}
+
+/// The chat's messages, opening at the end. Made anew for each chat, so its
+/// scroll position starts there.
+private struct MessageList<Row: View>: View {
+    @Environment(ConversationModel.self) private var model
+    /// The user message open in the in-place editor, scrolled to the middle.
+    let editing: ChatMessage.ID?
+    @ViewBuilder var row: (ChatMessage) -> Row
+
+    /// Where the chat is scrolled: the message at the top while scrolled up,
+    /// which then stays put as rows above it are measured. Scrolled to the
+    /// end by the last message: to the bottom edge, it overshoots by the
+    /// input's inset.
+    @State private var position = ScrollPosition(idType: ChatMessage.ID.self)
+    /// Whether the end of the conversation is on screen: streaming keeps it
+    /// there, and scrolling up offers a way back instead.
+    @State private var atBottom = true
+    /// A finger is on the chat or it coasts from one: it goes where that
+    /// takes it, and where it ends up decides whether the end is followed.
+    @State private var touching = false
+    @State private var tracking = Tracking()
+
+    /// Outside SwiftUI's state: these change with every frame of a scroll,
+    /// and nothing drawn depends on them.
+    private final class Tracking {
+        /// The top of what is on screen.
+        var top: CGFloat = 0
+        /// Stay at the end as it moves. A fast reply outruns any check of
+        /// how far the end is, so only a drag away turns this off.
+        var following = true
+    }
+
+    /// How many of the latest messages are drawn; more join on the way up.
+    @State private var shown = Self.page
+
+    private static var page: Int { 30 }
+    /// How far from the top the next page starts being drawn.
+    private static var pageMargin: CGFloat { 1000 }
+    /// How far from the end still counts as at it.
+    private static var endSlack: CGFloat { 40 }
+
+    /// What the chat reacts to as it scrolls or its frame changes.
+    private struct Extent: Equatable {
+        var top: CGFloat
+        var fromEnd: CGFloat
+        var contentHeight: CGFloat
+        var visibleHeight: CGFloat
+    }
+
+    var body: some View {
+        ScrollView {
+            // Not lazy: a lazy stack estimates the rows it hasn't drawn, and
+            // redoes that when one changes height, which moves the chat. The
+            // cost stays down by drawing the latest messages only.
+            VStack(alignment: .leading, spacing: 16) {
+                ForEach(model.messages.suffix(shown)) { message in
+                    row(message)
+                        .id(message.id)
+                }
+            }
+            .scrollTargetLayout()
+            .padding()
+            // At the end, the chat keeps the last message in place, so a
+            // section opening in it would push the text above it up.
+            .environment(\.holdScroll, HoldScrollAction { [tracking] in
+                // Scrolled up, the chat already keeps the message at the top
+                // in place.
+                guard tracking.following else { return }
+                tracking.following = false
+                position.scrollTo(y: tracking.top)
+            })
+        }
+        .scrollPosition($position)
+        .defaultScrollAnchor(.bottom, for: .initialOffset)
+        // A short chat sits at the bottom, by the input.
+        .defaultScrollAnchor(.bottom, for: .alignment)
+        // Content growing keeps what is on screen in place; following the
+        // end is up to the chat.
+        .defaultScrollAnchor(.top, for: .sizeChanges)
+        .onScrollGeometryChange(for: Extent.self, of: Self.extent, action: scrolled)
+        .onScrollPhaseChange { _, phase in touching = phase == .interacting || phase == .decelerating }
+        .onChange(of: editing) { _, id in
+            if let id { withAnimation { position.scrollTo(id: id, anchor: .center) } }
+        }
+        // A reply starting (send, edit, regenerate) brings the end into view.
+        .onChange(of: model.messages.last?.id) {
+            if model.isGenerating { scrollToEnd() }
+        }
+        .overlay(alignment: .bottomTrailing) {
+            Group {
+                if !atBottom && !model.messages.isEmpty {
+                    Button("Jump to bottom", systemImage: "arrow.down", action: scrollToEnd)
+                        .labelStyle(.iconOnly)
+                        .font(.headline)
+                        .frame(width: 44, height: 44)
+                        .glassEffect(.regular.interactive(), in: .circle)
+                        .padding()
+                        .transition(.opacity.combined(with: .scale))
+                        .accessibilityIdentifier("jumpToBottom")
+                }
+            }
+            // On the button alone: around the list, it would animate whatever
+            // else changes as the end goes out of view.
+            .animation(.easeInOut(duration: 0.2), value: atBottom)
+        }
+    }
+
+    /// Once there, again: the way down was worked out from the estimated
+    /// heights of rows not drawn yet, and the last ones are measured now.
+    private func scrollToEnd() {
+        guard let last = model.messages.last?.id else { return }
+        tracking.following = true
+        withAnimation {
+            position.scrollTo(id: last, anchor: .bottom)
+        } completion: {
+            position.scrollTo(id: last, anchor: .bottom)
+        }
+    }
+
+    private static func extent(_ geometry: ScrollGeometry) -> Extent {
+        // The container is the part between the bars; the offset counts from
+        // under the top one.
+        let top = geometry.contentOffset.y + geometry.contentInsets.top
+        let visibleEnd = top + geometry.containerSize.height
+        return Extent(top: top, fromEnd: geometry.contentSize.height - visibleEnd,
+                      contentHeight: geometry.contentSize.height, visibleHeight: geometry.containerSize.height)
+    }
+
+    private func scrolled(from old: Extent, to new: Extent) {
+        tracking.top = new.top
+        if touching {
+            tracking.following = new.fromEnd <= Self.endSlack
+            if new.top < Self.pageMargin && shown < model.messages.count { shown += Self.page }
+        }
+        // At the end, it stays there as the reply streams in and as the
+        // keyboard or a taller input takes room.
+        let resized = new.visibleHeight != old.visibleHeight
+            || (model.isGenerating && new.contentHeight != old.contentHeight)
+        if resized && tracking.following && !touching, let last = model.messages.last?.id {
+            position.scrollTo(id: last, anchor: .bottom)
+            atBottom = true
+        } else {
+            atBottom = new.fromEnd <= Self.endSlack
+        }
+    }
+}
+
+/// Keeps the chat where it is scrolled to: called by a message just before
+/// it opens or closes a section, so the section grows down from under the
+/// finger.
+struct HoldScrollAction {
+    let action: () -> Void
+    func callAsFunction() { action() }
+}
+
+extension EnvironmentValues {
+    @Entry var holdScroll: HoldScrollAction?
 }
 
 /// The centered title: the model's name over its load progress or size, and

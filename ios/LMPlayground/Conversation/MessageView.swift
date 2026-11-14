@@ -10,6 +10,12 @@ struct MessageActions {
     var onRegenerate: (() -> Void)?
     var onBranch: (() -> Void)?
     var onSessionInfo: (() -> Void)?
+
+    /// Which actions are offered: closures don't compare, and those of an
+    /// unchanged message do the same thing.
+    var offered: [Bool] {
+        [onContinue != nil, onEdit != nil, onRegenerate != nil, onBranch != nil, onSessionInfo != nil]
+    }
 }
 
 /// One message. User messages are right-aligned bubbles, with Copy and Edit
@@ -79,6 +85,15 @@ struct MessageView: View {
         case .assistant:
             AssistantMessageView(message: message, isStreaming: isStreaming, actions: actions)
         }
+    }
+}
+
+/// Compared by what is drawn, so a token streamed into the last reply
+/// doesn't lay out every message above it again.
+extension MessageView: @MainActor Equatable {
+    static func == (lhs: MessageView, rhs: MessageView) -> Bool {
+        lhs.message == rhs.message && lhs.isStreaming == rhs.isStreaming && lhs.isEditing == rhs.isEditing
+            && lhs.actions.offered == rhs.actions.offered
     }
 }
 
@@ -335,12 +350,16 @@ struct ThinkingSection: View {
     let seconds: Int
     let tokens: Int
     let active: Bool
+    /// Not animated: a long reasoning would drag the messages below it
+    /// across the screen.
     @State private var expanded = false
+    @Environment(\.holdScroll) private var holdScroll
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Button {
-                withAnimation(.snappy) { expanded.toggle() }
+                holdScroll?()
+                expanded.toggle()
             } label: {
                 HStack(spacing: 6) {
                     Image(systemName: "lightbulb")
@@ -348,6 +367,7 @@ struct ThinkingSection: View {
                     Text(title)
                     Image(systemName: "chevron.right")
                         .rotationEffect(.degrees(expanded ? 90 : 0))
+                        .animation(.snappy, value: expanded)
                         .font(.caption2)
                         .accessibilityHidden(true)
                 }
@@ -381,11 +401,13 @@ struct ThinkingSection: View {
 struct ToolCallView: View {
     let call: ToolCallInfo
     @State private var expanded = false
+    @Environment(\.holdScroll) private var holdScroll
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Button {
-                withAnimation(.snappy) { expanded.toggle() }
+                holdScroll?()
+                expanded.toggle()
             } label: {
                 Label("\(call.name) · \(Double(call.durationMs) / 1000, specifier: "%.1f")s", systemImage: "wrench.and.screwdriver")
                     .font(.subheadline)
