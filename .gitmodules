@@ -1,4 +1,4 @@
 [submodule "app/src/main/cpp/llama.cpp"]
-	path = app/src/main/cpp/llama.cpp
+	path = core/llama.cpp
 	url=https://github.com/andriydruk/llama.cpp-android
-	branch = android-0.7.0
+	branch = lmplayground-0.7.0

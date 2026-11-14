@@ -64,11 +64,19 @@ LM Playground is an Android application for running Large Language Models locall
 
 </details>
 
-Most models use Q4_K_M quantization; Qwen 3.5 uses Q3_K_M, and GPT-OSS ships in its native MXFP4 format. See [`ModelInfoProvider.kt`](app/src/main/java/com/druk/lmplayground/models/ModelInfoProvider.kt) for the full list.
+Most models use Q4_K_M quantization; Qwen 3.5 uses Q3_K_M, and GPT-OSS ships in its native MXFP4 format. See [`ModelInfoProvider.kt`](android/app/src/main/java/com/druk/lmplayground/models/ModelInfoProvider.kt) for the full list.
 
 ## Install
 
 If you're just looking to install LM Playground, you can find it on [Google Play](https://play.google.com/store/apps/details?id=com.druk.lmplayground). If you're a developer wanting to contribute, read on.
+
+## Repository layout
+
+| Folder | Contents |
+|--------|----------|
+| [`android/`](android/) | The Android app (Gradle project). See [`android/ARCHITECTURE.md`](android/ARCHITECTURE.md). |
+| [`ios/`](ios/) | The iOS app, in development. |
+| [`docs/`](docs/) | The website. |
 
 ## Build Instructions
 
@@ -81,7 +89,7 @@ Prerequisites:
 ```
 git clone --recurse-submodules https://github.com/andriydruk/LMPlayground.git
 ```
-2. Open the project in Android Studio: `File` > `Open` > Select the cloned repository.
+2. Open the Android project in Android Studio: `File` > `Open` > select the `android/` folder of the cloned repository.
 3. Connect an Android device or start an emulator.
 4. Run the application using `Run` > `Run 'app'` or the play button in Android Studio.
 

@@ -1,0 +1,162 @@
+# XcodeGen spec for LMPlayground.xcodeproj.
+#
+# The generated project is committed so it opens without extra tools. After
+# editing this file (or adding a file to LlamaKit), regenerate it:
+#   cd ios && xcodegen generate
+# App and test sources are synchronized folders: new files there need no
+# regeneration. Build settings live in Config/*.xcconfig.
+
+name: LMPlayground
+
+options:
+  bundleIdPrefix: com.druk
+  deploymentTarget:
+    iOS: "26.0"
+    macOS: "26.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+configFiles:
+  Debug: Config/Debug.xcconfig
+  Release: Config/Release.xcconfig
+
+packages:
+  GRDB:
+    url: https://github.com/groue/GRDB.swift
+    exactVersion: 7.11.1
+  Markdown:
+    url: https://github.com/swiftlang/swift-markdown
+    exactVersion: 0.9.0
+  SwiftSoup:
+    url: https://github.com/scinfu/SwiftSoup
+    exactVersion: 2.14.3
+
+targets:
+
+  # The ObjC++ bridge plus the shared C++ engine (core/llamacore), built for
+  # iOS and for macOS, where its tests run on Metal without a device.
+  LlamaKit:
+    type: framework
+    supportedDestinations: [iOS, macOS]
+    configFiles:
+      Debug: Config/LlamaKit.xcconfig
+      Release: Config/LlamaKit.xcconfig
+    sources:
+      - path: LlamaKit/include
+        headerVisibility: public
+      - path: LlamaKit
+        excludes:
+          - "include/**"
+        headerVisibility: project
+      - path: ../core/llamacore
+        headerVisibility: project
+    dependencies:
+      # Static: linked into LlamaKit, never embedded on its own.
+      - framework: build-apple/llama.xcframework
+        embed: false
+    preBuildScripts:
+      - name: Check llama.xcframework
+        script: '"$SRCROOT/scripts/check-xcframework.sh"'
+        basedOnDependencyAnalysis: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.druk.lmplayground.LlamaKit
+        GENERATE_INFOPLIST_FILE: YES
+        DEFINES_MODULE: YES
+        SKIP_INSTALL: YES
+        MARKETING_VERSION: $(MARKETING_VERSION)
+
+  LlamaKitTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: LlamaKitTests
+        type: syncedFolder
+    dependencies:
+      - target: LlamaKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.druk.lmplayground.LlamaKitTests
+        GENERATE_INFOPLIST_FILE: YES
+
+  LMPlayground:
+    type: application
+    platform: iOS
+    sources:
+      - path: LMPlayground
+        type: syncedFolder
+      # Chat-template overrides shared with Android, bundled as a folder.
+      - path: ../core/resources/chat_templates
+        type: folder
+        buildPhase: resources
+    dependencies:
+      - target: LlamaKit
+        embed: true
+      - package: GRDB
+      - package: Markdown
+      - package: SwiftSoup
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.druk.lmplayground
+        INFOPLIST_FILE: LMPlayground/Info.plist
+        CODE_SIGN_ENTITLEMENTS: LMPlayground/LMPlayground.entitlements
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_PREVIEWS: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+
+  # App logic (thinking split, pairing, catalog, database). Runs on a device:
+  # there is no iOS 26 simulator runtime on the build Mac yet.
+  LMPlaygroundTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: LMPlaygroundTests
+        type: syncedFolder
+    dependencies:
+      - target: LMPlayground
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.druk.lmplayground.Tests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/LMPlayground.app/LMPlayground
+        BUNDLE_LOADER: $(TEST_HOST)
+
+  # End-to-end flows on a device with models in Documents/Models.
+  LMPlaygroundUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: LMPlaygroundUITests
+        type: syncedFolder
+    dependencies:
+      - target: LMPlayground
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.druk.lmplayground.UITests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: LMPlayground
+
+schemes:
+  LMPlayground:
+    build:
+      targets:
+        LMPlayground: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - LMPlaygroundTests
+        - LMPlaygroundUITests
+    archive:
+      config: Release
+
+  LlamaKit:
+    build:
+      targets:
+        LlamaKit: all
+    test:
+      config: Debug
+      targets:
+        - LlamaKitTests

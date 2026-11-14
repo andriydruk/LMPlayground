@@ -1,0 +1,4 @@
+// Written by scripts/bump-version.sh from the repo-root version.properties.
+
+MARKETING_VERSION = 1.10.2
+CURRENT_PROJECT_VERSION = 1

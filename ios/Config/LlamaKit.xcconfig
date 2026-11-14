@@ -1,0 +1,14 @@
+// The ObjC++ bridge compiles the shared engine sources in core/llamacore and
+// links the static llama.xcframework built by scripts/build-xcframework.sh.
+
+HEADER_SEARCH_PATHS = $(inherited) $(SRCROOT)/../core/llamacore $(SRCROOT)/../core/llama.cpp/include $(SRCROOT)/../core/llama.cpp/common $(SRCROOT)/../core/llama.cpp/ggml/include $(SRCROOT)/../core/llama.cpp/vendor $(SRCROOT)/../core/llama.cpp/tools/mtmd $(SRCROOT)/../core/llama.cpp/tools/parakeet/include
+
+// llama.cpp's headers aren't clean under Xcode's stricter defaults.
+GCC_WARN_64_TO_32_BIT_CONVERSION = NO
+WARNING_CFLAGS = $(inherited) -Wno-shorten-64-to-32 -Wno-macro-redefined -Wno-comma -Wno-documentation
+
+// Engine logs go to os_log on iOS; macOS (tests) keeps stderr.
+GCC_PREPROCESSOR_DEFINITIONS[sdk=iphoneos*] = $(inherited) LMP_LOG_OSLOG=1
+GCC_PREPROCESSOR_DEFINITIONS[sdk=iphonesimulator*] = $(inherited) LMP_LOG_OSLOG=1
+
+OTHER_LDFLAGS = $(inherited) -framework Metal -framework Accelerate -framework Foundation

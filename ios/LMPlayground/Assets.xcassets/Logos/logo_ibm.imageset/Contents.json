@@ -1,0 +1,12 @@
+{
+  "images": [
+    {
+      "filename": "logo_ibm.png",
+      "idiom": "universal"
+    }
+  ],
+  "info": {
+    "author": "xcode",
+    "version": 1
+  }
+}
