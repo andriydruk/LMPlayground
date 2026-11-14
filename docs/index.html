@@ -1631,6 +1631,7 @@
     const LFM_LANGS      = ['en','ar','zh','fr','de','ja','ko','es'];
     const LFM_VL_LANGS   = ['en','ar','zh','fr','de','ja','ko','pt','es'];
     const LFM25_LANGS    = ['ar','zh','en','fr','de','hi','id','it','ja','ko','pl','pt','ru','es','th','vi'];
+    const LFM3_OMNI_LANGS = [...LFM25_LANGS,'da','el','fi','he','nl','sv','tr'];
     const SMOLLM3_LANGS  = ['en','fr','es','de','it','pt'];
     const MINICPM_LANGS  = ['en','zh'];
     const MISTRAL_LANGS  = ['en','fr','de','es','it','pt','nl','zh','ja','ko','ar'];
@@ -1646,12 +1647,15 @@
     // Sorted by release date (newest first). `tools` mirrors the app's TOOL_CAPABLE set (hammer badge).
     // Sizes are Q4_K_M except Qwen 3.5 (Q3_K_M) and GPT-OSS (MXFP4).
     const MODELS = [
+      // 2026-10-27
+      { name:'LFM3 Omni 2B',            provider:'Liquid AI', desc:'Omni-modal vision model',         size:'1.61 GB',  quant:'Q4_K_M', tags:['new','chat'],                 tools:true,  langs:LFM3_OMNI_LANGS },
+      { name:'LFM3 1.7B',               provider:'Liquid AI', desc:'Agentic reasoning model',         size:'1.10 GB',  quant:'Q4_K_M', tags:['new','reason','chat'],        tools:true,  langs:LFM25_LANGS },
+      // 2026-10-19
+      { name:'Spark-X2.6 4B',           provider:'XHToken',   desc:'Hybrid reasoning model',          size:'3.54 GB',  quant:'Q4_K_M', tags:['new','reason','chat'],        tools:true,  langs:MULTILINGUAL_BROAD },
       // 2026-09-06
       { name:'MiniCPM5 2B',             provider:'OpenBMB',   desc:'Hybrid reasoning model',          size:'1.56 GB',  quant:'Q4_K_M', tags:['new','reason','chat'],        tools:true,  langs:MINICPM_LANGS },
       // 2026-08-25
       { name:'Granite 4.2 3B',          provider:'IBM',       desc:'Hybrid reasoning model',          size:'2.24 GB',  quant:'Q4_K_M', tags:['new','reason','chat'],        tools:true,  langs:GRANITE_LANGS },
-      // 2026-08-24
-      { name:'Spark-X2.5 4B',           provider:'XHToken',   desc:'Hybrid reasoning model',          size:'2.60 GB',  quant:'Q4_K_M', tags:['new','reason','chat'],        tools:true,  langs:MULTILINGUAL_BROAD },
       // 2026-08-19
       { name:'LFM2.5 1.2B',             provider:'Liquid AI', desc:'Compact chat model',              size:'697 MB',   quant:'Q4_K_M', tags:['new','small','chat'],         tools:true,  langs:LFM25_LANGS },
       // 2026-08-12
@@ -1716,7 +1720,7 @@
     // Vision (image input) — mirrors the app's models that ship an mmproj
     // projector (ModelInfoProvider.kt). Drives the VISION badge + filter tab.
     const VISION_MODELS = new Set([
-      'LFM2.5 VL 3B', 'LFM2.5 VL 1.6B', 'LFM2.5 VL 450M',
+      'LFM3 Omni 2B', 'LFM2.5 VL 3B', 'LFM2.5 VL 1.6B', 'LFM2.5 VL 450M',
       'Gemma 4 E4B', 'Gemma 4 E2B', 'Qwen 3.5 4B', 'Qwen 3.5 2B', 'Qwen 3.5 0.8B',
       'Gemma 3 4B', 'Ministral 3 8B Reasoning', 'Ministral 3 8B Instruct',
       'Ministral 3 3B Reasoning', 'Ministral 3 3B Instruct',

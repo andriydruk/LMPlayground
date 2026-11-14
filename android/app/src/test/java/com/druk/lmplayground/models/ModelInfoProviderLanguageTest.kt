@@ -79,6 +79,15 @@ class ModelInfoProviderLanguageTest {
     }
 
     @Test
+    fun lfm3OmniAddsEuropeanLanguagesToLfm3() {
+        val text = byName("LFM3 1.7B").supportedLanguages.toSet()
+        val omni = byName("LFM3 Omni 2B").supportedLanguages.toSet()
+        assertEquals(byName("LFM2.5 2.6B").supportedLanguages.toSet(), text)
+        assertTrue(omni.containsAll(text))
+        assertEquals(setOf("da", "el", "fi", "he", "nl", "sv", "tr"), omni - text)
+    }
+
+    @Test
     fun lfm25LargeIsBroaderThanEarlierSizes() {
         val large = byName("LFM2.5 2.6B").supportedLanguages
         val small = byName("LFM2.5 350M").supportedLanguages
