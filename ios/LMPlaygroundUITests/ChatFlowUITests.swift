@@ -1,11 +1,13 @@
 import XCTest
 
 /// End-to-end chat on a device. Needs Qwen 3.5 0.8B
-/// (Qwen_Qwen3.5-0.8B-IQ4_XS.gguf) in the app's Documents/Models.
+/// (Qwen_Qwen3.5-0.8B-IQ4_XS.gguf) in the app's Documents/Models, or the
+/// catalog model named by UITEST_MODEL (pass TEST_RUNNER_UITEST_MODEL to
+/// xcodebuild).
 @MainActor
 final class ChatFlowUITests: XCTestCase {
 
-    private let modelName = "Qwen 3.5 0.8B"
+    private let modelName = ProcessInfo.processInfo.environment["UITEST_MODEL"] ?? "Qwen 3.5 0.8B"
 
     override func setUp() {
         continueAfterFailure = false
