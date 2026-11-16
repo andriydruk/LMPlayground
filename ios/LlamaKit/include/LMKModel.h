@@ -13,6 +13,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init NS_UNAVAILABLE;
 
+#if DEBUG
+/// A model with no weights, for store screenshots: properties read as empty
+/// and session creation fails.
++ (instancetype)placeholder;
+#endif
+
 /// Weight bytes.
 @property (nonatomic, readonly) uint64_t modelSize;
 /// Context length the model was trained with.

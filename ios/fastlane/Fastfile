@@ -1,0 +1,37 @@
+default_platform(:ios)
+
+# Run from ios/ on the owner's Mac (there is no iOS CI): `bundle exec fastlane <lane>`.
+# APP_STORE_CONNECT_API_KEY_PATH points at the App Store Connect API key JSON
+# (key_id, issuer_id, key), see https://docs.fastlane.tools/app-store-connect-api/.
+
+platform :ios do
+  desc "Upload the store screenshots from scripts/store-screenshots.sh, replacing the current ones"
+  lane :upload_screenshots do
+    deliver(
+      api_key_path: ENV["APP_STORE_CONNECT_API_KEY_PATH"],
+      screenshots_path: "fastlane/screenshots",
+      overwrite_screenshots: true,
+      skip_binary_upload: true,
+      skip_metadata: true,
+      skip_app_version_update: true,
+      run_precheck_before_submit: false,
+      submit_for_review: false,
+      force: true # no HTML preview to confirm
+    )
+  end
+
+  desc "Sync the listing text in store/<locale> (name, subtitle, description, keywords, promotional text)"
+  lane :update_listing do
+    sh("python3", "-I", "../scripts/check-store-text.py")
+    deliver(
+      api_key_path: ENV["APP_STORE_CONNECT_API_KEY_PATH"],
+      metadata_path: "store",
+      skip_screenshots: true,
+      skip_binary_upload: true,
+      skip_app_version_update: true,
+      run_precheck_before_submit: false,
+      submit_for_review: false,
+      force: true
+    )
+  end
+end
