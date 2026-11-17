@@ -32,6 +32,17 @@ object ModelInfoProvider {
         "ar", "zh", "en", "fr", "de", "hi", "id", "it",
         "ja", "ko", "pl", "pt", "ru", "es", "th", "vi"
     )
+    // LFM3 declares the same sixteen languages as LFM2.5 2.6B.
+    private val LFM3_LANGS = listOf(
+        "ar", "zh", "en", "fr", "de", "hi", "id", "it",
+        "ja", "ko", "pl", "pt", "ru", "es", "th", "vi"
+    )
+    // LFM3-Omni adds Danish, Greek, Finnish, Hebrew, Dutch, Swedish and Turkish.
+    private val LFM3_OMNI_LANGS = listOf(
+        "ar", "zh", "en", "fr", "de", "hi", "id", "it",
+        "ja", "ko", "pl", "pt", "ru", "es", "th", "vi",
+        "da", "el", "fi", "he", "nl", "sv", "tr"
+    )
     // The card's frontmatter also tags zh/ar/ru, but the model card text is
     // explicit that only these six are natively supported.
     private val SMOLLM3_LANGS = listOf("en", "fr", "es", "de", "it", "pt")
@@ -226,6 +237,15 @@ object ModelInfoProvider {
             supportedLanguages = LFM25_LANGS
         ),
         ModelInfo(
+            name = "LFM3 1.7B",
+            filename = "LFM3-1.7B-Q4_K_M.gguf",
+            remoteUri = Uri.parse("https://huggingface.co/LiquidAI/LFM3-1.7B-GGUF/resolve/main/LFM3-1.7B-Q4_K_M.gguf"),
+            releaseDate = LocalDate.parse("2026-10-27"),
+            description = "Liquid AI \u00B7 Agentic reasoning model \u00B7 1.10Gb",
+            logoRes = R.drawable.logo_liquid,
+            supportedLanguages = LFM3_LANGS
+        ),
+        ModelInfo(
             name = "Ministral 3 3B Instruct",
             filename = "Ministral-3-3B-Instruct-2512-Q4_K_M.gguf",
             remoteUri = Uri.parse("https://huggingface.co/lmstudio-community/Ministral-3-3B-Instruct-2512-GGUF/resolve/main/Ministral-3-3B-Instruct-2512-Q4_K_M.gguf"),
@@ -378,6 +398,19 @@ object ModelInfoProvider {
             mmprojFilename = "mmproj-LFM2.5-VL-3B-Q8_0.gguf",
             mmprojUri = Uri.parse("https://huggingface.co/LiquidAI/LFM2.5-VL-3B-GGUF/resolve/main/mmproj-LFM2.5-VL-3B-Q8_0.gguf")
         ),
+        // LFM3-Omni also takes audio and video and can answer in speech; the app
+        // uses it as an image + text model.
+        ModelInfo(
+            name = "LFM3 Omni 2B",
+            filename = "LFM3-Omni-2B-Q4_K_M.gguf",
+            remoteUri = Uri.parse("https://huggingface.co/LiquidAI/LFM3-Omni-2B-GGUF/resolve/main/LFM3-Omni-2B-Q4_K_M.gguf"),
+            releaseDate = LocalDate.parse("2026-10-27"),
+            description = "Liquid AI \u00B7 Omni-modal vision model \u00B7 1.10Gb + 507Mb mmproj",
+            logoRes = R.drawable.logo_liquid,
+            supportedLanguages = LFM3_OMNI_LANGS,
+            mmprojFilename = "mmproj-LFM3-Omni-2B-Q8_0.gguf",
+            mmprojUri = Uri.parse("https://huggingface.co/LiquidAI/LFM3-Omni-2B-GGUF/resolve/main/mmproj-LFM3-Omni-2B-Q8_0.gguf")
+        ),
         ModelInfo(
             name = "MiniCPM5 2B",
             filename = "MiniCPM5-2B-Q4_K_M.gguf",
@@ -387,12 +420,24 @@ object ModelInfoProvider {
             logoRes = R.drawable.logo_openbmb,
             supportedLanguages = MINICPM_LANGS
         ),
+        // Superseded by Spark-X2.6 below: same architecture, newer
+        // post-training. Kept so an already-downloaded copy is still recognized.
         ModelInfo(
             name = "Spark-X2.5 4B",
             filename = "Spark-X2.5-4B-Q4_K_M.gguf",
             remoteUri = Uri.parse("https://huggingface.co/XHToken/Spark-X2.5-4B-GGUF/resolve/main/Spark-X2.5-4B-Q4_K_M.gguf"),
             releaseDate = LocalDate.parse("2026-08-24"),
             description = "XHToken · Hybrid reasoning model · 2.60Gb",
+            logoRes = R.drawable.logo_xhtoken,
+            deprecated = true,
+            supportedLanguages = SPARK_LANGS
+        ),
+        ModelInfo(
+            name = "Spark-X2.6 4B",
+            filename = "Spark-X2.6-4B-Q4_K_M.gguf",
+            remoteUri = Uri.parse("https://huggingface.co/XHToken/Spark-X2.6-4B-GGUF/resolve/main/Spark-X2.6-4B-Q4_K_M.gguf"),
+            releaseDate = LocalDate.parse("2026-10-19"),
+            description = "XHToken \u00B7 Hybrid reasoning model \u00B7 3.54Gb",
             logoRes = R.drawable.logo_xhtoken,
             supportedLanguages = SPARK_LANGS
         ),
@@ -579,6 +624,9 @@ object ModelInfoProvider {
         "MiniCPM5-1B-Q4_K_M.gguf",
         "MiniCPM5-2B-Q4_K_M.gguf",
         "Spark-X2.5-4B-Q4_K_M.gguf",
+        "Spark-X2.6-4B-Q4_K_M.gguf",
+        "LFM3-1.7B-Q4_K_M.gguf",
+        "LFM3-Omni-2B-Q4_K_M.gguf",
         "Ministral-3-3B-Instruct-2512-Q4_K_M.gguf",
         "Ministral-3-3B-Reasoning-2512-Q4_K_M.gguf",
         "Ministral-3-8B-Instruct-2512-Q4_K_M.gguf",
@@ -620,6 +668,9 @@ object ModelInfoProvider {
         "MiniCPM5-1B-Q4_K_M.gguf",
         "MiniCPM5-2B-Q4_K_M.gguf",
         "Spark-X2.5-4B-Q4_K_M.gguf",
+        "Spark-X2.6-4B-Q4_K_M.gguf",
+        "LFM3-1.7B-Q4_K_M.gguf",
+        "LFM3-Omni-2B-Q4_K_M.gguf",
         "granite-4.2-3b-Q4_K_M.gguf",
         "Ministral-3-3B-Reasoning-2512-Q4_K_M.gguf",
         "Ministral-3-8B-Reasoning-2512-Q4_K_M.gguf",
@@ -645,6 +696,8 @@ object ModelInfoProvider {
         "LFM2.5-VL-450M-Q4_K_M.gguf" to ThinkingMode.NONE,
         "LFM2.5-VL-3B-Q4_K_M.gguf" to ThinkingMode.NONE,
         "LFM2.5-VL-1.6B-Q4_K_M.gguf" to ThinkingMode.NONE,
+        // Non-reasoning: every turn opens with an empty <think></think>.
+        "LFM3-Omni-2B-Q4_K_M.gguf" to ThinkingMode.NONE,
 
         // Reasoning-tuned: they keep thinking with the flag off, so offering
         // "off" is a promise the model will not keep.
@@ -664,6 +717,8 @@ object ModelInfoProvider {
         "MiniCPM5-2B-Q4_K_M.gguf" to ThinkingMode.OPTIONAL,
         "granite-4.2-3b-Q4_K_M.gguf" to ThinkingMode.OPTIONAL,
         "Spark-X2.5-4B-Q4_K_M.gguf" to ThinkingMode.OPTIONAL,
+        "Spark-X2.6-4B-Q4_K_M.gguf" to ThinkingMode.OPTIONAL,
+        "LFM3-1.7B-Q4_K_M.gguf" to ThinkingMode.OPTIONAL,
         "NVIDIA-Nemotron3-Nano-4B-Q4_K_M.gguf" to ThinkingMode.OPTIONAL,
     )
 

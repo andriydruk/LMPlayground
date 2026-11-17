@@ -1,0 +1,3 @@
+- Nya modeller: LFM3 1.7B, Spark-X2.6 4B och LFM3 Omni 2B, som kan prata om dina foton
+- Uppdaterad till senaste llama.cpp
+- Förbättringar av prestanda och stabilitet

@@ -19,6 +19,7 @@ object ToolRoundTripProbe : Probe {
     override fun run(ctx: ProbeContext): List<ProbeResult> {
         val attempts = ToolProbe.run(
             model = ctx.model,
+            supportsThinking = ctx.appSupportsThinking,
             maxTokens = ctx.expectation.maxTokens,
             timeoutMs = ctx.expectation.timeoutMs,
         )
@@ -101,6 +102,7 @@ object ToolsWhileThinkingProbe : Probe {
     override fun run(ctx: ProbeContext): List<ProbeResult> {
         val attempts = ToolProbe.run(
             model = ctx.model,
+            supportsThinking = ctx.appSupportsThinking,
             enableThinking = true,
             maxTokens = ctx.expectation.maxTokens,
             timeoutMs = ctx.expectation.timeoutMs,

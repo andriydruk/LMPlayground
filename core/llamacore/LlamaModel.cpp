@@ -185,8 +185,7 @@ bool LlamaModel::supportsToolCalling() {
         return false;
     }
     auto caps = common_chat_templates_get_caps(chat_tmpls.get());
-    auto it = caps.find("supports_tools");
-    return it != caps.end() && it->second;
+    return caps.value("supports_tools", false);
 }
 
 bool LlamaModel::supportsVision() {

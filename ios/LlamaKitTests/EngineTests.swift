@@ -219,7 +219,8 @@ struct EngineTests {
     /// same answer. Whether that answer is "OK" or more of the story is up to
     /// the model; most small ones carry on with a cut-off story.
     @Test(arguments: [TestSupport.textModel, "Qwen3-0.6B-Q4_K_M.gguf", "LFM2.5-2.6B-Q4_K_M.gguf",
-                     "Phi-4-mini-instruct-Q4_K_M.gguf"].filter(TestSupport.has))
+                     "Phi-4-mini-instruct-Q4_K_M.gguf", "LFM3-1.7B-Q4_K_M.gguf",
+                     "LFM3-Omni-2B-Q4_K_M.gguf", "Spark-X2.6-4B-Q4_K_M.gguf"].filter(TestSupport.has))
     func continuedReplyKeepsTheCacheConsistent(_ file: String) throws {
         let model = try Engine.loadModel(at: TestSupport.model(file))
         defer { model.unload() }

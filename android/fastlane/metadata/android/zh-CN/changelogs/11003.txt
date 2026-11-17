@@ -1,0 +1,3 @@
+- 新模型：LFM3 1.7B、Spark-X2.6 4B，以及能和你聊照片的 LFM3 Omni 2B
+- 更新至最新版 llama.cpp
+- 性能与稳定性改进
