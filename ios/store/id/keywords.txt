@@ -1,1 +1,1 @@
-ai,kecerdasan buatan,chatbot,obrolan,offline,lokal,model bahasa,llm,gguf,llama,qwen,gemma,asisten
+kecerdasan buatan,chatbot,obrolan,offline,model bahasa,llm,gguf,asisten

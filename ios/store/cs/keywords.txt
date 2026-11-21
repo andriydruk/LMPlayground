@@ -1,1 +1,1 @@
-ai,umělá inteligence,chatbot,offline,lokální,jazykový model,llm,gguf,llama,qwen,gemma,asistent
+umělá inteligence,chatbot,offline,jazykový model,llm,gguf,asistent

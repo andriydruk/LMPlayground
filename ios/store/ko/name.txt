@@ -1,1 +1,1 @@
-LM Playground
+LM Playground: 로컬 AI

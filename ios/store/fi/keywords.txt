@@ -1,1 +1,1 @@
-tekoäly,ai,chatbot,offline,paikallinen,kielimalli,llm,gguf,llama,qwen,gemma,avustaja,keskustelu
+tekoäly,chatbot,offline,kielimalli,llm,gguf,avustaja,keskustelu

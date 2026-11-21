@@ -1,1 +1,1 @@
-ki,chatbot,offline,lokal,privat,sprachmodell,llm,gguf,llama,qwen,gemma,assistent,datenschutz
+chatbot,offline,lokal,privat,sprachmodell,llm,gguf,assistent,datenschutz

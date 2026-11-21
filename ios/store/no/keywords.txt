@@ -1,1 +1,1 @@
-ki,ai,chatbot,offline,lokal,språkmodell,llm,gguf,llama,qwen,gemma,assistent,kunstig intelligens
+ai,chatbot,offline,språkmodell,llm,gguf,assistent,kunstig intelligens

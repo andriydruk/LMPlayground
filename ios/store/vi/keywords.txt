@@ -1,1 +1,1 @@
-ai,trí tuệ nhân tạo,chatbot,trò chuyện,ngoại tuyến,mô hình ngôn ngữ,llm,gguf,llama,qwen,gemma
+trí tuệ nhân tạo,chatbot,trò chuyện,ngoại tuyến,mô hình ngôn ngữ,llm,gguf

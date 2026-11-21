@@ -1,1 +1,1 @@
-ia,chatbot,offline,local,privado,modelo de linguagem,llm,gguf,llama,qwen,gemma,assistente
+chatbot,offline,privado,modelo de linguagem,llm,gguf,assistente
