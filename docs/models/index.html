@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<title>Models — LM Playground</title>
+<meta name="lmp-title-key" content="mp.meta.title">
+<meta name="description" content="Every open model LM Playground can run on iPhone, iPad and Android — sizes, capabilities and popularity." />
+<link rel="canonical" href="https://lmplayground.app/models/" />
+<link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  (function () {
+    var q = new URLSearchParams(location.search).get('theme'), saved = null;
+    try { saved = localStorage.getItem('lmp-theme'); } catch (e) {}
+    var t = q || saved;
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    document.documentElement.classList.add('js');
+    if (new URLSearchParams(location.search).has('shot')) document.documentElement.classList.add('shot');
+  })();
+</script>
+<link rel="stylesheet" href="../site.css">
+<script src="../lang.js"></script>
+<style>
+  .page-head { padding: 96px 0 48px; }
+  .page-head h1 { font-size: clamp(48px, 7vw, 80px); }
+  .page-head .lead { max-width: 680px; margin-top: 20px; }
+  .count-row { display: flex; gap: 40px; margin-top: 44px; flex-wrap: wrap; }
+  .count-row div { font-size: 15px; color: var(--fg-2); }
+  .count-row b { display: block; font-size: 40px; color: var(--fg); letter-spacing: -0.04em; font-weight: 600; line-height: 1.1; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif; }
+
+  .toolbar { position: sticky; top: 52px; z-index: 20; background: var(--nav); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--line-soft); }
+  .toolbar .wrap { display: flex; align-items: center; gap: 12px; padding-top: 12px; padding-bottom: 12px; flex-wrap: wrap; }
+  .search { flex: 1 1 220px; max-width: 300px; height: 38px; border-radius: 19px; border: 0; background: var(--chip); color: var(--fg); padding: 0 16px 0 38px; font: inherit; font-size: 15px; outline: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2386868b' stroke-width='2.2' stroke-linecap='round'><circle cx='11' cy='11' r='7'/><path d='M20 20l-3.5-3.5'/></svg>"); background-repeat: no-repeat; background-position: 13px center; background-size: 16px; }
+  .search:focus { box-shadow: 0 0 0 2px var(--fg-3); }
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filters button { border: 0; height: 34px; padding: 0 14px; border-radius: 17px; background: none; color: var(--fg-2); font-size: 14px; font-weight: 500; cursor: pointer; }
+  .filters button:hover { color: var(--fg); }
+  .filters button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+  .sort { margin-inline-start: auto; height: 34px; border: 0; border-radius: 17px; background: var(--chip); color: var(--fg); font: inherit; font-size: 14px; padding: 0 12px; cursor: pointer; }
+  @media (max-width: 734px) {
+    .toolbar { position: static; }
+    .sort { margin-inline-start: 0; } .search { max-width: none; flex-basis: 100%; }
+    .filters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 -22px; padding: 0 22px; width: calc(100% + 44px); }
+    .filters::-webkit-scrollbar { display: none; }
+    .filters button { flex: none; }
+  }
+
+  .list { padding: 32px 0 120px; }
+  .shown { font-size: 13px; color: var(--fg-3); margin: 0 0 12px; }
+  .mrow { display: grid; grid-template-columns: 48px minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1.3fr) 96px; gap: 20px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line-soft); }
+  .mrow .ltile { width: 48px; height: 48px; border-radius: 12px; }
+  .mrow .nm b { font-size: 18px; letter-spacing: -0.02em; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
+  .mrow .nm span { display: block; font-size: 14px; color: var(--fg-2); }
+  .mrow .pv { font-size: 14px; color: var(--fg-2); }
+  .mrow .pv .dl { display: block; font-size: 12px; color: var(--fg-3); font-variant-numeric: tabular-nums; }
+  .source { font-size: 12px; color: var(--fg-3); margin: 28px 0 0; }
+  .mrow .sz { text-align: end; font-variant-numeric: tabular-nums; }
+  .mrow .sz b { display: block; font-size: 16px; font-weight: 600; }
+  .mrow .sz span { font-size: 12px; color: var(--fg-3); }
+  [dir="rtl"] .mrow .sz b, [dir="rtl"] .mrow .sz span { unicode-bidi: isolate; direction: ltr; }
+  [dir="rtl"] .search { padding: 0 38px 0 16px; background-position: right 13px center; }
+  .empty { padding: 80px 0; text-align: center; color: var(--fg-2); }
+  @media (max-width: 834px) {
+    .mrow { grid-template-columns: 44px minmax(0, 1fr) auto; gap: 6px 14px; }
+    .mrow .ltile { width: 44px; height: 44px; grid-row: span 2; }
+    .mrow .pv { display: none; }
+    .mrow .badges { grid-column: 2 / 4; grid-row: 2; }
+    .mrow .sz { grid-column: 3; grid-row: 1; }
+  }
+
+  .byo { background: var(--bg-alt); }
+  .byo .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+  .byo h2 { font-size: clamp(34px, 4.2vw, 52px); }
+  .byo .copy { margin-top: 20px; }
+  .byo ol { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 14px; }
+  .byo li { counter-increment: s; background: var(--card-on-alt); border-radius: 20px; padding: 20px; padding-inline-start: 64px; position: relative; color: var(--fg-2); }
+  .byo li b { color: var(--fg); display: block; font-weight: 600; }
+  .byo li::before { content: counter(s); position: absolute; inset-inline-start: 22px; top: 20px; width: 28px; height: 28px; border-radius: 50%; background: var(--fg); color: var(--bg); display: grid; place-items: center; font-size: 14px; font-weight: 600; }
+  @media (max-width: 900px) { .byo .wrap { grid-template-columns: 1fr; gap: 32px; } }
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="wrap-wide nav-row">
+    <a class="brand" href="../"><img class="mark" src="../assets/logo.svg" alt="" />LM Playground</a>
+    <div class="nav-links">
+      <a href="../#features" data-i18n="nav.features">Features</a>
+      <a href="./" aria-current="page" data-i18n="nav.models">Models</a>
+      <a href="../#privacy" data-i18n="nav.privacy">Privacy</a>
+      <a href="../#how" data-i18n="nav.how">How it works</a>
+      <a href="../#faq" data-i18n="nav.faq">FAQ</a>
+    </div>
+    <div class="nav-right">
+      <a class="icon-btn" href="https://github.com/andriydruk/LMPlayground" aria-label="GitHub">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.640-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      </a>
+      <button class="icon-btn" id="themeBtn" aria-label="Toggle light or dark theme" data-i18n-attr="aria-label:ui.theme">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+      <a class="pill-sm" href="../#download" data-i18n="nav.download">Download</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="models.eyebrow">Models</p>
+    <h1 data-i18n-html="mp.title">Every model.<br/>One tap away.</h1>
+    <p class="lead" data-i18n-html="mp.lead">Open models picked and tuned for phones. <b>Each one runs entirely on your device</b> — download it once and it works offline from then on.</p>
+    <div class="count-row" id="counts"></div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="wrap">
+    <input class="search" id="q" type="search" placeholder="Search models" aria-label="Search models" data-i18n-attr="placeholder:mp.search;aria-label:mp.search" />
+    <div class="filters" role="group" aria-label="Filter models">
+      <button data-f="all" aria-pressed="true" data-i18n="mp.f.all">All</button>
+      <button data-f="new" aria-pressed="false" data-i18n="mp.f.new">New</button>
+      <button data-f="reason" aria-pressed="false" data-i18n="cap.think">Thinking</button>
+      <button data-f="vision" aria-pressed="false" data-i18n="cap.vision">Vision</button>
+      <button data-f="tools" aria-pressed="false" data-i18n="cap.tools">Tools</button>
+      <button data-f="small" aria-pressed="false" data-i18n="mp.f.small">Under 1 GB</button>
+    </div>
+    <select class="sort" id="sort" aria-label="Sort models" data-i18n-attr="aria-label:mp.sort">
+      <option value="popular" data-i18n="mp.sort.popular">Most popular</option>
+      <option value="new" data-i18n="mp.sort.new">Newest first</option>
+      <option value="small" data-i18n="mp.sort.small">Smallest first</option>
+      <option value="large" data-i18n="mp.sort.large">Largest first</option>
+      <option value="name" data-i18n="mp.sort.name">Name</option>
+    </select>
+  </div>
+</div>
+
+<main class="list">
+  <div class="wrap">
+    <p class="shown" id="shown"></p>
+    <div id="rows"></div>
+    <p class="source" data-i18n="mp.source">Downloads are Hugging Face downloads of each model’s GGUF files over the last 30 days (checked November 21, 2026).</p>
+  </div>
+</main>
+
+<section class="byo">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow" data-i18n="mp.byo.eyebrow">Bring your own</p>
+      <h2 data-i18n-html="mp.byo.title">Don’t see your favorite?<br/>Load any GGUF.</h2>
+      <p class="copy" data-i18n-html="mp.byo.body">The chat template and tokenizer are read straight from the file, so most GGUF models just work. If one doesn’t, <a class="link" href="https://github.com/andriydruk/LMPlayground/issues">tell us on GitHub</a></p>
+    </div>
+    <ol>
+      <li><b data-i18n="mp.byo.ios.title">iPhone and iPad</b><span data-i18n="mp.byo.ios">Tap Import in Settings → Models, or copy the file into the app’s Models folder in Files.</span></li>
+      <li><b>Android</b><span data-i18n="mp.byo.android">Put the .gguf file in the folder chosen in Settings → Models. It shows up next to the built-in models.</span></li>
+      <li><b data-i18n="mp.byo.chat.title">Start chatting</b><span data-i18n="mp.byo.chat">Pick it from the model selector like any other model.</span></li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div class="about">
+        <a class="brand" href="../"><img class="mark" src="../assets/logo.svg" alt="" />LM Playground</a>
+        <span data-i18n-html="footer.about">Open-source app for running large language models locally on iPhone and iPad (coming soon) and Android. Built on <a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a>. MIT licensed.</span>
+        <div class="stores">
+          <a class="store" aria-disabled="true">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.960-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.830c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+            <span><small data-i18n="store.ios.small">COMING SOON ON THE</small><b>App Store</b></span>
+          </a>
+          <a class="store" href="https://play.google.com/store/apps/details?id=com.druk.lmplayground">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.018 13.298l-3.919 2.218-3.515-3.493 3.543-3.521 3.891 2.202a1.49 1.49 0 0 1 0 2.594zM1.337.924a1.486 1.486 0 0 0-.112.568v21.017c0 .217.045.419.124.6l11.155-11.087L1.337.924zm12.207 10.065l3.258-3.238L3.45.195a1.466 1.466 0 0 0-.946-.179l11.04 10.973zm0 2.067l-11 10.933c.298.036.612-.016.906-.183l13.324-7.54-3.23-3.21z"/></svg>
+            <span><small data-i18n="store.android.small">GET IT ON</small><b>Google Play</b></span>
+          </a>
+        </div>
+      </div>
+      <div><h4 data-i18n="footer.product">Product</h4><ul><li><a href="../#features" data-i18n="nav.features">Features</a></li><li><a href="./" data-i18n="footer.product.models">All models</a></li><li><a href="../#how" data-i18n="nav.how">How it works</a></li><li><a href="../#faq" data-i18n="nav.faq">FAQ</a></li></ul></div>
+      <div><h4 data-i18n="footer.build">Build</h4><ul><li><a href="https://github.com/andriydruk/LMPlayground">GitHub</a></li><li><a href="https://github.com/andriydruk/LMPlayground/releases" data-i18n="footer.build.releases">Releases</a></li><li><a href="https://github.com/andriydruk/LMPlayground/issues" data-i18n="footer.build.issues">Issue tracker</a></li></ul></div>
+      <div><h4 data-i18n="footer.contact">Contact</h4><ul><li><a href="mailto:me@andriydruk.com" data-i18n="footer.email">Email</a></li><li><a href="https://x.com/AndriyDruk">X</a></li><li><a href="https://mastodon.social/@AndriyDruk">Mastodon</a></li></ul></div>
+    </div>
+    <div class="base"><span>© 2026 Andrew Druk</span><span class="base-r"><label class="lang-pick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg><select id="langSelect" aria-label="Language"></select></label><a href="../privacy-policy/" data-i18n="footer.privacy">Privacy Policy</a></span></div>
+  </div>
+</footer>
+
+<script src="../models.js"></script>
+<script src="../site.js"></script>
+<script>
+(function () {
+  var MODELS = (window.LMP_MODELS || []).map(function (m, i) { m.order = i; return m; });
+  var ICON = {
+    think: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2z"/></svg>',
+    vision: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>',
+    tools: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.6 5.6L3 18l3 3 6.1-6.1a4 4 0 0 0 5.6-5.6l-2.5 2.5-2-2 2.5-2.5z"/></svg>'
+  };
+  var state = { f: 'all', q: '', sort: 'popular' };
+  var fmt = function (n) { try { return new Intl.NumberFormat(lmpLocale, { notation: 'compact', maximumFractionDigits: 1 }).format(n); } catch (e) { return String(n); } };
+  var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
+
+  var providers = {}; MODELS.forEach(function (m) { providers[m.provider] = 1; });
+  document.getElementById('counts').innerHTML =
+    '<div><b>' + MODELS.length + '</b>' + lmpT('mp.count.models') + '</div>'
+    + '<div><b>' + Object.keys(providers).length + '</b>' + lmpT('mp.count.publishers') + '</div>'
+    + '<div><b>' + MODELS.filter(function (m) { return m.vision; }).length + '</b>' + lmpT('mp.count.vision') + '</div>'
+    + '<div><b>' + MODELS.filter(function (m) { return m.tools; }).length + '</b>' + lmpT('mp.count.tools') + '</div>';
+
+  function match(m) {
+    var f = state.f;
+    if (f === 'new' && !m.isNew) return false;
+    if (f === 'reason' && !m.reason) return false;
+    if (f === 'vision' && !m.vision) return false;
+    if (f === 'tools' && !m.tools) return false;
+    if (f === 'small' && m.mb >= 1024) return false;
+    if (state.q) {
+      var hay = (m.name + ' ' + m.provider + ' ' + m.desc).toLowerCase();
+      if (hay.indexOf(state.q) < 0) return false;
+    }
+    return true;
+  }
+  function row(m) {
+    return '<div class="mrow">'
+      + '<span class="ltile">' + (m.logo ? '<img src="../assets/logos/' + m.logo + '" alt="" loading="lazy">' : '') + '</span>'
+      + '<div class="nm"><b>' + esc(m.name) + (m.isNew ? '<span class="badge new">' + lmpT('mp.f.new') + '</span>' : '') + '</b><span>' + esc(m.desc) + '</span></div>'
+      + '<div class="pv">' + esc(m.provider) + '<span class="dl">' + lmpT('mp.downloads').replace('{n}', fmt(m.dl)) + '</span></div>'
+      + '<div class="badges">'
+      +   (m.reason ? '<span class="badge">' + ICON.think + lmpT('cap.think') + '</span>' : '')
+      +   (m.vision ? '<span class="badge">' + ICON.vision + lmpT('cap.vision') + '</span>' : '')
+      +   (m.tools ? '<span class="badge">' + ICON.tools + lmpT('cap.tools') + '</span>' : '')
+      + '</div>'
+      + '<div class="sz"><b>' + m.size + '</b><span>' + m.quant + '</span></div>'
+      + '</div>';
+  }
+  function render() {
+    var list = MODELS.filter(match);
+    var s = state.sort;
+    list.sort(function (a, b) {
+      return s === 'popular' ? b.dl - a.dl : s === 'small' ? a.mb - b.mb : s === 'large' ? b.mb - a.mb : s === 'name' ? a.name.localeCompare(b.name) : a.order - b.order;
+    });
+    document.getElementById('shown').textContent = list.length === MODELS.length ? lmpT('mp.shown.all').replace('{n}', list.length) : lmpT('mp.shown.some').replace('{n}', list.length).replace('{total}', MODELS.length);
+    document.getElementById('rows').innerHTML = list.length ? list.map(row).join('') : '<div class="empty">' + lmpT('mp.empty') + '</div>';
+  }
+  document.querySelectorAll('.filters button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.filters button').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)); });
+      state.f = b.dataset.f; render();
+    });
+  });
+  document.getElementById('q').addEventListener('input', function (e) { state.q = e.target.value.trim().toLowerCase(); render(); });
+  document.getElementById('sort').addEventListener('change', function (e) { state.sort = e.target.value; render(); });
+  render();
+})();
+</script>
+</body>
+</html>
