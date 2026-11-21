@@ -60,6 +60,7 @@ JS_EN = {
     "mp.count.publishers": "publishers",
     "mp.count.vision": "see images",
     "mp.count.tools": "can use tools",
+    "mp.badge.new": "New",
     "mp.downloads": "{n} downloads / month",
     "mp.shown.all": "Showing all {n} models",
     "mp.shown.some": "Showing {n} of {total} models",

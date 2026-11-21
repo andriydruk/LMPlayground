@@ -53,8 +53,9 @@
   .shown { font-size: 13px; color: var(--fg-3); margin: 0 0 12px; }
   .mrow { display: grid; grid-template-columns: 48px minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1.3fr) 96px; gap: 20px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line-soft); }
   .mrow .ltile { width: 48px; height: 48px; border-radius: 12px; }
-  .mrow .nm b { font-size: 18px; letter-spacing: -0.02em; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
-  .mrow .nm span { display: block; font-size: 14px; color: var(--fg-2); }
+  .mrow .nm b { display: block; font-size: 18px; letter-spacing: -0.02em; font-weight: 600; }
+  .mrow .nm b .badge { margin-inline-start: 8px; vertical-align: 3px; }
+  .mrow .nm > span { display: block; font-size: 14px; color: var(--fg-2); }
   .mrow .pv { font-size: 14px; color: var(--fg-2); }
   .mrow .pv .dl { display: block; font-size: 12px; color: var(--fg-3); font-variant-numeric: tabular-nums; }
   .source { font-size: 12px; color: var(--fg-3); margin: 28px 0 0; }
@@ -223,7 +224,7 @@
   function row(m) {
     return '<div class="mrow">'
       + '<span class="ltile">' + (m.logo ? '<img src="../assets/logos/' + m.logo + '" alt="" loading="lazy">' : '') + '</span>'
-      + '<div class="nm"><b>' + esc(m.name) + (m.isNew ? '<span class="badge new">' + lmpT('mp.f.new') + '</span>' : '') + '</b><span>' + esc(m.desc) + '</span></div>'
+      + '<div class="nm"><b>' + esc(m.name) + (m.isNew ? '<span class="badge new">' + lmpT('mp.badge.new', 'New') + '</span>' : '') + '</b><span>' + esc(m.desc) + '</span></div>'
       + '<div class="pv">' + esc(m.provider) + '<span class="dl">' + lmpT('mp.downloads').replace('{n}', fmt(m.dl)) + '</span></div>'
       + '<div class="badges">'
       +   (m.reason ? '<span class="badge">' + ICON.think + lmpT('cap.think') + '</span>' : '')

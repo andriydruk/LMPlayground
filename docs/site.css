@@ -201,7 +201,7 @@ footer { background: var(--bg-alt); color: var(--fg-2); font-size: 12px; padding
 footer .cols { display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 32px; padding-bottom: 40px; border-bottom: 1px solid var(--line); }
 footer h4 { margin: 0 0 12px; color: var(--fg); font-size: 12px; font-weight: 600; }
 footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-footer ul a:hover, footer .about a:hover, footer .base a:hover { color: var(--fg); text-decoration: underline; }
+footer ul a:hover, footer .about a:not(.store):hover, footer .base a:hover { color: var(--fg); text-decoration: underline; }
 footer .about { max-width: 340px; line-height: 1.6; }
 footer .about .brand { color: var(--fg); margin-bottom: 14px; font-size: 17px; }
 footer .about .mark { width: 24px; }
