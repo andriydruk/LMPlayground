@@ -62,6 +62,7 @@ class ModelInfoProviderCapabilityTest {
         listOf(
             "LFM2.5 2.6B", "SmolLM3 3B", "MiniCPM5 1B",
             "MiniCPM5 2B", "Granite 4.2 3B", "Spark-X2.5 4B",
+            "Spark-X2.6 4B", "LFM3 1.7B",
         ).forEach { name ->
             val model = byName(name)
             assertTrue("$name should support tools", model.supportsTools)
@@ -91,6 +92,29 @@ class ModelInfoProviderCapabilityTest {
             // The templates advertise thinking; the models never use it.
             assertEquals(name, ThinkingMode.NONE, model.thinkingMode)
         }
+    }
+
+    @Test
+    fun lfm3OmniIsAVisionModelWithToolsButNoThinkingToggle() {
+        val model = byName("LFM3 Omni 2B")
+        assertTrue(model.isVision)
+        assertTrue(model.supportsTools)
+        // The template opens every turn with an empty <think></think>; the
+        // model does not reason.
+        assertEquals(ThinkingMode.NONE, model.thinkingMode)
+    }
+
+    @Test
+    fun hybridReasoningModelsHonourTheThinkingToggle() {
+        listOf("Spark-X2.6 4B", "LFM3 1.7B").forEach { name ->
+            assertEquals(name, ThinkingMode.OPTIONAL, byName(name).thinkingMode)
+        }
+    }
+
+    @Test
+    fun sparkX25IsSupersededByX26() {
+        assertTrue(byName("Spark-X2.5 4B").deprecated)
+        assertFalse(byName("Spark-X2.6 4B").deprecated)
     }
 
     @Test

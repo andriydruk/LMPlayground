@@ -1,0 +1,3 @@
+- Mô hình mới: LFM3 1.7B, Spark-X2.6 4B và LFM3 Omni 2B, có thể trò chuyện về ảnh của bạn
+- Cập nhật lên llama.cpp mới nhất
+- Cải thiện hiệu suất và độ ổn định

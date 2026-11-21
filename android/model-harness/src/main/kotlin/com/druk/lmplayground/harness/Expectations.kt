@@ -110,6 +110,20 @@ object Expectations {
             notes = "reasoning-tuned: still emits <think> with thinking disabled, so the " +
                 "app's toggle cannot suppress it"),
 
+        // ── Liquid: LFM3 ─────────────────────────────────────────────────
+        ModelExpectation("LFM3-1.7B-Q4_K_M.gguf",
+            caps(tools = R, thinking = R, noThinking = O, vision = N, toolsWithThinking = O),
+            maxTokens = 2048,
+            notes = "reasons by default; the card warns enable_thinking=False is " +
+                "inconsistent. Needs llama.cpp v0.8.0 or later"),
+        ModelExpectation("LFM3-Omni-2B-Q4_K_M.gguf",
+            caps(tools = R, thinking = O, noThinking = R, vision = R, toolsWithVision = O),
+            notes = "non-reasoning omni model, used here for image + text only. Its " +
+                "template advertises thinking (an empty <think></think> every turn), so " +
+                "the catalog sets ThinkingMode.NONE. After a tool result it sometimes ends " +
+                "the turn with no text (1/3 at the app sampler, 3/3 greedy). Needs " +
+                "llama.cpp v0.8.0 or later"),
+
         // ── Mistral: Ministral 3 (vision) ────────────────────────────────
         ModelExpectation("Ministral-3-3B-Instruct-2512-Q4_K_M.gguf",
             caps(tools = R, thinking = O, noThinking = R, vision = R, toolsWithVision = O),
@@ -150,6 +164,11 @@ object Expectations {
             caps(tools = R, thinking = R, noThinking = R, vision = N, toolsWithThinking = R),
             maxTokens = 2048,
             notes = "spark2_5 architecture: needs llama.cpp b10828 or later"),
+
+        ModelExpectation("Spark-X2.6-4B-Q4_K_M.gguf",
+            caps(tools = R, thinking = R, noThinking = R, vision = N, toolsWithThinking = R),
+            maxTokens = 2048,
+            notes = "same spark2_5 architecture as X2.5, new post-training"),
 
         // ── NVIDIA ───────────────────────────────────────────────────────
         ModelExpectation("NVIDIA-Nemotron3-Nano-4B-Q4_K_M.gguf",

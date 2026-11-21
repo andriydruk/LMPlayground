@@ -15,14 +15,26 @@ struct LMPlaygroundApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .environment(services.store)
-                .environment(services.downloads)
-                .environment(services.runtime)
-                .environment(services.conversation)
-                .environment(services.dictation)
-                .environment(\.chatStore, services.chatStore)
+            #if DEBUG
+            if let scene = StoreScene.requested {
+                StoreSceneRoot(scene: scene)
+            } else {
+                root
+            }
+            #else
+            root
+            #endif
         }
+    }
+
+    private var root: some View {
+        RootView()
+            .environment(services.store)
+            .environment(services.downloads)
+            .environment(services.runtime)
+            .environment(services.conversation)
+            .environment(services.dictation)
+            .environment(\.chatStore, services.chatStore)
     }
 }
 

@@ -45,9 +45,10 @@ LM Playground is an Android application for running Large Language Models locall
 | Phi-4 mini | 3.8B | Microsoft |
 | LFM2.5 | 350M, 1.2B Thinking, 2.6B | Liquid AI |
 | LFM2.5 VL | 450M, 1.6B, 3B (vision) | Liquid AI |
+| LFM3 | 1.7B, Omni 2B (vision) | Liquid AI |
 | SmolLM3 | 3B | Hugging Face |
 | MiniCPM5 | 1B, 2B | OpenBMB |
-| Spark-X2.5 | 4B | XHToken |
+| Spark-X2.6 | 4B | XHToken |
 | Ministral 3 | 3B, 8B (Instruct & Reasoning, all vision) | Mistral |
 | Llama 3.2 | 1B, 3B | Meta |
 | Llama 3.1 | 8B | Meta |

@@ -26,6 +26,7 @@ ANDROID_RES = os.path.join(ROOT, "android", "app", "src", "main", "res")
 IOS = os.path.join(ROOT, "ios")
 CATALOG = os.path.join(IOS, "LMPlayground", "Localizable.xcstrings")
 OVERRIDES = os.path.join(IOS, "Localization")
+STORE_CATALOG = os.path.join(IOS, "LMPlayground", "StoreScenes", "StoreScreenshots.xcstrings")
 
 # Android resource folder suffix -> iOS locale.
 LOCALES = {
@@ -184,16 +185,42 @@ def main():
     if missing and os.environ.get("LMP_MISSING_OUT"):
         with open(os.environ["LMP_MISSING_OUT"], "w") as f:
             json.dump(sorted({k for v in missing.values() for k in v}), f, ensure_ascii=False, indent=1)
+    store_text = store_screenshots_catalog()
     if args.check:
         current = open(CATALOG).read() if os.path.exists(CATALOG) else ""
         if missing or current != text:
             sys.exit("Localizable.xcstrings is out of date or incomplete")
         print("Localizable.xcstrings is up to date")
+        current = open(STORE_CATALOG).read() if os.path.exists(STORE_CATALOG) else ""
+        if current != store_text:
+            sys.exit("StoreScreenshots.xcstrings is out of date")
+        print("StoreScreenshots.xcstrings is up to date")
         return
     with open(CATALOG, "w") as f:
         f.write(text)
     print(f"wrote {CATALOG}: {len(catalog['strings'])} keys")
+    with open(STORE_CATALOG, "w") as f:
+        f.write(store_text)
+    print(f"wrote {STORE_CATALOG}")
     write_infoplist_catalog()
+
+
+def store_screenshots_catalog():
+    """StoreScreenshots.xcstrings: Android's screenshot_* marketing copy,
+    keyed by its Android name, for the debug-only store scenes."""
+    en, _ = load_android("values")
+    names = sorted(name for name in en if name.startswith("screenshot_"))
+    translations = {locale: load_android(f"values-{folder}")[0] for folder, locale in LOCALES.items()}
+    strings = {}
+    for name in names:
+        localizations = {"en": unit(en[name])}
+        for locale, values in translations.items():
+            if name not in values:
+                sys.exit(f"{locale}: no translation for {name}")
+            localizations[locale] = unit(values[name])
+        strings[name] = {"extractionState": "manual", "localizations": localizations}
+    return json.dumps({"sourceLanguage": "en", "strings": strings, "version": "1.0"},
+                      ensure_ascii=False, indent=2, sort_keys=True) + "\n"
 
 
 def write_infoplist_catalog():

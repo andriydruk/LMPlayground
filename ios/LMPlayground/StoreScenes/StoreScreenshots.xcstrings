@@ -1,0 +1,5888 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "screenshot_chat": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دردش بخصوصية"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "গোপনে চ্যাট করুন"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chatujte soukromě"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat privat"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privat chatten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat privately"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chatea en privado"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keskustele yksityisesti"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mag-chat nang pribado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discutez en privé"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "שוחח בפרטיות"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "निजी तौर पर चैट करें"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ngobrol secara pribadi"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chatta in privato"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プライベートにチャット"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "비공개로 채팅"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sembang secara peribadi"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat privat"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat privé"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Czatuj prywatnie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Converse com privacidade"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discută privat"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chatta privat"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "แชทอย่างเป็นส่วนตัว"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gizlice sohbet et"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Спілкуйся приватно"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trò chuyện riêng tư"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "私密聊天"
+          }
+        }
+      }
+    },
+    "screenshot_chat_question": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ما هو التعلم الآلي؟"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "মেশিন লার্নিং কী?"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Co je strojové učení?"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hvad er maskinlæring?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Was ist maschinelles Lernen?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What is machine learning?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Qué es el aprendizaje automático?"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitä on koneoppiminen?"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ano ang machine learning?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qu'est-ce que l'apprentissage automatique ?"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "מהי למידת מכונה?"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "मशीन लर्निंग क्या है?"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apa itu machine learning?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cos'è l'apprendimento automatico?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "機械学習とは何ですか？"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "머신러닝이란 무엇인가요?"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apakah pembelajaran mesin?"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hva er maskinlæring?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wat is machine learning?"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Czym jest uczenie maszynowe?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O que é aprendizado de máquina?"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce este învățarea automată?"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vad är maskininlärning?"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "แมชชีนเลิร์นนิงคืออะไร?"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Makine öğrenimi nedir?"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Що таке машинне навчання?"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Học máy là gì?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "什么是机器学习？"
+          }
+        }
+      }
+    },
+    "screenshot_chat_response": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التعلم الآلي هو فرع من الذكاء الاصطناعي حيث **تتعلم الحواسيب من البيانات** بدلاً من برمجتها صراحةً.\n\nالمفاهيم الأساسية:\n\n• **التدريب**: تغذية الخوارزميات بالبيانات\n• **النماذج**: أنماط مستخلصة من البيانات\n• **الاستدلال**: إجراء تنبؤات على بيانات جديدة"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "মেশিন লার্নিং হলো কৃত্রিম বুদ্ধিমত্তার একটি শাখা যেখানে কম্পিউটার স্পষ্টভাবে প্রোগ্রাম করা হওয়ার পরিবর্তে **ডেটা থেকে শেখে**।\n\nমূল ধারণাসমূহ:\n\n• **প্রশিক্ষণ**: অ্যালগরিদমে ডেটা প্রদান\n• **মডেল**: ডেটা থেকে শেখা প্যাটার্ন\n• **ইনফারেন্স**: নতুন ডেটায় পূর্বাভাস তৈরি করা"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strojové učení je odvětví umělé inteligence, kde se počítače **učí z dat** místo toho, aby byly explicitně programovány.\n\nKlíčové pojmy:\n\n• **Trénování**: předávání dat algoritmům\n• **Modely**: vzory naučené z dat\n• **Inference**: vytváření predikcí z nových dat"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maskinlæring er en gren af kunstig intelligens, hvor computere **lærer af data** i stedet for at blive eksplicit programmeret.\n\nNøglebegreber:\n\n• **Træning**: fodrer algoritmer med data\n• **Modeller**: lærte mønstre fra data\n• **Inferens**: forudsigelser på nye data"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maschinelles Lernen ist ein Zweig der künstlichen Intelligenz, bei dem Computer **aus Daten lernen**, anstatt explizit programmiert zu werden.\n\nWichtige Konzepte:\n\n• **Training**: Algorithmen mit Daten füttern\n• **Modelle**: aus Daten gelernte Muster\n• **Inferenz**: Vorhersagen mit neuen Daten treffen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Machine learning is a branch of artificial intelligence where computers **learn from data** instead of being explicitly programmed.\n\nKey concepts:\n\n• **Training**: feeding data to algorithms\n• **Models**: learned patterns from data\n• **Inference**: making predictions on new data"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El aprendizaje automático es una rama de la inteligencia artificial donde las computadoras **aprenden de los datos** en lugar de ser programadas explícitamente.\n\nConceptos clave:\n\n• **Entrenamiento**: alimentar algoritmos con datos\n• **Modelos**: patrones aprendidos de los datos\n• **Inferencia**: hacer predicciones con datos nuevos"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koneoppiminen on tekoälyn ala, jossa tietokoneet **oppivat datasta** sen sijaan, että niitä ohjelmoitaisiin eksplisiittisesti.\n\nKeskeiset käsitteet:\n\n• **Koulutus**: datan syöttäminen algoritmeille\n• **Mallit**: opitut kuviot datasta\n• **Päättely**: ennusteiden tekeminen uudelle datalle"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ang machine learning ay isang sangay ng artificial intelligence kung saan ang mga computer ay **natututo mula sa data** sa halip na tahasang programado.\n\nMga pangunahing konsepto:\n\n• **Pagsasanay**: pagbibigay ng data sa mga algorithm\n• **Mga Modelo**: mga natutunan na pattern mula sa data\n• **Inference**: paggawa ng mga hula sa bagong data"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'apprentissage automatique est une branche de l'intelligence artificielle où les ordinateurs **apprennent à partir des données** au lieu d'être explicitement programmés.\n\nConcepts clés :\n\n• **Entraînement** : fournir des données aux algorithmes\n• **Modèles** : motifs appris à partir des données\n• **Inférence** : faire des prédictions sur de nouvelles données"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "למידת מכונה היא ענף של בינה מלאכותית שבו מחשבים **לומדים מנתונים** במקום להיות מתוכנתים במפורש.\n\nמושגי מפתח:\n\n• **אימון**: הזנת נתונים לאלגוריתמים\n• **מודלים**: דפוסים שנלמדו מנתונים\n• **היסק**: ביצוע תחזיות על נתונים חדשים"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "मशीन लर्निंग कृत्रिम बुद्धिमत्ता की एक शाखा है जहाँ कंप्यूटर स्पष्ट रूप से प्रोग्राम किए जाने के बजाय **डेटा से सीखते** हैं।\n\nमुख्य अवधारणाएँ:\n\n• **प्रशिक्षण**: एल्गोरिदम को डेटा देना\n• **मॉडल**: डेटा से सीखे गए पैटर्न\n• **अनुमान**: नए डेटा पर भविष्यवाणी करना"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Machine learning adalah cabang kecerdasan buatan di mana komputer **belajar dari data** alih-alih diprogram secara eksplisit.\n\nKonsep utama:\n\n• **Pelatihan**: memberikan data ke algoritma\n• **Model**: pola yang dipelajari dari data\n• **Inferensi**: membuat prediksi pada data baru"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'apprendimento automatico è un ramo dell'intelligenza artificiale in cui i computer **imparano dai dati** invece di essere programmati esplicitamente.\n\nConcetti chiave:\n\n• **Addestramento**: fornire dati agli algoritmi\n• **Modelli**: schemi appresi dai dati\n• **Inferenza**: fare previsioni su nuovi dati"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "機械学習は人工知能の一分野で、コンピュータが明示的にプログラムされるのではなく**データから学習**します。\n\n主要な概念：\n\n• **トレーニング**：アルゴリズムにデータを与えること\n• **モデル**：データから学習されたパターン\n• **推論**：新しいデータに対する予測"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "머신러닝은 컴퓨터가 명시적으로 프로그래밍되는 대신 **데이터로부터 학습**하는 인공지능의 한 분야입니다.\n\n핵심 개념:\n\n• **훈련**: 알고리즘에 데이터를 제공하는 것\n• **모델**: 데이터에서 학습된 패턴\n• **추론**: 새로운 데이터에 대한 예측"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pembelajaran mesin adalah cabang kecerdasan buatan di mana komputer **belajar daripada data** bukannya diprogramkan secara eksplisit.\n\nKonsep utama:\n\n• **Latihan**: memberi data kepada algoritma\n• **Model**: corak yang dipelajari daripada data\n• **Inferens**: membuat ramalan pada data baharu"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maskinlæring er en gren av kunstig intelligens der datamaskiner **lærer fra data** i stedet for å bli eksplisitt programmert.\n\nNøkkelbegreper:\n\n• **Trening**: mater algoritmer med data\n• **Modeller**: lærte mønstre fra data\n• **Inferens**: lage prediksjoner på nye data"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Machine learning is een tak van kunstmatige intelligentie waarbij computers **leren van gegevens** in plaats van expliciet geprogrammeerd te worden.\n\nKernbegrippen:\n\n• **Trainen**: gegevens aan algoritmen voeden\n• **Modellen**: patronen geleerd uit gegevens\n• **Inferentie**: voorspellingen doen op nieuwe gegevens"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uczenie maszynowe to gałąź sztucznej inteligencji, w której komputery **uczą się z danych** zamiast być jawnie programowane.\n\nKluczowe pojęcia:\n\n• **Trening**: dostarczanie danych algorytmom\n• **Modele**: wzorce nauczone z danych\n• **Wnioskowanie**: tworzenie przewidywań na nowych danych"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aprendizado de máquina é um ramo da inteligência artificial onde os computadores **aprendem com os dados** em vez de serem programados explicitamente.\n\nConceitos-chave:\n\n• **Treinamento**: alimentar algoritmos com dados\n• **Modelos**: padrões aprendidos dos dados\n• **Inferência**: fazer predições com novos dados"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Învățarea automată este o ramură a inteligenței artificiale în care computerele **învață din date** în loc să fie programate explicit.\n\nConcepte cheie:\n\n• **Antrenament**: furnizarea de date algoritmilor\n• **Modele**: tipare învățate din date\n• **Inferență**: realizarea de predicții pe date noi"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maskininlärning är en gren av artificiell intelligens där datorer **lär sig från data** istället för att programmeras explicit.\n\nNyckelbegrepp:\n\n• **Träning**: mata data till algoritmer\n• **Modeller**: inlärda mönster från data\n• **Inferens**: göra förutsägelser på nya data"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "แมชชีนเลิร์นนิงเป็นสาขาหนึ่งของปัญญาประดิษฐ์ที่คอมพิวเตอร์ **เรียนรู้จากข้อมูล** แทนที่จะถูกโปรแกรมไว้อย่างชัดเจน\n\nแนวคิดหลัก:\n\n• **การฝึก**: ป้อนข้อมูลให้อัลกอริทึม\n• **โมเดล**: รูปแบบที่เรียนรู้จากข้อมูล\n• **การอนุมาน**: การทำนายจากข้อมูลใหม่"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Makine öğrenimi, bilgisayarların açıkça programlanmak yerine **verilerden öğrendiği** bir yapay zeka dalıdır.\n\nTemel kavramlar:\n\n• **Eğitim**: algoritmalara veri beslenmesi\n• **Modeller**: verilerden öğrenilen örüntüler\n• **Çıkarım**: yeni veriler üzerinde tahmin yapma"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Машинне навчання – це галузь штучного інтелекту, де комп'ютери **навчаються на даних** замість того, щоб бути явно запрограмованими.\n\nКлючові поняття:\n\n• **Тренування**: подача даних алгоритмам\n• **Моделі**: вивчені закономірності з даних\n• **Висновування**: прогнозування на нових даних"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Học máy là một nhánh của trí tuệ nhân tạo, trong đó máy tính **học từ dữ liệu** thay vì được lập trình rõ ràng.\n\nCác khái niệm chính:\n\n• **Huấn luyện**: cung cấp dữ liệu cho thuật toán\n• **Mô hình**: các mẫu học được từ dữ liệu\n• **Suy luận**: đưa ra dự đoán trên dữ liệu mới"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "机器学习是人工智能的一个分支，计算机通过**从数据中学习**而非被明确编程来工作。\n\n关键概念：\n\n• **训练**：向算法输入数据\n• **模型**：从数据中学习到的模式\n• **推理**：对新数据进行预测"
+          }
+        }
+      }
+    },
+    "screenshot_chat_sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "على جهازك"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার ডিভাইসে"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "na vašem zařízení"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "på din enhed"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "auf deinem Gerät"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "on your device"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "en tu dispositivo"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "laitteellasi"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sa iyong device"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sur votre appareil"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "במכשיר שלך"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अपने डिवाइस पर"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "di perangkatmu"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sul tuo dispositivo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "お使いのデバイスで"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "내 기기에서"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pada peranti anda"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "på enheten din"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "op je apparaat"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "na Twoim urządzeniu"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "no seu dispositivo"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pe dispozitivul tău"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "på din enhet"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "บนอุปกรณ์ของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cihazınızda"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "на твоєму пристрої"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "trên thiết bị của bạn"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在你的设备上"
+          }
+        }
+      }
+    },
+    "screenshot_choose_model": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اختر النموذج"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "মডেল বাছুন"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vyberte model"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vælg model"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modell auswählen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose model"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir modelo"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valitse malli"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pumili ng modelo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir un modèle"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "בחר מודל"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "मॉडल चुनें"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilih model"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scegli modello"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "モデルを選択"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모델 선택"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pilih model"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Velg modell"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kies een model"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wybierz model"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolher modelo"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alege modelul"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Välj modell"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "เลือกโมเดล"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Model seç"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обирай модель"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chọn mô hình"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择模型"
+          }
+        }
+      }
+    },
+    "screenshot_choose_model_sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "من كبار مزوّدي الذكاء الاصطناعي"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "শীর্ষস্থানীয় AI প্রদানকারীদের থেকে"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "od předních poskytovatelů AI"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fra førende AI-udbydere"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "von führenden KI-Anbietern"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "from leading AI providers"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "de los principales proveedores de IA"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "johtavilta tekoälytoimittajilta"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mula sa nangungunang mga AI provider"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "des principaux fournisseurs d'IA"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "מספקי AI מובילים"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "प्रमुख AI प्रदाताओं से"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dari penyedia AI terkemuka"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dai principali provider di IA"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "主要なAIプロバイダーから"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "주요 AI 제공업체에서"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "daripada penyedia AI terkemuka"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fra ledende KI-leverandører"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "van toonaangevende AI-aanbieders"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "od wiodących dostawców AI"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dos principais provedores de IA"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "de la principalii furnizori de AI"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "från ledande AI-leverantörer"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "จากผู้ให้บริการ AI ชั้นนำ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "önde gelen yapay zekâ sağlayıcılarından"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "від провідних AI-провайдерів"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "từ các nhà cung cấp AI hàng đầu"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "来自主流 AI 厂商"
+          }
+        }
+      }
+    },
+    "screenshot_documents": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الدردشة مع المستندات"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "নথির সাথে চ্যাট করুন"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chatujte s dokumenty"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat med dokumenter"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chatte mit Dokumenten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat with documents"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chatea con documentos"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keskustele asiakirjojen kanssa"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Makipag-chat sa mga dokumento"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discutez avec vos documents"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "צ׳אט עם מסמכים"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "दस्तावेज़ों से चैट करें"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mengobrol dengan dokumen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chatta con i documenti"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ドキュメントとチャット"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "문서와 대화하기"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bersembang dengan dokumen"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat med dokumenter"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat met documenten"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rozmawiaj z dokumentami"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Converse com documentos"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discută cu documentele"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chatta med dokument"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "แชตกับเอกสาร"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belgelerle sohbet edin"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Спілкуйтеся з документами"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trò chuyện với tài liệu"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "与文档对话"
+          }
+        }
+      }
+    },
+    "screenshot_documents_question": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "متى يمكنني إنهاء عقد الإيجار؟"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আমি কখন আমার ভাড়ার চুক্তি বাতিল করতে পারি?"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kdy mohu vypovědět nájemní smlouvu?"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hvornår kan jeg opsige min lejekontrakt?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wann kann ich meinen Mietvertrag kündigen?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When can I terminate my rental agreement?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Cuándo puedo rescindir mi contrato de alquiler?"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Milloin voin irtisanoa vuokrasopimukseni?"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kailan ko puwedeng tapusin ang aking kontrata sa upa?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quand puis-je résilier mon bail ?"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "מתי אוכל לסיים את חוזה השכירות שלי?"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "मैं अपना किराया अनुबंध कब समाप्त कर सकता हूँ?"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kapan saya bisa mengakhiri perjanjian sewa saya?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando posso disdire il contratto di affitto?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "賃貸契約はいつ解約できますか？"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "임대 계약은 언제 해지할 수 있나요?"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilakah saya boleh menamatkan perjanjian sewa saya?"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Når kan jeg si opp leiekontrakten min?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wanneer kan ik mijn huurcontract opzeggen?"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kiedy mogę wypowiedzieć umowę najmu?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando posso rescindir meu contrato de aluguel?"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Când îmi pot rezilia contractul de închiriere?"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "När kan jag säga upp mitt hyresavtal?"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ฉันสามารถยกเลิกสัญญาเช่าได้เมื่อใด?"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kira sözleşmemi ne zaman feshedebilirim?"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Коли я можу розірвати договір оренди?"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khi nào tôi có thể chấm dứt hợp đồng thuê nhà?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "我什么时候可以终止租赁合同？"
+          }
+        }
+      }
+    },
+    "screenshot_documents_response": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يمكنك الإنهاء بـ **إشعار خطي مدته 60 يومًا** بعد فترة الأشهر الستة الأولى. يُعاد مبلغ التأمين خلال 14 يومًا من مغادرة السكن (القسم 8.2)."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "প্রথম ছয় মাস মেয়াদের পরে আপনি **৬০ দিনের লিখিত নোটিশে** বাতিল করতে পারেন। বাড়ি ছাড়ার ১৪ দিনের মধ্যে আপনার জামানত ফেরত দেওয়া হয় (ধারা 8.2)।"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Smlouvu můžete vypovědět s **60denní písemnou výpovědní lhůtou** po úvodním šestiměsíčním období. Kauce se vrací do 14 dnů od vystěhování (Oddíl 8.2)."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du kan opsige med **60 dages skriftligt varsel** efter den indledende seksmånedersperiode. Dit depositum tilbagebetales inden for 14 dage efter fraflytning (Afsnit 8.2)."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du kannst mit einer **schriftlichen Frist von 60 Tagen** nach den ersten sechs Monaten kündigen. Deine Kaution wird innerhalb von 14 Tagen nach dem Auszug zurückerstattet (Abschnitt 8.2)."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can terminate with **60 days' written notice** after the initial six-month period. Your deposit is returned within 14 days of move-out (Section 8.2)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puedes rescindir con **60 días de preaviso por escrito** tras el periodo inicial de seis meses. Tu depósito se devuelve en un plazo de 14 días desde la mudanza (Sección 8.2)."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voit irtisanoa **60 päivän kirjallisella irtisanomisajalla** ensimmäisen kuuden kuukauden jakson jälkeen. Vakuutesi palautetaan 14 päivän kuluessa muutosta (Kohta 8.2)."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puwede kang magtapos nang may **60 araw na nakasulat na abiso** pagkatapos ng unang anim na buwan. Ibabalik ang iyong deposito sa loob ng 14 araw pagkatapos lumipat (Seksyon 8.2)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous pouvez résilier avec un **préavis écrit de 60 jours** après la période initiale de six mois. Votre caution est restituée dans les 14 jours suivant le départ (Section 8.2)."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "אפשר לסיים ב**הודעה בכתב של 60 יום** לאחר תקופת ששת החודשים הראשונה. הפיקדון מוחזר תוך 14 יום מהפינוי (סעיף 8.2)."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "शुरुआती छह महीने की अवधि के बाद आप **60 दिन के लिखित नोटिस** के साथ समाप्त कर सकते हैं. आपकी जमा राशि मकान खाली करने के 14 दिनों के भीतर लौटा दी जाती है (धारा 8.2)."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anda dapat mengakhiri dengan **pemberitahuan tertulis 60 hari** setelah periode enam bulan awal. Deposit Anda dikembalikan dalam 14 hari setelah pindah (Bagian 8.2)."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puoi disdire con un **preavviso scritto di 60 giorni** dopo il periodo iniziale di sei mesi. Il deposito viene restituito entro 14 giorni dal trasloco (Sezione 8.2)."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最初の6か月間の後、**60日前の書面による通知**で解約できます。敷金は退去後14日以内に返還されます（第8.2条）。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최초 6개월 기간이 지난 후 **60일 전 서면 통지**로 해지할 수 있습니다. 보증금은 퇴거 후 14일 이내에 반환됩니다(8.2항)."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anda boleh menamatkan dengan **notis bertulis 60 hari** selepas tempoh enam bulan pertama. Deposit anda dikembalikan dalam masa 14 hari selepas berpindah keluar (Seksyen 8.2)."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du kan si opp med **60 dagers skriftlig varsel** etter den første seksmånedersperioden. Depositumet ditt tilbakebetales innen 14 dager etter utflytting (Avsnitt 8.2)."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je kunt opzeggen met **60 dagen schriftelijke opzegtermijn** na de eerste zes maanden. Je borg wordt binnen 14 dagen na vertrek terugbetaald (Paragraaf 8.2)."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Możesz wypowiedzieć umowę z **60-dniowym pisemnym wypowiedzeniem** po początkowym okresie sześciu miesięcy. Kaucja jest zwracana w ciągu 14 dni od wyprowadzki (Sekcja 8.2)."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você pode rescindir com **aviso prévio por escrito de 60 dias** após o período inicial de seis meses. Seu depósito é devolvido em até 14 dias após a saída (Seção 8.2)."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poți rezilia cu un **preaviz scris de 60 de zile** după perioada inițială de șase luni. Garanția se returnează în termen de 14 zile de la mutare (Secțiunea 8.2)."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du kan säga upp med **60 dagars skriftlig uppsägningstid** efter den inledande sexmånadersperioden. Din deposition återbetalas inom 14 dagar efter utflytt (Avsnitt 8.2)."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "คุณสามารถยกเลิกได้โดย **แจ้งเป็นลายลักษณ์อักษรล่วงหน้า 60 วัน** หลังจากช่วงหกเดือนแรก เงินมัดจำจะคืนภายใน 14 วันหลังย้ายออก (ข้อ 8.2)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İlk altı aylık dönemin ardından **60 gün önceden yazılı bildirimle** feshedebilirsiniz. Depozitonuz taşınmadan sonra 14 gün içinde iade edilir (Bölüm 8.2)."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ви можете розірвати договір із **письмовим повідомленням за 60 днів** після початкового шестимісячного періоду. Заставу повертають протягом 14 днів після виїзду (Розділ 8.2)."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn có thể chấm dứt bằng **thông báo trước 60 ngày bằng văn bản** sau giai đoạn sáu tháng đầu. Tiền đặt cọc được hoàn lại trong vòng 14 ngày sau khi dọn đi (Mục 8.2)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在最初六个月期满后，你可以提前 **60 天书面通知**终止合同。押金会在退租后 14 天内退还（第 8.2 节）。"
+          }
+        }
+      }
+    },
+    "screenshot_documents_sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إجابات مباشرة من ملفاتك"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "উত্তর সরাসরি আপনার ফাইল থেকে"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "odpovědi přímo z vašich souborů"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "svar direkte fra dine filer"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antworten direkt aus deinen Dateien"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "answers straight from your files"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "respuestas directas de tus archivos"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vastaukset suoraan tiedostoistasi"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mga sagot mismo mula sa iyong mga file"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "des réponses tirées de vos fichiers"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "תשובות ישירות מהקבצים שלך"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "जवाब सीधे आपकी फ़ाइलों से"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "jawaban langsung dari file Anda"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "risposte direttamente dai tuoi file"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ファイルから直接答える"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "파일에서 바로 답을 찾습니다"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "jawapan terus daripada fail anda"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "svar rett fra filene dine"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "antwoorden rechtstreeks uit je bestanden"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "odpowiedzi prosto z Twoich plików"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "respostas diretas dos seus arquivos"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "răspunsuri direct din fișierele tale"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "svar direkt från dina filer"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "คำตอบตรงจากไฟล์ของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yanıtlar doğrudan dosyalarınızdan"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "відповіді прямо з ваших файлів"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "câu trả lời lấy thẳng từ tệp của bạn"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "答案直接来自你的文件"
+          }
+        }
+      }
+    },
+    "screenshot_download_models": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تنزيل أي نموذج"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "যেকোনো মডেল ডাউনলোড করুন"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stáhněte jakýkoli model"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download enhver model"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jedes Modell herunterladen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download any model"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descarga cualquier modelo"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lataa mikä tahansa malli"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I-download ang anumang modelo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Téléchargez n'importe quel modèle"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "הורד כל מודל"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "कोई भी मॉडल डाउनलोड करें"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unduh model apa saja"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scarica qualsiasi modello"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "どんなモデルもダウンロード"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "원하는 모델 다운로드"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muat turun mana-mana model"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last ned enhver modell"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download elk model"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pobierz dowolny model"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baixe qualquer modelo"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descarcă orice model"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ladda ned valfri modell"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ดาวน์โหลดโมเดลใดก็ได้"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İstediğin modeli indir"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Завантажуй будь-яку модель"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tải mọi mô hình"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下载任意模型"
+          }
+        }
+      }
+    },
+    "screenshot_download_models_sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إلى أي مجلد تختاره"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার পছন্দের যেকোনো ফোল্ডারে"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "do libovolné složky"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "til enhver mappe du vælger"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in den Ordner deiner Wahl"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "to any folder you choose"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "en la carpeta que elijas"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mihin tahansa valitsemaasi kansioon"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sa anumang folder na piliin mo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dans le dossier de votre choix"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "לכל תיקייה שתבחר"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अपनी पसंद के किसी भी फ़ोल्डर में"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ke folder mana pun yang kamu pilih"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "nella cartella che preferisci"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "お好きなフォルダへ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "원하는 폴더로"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ke mana-mana folder pilihan anda"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "til hvilken mappe du vil"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "naar een map naar keuze"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "do wybranego folderu"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "na pasta que você escolher"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "în orice folder alegi"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "till valfri mapp"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ไปยังโฟลเดอร์ที่คุณเลือก"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "seçtiğin herhangi bir klasöre"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "у будь-яку обрану теку"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vào thư mục bạn chọn"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "到你选择的任意文件夹"
+          }
+        }
+      }
+    },
+    "screenshot_fine_tune": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ضبط دقيق"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "সূক্ষ্ম টিউন করুন"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doladění"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finjuster"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feinabstimmung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fine-tune"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajuste fino"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hienosäädä"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I-fine-tune"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustement fin"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "כוונון עדין"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "फ़ाइन-ट्यून"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Penyesuaian"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regolazione fine"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "微調整"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "미세 조정"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halusi"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finjuster"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fijn afstemmen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dostrajanie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajuste fino"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustare fină"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finjustera"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ปรับแต่ง"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İnce ayar"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Налаштовуй"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tinh chỉnh"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "微调"
+          }
+        }
+      }
+    },
+    "screenshot_fine_tune_sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "معلمات التوليد"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "জেনারেশন প্যারামিটার"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "parametrů generování"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "genereringsparametre"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Generierungsparameter"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "generation parameters"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "parámetros de generación"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "generointiparametreja"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ang mga parameter ng paglikha"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "paramètres de génération"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "פרמטרי יצירה"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "जनरेशन पैरामीटर"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "parameter generasi"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "parametri di generazione"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生成パラメータ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "생성 매개변수"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "parameter penjanaan"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "genereringsparametere"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "generatieparameters"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "parametry generowania"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "parâmetros de geração"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "parametri de generare"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "genereringsparametrar"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "พารามิเตอร์การสร้าง"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "üretim parametreleri"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "параметри генерації"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tham số tạo"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生成参数"
+          }
+        }
+      }
+    },
+    "screenshot_hero_providers_label": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+25 نموذجًا من:"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "২৫+ মডেল এখান থেকে:"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ modelů od:"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ modeller fra:"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ Modelle von:"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ models from:"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ modelos de:"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ mallia:"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ modelo mula sa:"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ modèles de :"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ מודלים מ:"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ मॉडल, इनसे:"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ model dari:"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ modelli da:"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25以上のモデル："
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25개 이상의 모델:"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ model daripada:"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ modeller fra:"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ modellen van:"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ modeli od:"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ modelos de:"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ modele de la:"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ modeller från:"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ โมเดลจาก:"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ model, şu sağlayıcılardan:"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ моделей від:"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ mô hình từ:"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25+ 模型，来自："
+          }
+        }
+      }
+    },
+    "screenshot_hero_subtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "خاص. محلي. غير متصل."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "গোপনীয়। স্থানীয়। অফলাইন।"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soukromé. Lokální. Offline."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privat. Lokalt. Offline."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privat. Lokal. Offline."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Private. Local. Offline."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privado. Local. Sin conexión."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yksityinen. Paikallinen. Offline."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pribado. Lokal. Offline."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privé. Local. Hors ligne."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "פרטי. מקומי. לא מקוון."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "निजी. लोकल. ऑफ़लाइन."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privat. Lokal. Offline."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privato. Locale. Offline."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プライベート。ローカル。オフライン。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "프라이빗. 로컬. 오프라인."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peribadi. Tempatan. Luar talian."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privat. Lokalt. Offline."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privé. Lokaal. Offline."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prywatnie. Lokalnie. Offline."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privado. Local. Offline."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privat. Local. Offline."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privat. Lokalt. Offline."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ส่วนตัว ในเครื่อง ออฟไลน์"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gizli. Yerel. Çevrimdışı."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Приватно. Локально. Офлайн."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riêng tư. Cục bộ. Ngoại tuyến."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "私密。本地。离线。"
+          }
+        }
+      }
+    },
+    "screenshot_hero_title_emphasis": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هاتفك"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vašem"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "din"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "deinem"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "your"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tu"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "omassa"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iyong"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "votre"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "הטלפון"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "अपने"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ponselmu"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tuo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたの"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "내"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "telefon"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "din"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "je"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "twoim"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "seu"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "telefonul"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "din"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "มือถือ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "senin"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "своєму"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "điện thoại"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的"
+          }
+        }
+      }
+    },
+    "screenshot_hero_title_prefix": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "شغّل النماذج على"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "মডেল চালান"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI ve"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI på"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modelle auf"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Run models on"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ejecuta modelos en"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tekoäly"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI sa"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'IA sur"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI על"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "मॉडल चलाएँ"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jalankan model di"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esegui modelli sul"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "モデルを"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모델을"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI pada"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "KI på"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI op"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI na"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rode modelos no"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rulează modele pe"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI på"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI บน"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modelleri"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запускай моделі на"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chạy mô hình trên"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在"
+          }
+        }
+      }
+    },
+    "screenshot_hero_title_suffix": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مباشرةً"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ফোনে"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "telefonu"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "telefon"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Handy ausführen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "phone"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "teléfono"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "puhelimessa"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "telepono"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "téléphone"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "שלך"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "फ़ोन पर"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sendiri"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "telefono"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "スマホで実行"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "폰에서 실행"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "anda"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "telefon"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "telefoon"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "telefonie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "celular"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tău"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "telefon"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "telefonunda çalıştır"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "телефоні"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "của bạn"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手机上运行模型"
+          }
+        }
+      }
+    },
+    "screenshot_hero_title_suffix_tablet": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "على جهازك اللوحي"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ট্যাবলেটে"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tabletu"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tablet"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tablet ausführen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tablet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tableta"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tabletissa"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tablet"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tablette"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "טאבלט שלך"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "टैबलेट पर"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tablet sendiri"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tablet"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タブレットで実行"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "태블릿에서 실행"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tablet anda"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "nettbrett"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tablet"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tablecie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tablet"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tableta ta"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "surfplatta"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "แท็บเล็ตของคุณ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tabletinde çalıştır"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "планшеті"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "máy tính bảng"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "平板上运行模型"
+          }
+        }
+      }
+    },
+    "screenshot_notification": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يعمل في الخلفية"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ব্যাকগ্রাউন্ডে চলে"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Běží na pozadí"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kører i baggrunden"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Läuft im Hintergrund"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Runs in the background"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Funciona en segundo plano"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toimii taustalla"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tumatakbo sa background"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fonctionne en arrière-plan"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "פועל ברקע"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "बैकग्राउंड में चलता है"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Berjalan di latar belakang"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Funziona in background"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バックグラウンドで実行"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "백그라운드에서 실행"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Berjalan di latar belakang"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kjører i bakgrunnen"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draait op de achtergrond"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Działa w tle"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Funciona em segundo plano"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rulează în fundal"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Körs i bakgrunden"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ทำงานอยู่เบื้องหลัง"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arka planda çalışır"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Працює у фоні"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chạy ở chế độ nền"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在后台运行"
+          }
+        }
+      }
+    },
+    "screenshot_notification_sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "احصل على تنبيه عند الانتهاء"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "শেষ হলে একটি বিজ্ঞপ্তি পান"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dostanete upozornění, až bude hotovo"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "få en notifikation, når den er færdig"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "erhalte einen Hinweis, wenn es fertig ist"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "get a ping when it's done"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "recibe un aviso cuando termine"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "saat ilmoituksen, kun se on valmis"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "makakuha ng abiso kapag tapos na"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "recevez une alerte une fois terminé"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "קבלו התראה כשזה מסתיים"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "पूरा होने पर सूचना पाएं"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dapatkan notifikasi saat selesai"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ricevi un avviso quando ha finito"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完了したら通知でお知らせ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "완료되면 알림으로 알려드려요"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dapat pemberitahuan apabila siap"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "få et varsel når den er ferdig"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "krijg een melding wanneer het klaar is"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "otrzymaj powiadomienie po zakończeniu"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "receba um aviso quando terminar"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "primești o notificare când termină"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "få en avisering när det är klart"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "รับการแจ้งเตือนเมื่อเสร็จ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bitince haber ver"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "отримай сповіщення, коли все готово"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "nhận thông báo khi hoàn tất"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完成时收到提醒"
+          }
+        }
+      }
+    },
+    "screenshot_prompt_sample_brainstorm": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أنت شريك إبداعي للعصف الذهني. اقترح أفكارًا جريئة وغير متوقعة وابنِ على أفكاري."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনি একজন সৃজনশীল ভাবনা-বিনিময়ের সঙ্গী। সাহসী, অপ্রত্যাশিত ধারণা দিন এবং আমার ধারণাগুলিকে আরও এগিয়ে নিন।"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jste kreativní partner pro brainstorming. Nabízejte odvážné, nečekané nápady a rozvíjejte ty moje."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du er en kreativ idéudviklingspartner. Kom med dristige, uventede idéer og byg videre på mine."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du bist ein kreativer Brainstorming-Partner. Biete mutige, unerwartete Ideen und baue auf meinen auf."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You are a creative brainstorming partner. Offer bold, unexpected ideas and build on mine."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eres un compañero creativo de lluvia de ideas. Propón ideas audaces e inesperadas y desarrolla las mías."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Olet luova ideointikumppani. Tarjoa rohkeita, odottamattomia ideoita ja kehitä omiani eteenpäin."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ikaw ay isang malikhaing katuwang sa brainstorming. Mag-alok ng matatapang at hindi inaasahang mga ideya at palawakin ang sa akin."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu es un partenaire de brainstorming créatif. Propose des idées audacieuses et inattendues, et développe les miennes."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "אתה שותף יצירתי לסיעור מוחות. הצע רעיונות נועזים ובלתי צפויים ופתח את אלה שלי."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आप एक रचनात्मक विचार-मंथन साथी हैं। साहसी, अप्रत्याशित विचार दें और मेरे विचारों को आगे बढ़ाएं।"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kamu adalah partner brainstorming yang kreatif. Tawarkan ide yang berani dan tak terduga, lalu kembangkan dari ideku."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sei un partner creativo di brainstorming. Proponi idee audaci e inaspettate e sviluppa le mie."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたは創造的なブレインストーミングのパートナーです。大胆で意外なアイデアを提案し、私のアイデアを発展させてください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "당신은 창의적인 브레인스토밍 파트너입니다. 대담하고 의외의 아이디어를 제안하고 제 아이디어를 발전시키세요."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anda ialah rakan sumbang saran yang kreatif. Tawarkan idea yang berani dan tidak dijangka serta kembangkan daripada idea saya."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du er en kreativ idémyldringspartner. Kom med dristige, uventede ideer og bygg videre på mine."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je bent een creatieve brainstormpartner. Bied gedurfde, onverwachte ideeën en bouw voort op de mijne."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jesteś kreatywnym partnerem do burzy mózgów. Proponuj śmiałe, nieoczekiwane pomysły i rozwijaj moje."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você é um parceiro criativo de brainstorming. Ofereça ideias ousadas e inesperadas e desenvolva as minhas."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ești un partener creativ de brainstorming. Propune idei îndrăznețe și neașteptate și dezvoltă-le pe ale mele."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du är en kreativ brainstormingpartner. Bjud på djärva, oväntade idéer och bygg vidare på mina."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "คุณเป็นคู่หูระดมความคิดที่สร้างสรรค์ เสนอไอเดียที่กล้าและเหนือความคาดหมาย และต่อยอดจากไอเดียของฉัน"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sen yaratıcı bir beyin fırtınası ortağısın. Cüretkar, beklenmedik fikirler sun ve benimkilerin üzerine ekle."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ти креативний партнер для мозкового штурму. Пропонуй сміливі, несподівані ідеї та розвивай мої."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn là một đối tác động não sáng tạo. Hãy đưa ra những ý tưởng táo bạo, bất ngờ và phát triển thêm từ ý của tôi."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你是一位富有创意的头脑风暴伙伴。提出大胆、出人意料的想法，并在我的想法基础上拓展。"
+          }
+        }
+      }
+    },
+    "screenshot_prompt_sample_code": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أنت مراجع أكواد محترف. أشر إلى الأخطاء والحالات الحدية والمشكلات الأمنية. كن مباشرًا ومحددًا."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনি একজন সিনিয়র কোড রিভিউয়ার। বাগ, এজ কেস এবং নিরাপত্তা সমস্যা চিহ্নিত করুন। সরাসরি ও সুনির্দিষ্ট হন।"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jste zkušený recenzent kódu. Upozorňujte na chyby, hraniční případy a bezpečnostní problémy. Buďte přímí a konkrétní."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du er en erfaren kodeanmelder. Påpeg fejl, grænsetilfælde og sikkerhedsproblemer. Vær direkte og specifik."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du bist ein erfahrener Code-Reviewer. Weise auf Bugs, Grenzfälle und Sicherheitsprobleme hin. Sei direkt und konkret."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You are a senior code reviewer. Point out bugs, edge cases, and security issues. Be direct and specific."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eres un revisor de código sénior. Señala errores, casos límite y problemas de seguridad. Sé directo y específico."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Olet kokenut koodin tarkastaja. Osoita bugit, reunatapaukset ja tietoturvaongelmat. Ole suora ja täsmällinen."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ikaw ay isang senior na code reviewer. Ituro ang mga bug, edge case, at isyu sa seguridad. Maging direkta at tiyak."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu es un relecteur de code expérimenté. Signale les bugs, les cas limites et les problèmes de sécurité. Sois direct et précis."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "אתה מבקר קוד בכיר. הצבע על באגים, מקרי קצה ובעיות אבטחה. היה ישיר וספציפי."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आप एक वरिष्ठ कोड समीक्षक हैं। बग, एज केस और सुरक्षा समस्याओं को बताएं। सीधे और सटीक रहें।"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kamu adalah peninjau kode senior. Tunjukkan bug, kasus tepi, dan masalah keamanan. Bersikaplah langsung dan spesifik."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sei un revisore di codice esperto. Segnala bug, casi limite e problemi di sicurezza. Sii diretto e specifico."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたはシニアコードレビュアーです。バグ、エッジケース、セキュリティ上の問題を指摘してください。率直かつ具体的に。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "당신은 시니어 코드 리뷰어입니다. 버그, 엣지 케이스, 보안 문제를 지적하세요. 직접적이고 구체적으로."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anda ialah penyemak kod kanan. Tunjukkan pepijat, kes tepi dan isu keselamatan. Berterus terang dan khusus."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du er en erfaren kodevurderer. Påpek feil, grensetilfeller og sikkerhetsproblemer. Vær direkte og spesifikk."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je bent een senior code-reviewer. Wijs op bugs, randgevallen en beveiligingsproblemen. Wees direct en specifiek."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jesteś doświadczonym recenzentem kodu. Wskazuj błędy, przypadki brzegowe i problemy z bezpieczeństwem. Bądź bezpośredni i konkretny."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você é um revisor de código sênior. Aponte bugs, casos extremos e problemas de segurança. Seja direto e específico."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ești un recenzent de cod experimentat. Semnalează bug-uri, cazuri limită și probleme de securitate. Fii direct și specific."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du är en senior kodgranskare. Peka ut buggar, gränsfall och säkerhetsproblem. Var direkt och specifik."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "คุณเป็นผู้ตรวจรีวิวโค้ดระดับอาวุโส ชี้ให้เห็นบั๊ก กรณีขอบเขต และปัญหาด้านความปลอดภัย ตรงไปตรงมาและเฉพาะเจาะจง"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sen kıdemli bir kod incelemecisisin. Hataları, uç durumları ve güvenlik sorunlarını belirt. Doğrudan ve net ol."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ти досвідчений рецензент коду. Вказуй на помилки, граничні випадки та проблеми безпеки. Будь прямим і конкретним."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn là một người đánh giá mã cấp cao. Hãy chỉ ra lỗi, các trường hợp biên và vấn đề bảo mật. Hãy trực tiếp và cụ thể."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你是一位资深的代码审查员。请指出 bug、边界情况和安全问题。直接且具体。"
+          }
+        }
+      }
+    },
+    "screenshot_prompt_sample_translator": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أنت مترجم. حوّل كل ما أرسله إلى فرنسية طبيعية وسلسة مع الحفاظ على التنسيق."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনি একজন অনুবাদক। আমি যা পাঠাই তা স্বাভাবিক, সাবলীল ফরাসিতে রূপান্তর করুন এবং ফর্ম্যাটিং বজায় রাখুন।"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jste překladatel. Vše, co pošlu, převeďte do přirozené, plynulé francouzštiny a zachovejte formátování."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du er en oversætter. Lav alt, hvad jeg sender, om til naturligt, flydende fransk og bevar formateringen."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du bist ein Übersetzer. Wandle alles, was ich sende, in natürliches, flüssiges Französisch um und behalte die Formatierung bei."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You are a translator. Turn everything I send into natural, fluent French and keep the formatting."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eres un traductor. Convierte todo lo que te envíe en francés natural y fluido, y conserva el formato."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Olet kääntäjä. Muunna kaikki lähettämäni luonnolliseksi, sujuvaksi ranskaksi ja säilytä muotoilu."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ikaw ay isang tagasalin. Gawing natural at madulas na Pranses ang lahat ng ipapadala ko at panatilihin ang pormat."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu es un traducteur. Transforme tout ce que je t'envoie en français naturel et fluide, et conserve la mise en forme."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "אתה מתרגם. הפוך כל מה שאני שולח לצרפתית טבעית וזורמת ושמור על העיצוב."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आप एक अनुवादक हैं। मैं जो कुछ भी भेजूं उसे स्वाभाविक, धाराप्रवाह फ्रेंच में बदलें और फ़ॉर्मेटिंग बनाए रखें।"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kamu adalah seorang penerjemah. Ubah semua yang aku kirim menjadi bahasa Prancis yang alami dan lancar, serta pertahankan formatnya."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sei un traduttore. Trasforma tutto ciò che ti invio in francese naturale e fluente e mantieni la formattazione."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたは翻訳者です。私が送るものすべてを自然で流暢なフランス語に変換し、書式を保ってください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "당신은 번역가입니다. 제가 보내는 모든 것을 자연스럽고 유창한 프랑스어로 바꾸고 서식을 유지하세요."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anda ialah seorang penterjemah. Tukar segala yang saya hantar kepada bahasa Perancis yang semula jadi dan lancar serta kekalkan formatnya."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du er en oversetter. Gjør alt jeg sender om til naturlig, flytende fransk og behold formateringen."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je bent een vertaler. Zet alles wat ik stuur om in natuurlijk, vloeiend Frans en behoud de opmaak."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jesteś tłumaczem. Zamieniaj wszystko, co wysyłam, na naturalny, płynny francuski i zachowuj formatowanie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você é um tradutor. Transforme tudo que eu enviar em francês natural e fluente e mantenha a formatação."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ești un traducător. Transformă tot ce îți trimit în franceză naturală și fluentă și păstrează formatarea."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du är en översättare. Förvandla allt jag skickar till naturlig, flytande franska och behåll formateringen."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "คุณเป็นนักแปล แปลงทุกอย่างที่ฉันส่งให้เป็นภาษาฝรั่งเศสที่เป็นธรรมชาติและลื่นไหล และคงรูปแบบไว้"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sen bir çevirmensin. Sana gönderdiğim her şeyi doğal ve akıcı Fransızcaya çevir ve biçimlendirmeyi koru."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ти перекладач. Перетворюй усе, що я надсилаю, на природну, плавну французьку та зберігай форматування."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn là một biên dịch viên. Hãy chuyển mọi thứ tôi gửi thành tiếng Pháp tự nhiên, trôi chảy và giữ nguyên định dạng."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你是一位翻译。把我发送的所有内容转换成自然流畅的法语，并保留格式。"
+          }
+        }
+      }
+    },
+    "screenshot_prompts": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "موجهات جاهزة للاستخدام"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "পুনঃব্যবহারযোগ্য প্রম্পট"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opakovaně použitelné prompty"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Genanvendelige prompter"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiederverwendbare Prompts"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reusable prompts"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prompts reutilizables"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uudelleenkäytettävät kehotteet"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mga prompt na magagamit-muli"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invites réutilisables"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "הנחיות לשימוש חוזר"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "दोबारा इस्तेमाल योग्य प्रॉम्प्ट"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prompt yang bisa dipakai ulang"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prompt riutilizzabili"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "再利用できるプロンプト"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "재사용 가능한 프롬프트"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesaan boleh guna semula"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gjenbrukbare prompter"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herbruikbare prompts"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prompty wielokrotnego użytku"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prompts reutilizáveis"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prompturi reutilizabile"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Återanvändbara prompter"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "พรอมต์ที่ใช้ซ้ำได้"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeniden kullanılabilir istemler"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Багаторазові промпти"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lời nhắc tái sử dụng"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "可复用的提示词"
+          }
+        }
+      }
+    },
+    "screenshot_prompts_sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اضبط النبرة مرة واحدة واستخدمها في كل مكان"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "একবার টোন ঠিক করুন, যেকোনো জায়গায় ব্যবহার করুন"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "nastavte tón jednou, používejte kdekoli"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sæt tonen én gang, brug den overalt"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tonfall einmal festlegen, überall nutzen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "set the tone once, use anywhere"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "define el tono una vez, úsalo donde quieras"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "aseta sävy kerran, käytä missä tahansa"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "itakda ang tono nang minsan, gamitin saanman"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "définissez le ton une fois, utilisez-le partout"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "הגדירו את הטון פעם אחת, השתמשו בכל מקום"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "एक बार टोन तय करें, हर जगह इस्तेमाल करें"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "atur nadanya sekali, pakai di mana saja"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "imposta il tono una volta, usalo ovunque"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トーンを一度設定すれば、どこでも使える"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "톤을 한 번 설정하면 어디서나 사용"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tetapkan nada sekali, guna di mana-mana"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sett tonen én gang, bruk den overalt"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "stel de toon één keer in, gebruik hem overal"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ustaw ton raz, używaj wszędzie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "defina o tom uma vez, use em qualquer lugar"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "setezi tonul o dată, îl folosești oriunde"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ställ in tonen en gång, använd den överallt"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ตั้งโทนครั้งเดียว ใช้ได้ทุกที่"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tonu bir kez ayarla, her yerde kullan"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "задай тон один раз, використовуй будь-де"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "đặt giọng điệu một lần, dùng ở mọi nơi"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "设定一次语气，随处使用"
+          }
+        }
+      }
+    },
+    "screenshot_system_prompt_sample": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أنت معلّم علوم مختصر. اشرح الأفكار بوضوح مع أمثلة من الحياة اليومية."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনি একজন সংক্ষিপ্ত বিজ্ঞান শিক্ষক। দৈনন্দিন উদাহরণ দিয়ে ধারণাগুলি স্পষ্টভাবে ব্যাখ্যা করুন।"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jste stručný učitel přírodních věd. Vysvětlujte myšlenky jasně pomocí každodenních příkladů."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du er en kortfattet naturvidenskabslærer. Forklar idéer tydeligt med hverdagseksempler."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du bist ein präziser Wissenschaftslehrer. Erkläre Ideen klar mit Beispielen aus dem Alltag."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You are a concise science tutor. Explain ideas clearly with everyday examples."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eres un tutor de ciencias conciso. Explica las ideas con claridad usando ejemplos cotidianos."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Olet tiivis tiedeopettaja. Selitä ajatukset selkeästi arkipäiväisin esimerkein."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ikaw ay isang maikling tagapagturo ng agham. Ipaliwanag ang mga ideya nang malinaw gamit ang mga halimbawa sa pang-araw-araw na buhay."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu es un tuteur scientifique concis. Explique les idées clairement avec des exemples du quotidien."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "אתה מורה תמציתי למדעים. הסבר רעיונות בבהירות בעזרת דוגמאות מחיי היום-יום."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आप एक संक्षिप्त विज्ञान शिक्षक हैं। रोजमर्रा के उदाहरणों के साथ विचारों को स्पष्ट रूप से समझाएं।"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kamu adalah tutor sains yang ringkas. Jelaskan ide dengan jernih lewat contoh sehari-hari."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sei un tutor di scienze conciso. Spiega le idee con chiarezza usando esempi quotidiani."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたは簡潔な科学の先生です。身近な例を使ってアイデアをわかりやすく説明してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "당신은 간결한 과학 튜터입니다. 일상적인 예시를 들어 아이디어를 명확하게 설명하세요."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anda adalah tutor sains yang ringkas. Terangkan idea dengan jelas menggunakan contoh harian."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du er en konsis vitenskapslærer. Forklar ideer tydelig med hverdagslige eksempler."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je bent een bondige wetenschapsleraar. Leg ideeën helder uit met alledaagse voorbeelden."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jesteś zwięzłym korepetytorem nauk ścisłych. Tłumacz pojęcia jasno, posługując się codziennymi przykładami."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você é um tutor de ciências objetivo. Explique ideias com clareza usando exemplos do dia a dia."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ești un profesor de științe concis. Explică ideile clar, cu exemple din viața de zi cu zi."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du är en koncis vetenskapslärare. Förklara idéer tydligt med vardagliga exempel."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "คุณเป็นติวเตอร์วิทยาศาสตร์ที่กระชับ อธิบายแนวคิดให้ชัดเจนด้วยตัวอย่างในชีวิตประจำวัน"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sen kısa ve öz bir fen öğretmenisin. Fikirleri günlük hayattan örneklerle açıkça açıkla."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ти лаконічний викладач природничих наук. Пояснюй ідеї зрозуміло, використовуючи приклади з повсякденного життя."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn là một gia sư khoa học ngắn gọn. Hãy giải thích các ý tưởng một cách rõ ràng bằng những ví dụ thường ngày."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你是一位简洁的科学老师。请用日常生活中的例子清晰地解释概念。"
+          }
+        }
+      }
+    },
+    "screenshot_tools": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "امنح النماذج أدوات"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "মডেলকে টুল দিন"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dejte modelům nástroje"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giv modeller værktøjer"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gib Modellen Werkzeuge"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Give models tools"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Da herramientas a los modelos"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anna malleille työkaluja"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bigyan ng mga tool ang modelo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Donnez des outils aux modèles"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "תנו למודלים כלים"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "मॉडलों को टूल दें"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beri model alat"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dai strumenti ai modelli"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "モデルにツールを与える"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모델에 도구를 부여"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beri model alat"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gi modeller verktøy"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geef modellen tools"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daj modelom narzędzia"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dê ferramentas aos modelos"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oferă instrumente modelelor"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ge modeller verktyg"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "มอบเครื่องมือให้โมเดล"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modellere araçlar ver"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дай моделям інструменти"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trao công cụ cho mô hình"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "为模型赋予工具"
+          }
+        }
+      }
+    },
+    "screenshot_tools_sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بحث الويب والجلب وJavaScript"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ওয়েব সার্চ, ফেচ এবং JavaScript"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vyhledávání na webu, načtení & JavaScript"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "websøgning, hentning & JavaScript"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Websuche, Abruf & JavaScript"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "web search, fetch & JavaScript"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "búsqueda web, fetch & JavaScript"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "verkkohaku, nouto & JavaScript"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "web search, fetch & JavaScript"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "recherche web, fetch & JavaScript"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "חיפוש באינטרנט, שליפה ו-JavaScript"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "वेब सर्च, फ़ेच और JavaScript"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "pencarian web, ambil halaman & JavaScript"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ricerca web, fetch & JavaScript"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ウェブ検索、取得 & JavaScript"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "웹 검색, 가져오기 & JavaScript"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "carian web, ambil halaman & JavaScript"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "nettsøk, henting & JavaScript"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "webzoeken, ophalen & JavaScript"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "wyszukiwanie w sieci, pobieranie & JavaScript"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "busca na web, fetch & JavaScript"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "căutare web, fetch & JavaScript"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "webbsökning, hämtning & JavaScript"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ค้นเว็บ ดึงหน้าเว็บ & JavaScript"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "web araması, getirme & JavaScript"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "пошук у мережі, завантаження & JavaScript"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tìm kiếm web, tải trang & JavaScript"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "网络搜索、抓取和 JavaScript"
+          }
+        }
+      }
+    },
+    "screenshot_vision": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "دردش حول الصور"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ছবি নিয়ে চ্যাট করুন"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chatujte o obrázcích"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat om billeder"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Über Bilder chatten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat about images"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chatea sobre imágenes"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keskustele kuvista"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mag-chat tungkol sa mga larawan"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discutez d'images"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "שוחח על תמונות"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "छवियों के बारे में चैट करें"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mengobrol tentang gambar"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chatta sulle immagini"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "画像についてチャット"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이미지에 대해 대화"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bersembang tentang imej"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat om bilder"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat over afbeeldingen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rozmawiaj o obrazach"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Converse sobre imagens"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discută despre imagini"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chatta om bilder"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "แชทเกี่ยวกับรูปภาพ"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Görseller hakkında sohbet et"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Спілкуйся про зображення"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trò chuyện về hình ảnh"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "就图片聊天"
+          }
+        }
+      }
+    },
+    "screenshot_vision_question": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ما الحيوان الموجود في هذه الصورة؟"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "এই ছবিতে কোন প্রাণী আছে?"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jaké zvíře je na této fotografii?"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hvilket dyr er på dette foto?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welches Tier ist auf diesem Foto?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What animal is in this photo?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Qué animal hay en esta foto?"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mikä eläin tässä kuvassa on?"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anong hayop ang nasa larawang ito?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quel animal y a-t-il sur cette photo ?"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "איזו חיה נמצאת בתמונה הזו?"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "इस फ़ोटो में कौन-सा जानवर है?"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hewan apa yang ada di foto ini?"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Che animale c'è in questa foto?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この写真に写っているのは何の動物ですか？"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 사진 속 동물은 무엇인가요?"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haiwan apakah dalam foto ini?"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hvilket dyr er på dette bildet?"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welk dier staat op deze foto?"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jakie zwierzę jest na tym zdjęciu?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Que animal aparece nesta foto?"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce animal este în această fotografie?"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vilket djur är på det här fotot?"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ในรูปนี้มีสัตว์อะไร?"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu fotoğraftaki hayvan nedir?"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Яка тварина на цьому фото?"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Con vật trong bức ảnh này là gì?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这张照片里是什么动物？"
+          }
+        }
+      }
+    },
+    "screenshot_vision_response": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**خروف** بصوف كثيف مجعّد بلون أبيض كريمي، يرعى منحنيًا برأسه على منحدر تلّ أخضر يانع. السماء الملبّدة بالغيوم والمرعى الصخري يوحيان ببيئة جبلية باردة."
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ঘন, কোঁকড়ানো ক্রিম-সাদা পশমযুক্ত একটি **ভেড়া**, সবুজ-শ্যামল পাহাড়ি ঢালে মাথা নিচু করে চরছে। মেঘলা আকাশ ও পাথুরে চারণভূমি একটি শীতল, উঁচু এলাকার ইঙ্গিত দেয়।"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**Ovce** s hustým, kudrnatým, krémově bílým rounem, pasoucí se se skloněnou hlavou na svěže zeleném svahu. Zatažená obloha a kamenitá pastvina naznačují chladné, horské prostředí."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Et **får** med en tyk, krøllet, cremehvid uld, der græsser med sænket hoved på en frodig grøn bakke. Den overskyede himmel og den stenede græsgang antyder en kølig højlandsomgivelse."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein **Schaf** mit dichtem, gekräuseltem, cremeweißem Vlies, das mit gesenktem Kopf auf einem saftig grünen Hügel grast. Der bedeckte Himmel und die felsige Weide deuten auf eine kühle Hochlandlandschaft hin."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A **sheep** with a thick, curly cream-white fleece, grazing head-down on a lush green hillside. The overcast sky and rocky pasture suggest a cool, upland setting."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una **oveja** de lana espesa, rizada y de color crema blanquecino, paciendo con la cabeza baja en una ladera verde y exuberante. El cielo nublado y el pasto rocoso sugieren un entorno fresco de tierras altas."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**Lammas**, jolla on paksu, kihara kermanvalkoinen villa, laiduntaa pää alhaalla rehevällä vihreällä rinteellä. Pilvinen taivas ja kivinen laidun viittaavat viileään ylänköympäristöön."
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Isang **tupa** na may makapal at kulot na cream-white na balahibo, nakayukong nanginginain sa isang luntiang gilid ng burol. Ang makulimlim na langit at mabatong pastulan ay nagpapahiwatig ng malamig na kapaligiran sa kabundukan."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un **mouton** à la toison épaisse, bouclée et d'un blanc crème, broutant tête baissée sur un coteau verdoyant. Le ciel couvert et le pâturage rocailleux évoquent un cadre frais de hautes terres."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**כבשה** עם גיזה עבה ומתולתלת בגוון לבן-שמנת, רועה בראש מורכן על מדרון גבעה ירוק ועשיר. השמיים המעוננים והמרעה הסלעי מרמזים על אזור הררי וקריר."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "घनी, घुंघराली क्रीम-सफ़ेद ऊन वाली एक **भेड़**, हरी-भरी पहाड़ी ढलान पर सिर झुकाए चर रही है। बादल भरा आसमान और चट्टानी चरागाह एक ठंडे, ऊंचाई वाले इलाके का संकेत देते हैं।"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seekor **domba** dengan bulu putih krem yang tebal dan keriting, sedang menunduk merumput di lereng bukit hijau yang subur. Langit mendung dan padang rumput berbatu menunjukkan suasana dataran tinggi yang sejuk."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Una **pecora** dal vello folto, riccio e bianco crema, che pascola a testa bassa su una collina verde e rigogliosa. Il cielo coperto e il pascolo roccioso suggeriscono un ambiente fresco di altopiano."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**羊**です。ふさふさと巻いたクリーム色の羊毛をまとい、緑豊かな丘の斜面で頭を下げて草を食んでいます。どんよりとした空と岩がちの牧草地は、涼しい高地の環境を思わせます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "두껍고 곱슬곱슬한 크림색 양털을 가진 **양**이 푸르른 녹색 언덕에서 머리를 숙이고 풀을 뜯고 있습니다. 흐린 하늘과 돌이 많은 목초지는 서늘한 고지대 환경을 떠올리게 합니다."
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seekor **bebiri** dengan bulu putih krim yang tebal dan kerinting, sedang menunduk meragut di lereng bukit yang hijau subur. Langit mendung dan padang ragut berbatu menggambarkan suasana tanah tinggi yang nyaman."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En **sau** med en tykk, krøllete, kremhvit ull som beiter med senket hode på en frodig grønn skråning. Den overskyede himmelen og den steinete beitemarken tyder på et kjølig høylandsmiljø."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Een **schaap** met een dikke, krullende, crèmewitte vacht, dat met gebogen hoofd graast op een weelderige groene heuvel. De bewolkte lucht en de rotsachtige weide wijzen op een koele omgeving in het hoogland."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**Owca** o gęstym, kędzierzawym, kremowobiałym runie, skubiąca trawę z pochyloną głową na soczyście zielonym zboczu. Zachmurzone niebo i kamieniste pastwisko sugerują chłodne, górskie otoczenie."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma **ovelha** de lã espessa, encaracolada e de cor branco-creme, pastando de cabeça baixa numa encosta verde e exuberante. O céu nublado e o pasto rochoso sugerem um ambiente fresco de terras altas."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O **oaie** cu o lână deasă, creață, de culoare alb-crem, care paște cu capul plecat pe un deal verde și luxuriant. Cerul înnorat și pășunea pietroasă sugerează un cadru răcoros, de munte."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ett **får** med en tjock, lockig, gräddvit ull som betar med sänkt huvud på en frodig grön kulle. Den molniga himlen och den steniga betesmarken antyder en sval miljö i höglandet."
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**แกะ** ที่มีขนหนาหยิกสีขาวครีม กำลังก้มหัวเล็มหญ้าบนเนินเขาเขียวชอุ่ม ท้องฟ้าครึ้มและทุ่งหญ้าหินบ่งบอกถึงพื้นที่สูงที่อากาศเย็น"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yemyeşil bir yamaçta başını eğmiş otlayan, kalın ve kıvırcık krem beyazı yünlü bir **koyun**. Kapalı gökyüzü ve kayalık otlak, serin bir yayla ortamına işaret ediyor."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "**Вівця** з густим, кучерявим, кремово-білим руном, що пасеться, опустивши голову, на соковитому зеленому схилі. Похмуре небо та кам'янисте пасовище натякають на прохолодну гірську місцевість."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Một con **cừu** với bộ lông trắng ngà dày và xoăn, đang cúi đầu gặm cỏ trên sườn đồi xanh mướt. Bầu trời âm u và đồng cỏ nhiều đá gợi lên một vùng cao nguyên mát mẻ."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一只**绵羊**，长着浓密卷曲的乳白色羊毛，正低头在郁郁葱葱的绿色山坡上吃草。阴沉的天空和多石的牧场暗示这是一处凉爽的高地环境。"
+          }
+        }
+      }
+    },
+    "screenshot_vision_sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يمكن لنموذجك رؤيتها أيضًا"
+          }
+        },
+        "bn": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "আপনার মডেলও সেগুলো দেখতে পারে"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "váš model je také vidí"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "din model kan også se dem"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dein Modell sieht sie auch"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "your model can see them too"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tu modelo también puede verlas"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mallisi näkee ne myös"
+          }
+        },
+        "fil": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "nakikita rin ito ng iyong modelo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "votre modèle peut les voir aussi"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "המודל שלך יכול לראות אותן גם"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "आपका मॉडल उन्हें देख भी सकता है"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "modelmu juga bisa melihatnya"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "il tuo modello può vederle"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "モデルも画像を見られる"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모델도 이미지를 볼 수 있어요"
+          }
+        },
+        "ms": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "model anda juga boleh melihatnya"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "modellen din kan se dem også"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "je model kan ze ook zien"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Twój model też je widzi"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "seu modelo também consegue vê-las"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "modelul tău le poate vedea și el"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "din modell kan se dem också"
+          }
+        },
+        "th": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "โมเดลของคุณก็มองเห็นได้เช่นกัน"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "modelin de onları görebilir"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "твоя модель теж їх бачить"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mô hình của bạn cũng nhìn thấy chúng"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的模型也能看见"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
