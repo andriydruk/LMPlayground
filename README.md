@@ -11,13 +11,7 @@ LM Playground is an app for Android, iPhone, and iPad that runs language models 
 <a href="https://play.google.com/store/apps/details?id=com.druk.lmplayground">Google Play</a> · <a href="https://apps.apple.com/app/id6837658238">App Store</a> · <a href="https://lmplayground.app/">lmplayground.app</a>
 </p>
 
-### iPhone and iPad
-
-![LM Playground on iPhone](.github/readme/ios.png)
-
-### Android
-
-![LM Playground on Android](.github/readme/android.png)
+![LM Playground on iPhone, iPad, and Android](.github/readme/preview.png)
 
 ## Features
 
