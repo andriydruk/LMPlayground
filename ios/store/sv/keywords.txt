@@ -1,0 +1,1 @@
+chatbot,offline,språkmodell,llm,gguf,assistent,artificiell intelligens

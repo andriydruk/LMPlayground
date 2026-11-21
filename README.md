@@ -2,12 +2,16 @@
 <h1 align="center">LM Playground</h1>
 
 <p align="center">
-<img src="logo.png"/>
+<img src="logo.png" width="200" alt="LM Playground icon"/>
 </p>
 
-LM Playground is an Android application for running Large Language Models locally on-device. Download models, load them in one tap, and chat - all offline, all private. Powered by [llama.cpp](https://github.com/ggml-org/llama.cpp) with GGUF-format models from [Hugging Face](https://huggingface.co/).
+LM Playground is an app for Android, iPhone, and iPad that runs language models locally on-device. Download models, load them in one tap, and chat - all offline, all private. Powered by [llama.cpp](https://github.com/ggml-org/llama.cpp) with GGUF-format models from [Hugging Face](https://huggingface.co/).
 
-![preview](docs/banner.png)
+<p align="center">
+<a href="https://play.google.com/store/apps/details?id=com.druk.lmplayground">Google Play</a> · <a href="https://apps.apple.com/app/id6837658238">App Store</a> · <a href="https://lmplayground.app/">lmplayground.app</a>
+</p>
+
+![LM Playground on iPhone, iPad, and Android](.github/readme/preview.png)
 
 ## Features
 
@@ -22,10 +26,10 @@ LM Playground is an Android application for running Large Language Models locall
 - **Voice dictation** - tap the mic and speak; on-device speech recognition in 35 languages, fully offline
 - **Chat history** - conversations are saved and organized; pin, rename, delete, and resume sessions from the sidebar
 - **Custom GGUF models** - load your own model files from any source alongside the built-in catalog
-- **Reliable background downloads** - custom download engine with OkHttp and WorkManager, progress notifications with speed and ETA, automatic resume on network interruptions
-- **Storage management** - choose where to keep multi-GB model files with Android's Storage Access Framework
-- **ARM optimized** - KleidiAI kernels and OpenMP for faster generation on arm64 devices
-- **Large-screen ready** - tablets, foldables, and Chromebooks get a permanent sessions sidebar, list-detail Settings, and freeform window resize support
+- **Reliable background downloads** - downloads continue in the background and resume after network interruptions (OkHttp and WorkManager on Android, background URLSession on iOS)
+- **Storage management** - on Android, choose where to keep multi-GB model files with the Storage Access Framework
+- **Hardware accelerated** - Metal GPU inference on iPhone and iPad; KleidiAI kernels, OpenMP, and Vulkan on Android
+- **Large-screen ready** - iPad, Android tablets, foldables, and Chromebooks get a permanent sessions sidebar, list-detail Settings, and resizable windows
 
 ## Supported Models
 
@@ -65,34 +69,56 @@ LM Playground is an Android application for running Large Language Models locall
 
 </details>
 
-Most models use Q4_K_M quantization; Qwen 3.5 uses Q3_K_M, and GPT-OSS ships in its native MXFP4 format. See [`ModelInfoProvider.kt`](android/app/src/main/java/com/druk/lmplayground/models/ModelInfoProvider.kt) for the full list.
+Most models use Q4_K_M quantization; Qwen 3.5 uses Q3_K_M, and GPT-OSS ships in its native MXFP4 format. See [`ModelInfoProvider.kt`](android/app/src/main/java/com/druk/lmplayground/models/ModelInfoProvider.kt) for the full list. On iPhone and iPad, the app checks each model against the device's GPU memory before loading it, so the largest models need a device with enough memory.
 
 ## Install
 
-If you're just looking to install LM Playground, you can find it on [Google Play](https://play.google.com/store/apps/details?id=com.druk.lmplayground). If you're a developer wanting to contribute, read on.
+If you're just looking to install LM Playground:
+
+- **Android** - [Google Play](https://play.google.com/store/apps/details?id=com.druk.lmplayground)
+- **iPhone and iPad** - [App Store](https://apps.apple.com/app/id6837658238); needs iOS 26 or later and an iPhone 15 Pro or newer, or an iPad with an M1 chip or newer
+
+If you're a developer wanting to contribute, read on.
 
 ## Repository layout
 
 | Folder | Contents |
 |--------|----------|
 | [`android/`](android/) | The Android app (Gradle project). See [`android/ARCHITECTURE.md`](android/ARCHITECTURE.md). |
-| [`ios/`](ios/) | The iOS app, in development. |
+| [`ios/`](ios/) | The iPhone and iPad app (SwiftUI; Xcode project generated from [`project.yml`](ios/project.yml) with XcodeGen). |
+| [`core/`](core/) | The C++ engine shared by both apps, and the llama.cpp submodule. |
 | [`docs/`](docs/) | The website. |
 
 ## Build Instructions
+
+Clone the repository with submodules:
+```
+git clone --recurse-submodules https://github.com/andriydruk/LMPlayground.git
+```
+
+### Android
 
 Prerequisites:
 * Android Studio [2024.3.1+](https://developer.android.com/studio/releases)
 * NDK 27.2.12479018
 * CMake 3.31.6
 
-1. Clone the repository with submodules:
+1. Open the Android project in Android Studio: `File` > `Open` > select the `android/` folder of the cloned repository.
+2. Connect an Android device or start an emulator.
+3. Run the application using `Run` > `Run 'app'` or the play button in Android Studio.
+
+### iPhone and iPad
+
+Prerequisites:
+* Xcode 26+
+* CMake
+
+1. Build the llama.cpp engine as an XCFramework (once, and again after the submodule changes):
 ```
-git clone --recurse-submodules https://github.com/andriydruk/LMPlayground.git
+ios/scripts/build-xcframework.sh
 ```
-2. Open the Android project in Android Studio: `File` > `Open` > select the `android/` folder of the cloned repository.
-3. Connect an Android device or start an emulator.
-4. Run the application using `Run` > `Run 'app'` or the play button in Android Studio.
+2. Open `ios/LMPlayground.xcodeproj` in Xcode and select the `LMPlayground` scheme.
+3. Run it on an iPhone or iPad. The simulator works too, but inference runs on the CPU there.
 
 ## License
 
@@ -100,7 +126,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
-This project is built on [llama.cpp](https://github.com/ggml-org/llama.cpp). Models are GGUF-format with Q4_K_M quantization sourced from [Hugging Face](https://huggingface.co/).
+This project is built on [llama.cpp](https://github.com/ggml-org/llama.cpp). Models are GGUF-format, mostly Q4_K_M quantization, sourced from [Hugging Face](https://huggingface.co/).
 
 ## Contact
 

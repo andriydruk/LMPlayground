@@ -1,0 +1,37 @@
+LM Playground spouští velké jazykové modely přímo na vašem iPhonu a iPadu. Stáhněte model, načtěte ho jedním klepnutím a chatujte – soukromě, ve vašem zařízení. Žádné cloudové servery, žádné API klíče, žádný účet a žádná data neopouštějí vaše zařízení.
+
+KLÍČOVÉ FUNKCE
+
+Zpracování v zařízení – každá odpověď se generuje lokálně pomocí Metal na vašem iPhonu nebo iPadu. Vaše konverzace zůstávají soukromé.
+
+Historie konverzací – konverzace se ukládají a třídí. Připínejte je, přejmenovávejte nebo mažte a pokračujte v kterémkoli chatu přesně tam, kde jste skončili. Na iPadu jsou chaty v postranním panelu vedle konverzace.
+
+Bohaté odpovědi – odpovědi se zobrazují s plnou podporou Markdownu: nadpisy, bloky kódu s tlačítkem pro kopírování, seznamy, tabulky, tučné písmo a kurzíva.
+
+Dokumenty – připojte k chatu soubor a ptejte se na jeho obsah. Vyhledávání v zařízení najde podle významu nejrelevantnější pasáže a předá je modelu, takže odpovědi vycházejí přímo z vašeho dokumentu, který nikdy neopustí vaše zařízení. Podporuje PDF, Word, EPUB, HTML, Markdown a prostý text; malý embeddingový model se stáhne jednou při prvním použití.
+
+Vision – pošlete fotku a chatujte o ní. Vyberte obrázek z knihovny nebo ho vyfoťte fotoaparátem a zeptejte se modelu, co vidí: popsat scénu, rozpoznat předměty nebo přečíst text. Obrázek se zpracuje přímo ve vašem zařízení.
+
+Hlasové diktování – klepněte na mikrofon a mluvte; slova se objevují už během mluvení, ve 35 jazycích. Řeč se rozpoznává ve vašem zařízení a nikdy se neukládá ani neodesílá.
+
+Modely s uvažováním – sledujte uvažování modelů v rozbalovací sekci s nastavitelným rozpočtem na přemýšlení.
+
+Nástroje – schopné modely mohou během odpovědi vyhledávat na webu, číst stránku a spouštět JavaScript v sandboxu. Každý nástroj je ve výchozím stavu vypnutý; zapněte jen ty, které chcete, pro každý model zvlášť. Vyhledávání na webu a čtení stránek přistupují k internetu, jen když je zapnete.
+
+Rychlost na první pohled – u každé odpovědi uvidíte počet tokenů a tokeny za sekundu.
+
+Vaše nastavení, pro každý chat – velikost kontextu, rozpočet na přemýšlení, teplota, Top-P, Top-K, Min-P, penalizace opakování a seed.
+
+Systémové prompty – uložte si opakovaně použitelné pokyny jednou a používejte je s jakýmkoli modelem, aby tón, role nebo formát výstupu zůstaly stejné.
+
+Vlastní modely – importujte vlastní modely GGUF z aplikace Soubory, vedle vestavěného katalogu.
+
+Spolehlivé stahování – modely se stahují na pozadí s průběhem, rychlostí a zbývajícím časem a po výpadku sítě pokračují.
+
+MODELY
+
+Katalog modelů otestovaných na iPhonu a iPadu od Qwen, Gemma, Llama, LFM, Granite a dalších, už od několika set megabajtů. Aplikace před načtením modelu zkontroluje volnou paměť a upozorní vás, když je model pro vaše zařízení příliš velký.
+
+OPEN SOURCE
+
+LM Playground je open source pod licencí MIT. Běží na llama.cpp, s modely z Hugging Face.

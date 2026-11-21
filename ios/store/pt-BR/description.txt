@@ -1,0 +1,37 @@
+LM Playground roda modelos de linguagem grandes diretamente no seu iPhone e iPad. Baixe um modelo, carregue com um toque e converse, com privacidade, no seu aparelho. Sem servidores na nuvem, sem chaves de API, sem conta e sem dados saindo do seu aparelho.
+
+RECURSOS PRINCIPAIS
+
+Inferência no dispositivo — cada resposta é gerada localmente com Metal no seu iPhone ou iPad. Suas conversas continuam privadas.
+
+Histórico de chat — as conversas ficam salvas e organizadas. Fixe, renomeie ou apague e retome qualquer chat exatamente de onde parou. No iPad, seus chats ficam em uma barra lateral ao lado da conversa.
+
+Respostas ricas — as respostas aparecem com Markdown completo: títulos, blocos de código com botão de copiar, listas, tabelas, negrito e itálico.
+
+Documentos — anexe um arquivo a um chat e faça perguntas sobre ele. A busca no dispositivo encontra os trechos mais relevantes pelo significado e os entrega ao modelo, então as respostas vêm direto do seu documento, que nunca sai do seu aparelho. Compatível com PDF, Word, EPUB, HTML, Markdown e texto simples; um pequeno modelo de embeddings é baixado uma única vez no primeiro uso.
+
+Visão — envie uma foto e converse sobre ela. Escolha uma imagem da sua fototeca ou tire uma com a câmera e pergunte ao modelo o que ele vê: descrever uma cena, identificar objetos ou ler um texto. A imagem é interpretada no próprio aparelho.
+
+Ditado por voz — toque no microfone e fale; suas palavras aparecem enquanto você fala, em 35 idiomas. A fala é reconhecida no seu aparelho e nunca é salva nem enviada.
+
+Modelos de raciocínio — acompanhe o raciocínio dos modelos em uma seção recolhível, com orçamento de raciocínio ajustável.
+
+Ferramentas — modelos compatíveis podem pesquisar na web, ler uma página e executar JavaScript em um sandbox durante uma resposta. Cada ferramenta vem desativada; ative só as que quiser, por modelo. A pesquisa na web e a leitura de páginas só acessam a internet quando você as ativa.
+
+Velocidade num relance — veja a contagem de tokens e os tokens por segundo de cada resposta.
+
+Suas configurações, por chat — tamanho do contexto, orçamento de raciocínio, temperatura, Top-P, Top-K, Min-P, penalidade de repetição e seed.
+
+Prompts de sistema — salve instruções reutilizáveis uma vez e use com qualquer modelo para manter o tom, o papel ou o formato de saída.
+
+Modelos personalizados — importe seus próprios modelos GGUF pelo app Arquivos, junto com o catálogo integrado.
+
+Downloads confiáveis — os modelos são baixados em segundo plano com progresso, velocidade e tempo restante, e retomam após uma queda de conexão.
+
+MODELOS
+
+Um catálogo de modelos testados no iPhone e no iPad, de Qwen, Gemma, Llama, LFM, Granite e outros, a partir de algumas centenas de megabytes. O app verifica a memória livre antes de carregar um modelo e avisa quando ele é grande demais para o seu aparelho.
+
+CÓDIGO ABERTO
+
+LM Playground é código aberto sob a Licença MIT. Feito com llama.cpp, com modelos do Hugging Face.

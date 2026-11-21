@@ -1,0 +1,1 @@
+tekoäly,chatbot,offline,kielimalli,llm,gguf,avustaja,keskustelu

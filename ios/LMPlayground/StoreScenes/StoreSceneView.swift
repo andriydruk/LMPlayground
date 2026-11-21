@@ -18,7 +18,7 @@ struct StoreSceneRoot: View {
         .ignoresSafeArea()
         .statusBarHidden(true)
         .persistentSystemOverlays(.hidden)
-        .preferredColorScheme(.dark)
+        .preferredColorScheme(StoreCanvas.appScheme)
         .task {
             StoreSceneReady.clear()
             do {
@@ -40,6 +40,11 @@ struct StoreSceneRoot: View {
 enum StoreCanvas {
     static let background = Color(red: 0.04, green: 0.04, blue: 0.04)
     static let subtitle = Color(white: 0.6)
+
+    /// The app's appearance inside the frame: dark for the store, light with
+    /// `-storeAppearance light` (the README preview).
+    static let appScheme: ColorScheme =
+        UserDefaults.standard.string(forKey: "storeAppearance") == "light" ? .light : .dark
 
     /// The app is laid out at a real device's width (iPhone 17 Pro, 11-inch
     /// iPad), then scaled into the frame.
@@ -182,7 +187,7 @@ private struct AppScreen<Content: View>: View {
                 UIKitHost(topInset: FakeStatusBar.height) { content }
                 FakeStatusBar()
             }
-            Color.black.frame(height: 24)
+            Color(.systemBackground).frame(height: 24)
         }
         .background(Color(.systemBackground))
     }
@@ -206,7 +211,7 @@ private struct FakeStatusBar: View {
             }
             .font(.system(size: pad ? 14 : 15, weight: .semibold))
         }
-        .foregroundStyle(.white)
+        .foregroundStyle(.primary)
         .padding(.horizontal, pad ? 24 : 34)
         .padding(.top, pad ? 6 : 16)
         .frame(height: Self.height, alignment: .top)

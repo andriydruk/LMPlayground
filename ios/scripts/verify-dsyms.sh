@@ -50,7 +50,7 @@ LLAMAKIT_DSYM="$DSYMS/LlamaKit.framework.dSYM"
 if [ -d "$LLAMAKIT_DSYM" ]; then
     # Captured, then searched: grep -q in a pipeline trips pipefail.
     units="$(dwarfdump --debug-info "$LLAMAKIT_DSYM" | grep DW_AT_name || true)"
-    for source in LlamaGenerationSession.cpp ggml-metal-context.m llama-model.cpp parakeet.cpp; do
+    for source in LlamaGenerationSession.cpp ggml-metal-context.m llama-model.cpp parakeet_capi.cpp; do
         if [[ "$units" == *"$source"* ]]; then
             echo "ok   DWARF for $source"
         else

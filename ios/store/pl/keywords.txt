@@ -1,0 +1,1 @@
+sztuczna inteligencja,chatbot,czat,offline,lokalnie,prywatność,model językowy,llm,gguf

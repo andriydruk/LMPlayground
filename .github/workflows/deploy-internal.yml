@@ -4,9 +4,15 @@ on:
   push:
     branches:
       - main
-    # Website-only pushes go live through GitHub Pages; no app build to ship.
+    # Website-only pushes go live through GitHub Pages, iOS-only pushes ship
+    # from the owner's Mac, and the README changes no app; none of them has
+    # an Android build to ship.
     paths-ignore:
       - 'docs/**'
+      - 'ios/**'
+      - 'README.md'
+      - 'logo.png'
+      - '.github/readme/**'
 
 jobs:
 

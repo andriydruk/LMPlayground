@@ -120,6 +120,10 @@ private const val PAD_TOP = DISPLAY_Y / FRAME_HEIGHT
 private const val PAD_RIGHT = (FRAME_WIDTH - DISPLAY_X - DISPLAY_W) / FRAME_WIDTH
 private const val PAD_BOTTOM = (FRAME_HEIGHT - DISPLAY_Y - DISPLAY_H) / FRAME_HEIGHT
 
+// Dark for the store; STORE_THEME=light renders the light app (README preview).
+private val STORE_DARK = System.getenv("STORE_THEME") != "light"
+private val STATUS_BAR_COLOR get() = if (STORE_DARK) Color.White else Color.Black
+
 // ── Fake status bar (matches camera hole height, covers that area) ─
 @Composable
 private fun FakeStatusBar() {
@@ -134,7 +138,7 @@ private fun FakeStatusBar() {
     ) {
         Text(
             text = "10:10",
-            color = Color.White,
+            color = STATUS_BAR_COLOR,
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium
         )
@@ -142,9 +146,9 @@ private fun FakeStatusBar() {
             horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(Icons.Outlined.Wifi, null, Modifier.size(14.dp), tint = Color.White)
-            Icon(Icons.Outlined.SignalCellular4Bar, null, Modifier.size(14.dp), tint = Color.White)
-            Icon(Icons.Outlined.BatteryFull, null, Modifier.size(14.dp), tint = Color.White)
+            Icon(Icons.Outlined.Wifi, null, Modifier.size(14.dp), tint = STATUS_BAR_COLOR)
+            Icon(Icons.Outlined.SignalCellular4Bar, null, Modifier.size(14.dp), tint = STATUS_BAR_COLOR)
+            Icon(Icons.Outlined.BatteryFull, null, Modifier.size(14.dp), tint = STATUS_BAR_COLOR)
         }
     }
 }
@@ -165,7 +169,7 @@ private fun BigStatusBar(wifiOff: Boolean = false) {
     ) {
         Text(
             text = "10:10",
-            color = Color.White,
+            color = STATUS_BAR_COLOR,
             fontSize = 24.sp,
             fontWeight = FontWeight.Medium
         )
@@ -177,10 +181,10 @@ private fun BigStatusBar(wifiOff: Boolean = false) {
                 if (wifiOff) Icons.Outlined.WifiOff else Icons.Outlined.Wifi,
                 null,
                 Modifier.size(22.dp),
-                tint = Color.White
+                tint = STATUS_BAR_COLOR
             )
-            Icon(Icons.Outlined.SignalCellular4Bar, null, Modifier.size(22.dp), tint = Color.White)
-            Icon(Icons.Outlined.BatteryFull, null, Modifier.size(22.dp), tint = Color.White)
+            Icon(Icons.Outlined.SignalCellular4Bar, null, Modifier.size(22.dp), tint = STATUS_BAR_COLOR)
+            Icon(Icons.Outlined.BatteryFull, null, Modifier.size(22.dp), tint = STATUS_BAR_COLOR)
         }
     }
 }
@@ -704,7 +708,7 @@ class StoreScreenshots(
     @Test
     fun scene0_hero() {
         paparazzi.snapshot {
-            PlaygroundTheme(isDarkTheme = true) { LocaleLayout {
+            PlaygroundTheme(isDarkTheme = STORE_DARK) { LocaleLayout {
                 val titleText = buildAnnotatedString {
                     append(stringResource(R.string.screenshot_hero_title_prefix))
                     append("\n")
@@ -799,7 +803,7 @@ class StoreScreenshots(
     @Test
     fun scene1_chooseModel() {
         paparazzi.snapshot {
-            PlaygroundTheme(isDarkTheme = true) { LocaleLayout {
+            PlaygroundTheme(isDarkTheme = STORE_DARK) { LocaleLayout {
                 val efficient = stringResource(R.string.model_category_efficient)
                 val lightweight = stringResource(R.string.model_category_lightweight)
                 val general = stringResource(R.string.model_category_general)
@@ -867,7 +871,7 @@ class StoreScreenshots(
     @Test
     fun scene2_chat() {
         paparazzi.snapshot {
-            PlaygroundTheme(isDarkTheme = true) { LocaleLayout {
+            PlaygroundTheme(isDarkTheme = STORE_DARK) { LocaleLayout {
                 val question = stringResource(R.string.screenshot_chat_question)
                 val response = stringResource(R.string.screenshot_chat_response)
 
@@ -915,7 +919,7 @@ class StoreScreenshots(
     @Test
     fun scene3_documents() {
         paparazzi.snapshot {
-            PlaygroundTheme(isDarkTheme = true) { LocaleLayout {
+            PlaygroundTheme(isDarkTheme = STORE_DARK) { LocaleLayout {
                 val question = stringResource(R.string.screenshot_documents_question)
                 val response = stringResource(R.string.screenshot_documents_response)
                 val gemma4 = gemma4Model()
@@ -970,7 +974,7 @@ class StoreScreenshots(
     @Test
     fun scene4_chatWithImage() {
         paparazzi.snapshot {
-            PlaygroundTheme(isDarkTheme = true) { LocaleLayout {
+            PlaygroundTheme(isDarkTheme = STORE_DARK) { LocaleLayout {
                 val question = stringResource(R.string.screenshot_vision_question)
                 val response = stringResource(R.string.screenshot_vision_response)
                 val gemma4 = gemma4Model()
@@ -1011,7 +1015,7 @@ class StoreScreenshots(
     @Test
     fun scene7_generationParams() {
         paparazzi.snapshot {
-            PlaygroundTheme(isDarkTheme = true) { LocaleLayout {
+            PlaygroundTheme(isDarkTheme = STORE_DARK) { LocaleLayout {
                 SheetScene(
                     modelInfo = gemma4Model(),
                     icon = Icons.Outlined.Tune,
@@ -1029,7 +1033,7 @@ class StoreScreenshots(
     @Test
     fun scene5_systemPrompts() {
         paparazzi.snapshot {
-            PlaygroundTheme(isDarkTheme = true) { LocaleLayout {
+            PlaygroundTheme(isDarkTheme = STORE_DARK) { LocaleLayout {
                 SheetScene(
                     modelInfo = gemma4Model(),
                     icon = Icons.Outlined.Description,
@@ -1047,7 +1051,7 @@ class StoreScreenshots(
     @Test
     fun scene6_tools() {
         paparazzi.snapshot {
-            PlaygroundTheme(isDarkTheme = true) { LocaleLayout {
+            PlaygroundTheme(isDarkTheme = STORE_DARK) { LocaleLayout {
                 SheetScene(
                     modelInfo = gemma4Model(),
                     icon = Icons.Outlined.Build,
@@ -1232,7 +1236,7 @@ class OgBanner {
     @Test
     fun ogBanner() {
         paparazzi.snapshot {
-            PlaygroundTheme(isDarkTheme = true) {
+            PlaygroundTheme(isDarkTheme = STORE_DARK) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()

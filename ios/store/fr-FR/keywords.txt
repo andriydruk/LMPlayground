@@ -1,0 +1,1 @@
+chatbot,hors ligne,local,privé,modèle de langage,llm,gguf,assistant
