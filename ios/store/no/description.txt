@@ -1,0 +1,37 @@
+LM Playground kjører store språkmodeller direkte på iPhone og iPad. Last ned en modell, last den inn med ett trykk, og chat – privat, på enheten din. Ingen skytjenere, ingen API-nøkler, ingen konto og ingen data som forlater enheten.
+
+HOVEDFUNKSJONER
+
+Inferens på enheten – hvert svar genereres lokalt med Metal på iPhone eller iPad. Samtalene dine forblir private.
+
+Chattehistorikk – samtaler lagres og organiseres. Fest, gi nytt navn til eller slett dem, og fortsett en hvilken som helst chat akkurat der du slapp. På iPad ligger chattene i et sidepanel ved siden av samtalen.
+
+Rike svar – svarene vises med full Markdown: overskrifter, kodeblokker med kopieringsknapp, lister, tabeller, fet og kursiv.
+
+Dokumenter – legg ved en fil i en chat og still spørsmål om den. Søket på enheten finner de mest relevante avsnittene etter betydning og gir dem til modellen, slik at svarene kommer rett fra dokumentet ditt, som aldri forlater enheten. Støtter PDF, Word, EPUB, HTML, Markdown og ren tekst; en liten embedding-modell lastes ned én gang ved første bruk.
+
+Vision – send et bilde og chat om det. Velg et bilde fra biblioteket eller ta et med kameraet, og spør modellen hva den ser: beskrive en scene, kjenne igjen gjenstander eller lese tekst. Bildet tolkes direkte på enheten.
+
+Diktering – trykk på mikrofonen og snakk; ordene dukker opp mens du snakker, på 35 språk. Talen gjenkjennes på enheten og blir aldri lagret eller sendt.
+
+Resonneringsmodeller – følg tenkingen til resonneringsmodeller i en sammenleggbar del, med justerbart tenkebudsjett.
+
+Verktøy – kapable modeller kan søke på nettet, lese en side og kjøre JavaScript i en sandkasse under et svar. Alle verktøy er av som standard; slå på bare dem du vil, per modell. Nettsøk og sidelesing går ut på internett bare når du slår dem på.
+
+Hastighet med et blikk – se antall tokens og tokens per sekund for hvert svar.
+
+Innstillingene dine, per chat – kontekststørrelse, tenkebudsjett, temperatur, Top-P, Top-K, Min-P, repetisjonsstraff og seed.
+
+Systemprompter – lagre gjenbrukbare instruksjoner én gang og bruk dem med hvilken som helst modell for å holde tone, rolle eller utdataformat likt.
+
+Egne modeller – importer dine egne GGUF-modeller fra Filer-appen, i tillegg til den innebygde katalogen.
+
+Pålitelige nedlastinger – modeller lastes ned i bakgrunnen med fremdrift, hastighet og gjenstående tid, og fortsetter etter et nettverksbrudd.
+
+MODELLER
+
+En katalog med modeller testet på iPhone og iPad, fra Qwen, Gemma, Llama, LFM, Granite og flere, fra noen hundre megabyte. Appen sjekker ledig minne før en modell lastes inn, og sier fra når en er for stor for enheten din.
+
+ÅPEN KILDEKODE
+
+LM Playground er åpen kildekode under MIT-lisensen. Drevet av llama.cpp, med modeller fra Hugging Face.

@@ -1,0 +1,1 @@
+chatbot,offline,privato,modello linguistico,llm,gguf,assistente

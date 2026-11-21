@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
-    # Website-only pushes go live through GitHub Pages; no app build to ship.
+    # Website-only pushes go live through GitHub Pages, and iOS-only pushes
+    # ship from the owner's Mac; neither has an Android build to ship.
     paths-ignore:
       - 'docs/**'
+      - 'ios/**'
 
 jobs:
 

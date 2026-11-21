@@ -1,0 +1,37 @@
+LM Playground chạy các mô hình ngôn ngữ lớn ngay trên iPhone và iPad của bạn. Tải một mô hình, nạp chỉ bằng một chạm và trò chuyện – riêng tư, trên thiết bị của bạn. Không máy chủ đám mây, không khóa API, không tài khoản và không có dữ liệu nào rời khỏi thiết bị.
+
+TÍNH NĂNG CHÍNH
+
+Suy luận trên thiết bị – mọi câu trả lời đều được tạo cục bộ bằng Metal trên iPhone hoặc iPad của bạn. Các cuộc trò chuyện luôn riêng tư.
+
+Lịch sử trò chuyện – các cuộc trò chuyện được lưu và sắp xếp. Ghim, đổi tên hoặc xóa, và tiếp tục bất kỳ cuộc trò chuyện nào ngay tại chỗ bạn dừng lại. Trên iPad, các cuộc trò chuyện nằm ở thanh bên cạnh nội dung trò chuyện.
+
+Câu trả lời phong phú – câu trả lời hiển thị với Markdown đầy đủ: tiêu đề, khối mã có nút sao chép, danh sách, bảng, chữ đậm và nghiêng.
+
+Tài liệu – đính kèm tệp vào cuộc trò chuyện và đặt câu hỏi về nó. Tìm kiếm trên thiết bị tìm ra các đoạn liên quan nhất theo ý nghĩa và chuyển cho mô hình, nên câu trả lời đến thẳng từ tài liệu của bạn, vốn không bao giờ rời khỏi thiết bị. Hỗ trợ PDF, Word, EPUB, HTML, Markdown và văn bản thuần; một mô hình embedding nhỏ được tải một lần trong lần dùng đầu tiên.
+
+Thị giác – gửi ảnh và trò chuyện về nó. Chọn ảnh từ thư viện hoặc chụp bằng camera, rồi hỏi mô hình thấy gì: mô tả khung cảnh, nhận diện đồ vật hoặc đọc chữ. Hình ảnh được hiểu ngay trên thiết bị của bạn.
+
+Đọc chính tả – chạm vào micrô và nói; lời bạn hiện ra ngay khi bạn nói, với 35 ngôn ngữ. Giọng nói được nhận dạng trên thiết bị và không bao giờ được lưu hay gửi đi.
+
+Mô hình suy luận – theo dõi quá trình suy nghĩ của mô hình suy luận trong một mục có thể thu gọn, với ngân sách suy nghĩ điều chỉnh được.
+
+Công cụ – các mô hình đủ khả năng có thể tìm kiếm web, đọc một trang và chạy JavaScript trong sandbox khi trả lời. Mỗi công cụ mặc định đều tắt; chỉ bật những công cụ bạn muốn, theo từng mô hình. Tìm kiếm web và đọc trang chỉ truy cập Internet khi bạn bật chúng.
+
+Tốc độ trong nháy mắt – xem số token và số token mỗi giây cho mỗi câu trả lời.
+
+Cài đặt của bạn, theo từng cuộc trò chuyện – kích thước ngữ cảnh, ngân sách suy nghĩ, nhiệt độ, Top-P, Top-K, Min-P, hình phạt lặp lại và seed.
+
+Lời nhắc hệ thống – lưu hướng dẫn dùng lại một lần và áp dụng cho bất kỳ mô hình nào để giữ nhất quán giọng điệu, vai trò hoặc định dạng đầu ra.
+
+Mô hình tùy chỉnh – nhập mô hình GGUF của riêng bạn từ ứng dụng Tệp, bên cạnh danh mục có sẵn.
+
+Tải xuống đáng tin cậy – mô hình được tải ở chế độ nền với tiến độ, tốc độ và thời gian còn lại, và tiếp tục sau khi mất kết nối mạng.
+
+MÔ HÌNH
+
+Danh mục mô hình đã thử nghiệm trên iPhone và iPad, từ Qwen, Gemma, Llama, LFM, Granite và nhiều hơn nữa, bắt đầu từ vài trăm megabyte. Ứng dụng kiểm tra bộ nhớ trống trước khi nạp mô hình và cho bạn biết khi một mô hình quá lớn so với thiết bị.
+
+MÃ NGUỒN MỞ
+
+LM Playground là mã nguồn mở theo Giấy phép MIT. Chạy trên llama.cpp, với các mô hình từ Hugging Face.

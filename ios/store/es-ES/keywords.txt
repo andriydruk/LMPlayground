@@ -1,0 +1,1 @@
+chatbot,sin conexión,privado,modelo de lenguaje,llm,gguf,asistente

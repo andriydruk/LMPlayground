@@ -1,0 +1,37 @@
+LM Playground, büyük dil modellerini doğrudan iPhone ve iPad'inizde çalıştırır. Bir model indirin, tek dokunuşla yükleyin ve sohbet edin; gizli olarak, kendi cihazınızda. Bulut sunucusu yok, API anahtarı yok, hesap yok ve cihazınızdan hiçbir veri çıkmaz.
+
+TEMEL ÖZELLİKLER
+
+Cihaz üzerinde çıkarım — her yanıt, iPhone veya iPad'inizde Metal ile yerel olarak üretilir. Konuşmalarınız gizli kalır.
+
+Sohbet geçmişi — konuşmalar kaydedilir ve düzenlenir. Sabitleyin, yeniden adlandırın veya silin; her sohbete kaldığınız yerden devam edin. iPad'de sohbetleriniz, konuşmanın yanındaki kenar çubuğunda durur.
+
+Zengin yanıtlar — yanıtlar tam Markdown ile gösterilir: başlıklar, kopyalama düğmeli kod blokları, listeler, tablolar, kalın ve italik.
+
+Belgeler — bir sohbete dosya ekleyin ve onunla ilgili sorular sorun. Cihaz üzerindeki arama, anlama göre en ilgili bölümleri bulur ve modele iletir; böylece yanıtlar doğrudan, cihazınızdan hiç çıkmayan belgenizden gelir. PDF, Word, EPUB, HTML, Markdown ve düz metin desteklenir; küçük bir gömme (embedding) modeli ilk kullanımda bir kez indirilir.
+
+Görü — bir fotoğraf gönderin ve onun hakkında sohbet edin. Arşivinizden bir görüntü seçin veya kamerayla çekin, ardından modele ne gördüğünü sorun: bir sahneyi anlatmak, nesneleri tanımak ya da metin okumak. Görüntü doğrudan cihazınızda anlaşılır.
+
+Sesle dikte — mikrofona dokunun ve konuşun; sözleriniz siz konuşurken, 35 dilde ekrana gelir. Konuşma cihazınızda tanınır, asla kaydedilmez veya gönderilmez.
+
+Akıl yürütme modelleri — akıl yürütme modellerinin düşünme sürecini daraltılabilir bir bölümde, ayarlanabilir düşünme bütçesiyle izleyin.
+
+Araçlar — yetenekli modeller, yanıt sırasında web'de arama yapabilir, bir sayfayı okuyabilir ve korumalı alanda JavaScript çalıştırabilir. Her araç varsayılan olarak kapalıdır; her model için yalnızca istediklerinizi açın. Web araması ve sayfa okuma, yalnızca siz açtığınızda internete erişir.
+
+Bir bakışta hız — her yanıt için token sayısını ve saniyedeki token sayısını görün.
+
+Sohbete özel ayarlarınız — bağlam boyutu, düşünme bütçesi, sıcaklık, Top-P, Top-K, Min-P, tekrar cezası ve seed.
+
+Sistem istemleri — yeniden kullanılabilir talimatları bir kez kaydedin ve ton, rol veya çıktı biçimini tutarlı tutmak için herhangi bir modelle kullanın.
+
+Özel modeller — yerleşik kataloğun yanında, kendi GGUF modellerinizi Dosyalar uygulamasından içe aktarın.
+
+Güvenilir indirmeler — modeller arka planda ilerleme, hız ve kalan süre bilgisiyle indirilir ve ağ kesintisinden sonra kaldığı yerden devam eder.
+
+MODELLER
+
+iPhone ve iPad'de test edilmiş, Qwen, Gemma, Llama, LFM, Granite ve diğerlerinden modeller içeren bir katalog; birkaç yüz megabayttan başlayan boyutlarda. Uygulama, bir modeli yüklemeden önce boş belleği kontrol eder ve model cihazınız için çok büyükse size bildirir.
+
+AÇIK KAYNAK
+
+LM Playground, MIT Lisansı altında açık kaynaktır. llama.cpp ile çalışır, modeller Hugging Face'ten gelir.

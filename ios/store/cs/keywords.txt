@@ -1,0 +1,1 @@
+umělá inteligence,chatbot,offline,jazykový model,llm,gguf,asistent

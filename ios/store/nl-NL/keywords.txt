@@ -1,0 +1,1 @@
+chatbot,offline,lokaal,privé,taalmodel,llm,gguf,assistent,chat
