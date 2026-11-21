@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Link preview banner</title>
+<!--
+  Source of docs/banner.png, the link preview image (og:image / twitter:image / README).
+  Regenerate with:  python3 docs/tools/render_banner.py
+  The phone styles come from the home page, so the banner always matches the site.
+-->
+<link rel="stylesheet" href="../site.css">
+<style>
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body { position: relative; }
+  .copy-col { position: absolute; left: 84px; top: 0; bottom: 0; width: 540px; display: flex; flex-direction: column; justify-content: center; }
+  .copy-col .mark { width: 76px; margin-bottom: 26px; }
+  .copy-col .name { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif; font-size: 38px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; margin: 0 0 10px; }
+  .copy-col h1 { font-size: 72px; line-height: 1.02; letter-spacing: -0.04em; }
+  .copy-col .note { margin-top: 26px; font-size: 21px; color: var(--fg-2); letter-spacing: -0.015em; }
+  /* Whole phones, scaled to fit the 630px frame with room for the shadow */
+  .phones { position: absolute; left: 700px; top: 55px; width: 520px; height: 700px; transform: scale(.8); transform-origin: 0 0; }
+  .phones .device { position: absolute; top: 0; }
+  .phones .device-ios { left: 0; z-index: 2; }
+  .phones .device-android { left: 236px; top: 64px; transform: scale(.86); transform-origin: 0 0; z-index: 1; }
+</style>
+<script>
+  // ?theme=dark renders the dark version
+  var t = new URLSearchParams(location.search).get('theme');
+  if (t) document.documentElement.setAttribute('data-theme', t);
+</script>
+</head>
+<body>
+<div class="copy-col">
+  <img class="mark" src="../assets/logo.svg" alt="">
+  <p class="name">LM Playground</p>
+  <h1>Private AI<br>on your phone.</h1>
+  <p class="note">iPhone and iPad · Android · Free and open source</p>
+</div>
+
+<div class="phones">
+<div class="device device-ios"><div class="device-screen"><div class="notch"></div>
+  <div class="lmp-status"><span>9:41</span><span class="lmp-status-icons"><svg viewBox="0 0 27 13" fill="none"><rect x=".5" y=".5" width="22" height="12" rx="3.5" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="17" height="9" rx="2" fill="currentColor"/><path d="M24 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2z" fill="currentColor" opacity=".45"/></svg></span></div>
+  <div class="lmp-appbar">
+    <span class="lmp-appbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></span>
+    <div class="lmp-model"><span class="lmp-model-name">Gemma 4 E2B <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></span><div class="lmp-model-size">3.11 GB</div></div>
+    <span class="lmp-appbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/><path d="M17.6 3.4a2 2 0 0 1 2.9 2.9L12 14.8l-3.6.9.9-3.6z"/></svg></span>
+  </div>
+  <div class="lmp-chat">
+    <div class="lmp-user-msg">What is machine learning?</div>
+    <div class="lmp-steps"><div class="lmp-step"><div class="lmp-step-head"><svg class="lmp-step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg><span>Thinking · 2s · 60 tokens</span></div></div></div>
+    <div class="lmp-asst"><p>Machine learning is a branch of artificial intelligence where computers <b>learn from data</b> instead of being explicitly programmed.</p><p style="white-space:pre-line">Key concepts:
+• <b>Training</b>: feeding data to algorithms
+• <b>Models</b>: learned patterns from data
+• <b>Inference</b>: making predictions on new data</p></div>
+    <div class="lmp-msg-actions"><span class="lmp-msg-stats">170 tokens · 4s · 43 tok/s</span></div>
+  </div>
+  <div class="lmp-input-ios"><span class="ios-glass ios-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span><span class="ios-glass ios-capsule"><span class="lmp-input-field">Message</span><span class="ios-in-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/><line x1="12" y1="18" x2="12" y2="22"/></svg></span></span></div>
+  <div class="lmp-home-indicator"></div>
+</div></div>
+
+<div class="device device-android"><div class="device-screen"><div class="notch"></div>
+  <div class="lmp-status"><span>12:19</span><span class="lmp-status-icons"><svg class="lmp-battery-icon" viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1"><rect x="0.5" y="0.5" width="20" height="13" rx="2.5"/><rect x="2" y="2" width="16" height="10" rx="1" fill="currentColor" stroke="none"/><rect x="21" y="4.5" width="2" height="5" rx="0.5" fill="currentColor" stroke="none"/></svg></span></div>
+  <div class="lmp-appbar">
+    <span class="lmp-appbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></span>
+    <div class="lmp-model"><span class="lmp-model-name">Qwen 3.5 2B <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></span><div class="lmp-model-size">1.07 GB</div></div>
+    <span class="lmp-appbar-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 10h11v2H3zm0-2h11V6H3zm0 8h7v-2H3zm15.01-3.13l.71-.71a.996.996 0 0 1 1.41 0l.71.71c.39.39.39 1.02 0 1.41l-.71.71-2.12-2.12zm-.71.71l-5.3 5.3V21h2.12l5.3-5.3-2.12-2.12z"/></svg></span>
+  </div>
+  <div class="lmp-chat">
+    <div class="lmp-doc-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span>rental-agreement.pdf</span></div>
+    <div class="lmp-user-msg">When can I terminate my rental agreement?</div>
+    <div class="lmp-steps">
+      <div class="lmp-step"><div class="lmp-step-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg><span>Searching document · 1s</span></div></div>
+      <div class="lmp-step"><div class="lmp-step-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg><span>Thinking · 3s · 90 tokens</span></div></div>
+    </div>
+    <div class="lmp-asst"><p>You can terminate with <b>60 days’ written notice</b> after the initial six-month period. Your deposit is returned within <b>14 days</b> of move-out (Section 8.2).</p></div>
+    <div class="lmp-msg-actions"><span class="lmp-msg-stats">166 tokens · 5s · 33 tok/s</span></div>
+    <div class="lmp-spacer"></div>
+  </div>
+  <div class="lmp-input-bar"><span class="lmp-input-bulb"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg></span><span class="lmp-input-field">Message</span><span class="lmp-send-btn">Send</span></div>
+  <div class="lmp-home-indicator"></div>
+</div></div>
+</div>
+
+<script>
+  // Pull the phone styles from the home page so the banner can't drift from the site.
+  fetch('../index.html').then(function (r) { return r.text(); }).then(function (html) {
+    var css = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
+    var s = document.createElement('style'); s.textContent = css;
+    document.head.insertBefore(s, document.head.querySelector('style'));
+    document.documentElement.setAttribute('data-ready', '1');
+  });
+</script>
+</body>
+</html>
